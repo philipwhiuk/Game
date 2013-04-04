@@ -8,7 +8,6 @@ import org.apache.log4j.Level;
 import com.whiuk.philip.game.server.data.DataService;
 import com.whiuk.philip.game.server.network.Connection;
 import com.whiuk.philip.game.server.system.SystemService;
-import com.whiuk.philip.game.shared.Messages;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.AccountData;
@@ -26,19 +25,20 @@ public class AuthServiceImpl implements AuthService {
 	 * Message for multiple logins detected.
 	 */
     private static final String MULTIPLE_LOGINS_ATTEMPT_MESSAGE =
-            "Attempting to login from a connection with an existing login, logging out the other client";
+            "Attempting to login from a connection with an existing login"
+    		+ ", logging out the other client";
     /**
-     * Error message when invalid login occurs
+     * Error message when invalid login occurs.
      */
     private static final String BAD_CONNECTION_LOGIN_MESSAGE =
             "Attempting to login from a connection that doesn't exist";
     /**
-     * Error message when invalid logout occurs
+     * Error message when invalid logout occurs.
      */
     private static final String  BAD_CONNECTION_LOGOUT_MESSAGE =
             "Attempting to logout a connection that doesn't exist";
     /**
-     * 
+     *
      */
     @Autowired
     private SystemService systemService;
@@ -69,23 +69,24 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public Account getAccount(final ClientMessage message) {
+	public final Account getAccount(final ClientMessage message) {
         Connection con = dataService.get(message.getClientInfo());
         return connections.get(con);
     }
 
     @Override
-    public Account getAccount(final Connection con) {
+    public final Account getAccount(final Connection con) {
         return connections.get(con);
     }
 
     @Override
-    public Connection getConnection(final Account acc) {
+    public final Connection getConnection(final Account acc) {
         return accounts.get(acc);
     }
 
     @Override
-    public void processMessage(final ClientInfo src, final AccountData data) {
+    public final void processMessage(final ClientInfo src,
+    		final AccountData data) {
         Connection con;
         switch(data.getType()) {
             case LOGIN:

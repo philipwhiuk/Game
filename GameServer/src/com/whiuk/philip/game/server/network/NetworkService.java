@@ -8,6 +8,10 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  */
 public interface NetworkService {
 
+   /**
+	 * Send a message from the server.
+	 * @param message The message
+	 */
     void processMessage(ServerMessage message);
 
 }

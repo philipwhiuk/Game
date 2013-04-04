@@ -1,16 +1,17 @@
 package com.whiuk.philip.game.server.security;
 
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
+import com.whiuk.philip.game.shared.Messages.ClientMessage;
 
 /**
  * @author Philip
  *
  */
-public class SecurityService {
+public interface SecurityService {
 
-    public void processMessage(int clientNotAuthenticated, ClientInfo source) {
-        // TODO Auto-generated method stub
-        
-    }
+   /**
+	 * Handle game messages received from clients that aren't authenticated.
+	 * @param message Message received
+	 */
+	void handleMessageFromUnauthenticatedClient(ClientMessage message);
 
 }

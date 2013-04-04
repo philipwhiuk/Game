@@ -17,35 +17,50 @@ import org.springframework.stereotype.Service;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 
-
+/**
+ *
+ * @author Philip Whitehouse
+ *
+ */
 @Service
 public class NettyNetworkService implements NetworkService {
 
-	public static int PORT = 8080;
-	
+	/**
+	 * Default listening port for server.
+	 */
+	private static final int PORT = 8080;
+
+	/**
+	 *
+	 */
 	public NettyNetworkService() {
-		
+
 	}
-	
+
+	/**
+	 * Initialisation.
+	 */
 	@PostConstruct()
-	public void init() {
+	public final void init() {
 		ChannelFactory factory = new NioServerSocketChannelFactory(
-				Executors.newCachedThreadPool(), Executors.newCachedThreadPool());
-		
+				Executors.newCachedThreadPool(),
+				Executors.newCachedThreadPool());
+
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
 			public ChannelPipeline getPipeline() {
-				return Channels.pipeline(new NettyNetworkServiceHandler());
+				return Channels.pipeline(
+					new NettyNetworkServiceHandler());
 			}
 		});
-		
+
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", true);
 		bootstrap.bind(new InetSocketAddress(PORT));
 	}
-	
+
 	@Override
-	public void processMessage(ServerMessage message) {
+	public void processMessage(final ServerMessage message) {
 		// TODO Auto-generated method stub
 
 	}

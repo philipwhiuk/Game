@@ -22,9 +22,7 @@ public interface Watchdog extends Runnable {
     Thread getThread();
 
     /**
-     * 
      * @return
      */
     long getWarningTime();
-    
 }

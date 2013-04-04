@@ -13,7 +13,7 @@ public class GameService {
      * @param account
      * @param data
      */
-    public void processMessage(Account account, GameData data) {
+    public void processMessage(final Account account, final GameData data) {
         // TODO Auto-generated method stub
     }
 

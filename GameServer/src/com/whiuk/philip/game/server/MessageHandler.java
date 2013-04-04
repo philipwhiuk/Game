@@ -6,16 +6,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
-import com.whiuk.philip.game.server.auth.ClientNotAuthenticatedException;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
 import com.whiuk.philip.game.server.network.NetworkService;
-import com.whiuk.philip.game.server.security.SecurityMessageType;
 import com.whiuk.philip.game.server.security.SecurityService;
 import com.whiuk.philip.game.server.system.SystemService;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
@@ -23,23 +20,54 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  *
  */
 public class MessageHandler implements Runnable {
+	/**
+	 * Network service.
+	 */
     @Autowired
     private NetworkService networkService;
+    /**
+     * Authentication service.
+     */
     @Autowired
     private AuthService authService;
+    /**
+     * Game service.
+     */
     @Autowired
     private GameService gameService;
+    /**
+     * Security service.
+     */
     @Autowired
     private SecurityService secService;
+    /**
+     * System service.
+     */
     @Autowired
     private SystemService systemService;
+    /**
+     * Chat service.
+     */
     @Autowired
     private ChatService chatService;
-    
-    
-    Queue<ClientMessage> inbound;
-    Queue<ServerMessage> outbound;
 
+    /**
+     * Queue of inbound messages to process.
+     */
+    private Queue<ClientMessage> inbound;
+    /**
+     * Queue of outbound messages to transmit.
+     */
+    private Queue<ServerMessage> outbound;
+
+    /**
+     * Amount of time handler tries to sleep when idle.
+     */
+    private static final int HANDLER_SLEEP_TIME = 100;
+
+    /**
+     * Whether the message handler is running.
+     */
     private boolean running;
     /**
      *
@@ -49,25 +77,24 @@ public class MessageHandler implements Runnable {
     }
 
     @Override
-    public void run() {
+	public final void run() {
         running = true;
-        while(running) {
+        while (running) {
             boolean processed = false;
             ServerMessage serverMessage;
             serverMessage = outbound.poll();
-            while(serverMessage != null) {
+            while (serverMessage != null) {
                 processOutboundMessage(serverMessage);
                 serverMessage = outbound.poll();
             }
             ClientMessage clientMessage = inbound.poll();
-            if(clientMessage != null) {
+            if (clientMessage != null) {
                 processInboundMessage(clientMessage);
             }
-            if(!processed) {
+            if (!processed) {
                 try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e){
-
+                    Thread.sleep(HANDLER_SLEEP_TIME);
+                } catch (InterruptedException e) {
                 }
             }
         }
@@ -76,18 +103,16 @@ public class MessageHandler implements Runnable {
     /**
      * @param message
      */
-    public final void processInboundMessage(ClientMessage message) {
-    	if(message.hasSystemData()) {
+    public final void processInboundMessage(final ClientMessage message) {
+    	if (message.hasSystemData()) {
             systemService.processMessage(message.getSystemData());
-        } else if(message.hasAccountData()) {
+        } else if (message.hasAccountData()) {
             authService.processMessage(message.getClientInfo(),
             		message.getAccountData());
         } else {
             Account account = authService.getAccount(message);
             if (account == null) {
-                secService.processMessage(
-                		SecurityMessageType.CLIENT_NOT_AUTHENTICATED,
-                        message.getClientInfo());
+                secService.handleMessageFromUnauthenticatedClient(message);
             } else {
                 switch(message.getType()) {
                     case GAME:
@@ -108,6 +133,7 @@ public class MessageHandler implements Runnable {
     }
     /**
      * Handles messages of an unknown type.
+     * @param clientInfo Client information for message
      */
     private void handleUnknownMessageType(final ClientInfo clientInfo) {
     	ServerMessage response = ServerMessage.newBuilder()
@@ -122,7 +148,7 @@ public class MessageHandler implements Runnable {
 	}
 
 	/**
-     * @param message
+     * @param message Message to transmit
      */
     public final void processOutboundMessage(final ServerMessage message) {
     	//TODO: Work out if it's better just to send stuff directly to the network service

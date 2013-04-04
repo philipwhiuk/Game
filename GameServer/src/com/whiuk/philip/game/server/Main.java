@@ -1,7 +1,6 @@
 package com.whiuk.philip.game.server;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Properties;
@@ -24,10 +23,10 @@ import com.whiuk.philip.game.server.GameServer.GameServerProperties;
  * @author Philip
  *
  */
-public class Main {
+public final class Main {
 
 	/**
-	 * Utility class - private constructor
+	 * Utility class - private constructor.
 	 */
 	private Main() {
 	}
@@ -39,18 +38,18 @@ public class Main {
     /**
      *
      */
-    private static final String defaultPropertiesFilename =
+    private static final String DEFAULT_PROPERTIES_FILENAME =
     		"/etc/opt/philipwhiuk/gameServer.properties";
     /**
      *
      */
-    private static String propertiesFilename = defaultPropertiesFilename;
+    private static String propertiesFilename = DEFAULT_PROPERTIES_FILENAME;
 
     /**
      * @param args
      * @throws IOException IO exception reading property file
      */
-    public static void main(String[] args)
+    public static void main(final String[] args)
     		throws IOException {
     	//TODO: Initialize logging properly
     	BasicConfigurator.configure();
@@ -76,8 +75,7 @@ public class Main {
             if (line.hasOption("properties")) {
             	propertiesFilename = line.getOptionValue("properties");
             }
-        }
-        catch (ParseException e) {
+        } catch (ParseException e) {
             // oops, something went wrong
         	logger.log(Level.WARN,
         			"Unable to read command line arguments", e);
@@ -96,7 +94,7 @@ public class Main {
             		e);
             gsProp = new GameServerProperties();
         }
-        GameServer server = new GameServer(gsProp);
+        new GameServer(gsProp);
     }
 
 }

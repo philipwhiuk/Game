@@ -12,11 +12,18 @@ import com.whiuk.philip.game.server.network.NetworkService;
  *
  */
 public class GameServer {
-
+	/**
+	 *
+	 */
     private ServerWatchdog watchdog;
-
+    /**
+     *
+     */
     @Autowired
     private NetworkService networkService;
+    /**
+     *
+     */
     @Autowired
     private AlarmsService alarmsService;
 
@@ -49,12 +56,15 @@ public class GameServer {
         }
     }
 
+    /**
+     *
+     */
     private GameServerProperties properties;
 
     /**
      * @param prop
      */
-    public GameServer(GameServerProperties prop) {
+    public GameServer(final GameServerProperties prop) {
         this.properties = prop;
     }
 

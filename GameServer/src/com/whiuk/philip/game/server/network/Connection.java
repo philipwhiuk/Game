@@ -1,5 +1,10 @@
 package com.whiuk.philip.game.server.network;
 
-public class Connection {
+/**
+ * Information about a connection.
+ * @author Philip Whitehouse
+ *
+ */
+public interface Connection {
 
 }
