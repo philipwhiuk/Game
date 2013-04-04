@@ -8,14 +8,18 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-import com.whiuk.philip.game.shared.Messages;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 
+/**
+ * Netty pipeline factory to integrate protobuf coding.
+ * @author Philip Whitehouse
+ *
+ */
 public class NettyNetworkServicePipelineFactory implements
 		ChannelPipelineFactory {
 
 	@Override
-	public ChannelPipeline getPipeline() throws Exception {
+	public final ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline p = Channels.pipeline();
 		p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
 		p.addLast("protobufDecoder", new ProtobufDecoder(ClientMessage.getDefaultInstance()));
