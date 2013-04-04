@@ -31,6 +31,8 @@
 		<conf name="test-runtime" />		
 	</configurations>
 	<dependencies>
+		<!-- CLI -->
+		<dependency org="commons-cli" name="commons-cli" rev="1.2"/>		
 		<!-- Logging -->
 		<dependency org="log4j" name="log4j" rev="1.2.17"/>
 		<!-- Spring -->
@@ -40,5 +42,6 @@
 		<dependency org="org.hibernate" name="hibernate-core" rev="4.1.10.Final"  conf="build->default"/>		
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.24"/>
 		<dependency org="com.google.protobuf" name="protobuf-java" rev="2.5.0"/>
+		<dependency org="org.jboss.netty" name="netty" rev="3.2.5.Final" />
 	</dependencies>
 </ivy-module>
