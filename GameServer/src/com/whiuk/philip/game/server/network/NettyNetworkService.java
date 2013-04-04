@@ -38,7 +38,7 @@ public class NettyNetworkService implements NetworkService {
 	}
 
 	/**
-	 * Initialisation.
+	 * Initialization.
 	 */
 	@PostConstruct()
 	public final void init() {
@@ -47,13 +47,8 @@ public class NettyNetworkService implements NetworkService {
 				Executors.newCachedThreadPool());
 
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
-		bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
-			public ChannelPipeline getPipeline() {
-				return Channels.pipeline(
-					new NettyNetworkServiceHandler());
-			}
-		});
-
+		bootstrap.setPipelineFactory(
+				new NettyNetworkServicePipelineFactory());
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", true);
 		bootstrap.bind(new InetSocketAddress(PORT));

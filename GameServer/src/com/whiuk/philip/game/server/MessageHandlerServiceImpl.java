@@ -3,6 +3,7 @@ package com.whiuk.philip.game.server;
 import java.util.Queue;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
@@ -19,7 +20,9 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  * @author Philip
  *
  */
-public class MessageHandler implements Runnable {
+@Service
+public class MessageHandlerServiceImpl
+    implements Runnable, MessageHandlerService {
 	/**
 	 * Network service.
 	 */
@@ -72,7 +75,7 @@ public class MessageHandler implements Runnable {
     /**
      *
      */
-    public MessageHandler() {
+    public MessageHandlerServiceImpl() {
 
     }
 
@@ -100,9 +103,7 @@ public class MessageHandler implements Runnable {
         }
      }
 
-    /**
-     * @param message
-     */
+    @Override
     public final void processInboundMessage(final ClientMessage message) {
     	if (message.hasSystemData()) {
             systemService.processMessage(message.getSystemData());
@@ -147,9 +148,7 @@ public class MessageHandler implements Runnable {
     	outbound.add(response);
 	}
 
-	/**
-     * @param message Message to transmit
-     */
+	@Override
     public final void processOutboundMessage(final ServerMessage message) {
     	//TODO: Work out if it's better just to send stuff directly to the network service
         networkService.processMessage(message);
