@@ -1,6 +1,6 @@
 package com.whiuk.philip.game.server.security;
 
-import com.whiuk.philip.game.shared.Source;
+import com.whiuk.philip.game.shared.Messages.ClientInfo;
 
 /**
  * @author Philip
@@ -8,7 +8,7 @@ import com.whiuk.philip.game.shared.Source;
  */
 public class SecurityService {
 
-    public void processMessage(int clientNotAuthenticated, Source source) {
+    public void processMessage(int clientNotAuthenticated, ClientInfo source) {
         // TODO Auto-generated method stub
         
     }

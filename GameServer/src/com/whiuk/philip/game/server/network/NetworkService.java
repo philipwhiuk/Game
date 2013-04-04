@@ -1,6 +1,6 @@
 package com.whiuk.philip.game.server.network;
 
-import com.whiuk.philip.game.shared.Message;
+import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
  * @author Philip
@@ -8,6 +8,6 @@ import com.whiuk.philip.game.shared.Message;
  */
 public interface NetworkService {
 
-    void processMessage(Message message);
+    void processMessage(ServerMessage message);
 
 }

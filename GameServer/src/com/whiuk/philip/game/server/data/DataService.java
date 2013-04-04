@@ -6,10 +6,10 @@ package com.whiuk.philip.game.server.data;
  * @param <V> Value
  *
  */
-public interface DataService<K,V> {
+public interface DataService<K, V> {
 
     /**
-     * @param key
+     * @param key Key
      * @return value
      */
     V get(K key);

@@ -1,12 +1,12 @@
 package com.whiuk.philip.game.server.system;
 
-import com.whiuk.philip.game.shared.Message;
-import com.whiuk.philip.game.shared.Source;
+import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
+import com.whiuk.philip.game.shared.Messages.ClientInfo;
 
 public interface SystemService {
 
-    void processMessage(Message message);
+    void processMessage(SystemData data);
 
-    void processLostConnection(Source src);
+    void processLostConnection(ClientInfo src);
 
 }

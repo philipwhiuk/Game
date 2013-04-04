@@ -15,13 +15,24 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.xtext.ui.shared.xtextBuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 		<nature>org.apache.ivyde.eclipse.ivynature</nature>
+		<nature>org.eclipse.xtext.ui.shared.xtextNature</nature>
 	</natures>
 	<linkedResources>
+		<link>
+			<name>src-gen</name>
+			<type>2</type>
+			<location>C:/Users/Philip/git/Game/GameShared/src-gen</location>
+		</link>
 		<link>
 			<name>src-shared</name>
 			<type>2</type>

@@ -1,0 +1,73 @@
+syntax = "proto2";
+option java_package = "com.whiuk.philip.game.shared";
+option java_outer_classname = "Messages";
+
+//Format of messages relating to authentication and login
+
+message ClientInfo {
+	required int32 clientID = 1;
+	required string ipAddress = 2;
+}
+
+message ClientMessage {
+	required Type type = 1;
+	optional ClientInfo clientInfo = 2;
+	optional SystemData systemData = 3;
+	optional AccountData accountData = 4;
+	optional ChatData chatData = 5;
+	optional GameData gameData = 6;
+
+	enum Type {
+		SYSTEM = 0;
+		AUTH = 1;
+		CHAT = 2;
+		GAME = 3;
+	}
+
+
+	message AccountData {
+		required AccountDataType type = 1;
+		required string username = 2;
+		optional string password = 3;
+		enum AccountDataType {
+			LOGIN = 1;
+			LOGOUT = 2;
+		}
+	}
+	//Format of messages relating to system information
+	message SystemData {
+	}
+	//Format of chat data
+	message ChatData {
+		required int32 channel = 1;
+		required string message = 2;
+	}
+	message GameData {
+
+	}
+}
+message ServerMessage {
+	required Type type = 1;
+	required ClientInfo clientInfo = 2;
+	optional SystemData systemData = 3;
+
+	enum Type {
+		SYSTEM = 0;
+		AUTH = 1;
+		CHAT = 2;
+		GAME = 3;
+	}
+
+	message SystemData {
+		enum Type {
+			UNKNOWN_MESSAGE_TYPE = 0;
+			INVALID_FORMAT = 1;
+			CONNECTED_SUCCESSFULLY = 2;
+			DISCONNECTING = 3;
+		}
+
+		required Type type = 1;
+		optional string details = 2;
+	}
+
+}

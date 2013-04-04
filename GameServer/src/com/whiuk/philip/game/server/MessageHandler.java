@@ -7,13 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
 import com.whiuk.philip.game.server.auth.ClientNotAuthenticatedException;
+import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
 import com.whiuk.philip.game.server.network.NetworkService;
 import com.whiuk.philip.game.server.security.SecurityMessageType;
 import com.whiuk.philip.game.server.security.SecurityService;
 import com.whiuk.philip.game.server.system.SystemService;
-import com.whiuk.philip.game.shared.Message;
-import com.whiuk.philip.game.shared.Message.AccountData;
+import com.whiuk.philip.game.shared.Messages.ClientInfo;
+import com.whiuk.philip.game.shared.Messages.ClientMessage;
+import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
  * @author Philip
@@ -31,11 +34,11 @@ public class MessageHandler implements Runnable {
     @Autowired
     private SystemService systemService;
     @Autowired
-    private GameService chatService;
+    private ChatService chatService;
     
     
-    Queue<Message> inbound;
-    Queue<Message> outbound;
+    Queue<ClientMessage> inbound;
+    Queue<ServerMessage> outbound;
 
     private boolean running;
     /**
@@ -50,15 +53,15 @@ public class MessageHandler implements Runnable {
         running = true;
         while(running) {
             boolean processed = false;
-            Message message;
-            message = outbound.poll();
-            while(message != null) {
-                processOutboundMessage(message);
-                message = outbound.poll();
+            ServerMessage serverMessage;
+            serverMessage = outbound.poll();
+            while(serverMessage != null) {
+                processOutboundMessage(serverMessage);
+                serverMessage = outbound.poll();
             }
-            message = inbound.poll();
-            if(message != null) {
-                processInboundMessage(message);
+            ClientMessage clientMessage = inbound.poll();
+            if(clientMessage != null) {
+                processInboundMessage(clientMessage);
             }
             if(!processed) {
                 try {
@@ -73,41 +76,56 @@ public class MessageHandler implements Runnable {
     /**
      * @param message
      */
-    public void processInboundMessage(Message message) {
-        if(message.getType() == Message.Type.SYSTEM) {
-            systemService.processMessage(message);
-        } else if(message.getType() == Message.Type.AUTH) {
-            authService.processMessage(message.getSource(), (AccountData) message.getData());
+    public final void processInboundMessage(ClientMessage message) {
+    	if(message.hasSystemData()) {
+            systemService.processMessage(message.getSystemData());
+        } else if(message.hasAccountData()) {
+            authService.processMessage(message.getClientInfo(),
+            		message.getAccountData());
         } else {
             Account account = authService.getAccount(message);
-            if(account == null) {
-                secService.processMessage(SecurityMessageType.CLIENT_NOT_AUTHENTICATED,
-                        message.getSource());
+            if (account == null) {
+                secService.processMessage(
+                		SecurityMessageType.CLIENT_NOT_AUTHENTICATED,
+                        message.getClientInfo());
             } else {
                 switch(message.getType()) {
                     case GAME:
-                        gameService.processMessage(account, message.getData());
+                        gameService.processMessage(account,
+                        		message.getGameData());
                         break;
                     case CHAT:
-                        chatService.processMessage(authService.getAccount(message),message.getData());
+                        chatService.processMessage(
+                        		authService.getAccount(message),
+                        		message.getChatData());
                         break;
                     default:
-                        //TODO: Protobuf message builder
-                        /*
-                        queueMessage(MessageBuilder.buildMessage()
-                                .setType(Event.Type.SYSTEM)
-                                .setData(DataBuilder.buildData()
-                                        .setType(SystemData.Type.UNKNOWN_TYPE));
-                                        */
+                    	handleUnknownMessageType(message.getClientInfo());
                         break;
                 }
             }
         }
     }
     /**
+     * Handles messages of an unknown type.
+     */
+    private void handleUnknownMessageType(final ClientInfo clientInfo) {
+    	ServerMessage response = ServerMessage.newBuilder()
+    			.setClientInfo(clientInfo)
+        		.setType(ServerMessage.Type.SYSTEM)
+        		.setSystemData(ServerMessage.SystemData.newBuilder()
+        				.setType(
+			ServerMessage.SystemData.Type.UNKNOWN_MESSAGE_TYPE)
+        				.build())
+        		.build();
+    	outbound.add(response);
+	}
+
+	/**
      * @param message
      */
-    public void processOutboundMessage(Message message) {
+    public final void processOutboundMessage(final ServerMessage message) {
+    	//TODO: Work out if it's better just to send stuff directly to the network service
         networkService.processMessage(message);
     }
 }
