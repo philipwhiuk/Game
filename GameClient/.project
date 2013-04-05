@@ -13,8 +13,14 @@
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
+		<nature>org.apache.ivyde.eclipse.ivynature</nature>
 	</natures>
 	<linkedResources>
+		<link>
+			<name>src-gen</name>
+			<type>2</type>
+			<location>C:/Users/Philip/git/Game/GameShared/src-gen</location>
+		</link>
 		<link>
 			<name>src-shared</name>
 			<type>2</type>
