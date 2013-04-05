@@ -2,6 +2,7 @@ package com.whiuk.philip.game.server.game;
 
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
@@ -14,13 +15,31 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessageOrBuilder;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
 
+/**
+ * Game Service implementation.
+ * @author Philip Whitehouse
+ *
+ */
 @Service
 public class GameServiceImpl implements GameService {
-
-	AuthService authService;
-	MessageHandlerService messageHandlerService;
-	Map<Character, Account> accounts;
-	Map<Account, Character> characters;
+	/**
+	 * Authentication service.
+	 */
+	@Autowired
+	private AuthService authService;
+	/**
+	 * Message handler.
+	 */
+	@Autowired
+	private MessageHandlerService messageHandlerService;
+	/**
+	 * Character -> Account mapping.
+	 */
+	private Map<Character, Account> accounts;
+	/**
+	 * Account -> Character mapping.
+	 */
+	private Map<Account, Character> characters;
 	
 	@Override
     public void processMessage(final Account account, final GameData data) {
@@ -38,7 +57,13 @@ public class GameServiceImpl implements GameService {
 		}
     }
 
-	private void update(Account account, GameData data) {
+	/**
+	 * Handle client game update.
+	 * @param account
+	 * @param data
+	 */
+	private void update(final Account account,
+			final GameData data) {
 		switch(data.getType()) {
 			case MOVEMENT: move(characters.get(account),
 					data.getMovementInformation()); break;
@@ -58,7 +83,8 @@ public class GameServiceImpl implements GameService {
 	 * @param account
 	 * @param data
 	 */
-	private void characterSelection(Account account, GameData data) {
+	private void characterSelection(final Account account,
+			final GameData data) {
 		if (characters.get(account) != null) {
 			ServerMessage message = ServerMessage
 				.newBuilder()
@@ -79,8 +105,8 @@ public class GameServiceImpl implements GameService {
 	 * @param character
 	 * @param combatInformation
 	 */
-	private void combat(Character character,
-			CombatInformation combatInformation) {
+	private void combat(final Character character,
+			final CombatInformation combatInformation) {
 		// TODO Auto-generated method stub
 
 	}
@@ -90,8 +116,8 @@ public class GameServiceImpl implements GameService {
 	 * @param character
 	 * @param actionInformation
 	 */
-	private void action(Character character,
-			ActionInformation actionInformation) {
+	private void action(final Character character,
+			final ActionInformation actionInformation) {
 		// TODO Auto-generated method stub
 
 	}
@@ -101,8 +127,8 @@ public class GameServiceImpl implements GameService {
 	 * @param character
 	 * @param movementInformation
 	 */
-	private void move(Character character,
-			MovementInformation movementInformation) {
+	private void move(final Character character,
+			final MovementInformation movementInformation) {
 		// TODO Auto-generated method stub
 
 	}
