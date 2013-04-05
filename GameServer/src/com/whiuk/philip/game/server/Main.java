@@ -16,6 +16,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.BeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.whiuk.philip.game.server.GameServer.GameServerProperties;
 
@@ -80,7 +83,11 @@ public final class Main {
         	logger.log(Level.WARN,
         			"Unable to read command line arguments", e);
         }
-
+    	
+    	ApplicationContext context = new ClassPathXmlApplicationContext("META-INF/beans.xml");
+    	BeanFactory factory = context;
+	    GameServer gameServer = (GameServer) factory
+    	        .getBean("gameServer");
         GameServerProperties gsProp;
         File file = new File(propertiesFilename);
         try {
@@ -94,7 +101,8 @@ public final class Main {
             		e);
             gsProp = new GameServerProperties();
         }
-        new GameServer(gsProp);
+        gameServer.setProperties(gsProp);
+        gameServer.run();
     }
 
 }

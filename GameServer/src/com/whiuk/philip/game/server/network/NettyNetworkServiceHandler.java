@@ -23,11 +23,11 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
 
 	/**
 	 * Set message handler.
-	 * @param messageHandler Message handler
+	 * @param handler Message handler
 	 */
 	public final void setMessageHandlerService(
-			final MessageHandlerService messageHandler) {
-		this.messageHandler = messageHandler;
+			final MessageHandlerService handler) {
+		this.messageHandler = handler;
 	}
 
 	@Override

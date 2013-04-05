@@ -7,14 +7,12 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
  * @author Philip
  *
  */
-public class GameService {
+public interface GameService {
 
     /**
      * @param account
      * @param data
      */
-    public void processMessage(final Account account, final GameData data) {
-        // TODO Auto-generated method stub
-    }
+    void processMessage(final Account account, final GameData data);
 
 }
