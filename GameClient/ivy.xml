@@ -32,5 +32,6 @@
 	</configurations>
 	<dependencies>
 		<dependency org="com.google.protobuf" name="protobuf-java" rev="2.5.0"/>
+		<dependency org="org.jboss.netty" name="netty" rev="3.2.5.Final" />
 	</dependencies>
 </ivy-module>
