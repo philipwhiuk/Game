@@ -5,8 +5,8 @@ option java_outer_classname = "Messages";
 //Format of messages relating to authentication and login
 
 message ClientInfo {
-	required int32 clientID = 1;
-	required string ipAddress = 2;
+    required int32 clientID = 1;
+    required string ipAddress = 2;
 }
 
 message ClientMessage {
@@ -43,13 +43,33 @@ message ClientMessage {
 		required string message = 2;
 	}
 	message GameData {
+		required Type type = 1;
+		optional MovementInformation movementInformation = 2;
+		optional ActionInformation actionInformation = 3;
+		optional CombatInformation combatInformation = 4;
+		enum Type {
+				CHARACTER_SELECTION = 0;
+				EXIT = 1;
+				MOVEMENT = 2;
+				ACTION = 3;
+				COMBAT = 4;
+		}
+		message MovementInformation {
 
+		}
+		message ActionInformation {
+
+		}
+		message CombatInformation {
+
+		}
 	}
 }
 message ServerMessage {
 	required Type type = 1;
 	required ClientInfo clientInfo = 2;
 	optional SystemData systemData = 3;
+	optional GameData gameData = 4;
 
 	enum Type {
 		SYSTEM = 0;
@@ -68,6 +88,13 @@ message ServerMessage {
 
 		required Type type = 1;
 		optional string details = 2;
+	}
+
+	message GameData {
+		optional Error error = 1;
+		enum Error {
+			CHARACTER_ALREADY_SELECTED = 0;
+		}
 	}
 
 }
