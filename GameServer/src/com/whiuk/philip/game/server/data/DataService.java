@@ -14,4 +14,10 @@ public interface DataService<K, V> {
      */
     V get(K key);
 
+    /**
+     * @param key Key
+     * @param value Value
+     */
+    void put(K key, V value);
+
 }
