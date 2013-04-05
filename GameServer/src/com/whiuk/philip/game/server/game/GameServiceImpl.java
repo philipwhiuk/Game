@@ -46,6 +46,7 @@ public class GameServiceImpl implements GameService {
 	/**
 	 * Watchdog service.
 	 */
+	@Autowired
 	private WatchdogService watchdogService;
 
 	/**
@@ -58,6 +59,7 @@ public class GameServiceImpl implements GameService {
 	 */
 	@PostConstruct
 	public final void init() {
+		gameWorld = GameWorld.load();
 		watchdogService.monitor(gameWorld);
 	}
 	

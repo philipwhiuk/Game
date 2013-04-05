@@ -71,4 +71,13 @@ public class GameWorld extends Thread implements Watchable {
 	public void setWatchdog(Watchdog watchdog) {
 		this.watchdog = watchdog;
 	}
+
+	/**
+	 * Loads the game world
+	 * @return
+	 */
+	public static GameWorld load() {
+		// TODO Auto-generated method stub
+		return new GameWorld();
+	}
 }

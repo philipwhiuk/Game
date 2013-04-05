@@ -1,5 +1,6 @@
 package com.whiuk.philip.game.server.watchdog;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -15,6 +16,10 @@ public class WatchdogServiceImpl implements WatchdogService {
 	 */
 	private List<Watchdog> watchdogs;
 
+	public WatchdogServiceImpl() {
+		watchdogs = new ArrayList<Watchdog>();
+	}
+	
 	@Override
 	public final void monitor(final Watchable watched) {
 		watchdogs.add(new WatchdogServiceWatchdog(watched));
