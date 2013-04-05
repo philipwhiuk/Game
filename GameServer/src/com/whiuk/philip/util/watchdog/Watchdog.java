@@ -25,4 +25,9 @@ public interface Watchdog extends Runnable {
      * @return
      */
     long getWarningTime();
+
+    /**
+     * Pat the watchdog.
+     */
+	void pat();
 }

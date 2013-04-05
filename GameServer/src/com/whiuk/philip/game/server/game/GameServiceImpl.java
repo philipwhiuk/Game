@@ -2,17 +2,19 @@ package com.whiuk.philip.game.server.game;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
+import com.whiuk.philip.game.server.watchdog.WatchdogService;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.ActionInformation;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.CombatInformation;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.MovementInformation;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
-import com.whiuk.philip.game.shared.Messages.ServerMessageOrBuilder;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
 
 /**
@@ -40,9 +42,27 @@ public class GameServiceImpl implements GameService {
 	 * Account -> Character mapping.
 	 */
 	private Map<Account, Character> characters;
+
+	/**
+	 * Watchdog service.
+	 */
+	private WatchdogService watchdogService;
+
+	/**
+	 * Game world.
+	 */
+	private GameWorld gameWorld;
+
+	/**
+	 * Initialize the service.
+	 */
+	@PostConstruct
+	public final void init() {
+		watchdogService.monitor(gameWorld);
+	}
 	
 	@Override
-    public void processMessage(final Account account, final GameData data) {
+	public final void processMessage(final Account account, final GameData data) {
 		if (data.getType() == GameData.Type.CHARACTER_SELECTION) {
 			characterSelection(account, data);
 		} else if (data.getType() == GameData.Type.EXIT) {
