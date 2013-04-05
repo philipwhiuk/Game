@@ -22,8 +22,10 @@ public class NettyNetworkServicePipelineFactory implements
 	public final ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline p = Channels.pipeline();
 		p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-		p.addLast("protobufDecoder", new ProtobufDecoder(ClientMessage.getDefaultInstance()));
-		p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
+		p.addLast("protobufDecoder",
+				new ProtobufDecoder(ClientMessage.getDefaultInstance()));
+		p.addLast("frameEncoder",
+				new ProtobufVarint32LengthFieldPrepender());
 		p.addLast("protobufEncoder", new ProtobufEncoder());
 		p.addLast("handler", new NettyNetworkServiceHandler());
 		return p;

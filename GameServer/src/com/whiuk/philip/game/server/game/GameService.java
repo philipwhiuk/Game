@@ -10,6 +10,7 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
 public interface GameService {
 
     /**
+     * Process game message from account
      * @param account
      * @param data
      */

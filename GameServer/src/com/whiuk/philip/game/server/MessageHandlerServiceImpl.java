@@ -9,6 +9,7 @@ import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
+import com.whiuk.philip.game.server.network.Connection;
 import com.whiuk.philip.game.server.network.NetworkService;
 import com.whiuk.philip.game.server.security.SecurityService;
 import com.whiuk.philip.game.server.system.SystemService;
@@ -132,11 +133,16 @@ public class MessageHandlerServiceImpl
             }
         }
     }
-    /**
-     * Handles messages of an unknown type.
-     * @param clientInfo Client information for message
-     */
-    private void handleUnknownMessageType(final ClientInfo clientInfo) {
+	@Override
+	public final void handleUnknownMessageType(
+			final Connection connection) {
+		// TODO Auto-generated method stub
+		handleUnknownMessageType(
+				networkService.getClientInfo(connection));
+	}
+
+    @Override
+    public final void handleUnknownMessageType(final ClientInfo clientInfo) {
     	ServerMessage response = ServerMessage.newBuilder()
     			.setClientInfo(clientInfo)
         		.setType(ServerMessage.Type.SYSTEM)

@@ -57,4 +57,10 @@ public class NettyNetworkService implements NetworkService {
 
 	}
 
+	@Override
+	public Connection getClientInfo(Connection connection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

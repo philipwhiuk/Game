@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 public class VoldemortDataService<K, V> implements DataService<K, V> {
 
 	@Override
-	public V get(K key) {
+	public final V get(final K key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

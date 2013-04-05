@@ -9,10 +9,10 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage.ChatData;
  *
  */
 public interface ChatService {
-	/**
-	 *
-	 * @param account
-	 * @param chatData
+    /**
+	 * Process chat message from account.
+	 * @param account Account
+	 * @param chatData Chat message
 	 */
 	void processMessage(Account account, ChatData chatData);
 
