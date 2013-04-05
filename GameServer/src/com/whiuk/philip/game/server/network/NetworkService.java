@@ -14,7 +14,7 @@ public interface NetworkService {
 	 */
     void processMessage(ServerMessage message);
     /**
-     * Create a Client Info object for a connection
+     * Create a Client Info object for a connection.
      * @param connection
      * @return
      */

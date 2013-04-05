@@ -6,7 +6,7 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
- * Handles message flow
+ * Handles message flow.
  * @author Philip Whitehouse
  *
  */

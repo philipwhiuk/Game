@@ -18,7 +18,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepend
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
- * 
+ *
  * @author Philip Whitehouse
  *
  */
@@ -40,7 +40,7 @@ public class GameClient {
 	 *
 	 */
 	public GameClient() {
-		ntwThread = new NetworkThread(HOST,PORT);
+		ntwThread = new NetworkThread(HOST, PORT);
 		ntwThread.start();
 	}
 }

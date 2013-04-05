@@ -18,7 +18,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepend
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
- * 
+ *
  * @author Philip Whitehouse
  *
  */
@@ -34,12 +34,12 @@ public class NetworkThread extends Thread {
 	private int port;
 	/**
 	 *
-	 * @param host
-	 * @param port
+	 * @param h hostname
+	 * @param p port
 	 */
-	public NetworkThread(final String host, final int port) {
-		this.host = host;
-		this.port = port;
+	public NetworkThread(final String h, final int p) {
+		this.host = h;
+		this.port = p;
 	}
 
 	@Override
@@ -56,9 +56,9 @@ public class NetworkThread extends Thread {
 					ChannelPipeline p = Channels.pipeline();
 					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
 					p.addLast("protobufDecoder",
-							new ProtobufDecoder(ServerMessage.getDefaultInstance()));
+						new ProtobufDecoder(ServerMessage.getDefaultInstance()));
 					p.addLast("frameEncoder",
-							new ProtobufVarint32LengthFieldPrepender());
+						new ProtobufVarint32LengthFieldPrepender());
 					p.addLast("protobufEncoder", new ProtobufEncoder());
 					p.addLast("handler", new ClientChannelHandler());
 					return p;

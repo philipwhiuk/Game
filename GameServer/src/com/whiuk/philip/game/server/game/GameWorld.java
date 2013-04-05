@@ -6,7 +6,7 @@ import com.whiuk.philip.util.watchdog.Watchable;
 import com.whiuk.philip.util.watchdog.Watchdog;
 
 /**
- * Game world
+ * Game world.
  * @author Philip Whitehouse
  *
  */
@@ -64,16 +64,15 @@ public class GameWorld extends Thread implements Watchable {
 	@Override
 	public void restart() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
-	public void setWatchdog(Watchdog watchdog) {
-		this.watchdog = watchdog;
+	public void setWatchdog(Watchdog w) {
+		this.watchdog = w;
 	}
 
 	/**
-	 * Loads the game world
+	 * Loads the game world.
 	 * @return
 	 */
 	public static GameWorld load() {

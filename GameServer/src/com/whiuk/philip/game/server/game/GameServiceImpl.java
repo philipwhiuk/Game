@@ -62,7 +62,7 @@ public class GameServiceImpl implements GameService {
 		gameWorld = GameWorld.load();
 		watchdogService.monitor(gameWorld);
 	}
-	
+
 	@Override
 	public final void processMessage(final Account account, final GameData data) {
 		if (data.getType() == GameData.Type.CHARACTER_SELECTION) {
@@ -73,7 +73,6 @@ public class GameServiceImpl implements GameService {
 			}
 		} else if (characters.get(account) != null) {
 			update(account, data);
-			
 		} else {
 			//TODO: Log action attempted when no character selected
 		}

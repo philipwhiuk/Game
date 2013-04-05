@@ -19,7 +19,7 @@ public class WatchdogServiceImpl implements WatchdogService {
 	public WatchdogServiceImpl() {
 		watchdogs = new ArrayList<Watchdog>();
 	}
-	
+
 	@Override
 	public final void monitor(final Watchable watched) {
 		watchdogs.add(new WatchdogServiceWatchdog(watched));

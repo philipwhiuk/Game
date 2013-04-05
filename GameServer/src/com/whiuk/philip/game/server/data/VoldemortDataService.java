@@ -39,7 +39,7 @@ public class VoldemortDataService<K, V> implements DataService<K, V> {
     }
 
     /**
-     * Initialization
+     * Initialization.
      */
     public void init() {
         String bootstrapUrl = "tcp://" + VOLDEMORT_ADDRESS;

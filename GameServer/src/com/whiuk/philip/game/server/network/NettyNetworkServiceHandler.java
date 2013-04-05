@@ -16,7 +16,7 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage;
 public class NettyNetworkServiceHandler extends SimpleChannelHandler {
 
 	/**
-	 * Handles network messages
+	 * Handles network messages.
 	 */
 	@Autowired
 	MessageHandlerService messageHandler;

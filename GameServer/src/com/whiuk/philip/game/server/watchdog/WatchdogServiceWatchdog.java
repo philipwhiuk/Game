@@ -28,17 +28,17 @@ public class WatchdogServiceWatchdog implements Watchdog {
 	@Override
 	public void run() {
 		running = true;
-		while(running) {
+		while (running) {
 			try {
 				Thread.sleep(THREAD_START_UP_TIME);
 			} catch (InterruptedException e1) {
 			}
 			started = true;
-			while(started) {
-				if(lastPat < System.nanoTime() - warningTime) {
+			while (started) {
+				if (lastPat < System.nanoTime() - warningTime) {
 					watchedObject.warn();
 				}
-				if(lastPat < System.nanoTime() - killTime) {
+				if (lastPat < System.nanoTime() - killTime) {
 					watchedObject.restart();
 					started = false;
 				}
@@ -54,7 +54,7 @@ public class WatchdogServiceWatchdog implements Watchdog {
 	public void pat() {
 		lastPat = System.nanoTime();
 	}
-	
+
 	@Override
 	public void restartThread() {
 		watchedObject.restart();
