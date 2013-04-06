@@ -1,6 +1,8 @@
 package com.whiuk.philip.game.server.network;
 
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
+import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,5 +37,13 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
 			final MessageEvent e) {
 		ClientMessage message = (ClientMessage) e.getMessage();
 		messageHandler.processInboundMessage(message);
+	}
+
+	@Override
+	public final void exceptionCaught(final ChannelHandlerContext ctx,
+			final ExceptionEvent e) {
+        e.getCause().printStackTrace();
+        Channel ch = e.getChannel();
+        ch.close();
 	}
 }

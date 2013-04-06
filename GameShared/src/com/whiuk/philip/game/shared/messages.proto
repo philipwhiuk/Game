@@ -36,6 +36,12 @@ message ClientMessage {
 	}
 	//Format of messages relating to system information
 	message SystemData {
+		required Type type = 1;
+		enum Type {
+			CONNECTING = 0;
+			DISCONNECTING = 1;
+		}
+
 	}
 	//Format of chat data
 	message ChatData {

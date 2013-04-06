@@ -46,7 +46,12 @@ public class GameClient {
 				
 			}
 			while(connected) {
-
+				ntwThread.sendOutboundMessage(ClientMessage.newBuilder()
+						.setType(ClientMessage.Type.SYSTEM)
+						.setSystemData(ClientMessage.SystemData.newBuilder()
+								.setType(ClientMessage.SystemData.Type.CONNECTING)
+								.build())
+						.build());
 			}
 		}
 	}
