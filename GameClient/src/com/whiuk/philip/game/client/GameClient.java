@@ -47,6 +47,10 @@ public class GameClient {
 	 * Display hieght.
 	 */
 	private static final int DISPLAY_HEIGHT = 600;
+	/**
+	 * Title.
+	 */
+	private static final String GAME_CLIENT_TITLE = "The Game";
 
 	/**
 	 *
@@ -65,6 +69,7 @@ public class GameClient {
 		try {
 			Display.setDisplayMode(new DisplayMode(
 					DISPLAY_WIDTH, DISPLAY_HEIGHT));
+			Display.setTitle(GAME_CLIENT_TITLE);
 			Display.create();
 		} catch (LWJGLException e) {
 			handleLWJGLException(e);
