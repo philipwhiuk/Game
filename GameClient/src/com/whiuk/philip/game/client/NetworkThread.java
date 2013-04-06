@@ -9,6 +9,7 @@ import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
+import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
@@ -23,6 +24,9 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  *
  */
 public class NetworkThread extends Thread {
+	/**
+	 *
+	 */
 	private static final Object CONNECTION_TIMEOUT = 10000;
 	/**
 	 *
@@ -44,7 +48,7 @@ public class NetworkThread extends Thread {
 
 	@Override
 	public final void run() {
-		ChannelFactory factory = new NioServerSocketChannelFactory(
+		ChannelFactory factory = new NioClientSocketChannelFactory(
 				Executors.newCachedThreadPool(),
 				Executors.newCachedThreadPool());
 
@@ -77,7 +81,7 @@ public class NetworkThread extends Thread {
 		 } else if (!f.isSuccess()) {
 		     f.getCause().printStackTrace();
 		 } else {
-		     // Connection established successfully
+		     GameClient.getGameClient().setConnected(true);
 		 }
 	}
 }

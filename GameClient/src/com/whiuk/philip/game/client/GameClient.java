@@ -1,20 +1,6 @@
 package com.whiuk.philip.game.client;
 
-import java.net.InetSocketAddress;
-import java.net.SocketAddress;
-import java.util.concurrent.Executors;
-
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
-import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
@@ -32,15 +18,65 @@ public class GameClient {
 	 */
 	private static final int PORT = 8443;
 	/**
+	 * 
+	 */
+	private static GameClient gameClient;
+	/**
 	 *
 	 */
 	private final NetworkThread ntwThread;
+	private boolean connected;
+	private boolean running;
 
 	/**
 	 *
 	 */
 	public GameClient() {
 		ntwThread = new NetworkThread(HOST, PORT);
-		ntwThread.start();
 	}
+
+	/**
+	 * Run game client.
+	 */
+	public final void run() {
+		ntwThread.start();
+		running = true;
+		while(running) {
+			while(!connected) {
+				
+			}
+			while(connected) {
+
+			}
+		}
+	}
+	/**
+	 * Process message.
+	 * @param message
+	 */
+	public void processInboundMessage(final ServerMessage message) {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Singleton access.
+	 * @return client
+	 */
+	public static GameClient getGameClient() {
+		return gameClient;
+	}
+	/**
+	 * Singleton setter.
+	 * @param client
+	 * @return
+	 */
+	public static void setGameClient(final GameClient client) {
+		gameClient = client;
+	}
+
+	public void setConnected(boolean b) {
+		connected = b;
+	}
+
 }
