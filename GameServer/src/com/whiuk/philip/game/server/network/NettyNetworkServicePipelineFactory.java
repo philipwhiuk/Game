@@ -18,15 +18,18 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage;
 public class NettyNetworkServicePipelineFactory implements
 		ChannelPipelineFactory {
 
+	/**
+	 * Handler
+	 */
 	private NettyNetworkServiceHandler handler;
 
 	/**
 	 * 
-	 * @param handler
+	 * @param h
 	 */
-	public NettyNetworkServicePipelineFactory(NettyNetworkServiceHandler handler) {
+	public NettyNetworkServicePipelineFactory(NettyNetworkServiceHandler h) {
 		super();
-		this.handler = handler;
+		this.handler = h;
 	}
 
 	@Override

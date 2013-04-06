@@ -38,7 +38,7 @@ message ClientMessage {
 	message SystemData {
 		required Type type = 1;
 		enum Type {
-			CONNECTING = 0;
+			CONNECTED = 0;
 			DISCONNECTING = 1;
 		}
 

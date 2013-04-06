@@ -3,6 +3,7 @@ package com.whiuk.philip.game.client;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
+import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
@@ -43,7 +44,18 @@ public class NetworkThread extends Thread {
 	 *
 	 */
 	private ClientChannelHandler messageHandler;
+	/**
+	 *
+	 */
 	private Channel channel;
+	/**
+	 *
+	 */
+	private boolean listening;
+	/**
+	 * Class logger
+	 */
+	private static final transient Logger LOGGER = Logger.getLogger(GameClient.class);
 	/**
 	 *
 	 * @param h hostname
@@ -91,7 +103,14 @@ public class NetworkThread extends Thread {
 		     f.getCause().printStackTrace();
 		 } else {
 			 channel = f.getChannel();
-		     GameClient.getGameClient().setConnected(true);
+			 LOGGER.info("Sending connected message");
+			 sendOutboundMessage(ClientMessage.newBuilder()
+				.setType(ClientMessage.Type.SYSTEM)
+				.setSystemData(ClientMessage.SystemData.newBuilder()
+						.setType(ClientMessage.SystemData.Type.CONNECTED)
+						.build())
+				.build());
+			 GameClient.getGameClient().setConnected(true);
 		 }
 	}
 
@@ -101,5 +120,17 @@ public class NetworkThread extends Thread {
 	 */
 	public final void sendOutboundMessage(final ClientMessage message) {
 		channel.write(message);
+	}
+
+	public void stopListening() {
+		//TODO Move this to the listening loop
+		sendOutboundMessage(ClientMessage.newBuilder()
+			.setType(ClientMessage.Type.SYSTEM)
+			.setSystemData(ClientMessage.SystemData.newBuilder()
+				.setType(ClientMessage.SystemData.Type.DISCONNECTING)
+				.build())
+			.build());
+		listening = false;
+		
 	}
 }

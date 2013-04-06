@@ -2,8 +2,10 @@ package com.whiuk.philip.game.client;
 
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
+import org.lwjgl.LWJGLException;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
@@ -13,24 +15,38 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  */
 public class GameClient {
 	/**
-	 *
+	 * Network host.
 	 */
 	private static final String HOST = "localhost";
 	/**
-	 *
+	 * Network port.
 	 */
 	private static final int PORT = 8443;
 	/**
-	 * 
+	 * Game client singleton.
 	 */
 	private static GameClient gameClient;
 	/**
 	 *
 	 */
 	private final NetworkThread ntwThread;
+	/**
+	 * Connection status.
+	 */
 	private volatile boolean connected;
-	private volatile boolean running;
-	private static final transient Logger LOGGER = Logger.getLogger(GameClient.class);
+	/**
+	 * Class logger.
+	 */
+	private static final transient Logger LOGGER =
+			Logger.getLogger(GameClient.class);
+	/**
+	 * Display width.
+	 */
+	private static final int DISPLAY_WIDTH = 800;
+	/**
+	 * Display hieght.
+	 */
+	private static final int DISPLAY_HEIGHT = 600;
 
 	/**
 	 *
@@ -46,31 +62,41 @@ public class GameClient {
 	 */
 	public final void run() {
 		ntwThread.start();
-		running = true;
-		while(running) {
-			while(!connected) {
-				
-			}
-			while(connected) {
-				LOGGER.info("Sending message");
-				ntwThread.sendOutboundMessage(ClientMessage.newBuilder()
-						.setType(ClientMessage.Type.SYSTEM)
-						.setSystemData(ClientMessage.SystemData.newBuilder()
-								.setType(ClientMessage.SystemData.Type.CONNECTING)
-								.build())
-						.build());
-			}
+		try {
+			Display.setDisplayMode(new DisplayMode(
+					DISPLAY_WIDTH, DISPLAY_HEIGHT));
+			Display.create();
+		} catch (LWJGLException e) {
+			handleLWJGLException(e);
+		}
+		while (!Display.isCloseRequested()) {
+			// render OpenGL here
+			Display.update();
 		}
 	}
 	/**
+	 * Handles a fatal LWJGL exception.
+	 * @param e Exception
+	 */
+	private void handleLWJGLException(final LWJGLException e) {
+		LOGGER.fatal("Failed to create display", e);
+		ntwThread.stopListening();
+		try {
+			ntwThread.join();
+		} catch (InterruptedException e1) {
+			LOGGER.info("Interrupted while closing network thread.");
+		}
+		System.exit(1);
+	}
+
+	/**
 	 * Process message.
-	 * @param message
+	 * @param message Server message
 	 */
 	public void processInboundMessage(final ServerMessage message) {
 		// TODO Auto-generated method stub
 
 	}
-
 	/**
 	 * Singleton access.
 	 * @return client
@@ -80,14 +106,17 @@ public class GameClient {
 	}
 	/**
 	 * Singleton setter.
-	 * @param client
-	 * @return
+	 * @param client Client
 	 */
 	public static void setGameClient(final GameClient client) {
 		gameClient = client;
 	}
 
-	public void setConnected(boolean b) {
+	/**
+	 * Update connection status.
+	 * @param b Connection status
+	 */
+	public final void setConnected(final boolean b) {
 		connected = b;
 	}
 
