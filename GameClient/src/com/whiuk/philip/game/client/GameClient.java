@@ -95,7 +95,7 @@ public class GameClient {
 	 * Close the network connection.
 	 */
 	private void closeNetworkConnection() {
-		ntwThread.stopListening();
+		ntwThread.disconnectAndStop();
 		try {
 			ntwThread.join();
 		} catch (InterruptedException e1) {

@@ -2,6 +2,7 @@ package com.whiuk.philip.game.client;
 
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -51,7 +52,8 @@ public class NetworkThread extends Thread {
 	/**
 	 *
 	 */
-	private boolean listening;
+	private AtomicBoolean connected;
+	private boolean running;
 	/**
 	 * Class logger
 	 */
@@ -119,18 +121,26 @@ public class NetworkThread extends Thread {
 	 * @param message
 	 */
 	public final void sendOutboundMessage(final ClientMessage message) {
-		channel.write(message);
+		if (channel != null) {
+			channel.write(message);
+		}
 	}
 
-	public void stopListening() {
-		//TODO Move this to the listening loop
-		sendOutboundMessage(ClientMessage.newBuilder()
-			.setType(ClientMessage.Type.SYSTEM)
-			.setSystemData(ClientMessage.SystemData.newBuilder()
-				.setType(ClientMessage.SystemData.Type.DISCONNECTING)
-				.build())
-			.build());
-		listening = false;
-		
+	/**
+	 * Provides method to close down the network connection gracefully.
+	 */
+	public final void disconnectAndStop() {
+		synchronized (connected) {
+			if (connected.get()) {
+				sendOutboundMessage(ClientMessage.newBuilder()
+					.setType(ClientMessage.Type.SYSTEM)
+					.setSystemData(ClientMessage.SystemData.newBuilder()
+						.setType(ClientMessage.SystemData.Type.DISCONNECTING)
+						.build())
+					.build());
+				running = false;
+				connected.set(false);
+			}
+		}
 	}
 }
