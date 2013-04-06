@@ -11,7 +11,7 @@ import com.whiuk.philip.game.shared.Messages.ClientInfo;
 public interface SystemService {
 	/**
 	 *
-	 * @param data
+	 * @param data System data
 	 */
     void processMessage(SystemData data);
     /**

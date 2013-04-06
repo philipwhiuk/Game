@@ -18,6 +18,17 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage;
 public class NettyNetworkServicePipelineFactory implements
 		ChannelPipelineFactory {
 
+	private NettyNetworkServiceHandler handler;
+
+	/**
+	 * 
+	 * @param handler
+	 */
+	public NettyNetworkServicePipelineFactory(NettyNetworkServiceHandler handler) {
+		super();
+		this.handler = handler;
+	}
+
 	@Override
 	public final ChannelPipeline getPipeline() throws Exception {
 		ChannelPipeline p = Channels.pipeline();
@@ -27,7 +38,7 @@ public class NettyNetworkServicePipelineFactory implements
 		p.addLast("frameEncoder",
 				new ProtobufVarint32LengthFieldPrepender());
 		p.addLast("protobufEncoder", new ProtobufEncoder());
-		p.addLast("handler", new NettyNetworkServiceHandler());
+		p.addLast("handler", handler);
 		return p;
 	}
 

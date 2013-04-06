@@ -9,6 +9,7 @@ import org.jboss.netty.bootstrap.ServerBootstrap;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
@@ -28,6 +29,12 @@ public class NettyNetworkService implements NetworkService {
 	private static final int PORT = 8443;
 
 	/**
+	 * 
+	 */
+	@Autowired
+	private NettyNetworkServiceHandler handler;
+
+	/**
 	 *
 	 */
 	public NettyNetworkService() {
@@ -45,7 +52,7 @@ public class NettyNetworkService implements NetworkService {
 
 		ServerBootstrap bootstrap = new ServerBootstrap(factory);
 		bootstrap.setPipelineFactory(
-				new NettyNetworkServicePipelineFactory());
+			new NettyNetworkServicePipelineFactory(handler));
 		bootstrap.setOption("child.tcpNoDelay", true);
 		bootstrap.setOption("child.keepAlive", true);
 		bootstrap.bind(new InetSocketAddress(PORT));

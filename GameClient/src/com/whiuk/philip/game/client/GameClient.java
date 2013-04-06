@@ -1,5 +1,8 @@
 package com.whiuk.philip.game.client;
 
+import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
+
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
@@ -25,13 +28,16 @@ public class GameClient {
 	 *
 	 */
 	private final NetworkThread ntwThread;
-	private boolean connected;
-	private boolean running;
+	private volatile boolean connected;
+	private volatile boolean running;
+	private static final transient Logger LOGGER = Logger.getLogger(GameClient.class);
 
 	/**
 	 *
 	 */
 	public GameClient() {
+    	//TODO: Initialize logging properly
+    	BasicConfigurator.configure();
 		ntwThread = new NetworkThread(HOST, PORT);
 	}
 
@@ -46,6 +52,7 @@ public class GameClient {
 				
 			}
 			while(connected) {
+				LOGGER.info("Sending message");
 				ntwThread.sendOutboundMessage(ClientMessage.newBuilder()
 						.setType(ClientMessage.Type.SYSTEM)
 						.setSystemData(ClientMessage.SystemData.newBuilder()
