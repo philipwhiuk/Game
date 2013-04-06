@@ -159,13 +159,13 @@ public class GameClient {
 			@Override
 			public void operationComplete(ChannelFuture future)
 					throws Exception {
-				if (f.isCancelled()) {
+				if (future.isCancelled()) {
 				     LOGGER.info("Connection attempt cancelled");
-				 } else if (!f.isSuccess()) {
+				 } else if (!future.isSuccess()) {
 					 LOGGER.warn("Connection attempt unsuccesful",
-							 f.getCause());
+							 future.getCause());
 				 } else {
-					 channel = f.getChannel();
+					 channel = future.getChannel();
 					 LOGGER.info("Sending connected message");
 					 sendOutboundMessage(ClientMessage.newBuilder()
 						.setType(ClientMessage.Type.SYSTEM)
