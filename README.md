@@ -22,5 +22,5 @@ Server
 
 Build notes:
 * Note that Voldemort (and it's sub-depedencies) are currently in the repository because I can't find Voldemort on Maven Central.
-* LWJGL's libraries are also statically included because they have native libraries and there's no transparent solution for this in Ivy. If you're building on something else but Linux you'll want to change the referenced native library to the correct folder.
+* LWJGL's libraries are also statically included because they have native libraries and there's no transparent solution for this in Ivy. If you're building on something else but Windows you'll want to change the referenced native library to the correct folder.
 * The rest are downloaded from Maven Central.
