@@ -9,9 +9,10 @@ import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
-import com.whiuk.philip.game.server.network.Connection;
 import com.whiuk.philip.game.server.network.NetworkService;
 import com.whiuk.philip.game.server.security.SecurityService;
+import com.whiuk.philip.game.server.system.Connection;
+import com.whiuk.philip.game.server.system.InvalidMappingException;
 import com.whiuk.philip.game.server.system.SystemService;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
@@ -107,8 +108,10 @@ public class MessageHandlerServiceImpl
     @Override
     public final void processInboundMessage(final ClientMessage message) {
     	if (message.hasSystemData()) {
-            systemService.processMessage(message.getSystemData());
-        } else if (message.hasAccountData()) {
+            systemService.processMessage(message.getClientInfo(),
+            		message.getSystemData());
+        }
+    	if (message.hasAccountData()) {
             authService.processMessage(message.getClientInfo(),
             		message.getAccountData());
         } else {
@@ -135,10 +138,11 @@ public class MessageHandlerServiceImpl
     }
 	@Override
 	public final void handleUnknownMessageType(
-			final Connection connection) {
+			final Connection connection)
+					throws InvalidMappingException {
 		// TODO Auto-generated method stub
 		handleUnknownMessageType(
-				networkService.getClientInfo(connection));
+				systemService.getClientInfo(connection));
 	}
 
     @Override

@@ -10,4 +10,19 @@ import javax.persistence.Entity;
 @Entity
 public class Character {
 
+	/**
+	 * Whether the player controlling the character
+	 * has logged out. See {@link logout()}.
+	 */
+	private boolean loggedOut;
+
+	/**
+	 * Indicates the player in control of the character has logged out
+	 * and the character should be removed from the world once any activity
+	 * has ceased.
+	 */
+	public void logout() {
+		this.loggedOut = true;
+	}
+
 }

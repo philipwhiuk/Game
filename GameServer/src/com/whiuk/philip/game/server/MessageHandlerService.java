@@ -1,6 +1,7 @@
 package com.whiuk.philip.game.server;
 
-import com.whiuk.philip.game.server.network.Connection;
+import com.whiuk.philip.game.server.system.Connection;
+import com.whiuk.philip.game.server.system.InvalidMappingException;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
@@ -26,7 +27,8 @@ public interface MessageHandlerService {
     public void handleUnknownMessageType(final ClientInfo clientInfo);
     /**
      * Handles messages of an unknown type.
-     * @param clientInfo Client information for message
+     * @param connection Connection information for message
+     * @throws InvalidMappingException Indicates the connection doesn't map to a client.
      */
-	public void handleUnknownMessageType(Connection connection);
+	public void handleUnknownMessageType(Connection connection) throws InvalidMappingException;
 }

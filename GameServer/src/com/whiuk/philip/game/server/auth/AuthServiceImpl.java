@@ -5,8 +5,10 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
+import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.data.DataService;
-import com.whiuk.philip.game.server.network.Connection;
+import com.whiuk.philip.game.server.game.GameService;
+import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.SystemService;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
@@ -45,11 +47,6 @@ public class AuthServiceImpl implements AuthService {
     /**
      *
      */
-    @Autowired
-    private DataService<ClientInfo, Connection> dataService;
-    /**
-     *
-     */
     private Map<Account, Connection> accounts;
     /**
      *
@@ -59,6 +56,16 @@ public class AuthServiceImpl implements AuthService {
      *
      */
     private final transient Logger logger = Logger.getLogger(getClass());
+    /**
+     *
+     */
+    @Autowired
+    private ChatService chatService;
+    /**
+     *
+     */
+    @Autowired
+    private GameService gameService;
 
     /**
      *
@@ -70,13 +77,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
 	public final Account getAccount(final ClientMessage message) {
-        Connection con = dataService.get(message.getClientInfo());
+    	Connection con = systemService.getConnection(message.getClientInfo());
         return connections.get(con);
     }
 
     @Override
-    public final Account getAccount(final Connection con) {
-        return connections.get(con);
+    public final Account getAccount(final ClientInfo clientInfo) {
+        return connections.get(clientInfo);
     }
 
     @Override
@@ -91,8 +98,8 @@ public class AuthServiceImpl implements AuthService {
         switch(data.getType()) {
             case LOGIN:
                 //Handle trying to login twice from the same source.
-                con = dataService.get(src);
-                if (dataService.get(src) == null) {
+                con = systemService.getConnection(src);
+                if (systemService.getConnection(src) == null) {
                     logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
                     systemService.processLostConnection(src);
                 } else {
@@ -105,8 +112,8 @@ public class AuthServiceImpl implements AuthService {
                 }
                 break;
             case LOGOUT:
-                con = dataService.get(src);
-                if (dataService.get(src) == null) {
+                con = systemService.getConnection(src);
+                if (systemService.getConnection(src) == null) {
                     logger.log(Level.INFO, BAD_CONNECTION_LOGOUT_MESSAGE);
                 } else {
                     /*
@@ -130,5 +137,15 @@ public class AuthServiceImpl implements AuthService {
         // TODO Auto-generated method stub
 
     }
+
+	@Override
+	public void notifyDisconnection(Connection con) {
+		if(connections.containsKey(con)) {
+			Account account = connections.remove(con);
+			accounts.remove(account);
+			chatService.notifyLogout(account);
+			gameService.notifyLogout(account);
+		}
+	}
 
 }

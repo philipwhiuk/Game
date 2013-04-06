@@ -1,6 +1,6 @@
 package com.whiuk.philip.game.server.auth;
 
-import com.whiuk.philip.game.server.network.Connection;
+import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.AccountData;
@@ -27,17 +27,23 @@ public interface AuthService {
 
     /**
      * Get account by connection.
-     * @param con Connection
+     * @param clientInfo ClientInfo
      * @return Account
      */
-    Account getAccount(Connection con);
+    Account getAccount(ClientInfo clientInfo);
 
     /**
      * Get connection by account.
      * @param acc Account
-     * @return Connection
+     * @return ClientInfo
      */
     Connection getConnection(Account acc);
+
+    /**
+     * Notify the service of a client disconnection.
+     * @param clientInfo
+     */
+    void notifyDisconnection(Connection connection);
 
 
 }

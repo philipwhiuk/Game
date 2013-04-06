@@ -14,4 +14,10 @@ public class ChatServiceImpl implements ChatService {
 
 	}
 
+	@Override
+	public void notifyLogout(Account account) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

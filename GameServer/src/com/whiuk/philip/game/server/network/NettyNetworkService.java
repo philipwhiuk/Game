@@ -12,6 +12,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 
@@ -62,12 +63,6 @@ public class NettyNetworkService implements NetworkService {
 	public void processMessage(final ServerMessage message) {
 		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	public Connection getClientInfo(Connection connection) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 }

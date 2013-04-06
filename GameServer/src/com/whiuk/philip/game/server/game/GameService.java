@@ -16,4 +16,6 @@ public interface GameService {
      */
     void processMessage(final Account account, final GameData data);
 
+	void notifyLogout(Account account);
+
 }

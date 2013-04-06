@@ -24,7 +24,6 @@ public class NettyNetworkServicePipelineFactory implements
 	private NettyNetworkServiceHandler handler;
 
 	/**
-	 * 
 	 * @param h
 	 */
 	public NettyNetworkServicePipelineFactory(NettyNetworkServiceHandler h) {

@@ -1,5 +1,6 @@
 package com.whiuk.philip.game.server.network;
 
+import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
@@ -13,11 +14,5 @@ public interface NetworkService {
 	 * @param message The message
 	 */
     void processMessage(ServerMessage message);
-    /**
-     * Create a Client Info object for a connection.
-     * @param connection
-     * @return
-     */
-    Connection getClientInfo(Connection connection);
 
 }

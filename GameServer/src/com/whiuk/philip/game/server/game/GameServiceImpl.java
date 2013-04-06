@@ -4,12 +4,15 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Category;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
+import com.whiuk.philip.game.server.system.InvalidMappingException;
 import com.whiuk.philip.game.server.watchdog.WatchdogService;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.ActionInformation;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.CombatInformation;
@@ -24,6 +27,11 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
  */
 @Service
 public class GameServiceImpl implements GameService {
+	/**
+	 *
+	 */
+	private static final Logger LOGGER =
+			Logger.getLogger(GameServiceImpl.class);
 	/**
 	 * Authentication service.
 	 */
@@ -93,9 +101,13 @@ public class GameServiceImpl implements GameService {
 			case COMBAT: combat(characters.get(account),
 					data.getCombatInformation()); break;
 			default:
+			try {
 				messageHandlerService
 					.handleUnknownMessageType(authService
 					.getConnection(account));
+			} catch (InvalidMappingException e) {
+				LOGGER.info("Unknown connection from account "+account+" sent unknown game message type:" + data.getType());
+			}
 		}
 	}
 
@@ -152,6 +164,13 @@ public class GameServiceImpl implements GameService {
 			final MovementInformation movementInformation) {
 		// TODO Auto-generated method stub
 
+	}
+
+	@Override
+	public void notifyLogout(final Account account) {
+		Character c = characters.remove(account);
+		accounts.remove(c);
+		c.logout();
 	}
 
 }

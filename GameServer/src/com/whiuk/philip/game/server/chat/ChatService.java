@@ -16,4 +16,6 @@ public interface ChatService {
 	 */
 	void processMessage(Account account, ChatData chatData);
 
+	void notifyLogout(Account account);
+
 }

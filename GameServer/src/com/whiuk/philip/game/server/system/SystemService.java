@@ -10,14 +10,27 @@ import com.whiuk.philip.game.shared.Messages.ClientInfo;
  */
 public interface SystemService {
 	/**
-	 *
+	 * @param client Client info
 	 * @param data System data
 	 */
-    void processMessage(SystemData data);
+	void processMessage(ClientInfo client, SystemData data);
     /**
      *
      * @param src
      */
     void processLostConnection(ClientInfo src);
+    /**
+     * 
+     * @param clientInfo
+     * @return
+     */
+	Connection getConnection(ClientInfo clientInfo);
+	/**
+	 * 
+	 * @param connection
+	 * @return
+	 * @throws InvalidMappingException 
+	 */
+	ClientInfo getClientInfo(Connection connection) throws InvalidMappingException;
 
 }
