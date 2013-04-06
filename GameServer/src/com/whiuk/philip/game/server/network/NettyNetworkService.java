@@ -25,7 +25,7 @@ public class NettyNetworkService implements NetworkService {
 	/**
 	 * Default listening port for server.
 	 */
-	private static final int PORT = 8080;
+	private static final int PORT = 8443;
 
 	/**
 	 *
