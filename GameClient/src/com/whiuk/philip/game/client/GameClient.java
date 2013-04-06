@@ -135,11 +135,9 @@ public class GameClient {
 
 		bootstrap.setPipelineFactory(
 			new ChannelPipelineFactory() {
-				private final ChannelHandler timeoutHandler =
-		                new ReadTimeoutHandler(timer, READ_TIMEOUT);
 				@Override
 				public ChannelPipeline getPipeline() throws Exception {
-					ChannelPipeline p = Channels.pipeline(timeoutHandler);
+					ChannelPipeline p = Channels.pipeline();
 					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
 					p.addLast("protobufDecoder",
 						new ProtobufDecoder(ServerMessage.getDefaultInstance()));
