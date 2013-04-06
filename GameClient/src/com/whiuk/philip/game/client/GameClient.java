@@ -73,6 +73,8 @@ public class GameClient {
 			// render OpenGL here
 			Display.update();
 		}
+		Display.destroy();
+		closeNetworkConnection();
 	}
 	/**
 	 * Handles a fatal LWJGL exception.
@@ -80,13 +82,20 @@ public class GameClient {
 	 */
 	private void handleLWJGLException(final LWJGLException e) {
 		LOGGER.fatal("Failed to create display", e);
+		closeNetworkConnection();
+		System.exit(1);
+	}
+
+	/**
+	 * Close the network connection.
+	 */
+	private void closeNetworkConnection() {
 		ntwThread.stopListening();
 		try {
 			ntwThread.join();
 		} catch (InterruptedException e1) {
 			LOGGER.info("Interrupted while closing network thread.");
 		}
-		System.exit(1);
 	}
 
 	/**
