@@ -6,10 +6,10 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 import org.hibernate.criterion.Restrictions;
 
-import com.whiuk.philip.game.server.HibernateUtils;
 import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
+import com.whiuk.philip.game.server.hibernate.HibernateUtils;
 import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.SystemService;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
@@ -74,6 +74,12 @@ public class AuthServiceImpl implements AuthService {
      */
     @Autowired
     private MessageHandlerService messageHandler;
+    
+    /**
+     *
+     */
+    @Autowired
+    private AccountDAO accountDAO;
     
     /**
      *
@@ -143,9 +149,9 @@ public class AuthServiceImpl implements AuthService {
     private void processLoginAttempt(final Connection con,
     		final String username, final String password) {
     	//TODO Exceeded maximum login attempts
-        Account account = (Account) HibernateUtils.getSessionFactory().openSession()
-        	.createCriteria(Account.class)
-        	.add(Restrictions.eq("username", username)).uniqueResult();
+    	HibernateUtils.beginTransaction();
+        Account account = accountDAO.findByUsername(username);
+        HibernateUtils.commitTransaction();
         if (account != null) {
         	if (!account.getPassword().equals(password)) {
         		processFailedLogin(con, account);

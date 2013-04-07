@@ -1,5 +1,6 @@
-package com.whiuk.philip.game.server;
+package com.whiuk.philip.game.server.hibernate;
 
+import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
@@ -45,4 +46,39 @@ public final class HibernateUtils {
     public static SessionFactory getSessionFactory() {
         return SESSION_FACTORY;
     }
+    /**
+     *
+     * @return
+     */
+    public static Session beginTransaction() {
+    	Session hibernateSession = HibernateUtils.getSession();
+    	hibernateSession.beginTransaction();
+    	return hibernateSession;
+	}
+	/**
+	 *
+	 */
+	public static void commitTransaction() {
+		HibernateUtils.getSession().getTransaction().commit();
+	}
+	/**
+	 *
+	 */
+	public static void rollbackTransaction() {
+		HibernateUtils.getSession().getTransaction().rollback();
+	}
+	/**
+	 *
+	 */
+	public static void closeSession() {
+		HibernateUtils.getSession().close();
+	}
+	/**
+	 *
+	 * @return
+	 */
+	public static Session getSession() {
+		Session hibernateSession = SESSION_FACTORY.getCurrentSession();
+		return hibernateSession;
+	}
 }
