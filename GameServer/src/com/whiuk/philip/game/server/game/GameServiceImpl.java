@@ -106,7 +106,10 @@ public class GameServiceImpl implements GameService {
 					.handleUnknownMessageType(authService
 					.getConnection(account));
 			} catch (InvalidMappingException e) {
-				LOGGER.info("Unknown connection from account "+account+" sent unknown game message type:" + data.getType());
+				LOGGER.info("Unknown connection from account "
+					+ account
+					+ " sent unknown game message type:"
+					+ data.getType());
 			}
 		}
 	}

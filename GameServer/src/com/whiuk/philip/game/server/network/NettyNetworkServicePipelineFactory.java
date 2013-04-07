@@ -19,7 +19,7 @@ public class NettyNetworkServicePipelineFactory implements
 		ChannelPipelineFactory {
 
 	/**
-	 * Handler
+	 * Network handler.
 	 */
 	private NettyNetworkServiceHandler handler;
 

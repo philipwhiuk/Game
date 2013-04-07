@@ -24,12 +24,12 @@ public class Connection {
 
 	/**
 	 *
-	 * @param clientInfo
+	 * @param c
 	 * @param nanoTime
 	 * @param b
 	 */
-	public Connection(ClientInfo clientInfo, long nanoTime, boolean b) {
-		this.clientInfo = clientInfo;
+	public Connection(ClientInfo c, long nanoTime, boolean b) {
+		this.clientInfo = c;
 		this.lastConnectionTime = nanoTime;
 		this.active = b;
 	}
@@ -48,9 +48,9 @@ public class Connection {
 	void addNewConnnection(long nanoTime) {
 		lastConnectionTime = nanoTime;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 */
 	public void connect() {
 		lastConnectionTime = System.nanoTime();
@@ -58,7 +58,7 @@ public class Connection {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	public void disconnect() {
 		active = false;

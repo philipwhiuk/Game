@@ -140,7 +140,7 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public void notifyDisconnection(Connection con) {
-		if(connections.containsKey(con)) {
+		if (connections.containsKey(con)) {
 			Account account = connections.remove(con);
 			accounts.remove(account);
 			chatService.notifyLogout(account);

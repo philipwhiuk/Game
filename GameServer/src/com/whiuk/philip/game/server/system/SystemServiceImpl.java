@@ -20,7 +20,7 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
 public class SystemServiceImpl implements SystemService {
 
 	/**
-	 * Class logger
+	 * Class logger.
 	 */
 	private static final Logger LOGGER =
 			Logger.getLogger(SystemServiceImpl.class);

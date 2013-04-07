@@ -36,34 +36,36 @@ public class ClientChannelHandler extends SimpleChannelHandler {
 	private static final long ONE_SECOND = 1000;
 
 	/**
-	 * 
+	 *
 	 */
 	final ClientBootstrap bootstrap;
 	/**
-	 * 
+	 *
 	 */
     private final Timer timer;
     /**
-     * 
+     *
      */
     private long startTime = -1;
     /**
-     * 
+     *
      */
 	private GameClient client;
-	
+	/**
+	 *
+	 */
 	private volatile boolean reconnect = true;
 
     /**
-     * @param gameClient 
-     * @param bootstrap
-     * @param timer
+     * @param gameClient
+     * @param b
+     * @param t
      */
-	public ClientChannelHandler(GameClient gameClient, final ClientBootstrap bootstrap,
-			final Timer timer) {
+	public ClientChannelHandler(GameClient gameClient, final ClientBootstrap b,
+			final Timer t) {
 		this.client = gameClient;
-        this.bootstrap = bootstrap;
-        this.timer = timer;
+        this.bootstrap = b;
+        this.timer = t;
     }
 
 	/**
