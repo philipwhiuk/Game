@@ -16,6 +16,10 @@ public interface ChatService {
 	 */
 	void processMessage(Account account, ChatData chatData);
 
+	/**
+	 * Notify the chat service an account has logged out.
+	 * @param account
+	 */
 	void notifyLogout(Account account);
 
 }

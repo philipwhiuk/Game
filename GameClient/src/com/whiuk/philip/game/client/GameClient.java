@@ -3,13 +3,11 @@ package com.whiuk.philip.game.client;
 import java.net.InetSocketAddress;
 import java.util.concurrent.Executors;
 
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFuture;
 import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.ChannelHandler;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
@@ -18,7 +16,6 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
-import org.jboss.netty.handler.timeout.ReadTimeoutHandler;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 import org.lwjgl.LWJGLException;
@@ -138,12 +135,15 @@ public class GameClient {
 				@Override
 				public ChannelPipeline getPipeline() throws Exception {
 					ChannelPipeline p = Channels.pipeline();
-					p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
+					p.addLast("frameDecoder",
+							new ProtobufVarint32FrameDecoder());
 					p.addLast("protobufDecoder",
-						new ProtobufDecoder(ServerMessage.getDefaultInstance()));
+						new ProtobufDecoder(
+								ServerMessage.getDefaultInstance()));
 					p.addLast("frameEncoder",
 						new ProtobufVarint32LengthFieldPrepender());
-					p.addLast("protobufEncoder", new ProtobufEncoder());
+					p.addLast("protobufEncoder",
+							new ProtobufEncoder());
 					p.addLast("handler", channelHandler);
 					return p;
 				}
@@ -157,8 +157,9 @@ public class GameClient {
 		final ChannelFuture f = bootstrap.connect();
 		f.addListener(new ChannelFutureListener() {
 			@Override
-			public void operationComplete(ChannelFuture future)
-					throws Exception {
+			public void operationComplete(
+					final ChannelFuture future)
+							throws Exception {
 				if (future.isCancelled()) {
 				     LOGGER.info("Connection attempt cancelled");
 				 } else if (!future.isSuccess()) {

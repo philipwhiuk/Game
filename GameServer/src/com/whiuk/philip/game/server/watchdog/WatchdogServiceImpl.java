@@ -8,6 +8,11 @@ import org.springframework.stereotype.Service;
 import com.whiuk.philip.util.watchdog.Watchable;
 import com.whiuk.philip.util.watchdog.Watchdog;
 
+/**
+ *
+ * @author Philip Whitehouse
+ *
+ */
 @Service
 public class WatchdogServiceImpl implements WatchdogService {
 
@@ -16,6 +21,9 @@ public class WatchdogServiceImpl implements WatchdogService {
 	 */
 	private List<Watchdog> watchdogs;
 
+	/**
+	 *
+	 */
 	public WatchdogServiceImpl() {
 		watchdogs = new ArrayList<Watchdog>();
 	}

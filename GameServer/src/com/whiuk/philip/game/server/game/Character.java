@@ -21,7 +21,7 @@ public class Character {
 	 * and the character should be removed from the world once any activity
 	 * has ceased.
 	 */
-	public void logout() {
+	public final void logout() {
 		this.loggedOut = true;
 	}
 

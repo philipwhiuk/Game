@@ -1,7 +1,6 @@
 package com.whiuk.philip.game.server.game;
 
 import com.whiuk.philip.game.server.auth.Account;
-import com.whiuk.philip.game.server.watchdog.WatchdogService;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
 
 /**
@@ -16,6 +15,10 @@ public interface GameService {
      */
     void processMessage(final Account account, final GameData data);
 
+    /**
+     *
+     * @param account
+     */
 	void notifyLogout(Account account);
 
 }

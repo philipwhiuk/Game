@@ -61,7 +61,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
      * @param b
      * @param t
      */
-	public ClientChannelHandler(GameClient gameClient, final ClientBootstrap b,
+	public ClientChannelHandler(final GameClient gameClient, final ClientBootstrap b,
 			final Timer t) {
 		this.client = gameClient;
         this.bootstrap = b;

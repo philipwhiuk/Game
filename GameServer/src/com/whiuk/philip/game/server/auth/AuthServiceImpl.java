@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
 
 import com.whiuk.philip.game.server.chat.ChatService;
-import com.whiuk.philip.game.server.data.DataService;
 import com.whiuk.philip.game.server.game.GameService;
 import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.SystemService;
@@ -139,7 +138,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
 	@Override
-	public void notifyDisconnection(Connection con) {
+	public final void notifyDisconnection(final Connection con) {
 		if (connections.containsKey(con)) {
 			Account account = connections.remove(con);
 			accounts.remove(account);

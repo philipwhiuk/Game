@@ -26,7 +26,7 @@ public class NettyNetworkServicePipelineFactory implements
 	/**
 	 * @param h
 	 */
-	public NettyNetworkServicePipelineFactory(NettyNetworkServiceHandler h) {
+	public NettyNetworkServicePipelineFactory(final NettyNetworkServiceHandler h) {
 		super();
 		this.handler = h;
 	}

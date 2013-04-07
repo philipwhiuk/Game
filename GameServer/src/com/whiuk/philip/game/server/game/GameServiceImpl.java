@@ -4,7 +4,6 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.log4j.Category;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -170,7 +169,7 @@ public class GameServiceImpl implements GameService {
 	}
 
 	@Override
-	public void notifyLogout(final Account account) {
+	public final void notifyLogout(final Account account) {
 		Character c = characters.remove(account);
 		accounts.remove(c);
 		c.logout();

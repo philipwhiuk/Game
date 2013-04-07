@@ -50,7 +50,7 @@ public class WatchdogServiceWatchdog implements Watchdog {
 	 *
 	 * @param watched
 	 */
-	public WatchdogServiceWatchdog(Watchable watched) {
+	public WatchdogServiceWatchdog(final Watchable watched) {
 		this.watchedObject = watched;
 		watchedObject.setWatchdog(this);
 	}
@@ -103,7 +103,7 @@ public class WatchdogServiceWatchdog implements Watchdog {
 	}
 
 	@Override
-	public long getWarningTime() {
+	public final long getWarningTime() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

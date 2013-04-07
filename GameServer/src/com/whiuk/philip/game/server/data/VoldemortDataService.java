@@ -41,7 +41,7 @@ public class VoldemortDataService<K, V> implements DataService<K, V> {
     /**
      * Initialization.
      */
-    public void init() {
+    public final void init() {
         String bootstrapUrl = "tcp://" + VOLDEMORT_ADDRESS;
         StoreClientFactory factory = new SocketStoreClientFactory(
             new ClientConfig().setBootstrapUrls(bootstrapUrl));

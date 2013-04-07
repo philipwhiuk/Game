@@ -74,11 +74,7 @@ public class GameServer {
      *
      * @param gsProp
      */
-	public void setProperties(GameServerProperties gsProp) {
+	public final void setProperties(final GameServerProperties gsProp) {
 		this.properties = gsProp;
-	}
-
-	public void run() {
-		// TODO Auto-generated method stub
 	}
 }

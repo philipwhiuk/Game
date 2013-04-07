@@ -24,11 +24,11 @@ public interface MessageHandlerService {
      * Handles messages of an unknown type.
      * @param clientInfo Client information for message
      */
-    public void handleUnknownMessageType(final ClientInfo clientInfo);
+    void handleUnknownMessageType(final ClientInfo clientInfo);
     /**
      * Handles messages of an unknown type.
      * @param connection Connection information for message
      * @throws InvalidMappingException Indicates the connection doesn't map to a client.
      */
-	public void handleUnknownMessageType(Connection connection) throws InvalidMappingException;
+	void handleUnknownMessageType(Connection connection) throws InvalidMappingException;
 }

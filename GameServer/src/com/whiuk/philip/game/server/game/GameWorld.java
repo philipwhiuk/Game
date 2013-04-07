@@ -67,7 +67,7 @@ public class GameWorld extends Thread implements Watchable {
 	}
 
 	@Override
-	public void setWatchdog(Watchdog w) {
+	public final void setWatchdog(final Watchdog w) {
 		this.watchdog = w;
 	}
 
