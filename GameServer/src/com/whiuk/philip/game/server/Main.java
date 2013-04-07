@@ -24,25 +24,23 @@ import com.whiuk.philip.game.server.GameServer.GameServerProperties;
 
 /**
  * @author Philip
- *
  */
 public final class Main {
 
-	/**
-	 * Utility class - private constructor.
-	 */
-	private Main() {
-	}
+    /**
+     * Utility class - private constructor.
+     */
+    private Main() {
+    }
 
-	/**
+    /**
 	 *
 	 */
     private static Logger logger = Logger.getLogger(Main.class);
     /**
      *
      */
-    private static final String DEFAULT_PROPERTIES_FILENAME =
-    		"/etc/opt/philipwhiuk/gameServer.properties";
+    private static final String DEFAULT_PROPERTIES_FILENAME = "/etc/opt/philipwhiuk/gameServer.properties";
     /**
      *
      */
@@ -50,46 +48,44 @@ public final class Main {
 
     /**
      * @param args
-     * @throws IOException IO exception reading property file
+     * @throws IOException
+     *             IO exception reading property file
      */
-    public static void main(final String[] args)
-    		throws IOException {
-    	//TODO: Initialize logging properly
-    	BasicConfigurator.configure();
-    	CommandLineParser parser = new BasicParser();
-    	Options options = new Options();
-    	Option help = new Option("help", "print this message");
-    	Option properties   = OptionBuilder.withArgName("file")
+    public static void main(final String[] args) throws IOException {
+        // TODO: Initialize logging properly
+        BasicConfigurator.configure();
+        CommandLineParser parser = new BasicParser();
+        Options options = new Options();
+        Option help = new Option("help", "print this message");
+        Option properties = OptionBuilder
+                .withArgName("file")
                 .hasArg()
                 .withDescription(
-            		"use given file to retrieve additional properties")
+                        "use given file to retrieve additional properties")
                 .create("properties");
-		options.addOption(help);
-    	options.addOption(properties);
-    	try {
+        options.addOption(help);
+        options.addOption(properties);
+        try {
             // parse the command line arguments
             CommandLine line = parser.parse(options, args);
             if (line.hasOption("help")) {
-            	// automatically generate the help statement
-            	HelpFormatter formatter = new HelpFormatter();
-            	formatter.printHelp("game-server", options);
-            	System.exit(0);
+                // automatically generate the help statement
+                HelpFormatter formatter = new HelpFormatter();
+                formatter.printHelp("game-server", options);
+                System.exit(0);
             }
             if (line.hasOption("properties")) {
-            	propertiesFilename = line.getOptionValue("properties");
+                propertiesFilename = line.getOptionValue("properties");
             }
         } catch (ParseException e) {
             // oops, something went wrong
-        	logger.log(Level.WARN,
-        			"Unable to read command line arguments", e);
+            logger.log(Level.WARN, "Unable to read command line arguments", e);
         }
 
-    	ApplicationContext context =
-    			new ClassPathXmlApplicationContext(
-    					"META-INF/beans.xml");
-    	BeanFactory factory = context;
-	    GameServer gameServer = (GameServer) factory
-    	        .getBean("gameServer");
+        ApplicationContext context = new ClassPathXmlApplicationContext(
+                "META-INF/beans.xml");
+        BeanFactory factory = context;
+        GameServer gameServer = (GameServer) factory.getBean("gameServer");
         GameServerProperties gsProp;
         File file = new File(propertiesFilename);
         try {
@@ -97,10 +93,9 @@ public final class Main {
             prop.load(new FileReader(file));
             gsProp = new GameServerProperties(prop);
         } catch (Exception e) {
-        	System.out.println(file.getAbsolutePath());
-            logger.log(Level.WARN,
-            		"Error reading properties file: " + propertiesFilename,
-            		e);
+            System.out.println(file.getAbsolutePath());
+            logger.log(Level.WARN, "Error reading properties file: "
+                    + propertiesFilename, e);
             gsProp = new GameServerProperties();
         }
         gameServer.setProperties(gsProp);

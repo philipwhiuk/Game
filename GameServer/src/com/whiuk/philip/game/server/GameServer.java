@@ -10,11 +10,10 @@ import com.whiuk.philip.game.server.network.NetworkService;
 
 /**
  * @author Philip
- *
  */
 @Service
 public class GameServer {
-	/**
+    /**
 	 *
 	 */
     private ServerWatchdog watchdog;
@@ -31,7 +30,6 @@ public class GameServer {
 
     /**
      * @author Philip
-     *
      */
     public static class GameServerProperties {
         /**
@@ -42,14 +40,17 @@ public class GameServer {
          *
          */
         private int port;
+
         /**
          *
          */
         public GameServerProperties() {
 
         }
+
         /**
-         * @param prop Key-value properties
+         * @param prop
+         *            Key-value properties
          */
         public GameServerProperties(final Properties prop) {
             if (prop.containsKey("port")) {
@@ -70,10 +71,9 @@ public class GameServer {
     }
 
     /**
-     *
      * @param gsProp
      */
-	public final void setProperties(final GameServerProperties gsProp) {
-		this.properties = gsProp;
-	}
+    public final void setProperties(final GameServerProperties gsProp) {
+        this.properties = gsProp;
+    }
 }

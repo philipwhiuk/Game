@@ -2,7 +2,6 @@ package com.whiuk.philip.util.watchdog;
 
 /**
  * @author Philip
- *
  */
 public interface Watchdog extends Runnable {
 
@@ -29,5 +28,5 @@ public interface Watchdog extends Runnable {
     /**
      * Pat the watchdog.
      */
-	void pat();
+    void pat();
 }

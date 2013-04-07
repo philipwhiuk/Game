@@ -7,66 +7,68 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 
 /**
- * 
  * @author Philip Whitehouse
- *
  * @param <T>
  * @param <ID>
  */
-public abstract class GenericDAOImpl<T, ID extends Serializable>
-	implements GenericDAO<T, ID> {
+public abstract class GenericDAOImpl<T, ID extends Serializable> implements
+        GenericDAO<T, ID> {
 
-	/**
-	 * @return
-	 */
+    /**
+     * @return
+     */
     protected Session getSession() {
         return HibernateUtils.getSession();
     }
 
     @Override
-    public void save(T entity) {
+    public final void save(final T entity) {
         Session hibernateSession = this.getSession();
         hibernateSession.saveOrUpdate(entity);
     }
 
     @Override
-    public void merge(T entity) {
+    public final void merge(final T entity) {
         Session hibernateSession = this.getSession();
         hibernateSession.merge(entity);
     }
 
     @Override
-    public void delete(T entity) {
+    public final void delete(final T entity) {
         Session hibernateSession = this.getSession();
         hibernateSession.delete(entity);
     }
 
-    @SuppressWarnings("unchecked") //Hibernate
-	public List<T> findMany(Query query) {
+    @SuppressWarnings("unchecked")
+    // Hibernate
+    @Override
+    public final List<T> findMany(final Query query) {
         List<T> t;
         t = (List<T>) query.list();
         return t;
     }
 
-    @SuppressWarnings("unchecked") //Hibernate
-	@Override
-    public T findOne(Query query) {
+    @SuppressWarnings("unchecked")
+    // Hibernate
+    @Override
+    public final T findOne(final Query query) {
         T t;
         t = (T) query.uniqueResult();
         return t;
     }
 
-    @SuppressWarnings("unchecked") //Hibernate
-	@Override
-    public T findByID(Class clazz, Long id) {
+    @SuppressWarnings("unchecked")
+    // Hibernate
+    @Override
+    public final T findByID(Class clazz, Long id) {
         Session hibernateSession = this.getSession();
         T t = null;
         t = (T) hibernateSession.get(clazz, id);
         return t;
     }
- 
+
     @Override
-    public List findAll(Class clazz) {
+    public final List findAll(Class clazz) {
         Session hibernateSession = this.getSession();
         List t = null;
         Query query = hibernateSession.createQuery("from " + clazz.getName());

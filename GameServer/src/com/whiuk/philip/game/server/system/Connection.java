@@ -4,72 +4,70 @@ import com.whiuk.philip.game.shared.Messages.ClientInfo;
 
 /**
  * Information about a connection.
+ * 
  * @author Philip Whitehouse
- *
  */
 public class Connection {
 
-	/**
+    /**
 	 *
 	 */
-	private long lastConnectionTime;
-	/**
+    private long lastConnectionTime;
+    /**
 	 *
 	 */
-	private boolean active;
-	/**
+    private boolean active;
+    /**
 	 *
 	 */
-	private ClientInfo clientInfo;
-	/**
+    private ClientInfo clientInfo;
+    /**
 	 *
 	 */
-	private long lastLoginAttempt;
+    private long lastLoginAttempt;
 
-	/**
-	 *
-	 * @param c
-	 * @param nanoTime
-	 * @param b
-	 */
-	public Connection(final ClientInfo c, final long nanoTime, final boolean b) {
-		this.clientInfo = c;
-		this.lastConnectionTime = nanoTime;
-		this.active = b;
-	}
+    /**
+     * @param c
+     * @param nanoTime
+     * @param b
+     */
+    public Connection(final ClientInfo c, final long nanoTime, final boolean b) {
+        this.clientInfo = c;
+        this.lastConnectionTime = nanoTime;
+        this.active = b;
+    }
 
-	/**
-	 *
-	 */
-	final void setActive() {
-		active = true;
-	}
-
-	/**
-	 *
-	 * @param nanoTime
-	 */
-	final void addNewConnnection(final long nanoTime) {
-		lastConnectionTime = nanoTime;
-	}
-
-	/**
+    /**
 	 *
 	 */
-	public final void connect() {
-		lastConnectionTime = System.nanoTime();
-		active = true;
-	}
+    final void setActive() {
+        active = true;
+    }
 
-	/**
+    /**
+     * @param nanoTime
+     */
+    final void addNewConnnection(final long nanoTime) {
+        lastConnectionTime = nanoTime;
+    }
+
+    /**
 	 *
 	 */
-	public final void disconnect() {
-		active = false;
-	}
+    public final void connect() {
+        lastConnectionTime = System.nanoTime();
+        active = true;
+    }
 
-	public void setLastLoginAttempt(long nanoTime) {
-		this.lastLoginAttempt = nanoTime;
-	}
+    /**
+	 *
+	 */
+    public final void disconnect() {
+        active = false;
+    }
+
+    public void setLastLoginAttempt(long nanoTime) {
+        this.lastLoginAttempt = nanoTime;
+    }
 
 }

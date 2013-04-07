@@ -8,29 +8,39 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
  * Handles message flow.
+ * 
  * @author Philip Whitehouse
- *
  */
 public interface MessageHandlerService {
-	/**
-     * @param message Message to recieve
+    /**
+     * @param message
+     *            Message to recieve
      */
-	void queueInboundMessage(ClientMessage message);
-	/**
-     * @param message Message to transmit
+    void queueInboundMessage(ClientMessage message);
+
+    /**
+     * @param message
+     *            Message to transmit
      */
-	void queueOutboundMessage(ServerMessage message);
+    void queueOutboundMessage(ServerMessage message);
+
     /**
      * Handles messages of an unknown type.
-     * @param clientInfo Client information for message
+     * 
+     * @param clientInfo
+     *            Client information for message
      */
     void handleUnknownMessageType(final ClientInfo clientInfo);
+
     /**
      * Handles messages of an unknown type.
-     * @param connection Connection information for message
-     * @throws InvalidMappingException Indicates the connection doesn't map to a client.
+     * 
+     * @param connection
+     *            Connection information for message
+     * @throws InvalidMappingException
+     *             Indicates the connection doesn't map to a client.
      */
-	void handleUnknownMessageType(Connection connection) throws InvalidMappingException;
-
+    void handleUnknownMessageType(Connection connection)
+            throws InvalidMappingException;
 
 }

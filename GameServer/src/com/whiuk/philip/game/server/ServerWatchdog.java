@@ -9,7 +9,6 @@ import com.whiuk.philip.util.watchdog.Watchdog;
 
 /**
  * @author Philip
- *
  */
 public class ServerWatchdog implements Runnable {
 
@@ -21,14 +20,13 @@ public class ServerWatchdog implements Runnable {
     /**
      *
      */
-    private static final String THREAD_EXCEEDED_WARNING_TIME =
-        "Watched thread '%s' exceeded warning time, last notified %sms ago.";
+    private static final String THREAD_EXCEEDED_WARNING_TIME = "Watched thread '%s' exceeded warning time, last notified %sms ago.";
 
     /**
      *
      */
-    public static final transient Logger LOGGER =
-           Logger.getLogger(ServerWatchdog.class);
+    public static final transient Logger LOGGER = Logger
+            .getLogger(ServerWatchdog.class);
 
     /**
      * List of watchdogs to check.
@@ -37,7 +35,7 @@ public class ServerWatchdog implements Runnable {
 
     @Override
     public final void run() {
-        for (Watchdog watchdog: watchdogs) {
+        for (Watchdog watchdog : watchdogs) {
             long timeSincePat = System.currentTimeMillis() - watchdog.lastPat();
             if (timeSincePat > watchdog.getWarningTime()) {
                 String message = String.format(THREAD_EXCEEDED_WARNING_TIME,

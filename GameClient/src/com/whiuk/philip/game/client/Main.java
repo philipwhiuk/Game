@@ -4,19 +4,19 @@ import org.apache.log4j.BasicConfigurator;
 
 /**
  * @author Philip
- *
  */
 public class Main {
 
     /**
-     * @param args Command line arguments
+     * @param args
+     *            Command line arguments
      */
     public static void main(final String[] args) {
-    	//TODO: Initialize logging properly
-    	BasicConfigurator.configure();
-    	GameClient client = new GameClient();
-    	GameClient.setGameClient(client);
-    	client.run();
+        // TODO: Initialize logging properly
+        BasicConfigurator.configure();
+        GameClient client = new GameClient();
+        GameClient.setGameClient(client);
+        client.run();
     }
 
 }

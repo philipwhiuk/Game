@@ -21,14 +21,13 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
  * @author Philip
- *
  */
 @Service
-public class MessageHandlerServiceImpl
-    implements Runnable, MessageHandlerService {
-	/**
-	 * Network service.
-	 */
+public class MessageHandlerServiceImpl implements Runnable,
+        MessageHandlerService {
+    /**
+     * Network service.
+     */
     @Autowired
     private NetworkService networkService;
     /**
@@ -75,23 +74,24 @@ public class MessageHandlerServiceImpl
      * Whether the message handler is running.
      */
     private boolean running;
+
     /**
      *
      */
     public MessageHandlerServiceImpl() {
-    	inbound = new ConcurrentLinkedQueue<ClientMessage>();
-    	outbound = new ConcurrentLinkedQueue<ServerMessage>();
+        inbound = new ConcurrentLinkedQueue<ClientMessage>();
+        outbound = new ConcurrentLinkedQueue<ServerMessage>();
     }
 
     @Override
-	public final void run() {
+    public final void run() {
         running = true;
         while (running) {
             boolean processed = false;
             ServerMessage serverMessage;
             serverMessage = outbound.poll();
             while (serverMessage != null) {
-            	sendOutboundMessage(serverMessage);
+                sendOutboundMessage(serverMessage);
                 serverMessage = outbound.poll();
             }
             ClientMessage clientMessage = inbound.poll();
@@ -105,79 +105,83 @@ public class MessageHandlerServiceImpl
                 }
             }
         }
-     }
+    }
 
     /**
      * Process an inbound message
+     * 
      * @param message
      */
     private final void processInboundMessage(final ClientMessage message) {
-    	if (message.hasSystemData()) {
+        if (message.hasSystemData()) {
             systemService.processMessage(message.getClientInfo(),
-            		message.getSystemData());
+                    message.getSystemData());
         }
-    	if (message.hasAuthData()) {
+        if (message.hasAuthData()) {
             authService.processMessage(message.getClientInfo(),
-            		message.getAuthData());
+                    message.getAuthData());
         } else {
             Account account = authService.getAccount(message);
             if (account == null) {
                 secService.handleMessageFromUnauthenticatedClient(message);
             } else {
-                switch(message.getType()) {
+                switch (message.getType()) {
                     case GAME:
                         gameService.processMessage(account,
-                        		message.getGameData());
+                                message.getGameData());
                         break;
                     case CHAT:
                         chatService.processMessage(
-                        		authService.getAccount(message),
-                        		message.getChatData());
+                                authService.getAccount(message),
+                                message.getChatData());
                         break;
                     default:
-                    	handleUnknownMessageType(message.getClientInfo());
+                        handleUnknownMessageType(message.getClientInfo());
                         break;
                 }
             }
         }
     }
-	@Override
-	public final void handleUnknownMessageType(
-			final Connection connection)
-					throws InvalidMappingException {
-		// TODO Auto-generated method stub
-		handleUnknownMessageType(
-				systemService.getClientInfo(connection));
-	}
+
+    @Override
+    public final void handleUnknownMessageType(final Connection connection)
+            throws InvalidMappingException {
+        // TODO Auto-generated method stub
+        handleUnknownMessageType(systemService.getClientInfo(connection));
+    }
 
     @Override
     public final void handleUnknownMessageType(final ClientInfo clientInfo) {
-    	ServerMessage response = ServerMessage.newBuilder()
-    			.setClientInfo(clientInfo)
-        		.setType(ServerMessage.Type.SYSTEM)
-        		.setSystemData(ServerMessage.SystemData.newBuilder()
-        				.setType(
-			ServerMessage.SystemData.Type.UNKNOWN_MESSAGE_TYPE)
-        				.build())
-        		.build();
-    	outbound.add(response);
-	}
+        ServerMessage response = ServerMessage
+                .newBuilder()
+                .setClientInfo(clientInfo)
+                .setType(ServerMessage.Type.SYSTEM)
+                .setSystemData(
+                        ServerMessage.SystemData
+                                .newBuilder()
+                                .setType(
+                                        ServerMessage.SystemData.Type.UNKNOWN_MESSAGE_TYPE)
+                                .build()).build();
+        outbound.add(response);
+    }
 
-	@Override
+    @Override
     public final void queueOutboundMessage(final ServerMessage message) {
-    	outbound.add(message);
+        outbound.add(message);
     }
 
-	@Override
+    @Override
     public final void queueInboundMessage(final ClientMessage message) {
-    	inbound.add(message);
+        inbound.add(message);
     }
 
-	/**
-	 * @param message Send out-bound message
-	 */
-	private void sendOutboundMessage(final ServerMessage message) {
-    	//TODO: Work out if it's better just to send stuff directly to the network service
+    /**
+     * @param message
+     *            Send out-bound message
+     */
+    private void sendOutboundMessage(final ServerMessage message) {
+        // TODO: Work out if it's better just to send stuff directly to the
+        // network service
         networkService.processMessage(message);
     }
 }

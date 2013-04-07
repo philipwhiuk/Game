@@ -12,36 +12,35 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage;
 
 /**
  * Netty pipeline factory to integrate protobuf coding.
+ * 
  * @author Philip Whitehouse
- *
  */
 public class NettyNetworkServicePipelineFactory implements
-		ChannelPipelineFactory {
+        ChannelPipelineFactory {
 
-	/**
-	 * Network handler.
-	 */
-	private NettyNetworkServiceHandler handler;
+    /**
+     * Network handler.
+     */
+    private NettyNetworkServiceHandler handler;
 
-	/**
-	 * @param h
-	 */
-	public NettyNetworkServicePipelineFactory(final NettyNetworkServiceHandler h) {
-		super();
-		this.handler = h;
-	}
+    /**
+     * @param h
+     */
+    public NettyNetworkServicePipelineFactory(final NettyNetworkServiceHandler h) {
+        super();
+        this.handler = h;
+    }
 
-	@Override
-	public final ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline p = Channels.pipeline();
-		p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-		p.addLast("protobufDecoder",
-				new ProtobufDecoder(ClientMessage.getDefaultInstance()));
-		p.addLast("frameEncoder",
-				new ProtobufVarint32LengthFieldPrepender());
-		p.addLast("protobufEncoder", new ProtobufEncoder());
-		p.addLast("handler", handler);
-		return p;
-	}
+    @Override
+    public final ChannelPipeline getPipeline() throws Exception {
+        ChannelPipeline p = Channels.pipeline();
+        p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
+        p.addLast("protobufDecoder",
+                new ProtobufDecoder(ClientMessage.getDefaultInstance()));
+        p.addLast("frameEncoder", new ProtobufVarint32LengthFieldPrepender());
+        p.addLast("protobufEncoder", new ProtobufEncoder());
+        p.addLast("handler", handler);
+        return p;
+    }
 
 }

@@ -10,8 +10,8 @@ import voldemort.versioning.Versioned;
 
 /**
  * Voldemort implementation of data service.
+ * 
  * @author Philip Whitehouse
- *
  * @param <K>
  * @param <V>
  */
@@ -44,19 +44,19 @@ public class VoldemortDataService<K, V> implements DataService<K, V> {
     public final void init() {
         String bootstrapUrl = "tcp://" + VOLDEMORT_ADDRESS;
         StoreClientFactory factory = new SocketStoreClientFactory(
-            new ClientConfig().setBootstrapUrls(bootstrapUrl));
+                new ClientConfig().setBootstrapUrls(bootstrapUrl));
         client = factory.getStoreClient(VOLDEMORT_STORE_NAME);
     }
 
     @Override
     public final V get(final K key) {
-		Versioned<V> value = client.get(key);
-		return value.getValue();
-	}
+        Versioned<V> value = client.get(key);
+        return value.getValue();
+    }
 
-	@Override
-	public final void put(final K key, final V value) {
-		 client.put(key, value);
-	}
+    @Override
+    public final void put(final K key, final V value) {
+        client.put(key, value);
+    }
 
 }

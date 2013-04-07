@@ -23,88 +23,84 @@ import com.whiuk.philip.game.shared.Messages.ClientMessage;
 
 /**
  * Handles network events for the netty-based connection.
+ * 
  * @author Philip Whitehouse
- *
  */
 @Service
 public class NettyNetworkServiceHandler extends SimpleChannelHandler {
 
-	/**
-	 * Handles network messages.
-	 */
-	@Autowired
-	private MessageHandlerService messageHandler;
-	/**
-	 * Handles client connections.
-	 */
-	@Autowired
-	private SystemService systemService;
-	/**
-	 * Maps clients to channels.
-	 */
-	private Map<ClientInfo, Channel> channels;
-	/**
-	 * Maps channels to clients.
-	 */
-	private Map<Channel, ClientInfo> clients;
+    /**
+     * Handles network messages.
+     */
+    @Autowired
+    private MessageHandlerService messageHandler;
+    /**
+     * Handles client connections.
+     */
+    @Autowired
+    private SystemService systemService;
+    /**
+     * Maps clients to channels.
+     */
+    private Map<ClientInfo, Channel> channels;
+    /**
+     * Maps channels to clients.
+     */
+    private Map<Channel, ClientInfo> clients;
 
-	/**
+    /**
 	 *
 	 */
-	private static final transient Logger LOGGER = Logger
-			.getLogger(NettyNetworkServiceHandler.class);
+    private static final transient Logger LOGGER = Logger
+            .getLogger(NettyNetworkServiceHandler.class);
 
-	/**
-	 * Set message handler.
-	 * @param handler Message handler
-	 */
-	public final void setMessageHandlerService(
-			final MessageHandlerService handler) {
-		this.messageHandler = handler;
-	}
+    /**
+     * Set message handler.
+     * 
+     * @param handler
+     *            Message handler
+     */
+    public final void setMessageHandlerService(
+            final MessageHandlerService handler) {
+        this.messageHandler = handler;
+    }
 
-	@Override
+    @Override
     public final void messageReceived(final ChannelHandlerContext ctx,
-			final MessageEvent e) {
-		ClientMessage message = (ClientMessage) e.getMessage();
-		if (!clients.containsKey(ctx.getChannel())) {
-			String address = ((InetSocketAddress) ctx.getChannel()
-					.getRemoteAddress()).getAddress()
-					.toString();
-			LOGGER.info("Address recieved from: " + address);
+            final MessageEvent e) {
+        ClientMessage message = (ClientMessage) e.getMessage();
+        if (!clients.containsKey(ctx.getChannel())) {
+            String address = ((InetSocketAddress) ctx.getChannel()
+                    .getRemoteAddress()).getAddress().toString();
+            LOGGER.info("Address recieved from: " + address);
 
-			ClientInfo clientInfo = message
-					.getClientInfo().toBuilder()
-					.setRemoteIPAddress(address)
-					.build();
-			clients.put(ctx.getChannel(), clientInfo);
-			channels.put(clientInfo, ctx.getChannel());
-			LOGGER.info("Added client "
-					+ clientInfo + " on channel "
-					+ ctx.getChannel());
-		}
-		LOGGER.info("Message recieved from " + ctx.getChannel());
-		ClientMessage processedMessage = message.toBuilder()
-				.setClientInfo(clients.get(ctx.getChannel()))
-				.build();
-		messageHandler.queueInboundMessage(processedMessage);
-	}
+            ClientInfo clientInfo = message.getClientInfo().toBuilder()
+                    .setRemoteIPAddress(address).build();
+            clients.put(ctx.getChannel(), clientInfo);
+            channels.put(clientInfo, ctx.getChannel());
+            LOGGER.info("Added client " + clientInfo + " on channel "
+                    + ctx.getChannel());
+        }
+        LOGGER.info("Message recieved from " + ctx.getChannel());
+        ClientMessage processedMessage = message.toBuilder()
+                .setClientInfo(clients.get(ctx.getChannel())).build();
+        messageHandler.queueInboundMessage(processedMessage);
+    }
 
-	@Override
-	public final void exceptionCaught(final ChannelHandlerContext ctx,
-			final ExceptionEvent e) {
-		Channel ch = e.getChannel();
-		LOGGER.info("Exception caught on: " + ch, e.getCause());
+    @Override
+    public final void exceptionCaught(final ChannelHandlerContext ctx,
+            final ExceptionEvent e) {
+        Channel ch = e.getChannel();
+        LOGGER.info("Exception caught on: " + ch, e.getCause());
         ch.close();
-	}
+    }
 
-	@Override
-	public final void channelDisconnected(final ChannelHandlerContext ctx,
-			final ChannelStateEvent e) {
-		systemService.handleClientDisconnected(
-				clients.get(ctx.getChannel()));
-		if (clients.containsKey(ctx.getChannel())) {
-			channels.remove(clients.remove(ctx.getChannel()));
-		}
-	}
+    @Override
+    public final void channelDisconnected(final ChannelHandlerContext ctx,
+            final ChannelStateEvent e) {
+        systemService.handleClientDisconnected(clients.get(ctx.getChannel()));
+        if (clients.containsKey(ctx.getChannel())) {
+            channels.remove(clients.remove(ctx.getChannel()));
+        }
+    }
 }
