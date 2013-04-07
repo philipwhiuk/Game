@@ -3,25 +3,35 @@ package com.whiuk.philip.game.server.auth;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import com.whiuk.philip.game.server.system.Connection;
-
 /**
  * @author Philip
  */
 @Entity
 public class Account {
 
+    /**
+     *
+     */
     @Id
     private Long id;
+    /**
+     *
+     */
     private String username;
-    private long lastLoginAttempt;
+    /**
+     *
+     */
+    private LoginAttempt lastLoginAttempt;
+    /**
+     *
+     */
     private String password;
 
     /**
      * @param nanoTime
      */
-    public void setLastLoginAttempt(long nanoTime) {
-        lastLoginAttempt = nanoTime;
+    public void setLastLoginAttempt(LoginAttempt attempt) {
+        lastLoginAttempt = attempt;
     }
 
     /**
@@ -32,11 +42,26 @@ public class Account {
     }
 
     /**
+     * @param p
+     *            password
+     */
+    public void setPassword(String p) {
+        password = p;
+    }
+
+    /**
      * @return
      */
     public String getUsername() {
         // TODO Auto-generated method stub
-        return null;
+        return username;
     }
 
+    /**
+     * @param u
+     *            username
+     */
+    public void setUsername(String u) {
+        username = u;
+    }
 }

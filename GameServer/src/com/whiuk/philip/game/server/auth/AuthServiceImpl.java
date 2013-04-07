@@ -2,9 +2,11 @@ package com.whiuk.philip.game.server.auth;
 
 import java.util.HashMap;
 import java.util.Map;
-import org.apache.log4j.Logger;
+
 import org.apache.log4j.Level;
-import org.hibernate.criterion.Restrictions;
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.chat.ChatService;
@@ -14,11 +16,8 @@ import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.SystemService;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
  * @author Philip
@@ -66,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private GameService gameService;
     /**
-     * 
+     *
      */
     @Autowired
     private MessageHandlerService messageHandler;
@@ -76,6 +75,11 @@ public class AuthServiceImpl implements AuthService {
      */
     @Autowired
     private AccountDAO accountDAO;
+    /**
+    *
+    */
+    @Autowired
+    private LoginAttemptDAO loginAttemptDAO;
 
     /**
      *
@@ -150,14 +154,21 @@ public class AuthServiceImpl implements AuthService {
         HibernateUtils.beginTransaction();
         Account account = accountDAO.findByUsername(username);
         HibernateUtils.commitTransaction();
+        HibernateUtils.beginTransaction();
+        LoginAttempt attempt = new LoginAttempt();
+        attempt.setTime(System.nanoTime());
+        attempt.setAccount(account);
+        attempt.setConnection(con);
+        loginAttemptDAO.save(attempt);
+        HibernateUtils.commitTransaction();
         if (account != null) {
             if (!account.getPassword().equals(password)) {
-                processFailedLogin(con, account);
+                processFailedLogin(con, attempt, account);
             } else {
-                processSuccesfulLogin(con, account);
+                processSuccesfulLogin(con, attempt, account);
             }
         } else {
-            processFailedLogin(con);
+            processFailedLogin(con, attempt);
         }
     }
 
@@ -167,8 +178,9 @@ public class AuthServiceImpl implements AuthService {
      * @param con
      *            Connection
      */
-    private void processFailedLogin(final Connection con) {
-        con.setLastLoginAttempt(System.nanoTime());
+    private void processFailedLogin(final Connection con,
+            final LoginAttempt attempt) {
+        con.setLastLoginAttempt(attempt);
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
@@ -190,7 +202,7 @@ public class AuthServiceImpl implements AuthService {
      *            Account
      */
     private void processSuccesfulLogin(final Connection con,
-            final Account account) {
+            final LoginAttempt attempt, final Account account) {
         // TODO: Further authentication checks
         connections.put(con, account);
         accounts.put(account, con);
@@ -215,9 +227,10 @@ public class AuthServiceImpl implements AuthService {
      * @param account
      *            Account
      */
-    private void processFailedLogin(final Connection con, final Account account) {
-        account.setLastLoginAttempt(System.nanoTime());
-        con.setLastLoginAttempt(System.nanoTime());
+    private void processFailedLogin(final Connection con,
+            final LoginAttempt attempt, final Account account) {
+        account.setLastLoginAttempt(attempt);
+        con.setLastLoginAttempt(attempt);
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)

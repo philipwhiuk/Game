@@ -1,5 +1,6 @@
 package com.whiuk.philip.game.server.system;
 
+import com.whiuk.philip.game.server.auth.LoginAttempt;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 
 /**
@@ -24,7 +25,7 @@ public class Connection {
     /**
 	 *
 	 */
-    private long lastLoginAttempt;
+    private LoginAttempt lastLoginAttempt;
 
     /**
      * @param c
@@ -66,8 +67,8 @@ public class Connection {
         active = false;
     }
 
-    public void setLastLoginAttempt(long nanoTime) {
-        this.lastLoginAttempt = nanoTime;
+    public void setLastLoginAttempt(LoginAttempt attempt) {
+        this.lastLoginAttempt = attempt;
     }
 
 }
