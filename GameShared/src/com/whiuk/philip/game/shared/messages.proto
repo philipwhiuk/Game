@@ -6,12 +6,15 @@ option java_outer_classname = "Messages";
 
 message ClientInfo {
     required int32 clientID = 1;
-    required string ipAddress = 2;
+    required string version = 2;
+    required bytes macAddress = 3;
+    required string localIPAddress = 4;
+    optional string remoteIPAddress = 5;
 }
 
 message ClientMessage {
 	required Type type = 1;
-	optional ClientInfo clientInfo = 2;
+	required ClientInfo clientInfo = 2;
 	optional SystemData systemData = 3;
 	optional AccountData accountData = 4;
 	optional ChatData chatData = 5;

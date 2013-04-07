@@ -5,7 +5,6 @@ import java.util.Properties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.server.GameServer.GameServerProperties;
 import com.whiuk.philip.game.server.alarms.AlarmsService;
 import com.whiuk.philip.game.server.network.NetworkService;
 

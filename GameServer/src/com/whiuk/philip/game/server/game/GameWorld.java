@@ -73,7 +73,7 @@ public class GameWorld extends Thread implements Watchable {
 
 	/**
 	 * Loads the game world.
-	 * @return
+	 * @return world
 	 */
 	public static GameWorld load() {
 		// TODO Auto-generated method stub

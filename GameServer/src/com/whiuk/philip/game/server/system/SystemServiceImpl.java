@@ -1,5 +1,6 @@
 package com.whiuk.philip.game.server.system;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
@@ -44,6 +45,14 @@ public class SystemServiceImpl implements SystemService {
 	@Autowired
 	private MessageHandlerService messageHandler;
 
+	/**
+	 * Constructor
+	 */
+	public SystemServiceImpl() {
+		connections = new HashMap<ClientInfo, Connection>();
+		clients = new HashMap<Connection, ClientInfo>();
+	}
+
 	@Override
 	public final void processMessage(final ClientInfo clientInfo,
 			final SystemData data) {
@@ -52,6 +61,7 @@ public class SystemServiceImpl implements SystemService {
 				handleConnectionMessage(clientInfo);
 				break;
 			case DISCONNECTING:
+				LOGGER.info("Client <" + clientInfo + "> disconnected");
 				Connection connection = connections
 					.get(clientInfo);
 				connection.disconnect();
@@ -70,10 +80,10 @@ public class SystemServiceImpl implements SystemService {
 	private void handleConnectionMessage(final ClientInfo clientInfo) {
 		//If the connection exists
 		if (connections.containsKey(clientInfo)) {
-			LOGGER.info("Connection message from known client.");
+			LOGGER.info("Connection message from known client  <" + clientInfo + "> .");
 			connections.get(clientInfo).connect();
 		} else {
-			LOGGER.info("New client connected");
+			LOGGER.info("New client connected  <" + clientInfo + "> ");
 			Connection con = new Connection(clientInfo,
 					System.nanoTime(), true);
 			connections.put(clientInfo, con);

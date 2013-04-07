@@ -1,6 +1,8 @@
 package com.whiuk.philip.game.client;
 
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.util.Random;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
@@ -22,6 +24,9 @@ import org.lwjgl.LWJGLException;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
+import com.google.protobuf.ByteString;
+import com.whiuk.philip.game.shared.Messages.ClientInfo;
+import com.whiuk.philip.game.shared.Messages.ClientInfo.Builder;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
@@ -52,6 +57,12 @@ public class GameClient {
 	 * Channel Handler.
 	 */
 	private ClientChannelHandler channelHandler;
+
+	protected int clientID;
+
+	protected byte[] macAddress;
+
+	protected Builder clientInfo;
 	/**
 	 * Class logger.
 	 */
@@ -81,10 +92,16 @@ public class GameClient {
 	 * Title.
 	 */
 	private static final String GAME_CLIENT_TITLE = "The Game";
+
+	/**
+	 *
+	 */
+	protected static final String VERSION = "1.0";
 	/**
 	 *
 	 */
 	public GameClient() {
+		clientID = new Random().nextInt();
 	}
 	/**
 	 * Run game client.
@@ -156,6 +173,9 @@ public class GameClient {
 		bootstrap.setOption("remoteAddress", remoteAddress);
 		final ChannelFuture f = bootstrap.connect();
 		f.addListener(new ChannelFutureListener() {
+
+			private String address;
+
 			@Override
 			public void operationComplete(
 					final ChannelFuture future)
@@ -168,7 +188,17 @@ public class GameClient {
 				 } else {
 					 channel = future.getChannel();
 					 LOGGER.info("Sending connected message");
+					 address = ((InetSocketAddress) channel.getLocalAddress()).getAddress().toString();
+					 macAddress = NetworkInterface.getByInetAddress(((InetSocketAddress) channel.getLocalAddress())
+							 .getAddress()).getHardwareAddress();
+					 clientInfo = ClientInfo.newBuilder()
+						 .setClientID(clientID)
+						 .setVersion(VERSION)
+						 .setLocalIPAddress(address)
+						 .setMacAddress(ByteString.copyFrom(macAddress));
+
 					 sendOutboundMessage(ClientMessage.newBuilder()
+						 .setClientInfo(clientInfo)
 						.setType(ClientMessage.Type.SYSTEM)
 						.setSystemData(ClientMessage.SystemData.newBuilder()
 								.setType(ClientMessage.SystemData.Type.CONNECTED)
@@ -187,6 +217,7 @@ public class GameClient {
 			synchronized (channel) {
 				if (channel.isConnected()) {
 					sendOutboundMessage(ClientMessage.newBuilder()
+						.setClientInfo(clientInfo)
 						.setType(ClientMessage.Type.SYSTEM)
 						.setSystemData(ClientMessage.SystemData.newBuilder()
 							.setType(ClientMessage.SystemData.Type.DISCONNECTING)

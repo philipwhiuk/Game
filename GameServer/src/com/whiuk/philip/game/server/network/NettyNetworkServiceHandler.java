@@ -1,5 +1,7 @@
 package com.whiuk.philip.game.server.network;
 
+import java.net.InetSocketAddress;
+
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelHandlerContext;
@@ -10,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
+import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 
 /**
@@ -45,8 +48,15 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
     public final void messageReceived(final ChannelHandlerContext ctx,
 			final MessageEvent e) {
 		ClientMessage message = (ClientMessage) e.getMessage();
-		LOGGER.trace("Message recieved from " + ctx.getChannel());
-		messageHandler.processInboundMessage(message);
+		LOGGER.info("Message recieved from " + ctx.getChannel());
+		String address = ((InetSocketAddress) ctx.getChannel()
+				.getRemoteAddress()).getAddress().toString();
+		ClientMessage processedMessage = message.toBuilder()
+				.setClientInfo(message.getClientInfo().toBuilder()
+						.setRemoteIPAddress(address).build())
+				.build();
+		LOGGER.info("Address recieved from: " + address);
+		messageHandler.processInboundMessage(processedMessage);
 	}
 
 	@Override
