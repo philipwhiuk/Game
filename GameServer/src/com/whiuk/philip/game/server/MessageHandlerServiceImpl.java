@@ -1,6 +1,7 @@
 package com.whiuk.philip.game.server;
 
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -78,7 +79,8 @@ public class MessageHandlerServiceImpl
      *
      */
     public MessageHandlerServiceImpl() {
-
+    	inbound = new ConcurrentLinkedQueue<ClientMessage>();
+    	outbound = new ConcurrentLinkedQueue<ServerMessage>();
     }
 
     @Override
@@ -170,9 +172,9 @@ public class MessageHandlerServiceImpl
     public final void queueInboundMessage(final ClientMessage message) {
     	inbound.add(message);
     }
-	
+
 	/**
-	 * @param message Send inbound message
+	 * @param message Send out-bound message
 	 */
 	private void sendOutboundMessage(final ServerMessage message) {
     	//TODO: Work out if it's better just to send stuff directly to the network service

@@ -32,5 +32,10 @@ public interface SystemService {
 	 * @throws InvalidMappingException
 	 */
 	ClientInfo getClientInfo(Connection connection) throws InvalidMappingException;
+	/**
+	 *
+	 * @param clientInfo
+	 */
+	void handleClientDisconnected(ClientInfo clientInfo);
 
 }

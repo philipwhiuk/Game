@@ -112,4 +112,14 @@ public class SystemServiceImpl implements SystemService {
 		return clientInfo;
 	}
 
+	@Override
+	public final void handleClientDisconnected(
+			final ClientInfo clientInfo) {
+		if (connections.containsKey(clientInfo)) {
+			connections.get(clientInfo).disconnect();
+			authService.notifyDisconnection(
+					connections.get(clientInfo));
+		}
+	}
+
 }
