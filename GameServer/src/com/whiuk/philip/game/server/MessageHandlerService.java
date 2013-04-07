@@ -13,13 +13,13 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  */
 public interface MessageHandlerService {
 	/**
-     * @param message
+     * @param message Message to recieve
      */
-    void processInboundMessage(final ClientMessage message);
+	void queueInboundMessage(ClientMessage message);
 	/**
      * @param message Message to transmit
      */
-    void processOutboundMessage(final ServerMessage message);
+	void queueOutboundMessage(ServerMessage message);
     /**
      * Handles messages of an unknown type.
      * @param clientInfo Client information for message
@@ -31,4 +31,6 @@ public interface MessageHandlerService {
      * @throws InvalidMappingException Indicates the connection doesn't map to a client.
      */
 	void handleUnknownMessageType(Connection connection) throws InvalidMappingException;
+
+
 }

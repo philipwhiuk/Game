@@ -89,7 +89,7 @@ public class MessageHandlerServiceImpl
             ServerMessage serverMessage;
             serverMessage = outbound.poll();
             while (serverMessage != null) {
-                processOutboundMessage(serverMessage);
+            	sendOutboundMessage(serverMessage);
                 serverMessage = outbound.poll();
             }
             ClientMessage clientMessage = inbound.poll();
@@ -105,8 +105,11 @@ public class MessageHandlerServiceImpl
         }
      }
 
-    @Override
-    public final void processInboundMessage(final ClientMessage message) {
+    /**
+     * Process an inbound message
+     * @param message
+     */
+    private final void processInboundMessage(final ClientMessage message) {
     	if (message.hasSystemData()) {
             systemService.processMessage(message.getClientInfo(),
             		message.getSystemData());
@@ -159,7 +162,19 @@ public class MessageHandlerServiceImpl
 	}
 
 	@Override
-    public final void processOutboundMessage(final ServerMessage message) {
+    public final void queueOutboundMessage(final ServerMessage message) {
+    	outbound.add(message);
+    }
+
+	@Override
+    public final void queueInboundMessage(final ClientMessage message) {
+    	inbound.add(message);
+    }
+	
+	/**
+	 * @param message Send inbound message
+	 */
+	private void sendOutboundMessage(final ServerMessage message) {
     	//TODO: Work out if it's better just to send stuff directly to the network service
         networkService.processMessage(message);
     }

@@ -129,7 +129,7 @@ public class GameServiceImpl implements GameService {
 				.setError(ServerMessage.GameData
 				.Error.CHARACTER_ALREADY_SELECTED))
 				.build();
-			messageHandlerService.processOutboundMessage(message);
+			messageHandlerService.queueOutboundMessage(message);
 		} else {
 			//TODO: Load character
 		}

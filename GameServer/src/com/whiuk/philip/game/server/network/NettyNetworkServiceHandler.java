@@ -56,7 +56,7 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
 						.setRemoteIPAddress(address).build())
 				.build();
 		LOGGER.info("Address recieved from: " + address);
-		messageHandler.processInboundMessage(processedMessage);
+		messageHandler.queueInboundMessage(processedMessage);
 	}
 
 	@Override
