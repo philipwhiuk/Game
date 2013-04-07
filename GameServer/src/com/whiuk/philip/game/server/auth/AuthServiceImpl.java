@@ -4,14 +4,18 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import org.apache.log4j.Level;
+import org.hibernate.criterion.Restrictions;
 
+import com.whiuk.philip.game.server.HibernateUtils;
+import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
 import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.SystemService;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.AccountData;
+import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -65,7 +69,12 @@ public class AuthServiceImpl implements AuthService {
      */
     @Autowired
     private GameService gameService;
-
+    /**
+     * 
+     */
+    @Autowired
+    private MessageHandlerService messageHandler;
+    
     /**
      *
      */
@@ -92,7 +101,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public final void processMessage(final ClientInfo src,
-    		final AccountData data) {
+    		final AuthData data) {
         Connection con;
         switch(data.getType()) {
             case LOGIN:
@@ -106,7 +115,7 @@ public class AuthServiceImpl implements AuthService {
                         logger.log(Level.INFO, MULTIPLE_LOGINS_ATTEMPT_MESSAGE);
                         accounts.remove(connections.remove(con));
                     }
-                    processLoginAttempt(src, data.getUsername(),
+                    processLoginAttempt(systemService.getConnection(src), data.getUsername(),
                     		data.getPassword());
                 }
                 break;
@@ -131,11 +140,79 @@ public class AuthServiceImpl implements AuthService {
      * @param username Username
      * @param password Password
      */
-    private void processLoginAttempt(final ClientInfo src,
+    private void processLoginAttempt(final Connection con,
     		final String username, final String password) {
-        // TODO Auto-generated method stub
-
+    	//TODO Exceeded maximum login attempts
+        Account account = (Account) HibernateUtils.getSessionFactory().openSession()
+        	.createCriteria(Account.class)
+        	.add(Restrictions.eq("username", username)).uniqueResult();
+        if (account != null) {
+        	if (!account.getPassword().equals(password)) {
+        		processFailedLogin(con, account);
+        	} else {
+        		processSuccesfulLogin(con, account);
+        	}
+        } else {
+        	processFailedLogin(con);
+        }
     }
+
+    /**
+     * Handles a login attempt which didn't match an account.
+     * @param con Connection
+     */
+	private void processFailedLogin(final Connection con) {
+		con.setLastLoginAttempt(System.nanoTime());
+		ServerMessage message = ServerMessage
+				.newBuilder()
+				.setType(ServerMessage.Type.AUTH)
+				.setAuthData(ServerMessage.AuthData.newBuilder()
+						.setType(ServerMessage
+						.AuthData.Type.LOGIN_FAILED)
+						.build())
+				.build();
+		messageHandler.queueOutboundMessage(message);
+	}
+	/**
+	 * Handle a successful login attempt.
+	 * @param con Connection
+	 * @param account Account
+	 */
+	private void processSuccesfulLogin(final Connection con,
+			final Account account) {
+		//TODO: Further authentication checks
+		connections.put(con, account);
+		accounts.put(account, con);
+		ServerMessage message = ServerMessage
+				.newBuilder()
+				.setType(ServerMessage.Type.AUTH)
+				.setAuthData(ServerMessage.AuthData.newBuilder()
+					.setType(ServerMessage
+					.AuthData.Type.LOGIN_SUCCESSFUL)
+					.setUsername(account.getUsername())
+					.build())
+				.build();
+		messageHandler.queueOutboundMessage(message);
+	}
+	/**
+	 * Handle a failed login against an account.
+	 * @param con Connection
+	 * @param account Account
+	 */
+	private void processFailedLogin(final Connection con,
+			final Account account) {
+		account.setLastLoginAttempt(System.nanoTime());
+		con.setLastLoginAttempt(System.nanoTime());
+		ServerMessage message = ServerMessage
+				.newBuilder()
+				.setType(ServerMessage.Type.AUTH)
+				.setAuthData(ServerMessage.AuthData.newBuilder()
+						.setType(ServerMessage
+						.AuthData.Type.LOGIN_FAILED)
+						.build())
+				.build();
+		messageHandler.queueOutboundMessage(message);
+	}
 
 	@Override
 	public final void notifyDisconnection(final Connection con) {

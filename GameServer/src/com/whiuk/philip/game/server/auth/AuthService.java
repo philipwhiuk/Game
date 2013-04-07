@@ -3,7 +3,7 @@ package com.whiuk.philip.game.server.auth;
 import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.AccountData;
+import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
 
 /**
  * @author Philip
@@ -23,7 +23,7 @@ public interface AuthService {
      * @param src ClientInfo
      * @param data AccountData for a message
      */
-    void processMessage(ClientInfo src, AccountData data);
+    void processMessage(ClientInfo src, AuthData data);
 
     /**
      * Get account by connection.

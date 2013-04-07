@@ -16,7 +16,7 @@ message ClientMessage {
 	required Type type = 1;
 	required ClientInfo clientInfo = 2;
 	optional SystemData systemData = 3;
-	optional AccountData accountData = 4;
+	optional AuthData authData = 4;
 	optional ChatData chatData = 5;
 	optional GameData gameData = 6;
 
@@ -28,7 +28,7 @@ message ClientMessage {
 	}
 
 
-	message AccountData {
+	message AuthData {
 		required AccountDataType type = 1;
 		required string username = 2;
 		optional string password = 3;
@@ -78,7 +78,8 @@ message ServerMessage {
 	required Type type = 1;
 	required ClientInfo clientInfo = 2;
 	optional SystemData systemData = 3;
-	optional GameData gameData = 4;
+	optional AuthData authData = 4;
+	optional GameData gameData = 5;
 
 	enum Type {
 		SYSTEM = 0;
@@ -86,7 +87,6 @@ message ServerMessage {
 		CHAT = 2;
 		GAME = 3;
 	}
-
 	message SystemData {
 		enum Type {
 			UNKNOWN_MESSAGE_TYPE = 0;
@@ -94,9 +94,19 @@ message ServerMessage {
 			CONNECTED_SUCCESSFULLY = 2;
 			DISCONNECTING = 3;
 		}
-
 		required Type type = 1;
 		optional string details = 2;
+	}
+
+	message AuthData {
+		enum Type {
+			LOGIN_FAILED = 0;
+			EXTRA_AUTH_FAILED = 1;
+			LOGIN_SUCCESSFUL = 2;
+			LOGOUT_SUCCESSFUL = 3;
+		}
+		required Type type = 1;
+		optional string username = 2;
 	}
 
 	message GameData {

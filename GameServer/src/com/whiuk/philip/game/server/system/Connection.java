@@ -21,6 +21,10 @@ public class Connection {
 	 *
 	 */
 	private ClientInfo clientInfo;
+	/**
+	 *
+	 */
+	private long lastLoginAttempt;
 
 	/**
 	 *
@@ -62,6 +66,10 @@ public class Connection {
 	 */
 	public final void disconnect() {
 		active = false;
+	}
+
+	public void setLastLoginAttempt(long nanoTime) {
+		this.lastLoginAttempt = nanoTime;
 	}
 
 }

@@ -114,9 +114,9 @@ public class MessageHandlerServiceImpl
             systemService.processMessage(message.getClientInfo(),
             		message.getSystemData());
         }
-    	if (message.hasAccountData()) {
+    	if (message.hasAuthData()) {
             authService.processMessage(message.getClientInfo(),
-            		message.getAccountData());
+            		message.getAuthData());
         } else {
             Account account = authService.getAccount(message);
             if (account == null) {
