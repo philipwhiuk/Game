@@ -1,8 +1,8 @@
 package com.whiuk.philip.game.server.network;
 
 import java.net.InetSocketAddress;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
@@ -11,8 +11,6 @@ import org.jboss.netty.channel.ChannelStateEvent;
 import org.jboss.netty.channel.ExceptionEvent;
 import org.jboss.netty.channel.MessageEvent;
 import org.jboss.netty.channel.SimpleChannelHandler;
-import org.jboss.netty.util.Timeout;
-import org.jboss.netty.util.TimerTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,10 +47,18 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
     private Map<Channel, ClientInfo> clients;
 
     /**
-	 *
-	 */
+     * Class logger.
+     */
     private static final transient Logger LOGGER = Logger
             .getLogger(NettyNetworkServiceHandler.class);
+
+    /**
+     * Bean constructor.
+     */
+    public NettyNetworkServiceHandler() {
+        channels = new HashMap<ClientInfo, Channel>();
+        clients = new HashMap<Channel, ClientInfo>();
+    }
 
     /**
      * Set message handler.
@@ -98,8 +104,9 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
     @Override
     public final void channelDisconnected(final ChannelHandlerContext ctx,
             final ChannelStateEvent e) {
-        systemService.handleClientDisconnected(clients.get(ctx.getChannel()));
         if (clients.containsKey(ctx.getChannel())) {
+            systemService
+                    .handleClientDisconnected(clients.get(ctx.getChannel()));
             channels.remove(clients.remove(ctx.getChannel()));
         }
     }
