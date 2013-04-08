@@ -33,5 +33,7 @@
 	<dependencies>
 		<dependency org="com.google.protobuf" name="protobuf-java" rev="2.5.0"/>
 		<dependency org="org.jboss.netty" name="netty" rev="3.2.5.Final" />
+		<dependency org="org.bushe" name="eventbus" rev="1.4"/>
+		<dependency org="xpp3" name="xpp3_min" rev="1.1.4c"/>
 	</dependencies>
 </ivy-module>

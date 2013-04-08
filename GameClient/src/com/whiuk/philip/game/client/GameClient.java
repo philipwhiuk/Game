@@ -21,6 +21,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepend
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 import org.lwjgl.LWJGLException;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
 
@@ -29,6 +30,12 @@ import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientInfo.Builder;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
+
+import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
+import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
+import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
 /**
  * @author Philip Whitehouse
@@ -115,10 +122,19 @@ public class GameClient {
         } catch (LWJGLException e) {
             handleLWJGLException(e);
         }
+        Nifty nifty = new Nifty(new LwjglRenderDevice(),
+                new OpenALSoundDevice(), new LwjglInputSystem(),
+                new AccurateTimeProvider());
+        // TODO: Load start screen
         openNetworkConnection();
         while (!Display.isCloseRequested()) {
             // render OpenGL here
             Display.update();
+            // TODO: Forward key events to nifty
+            int mouseX = Mouse.getX();
+            int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+            nifty.render(true);
+
         }
         closeNetworkConnection();
         Display.destroy();
