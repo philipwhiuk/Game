@@ -1,6 +1,6 @@
 package com.whiuk.philip.game.client;
 
-import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.PropertyConfigurator;
 
 /**
  * @author Philip
@@ -12,8 +12,7 @@ public class Main {
      *            Command line arguments
      */
     public static void main(final String[] args) {
-        // TODO: Initialize logging properly
-        BasicConfigurator.configure();
+        PropertyConfigurator.configure("log4j.properties");
         GameClient client = new GameClient();
         GameClient.setGameClient(client);
         client.run();
