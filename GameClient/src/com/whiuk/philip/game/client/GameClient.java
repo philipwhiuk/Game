@@ -2,6 +2,11 @@ package com.whiuk.philip.game.client;
 
 import java.net.InetSocketAddress;
 import java.net.NetworkInterface;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Executors;
 
@@ -20,14 +25,16 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
-import org.lwjgl.input.Mouse;
+import org.lwjgl.LWJGLUtil;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientInfo.Builder;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
@@ -63,28 +70,47 @@ public class GameClient {
      */
     private ClientChannelHandler channelHandler;
 
+    /**
+     * Client ID
+     */
     protected int clientID;
 
+    /**
+     * MAC Address.
+     */
     protected byte[] macAddress;
 
-    protected Builder clientInfo;
+    /**
+     * Client Info object.
+     */
+    protected ClientInfo clientInfo;
+
+    /**
+     * LWJGL input system.
+     */
+    private LwjglInputSystem inputSystem;
+
+    /**
+     * Nifty GUI.
+     */
+    private Nifty nifty;
     /**
      * Class logger.
      */
     private static final transient Logger LOGGER = Logger
             .getLogger(GameClient.class);
     /**
-     * Display width.
+     * Max width.
      */
-    private static final int DISPLAY_WIDTH = 800;
+    private static final int WIDTH = 1024;
     /**
-     * Display height.
+     * Max height.
      */
-    private static final int DISPLAY_HEIGHT = 600;
+    private static final int HEIGHT = 768;
     /**
-	 *
-	 */
-    private static final Object CONNECTION_TIMEOUT = 10000;
+     * Connection timeout.
+     */
+    private static final int CONNECTION_TIMEOUT = 10000;
     /**
      * Delay before reconnecting.
      */
@@ -99,13 +125,20 @@ public class GameClient {
     private static final String GAME_CLIENT_TITLE = "The Game";
 
     /**
-	 *
-	 */
+     * Client version.
+     */
     protected static final String VERSION = "1.0";
 
     /**
-	 *
-	 */
+     * Orthographic near/far clipping distance.
+     */
+    private static final int ORTHO_DISTANCE_MAX = 9999;
+
+    private static final boolean FULLSCREEN = false;
+
+    /**
+     * Bean constructor.
+     */
     public GameClient() {
         clientID = new Random().nextInt();
     }
@@ -115,30 +148,192 @@ public class GameClient {
      */
     public final void run() {
         try {
-            Display.setDisplayMode(new DisplayMode(DISPLAY_WIDTH,
-                    DISPLAY_HEIGHT));
-            Display.setTitle(GAME_CLIENT_TITLE);
-            Display.create();
+            buildDisplay();
+
         } catch (LWJGLException e) {
             handleLWJGLException(e);
         }
-        Nifty nifty = new Nifty(new LwjglRenderDevice(),
-                new OpenALSoundDevice(), new LwjglInputSystem(),
-                new AccurateTimeProvider());
-        // TODO: Load start screen
+
+        setupOpenGL();
+        setupInputSystem();
+        setupNifty();
+
+        nifty.fromXml("startscreen.xml", "start");
         openNetworkConnection();
-        while (!Display.isCloseRequested()) {
+        boolean done = false;
+        while (!Display.isCloseRequested() && !done) {
+
             // render OpenGL here
             Display.update();
-            // TODO: Forward key events to nifty
-            int mouseX = Mouse.getX();
-            int mouseY = Display.getDisplayMode().getHeight() - Mouse.getY();
+            if (nifty.update()) {
+                done = true;
+            }
             nifty.render(true);
-
+            int error = GL11.glGetError();
+            if (error != GL11.GL_NO_ERROR) {
+                String glerrmsg = GLU.gluErrorString(error);
+                LOGGER.warn("OpenGL Error: (" + error + ") " + glerrmsg);
+            }
         }
         closeNetworkConnection();
+        inputSystem.shutdown();
         Display.destroy();
         System.exit(0);
+    }
+
+    /**
+     * Build LWJGL display.
+     * 
+     * @throws LWJGLException
+     */
+    private void buildDisplay() throws LWJGLException {
+        int width = WIDTH;
+        int height = HEIGHT;
+        selectDisplayMode();
+
+        int x = (width - Display.getDisplayMode().getWidth()) / 2;
+        int y = (height - Display.getDisplayMode().getHeight()) / 2;
+        Display.setLocation(x, y);
+        Display.create();
+        Display.setFullscreen(FULLSCREEN);
+        Display.setVSyncEnabled(false);
+        Display.setTitle(GAME_CLIENT_TITLE);
+        LOGGER.info("Width: " + Display.getDisplayMode().getWidth()
+                + ", Height: " + Display.getDisplayMode().getHeight()
+                + ", Bits per pixel: "
+                + Display.getDisplayMode().getBitsPerPixel() + ", Frequency: "
+                + Display.getDisplayMode().getFrequency() + ", Title: "
+                + Display.getTitle());
+        LOGGER.info("plattform: " + LWJGLUtil.getPlatformName());
+        LOGGER.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
+        LOGGER.info("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
+        LOGGER.info("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
+        String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
+        if (extensions != null) {
+            String[] ext = extensions.split(" ");
+            for (int i = 0; i < ext.length; i++) {
+                LOGGER.info("opengl extensions: " + ext[i]);
+            }
+        }
+
+    }
+
+    /**
+     * Select LWJGL display mode.
+     * 
+     * @throws LWJGLException
+     */
+    private void selectDisplayMode() throws LWJGLException {
+        DisplayMode currentMode = Display.getDisplayMode();
+        DisplayMode[] modes = Display.getAvailableDisplayModes();
+        List<DisplayMode> matching = new ArrayList<DisplayMode>();
+        for (int i = 0; i < modes.length; i++) {
+            DisplayMode mode = modes[i];
+            if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT
+                    && mode.getBitsPerPixel() == 32) {
+                LOGGER.info(mode.getWidth() + ", " + mode.getHeight() + ", "
+                        + mode.getBitsPerPixel() + ", " + mode.getFrequency());
+                matching.add(mode);
+            }
+        }
+
+        DisplayMode[] matchingModes = matching.toArray(new DisplayMode[0]);
+
+        // find mode with matching frequency.
+        boolean found = false;
+        for (int i = 0; i < matchingModes.length; i++) {
+            if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
+                LOGGER.info("using mode: " + matchingModes[i].getWidth() + ", "
+                        + matchingModes[i].getHeight() + ", "
+                        + matchingModes[i].getBitsPerPixel() + ", "
+                        + matchingModes[i].getFrequency());
+                Display.setDisplayMode(matchingModes[i]);
+                found = true;
+                break;
+            }
+        }
+
+        if (!found) {
+            Arrays.sort(matchingModes, new Comparator<DisplayMode>() {
+                public int compare(final DisplayMode o1, final DisplayMode o2) {
+                    if (o1.getFrequency() > o2.getFrequency()) {
+                        return 1;
+                    } else if (o1.getFrequency() < o2.getFrequency()) {
+                        return -1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+
+            for (int i = 0; i < matchingModes.length; i++) {
+                LOGGER.info("using fallback mode: "
+                        + matchingModes[i].getWidth() + ", "
+                        + matchingModes[i].getHeight() + ", "
+                        + matchingModes[i].getBitsPerPixel() + ", "
+                        + matchingModes[i].getFrequency());
+                Display.setDisplayMode(matchingModes[i]);
+                break;
+            }
+        }
+    }
+
+    /**
+     * Setup Nifty.
+     */
+    private void setupNifty() {
+        nifty = new Nifty(new LwjglRenderDevice(), new OpenALSoundDevice(),
+                inputSystem, new AccurateTimeProvider());
+        final StartScreen screen = new StartScreen();
+        nifty.registerScreenController(screen);
+        screen.prepareStart(nifty);
+    }
+
+    /**
+     * Setup input system.
+     */
+    private void setupInputSystem() {
+        try {
+            inputSystem = new LwjglInputSystem();
+            inputSystem.startup();
+        } catch (Exception e) {
+            handleInputException(e);
+        }
+    }
+
+    /**
+     * Setup OpenGL.
+     */
+    private void setupOpenGL() {
+        IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+        GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
+        int viewportWidth = viewportBuffer.get(2);
+        int viewportHeight = viewportBuffer.get(3);
+
+        // GL11.glViewport(0, 0, Display.getDisplayMode().getWidth(),
+        // Display.getDisplayMode().getHeight());
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, viewportWidth, viewportHeight, 0, -ORTHO_DISTANCE_MAX,
+                ORTHO_DISTANCE_MAX);
+
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+
+        // Prepare Render mode
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+
+        GL11.glEnable(GL11.GL_ALPHA_TEST);
+        GL11.glAlphaFunc(GL11.GL_NOTEQUAL, 0);
+
+        GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+
+        GL11.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
     /**
@@ -149,6 +344,15 @@ public class GameClient {
      */
     private void handleLWJGLException(final LWJGLException e) {
         LOGGER.fatal("Failed to create display", e);
+        closeNetworkConnection();
+        System.exit(1);
+    }
+
+    /**
+     * @param e
+     */
+    private void handleInputException(final Exception e) {
+        LOGGER.fatal("Failed to create input system", e);
         closeNetworkConnection();
         System.exit(1);
     }
@@ -208,7 +412,8 @@ public class GameClient {
                                     .getAddress()).getHardwareAddress();
                     clientInfo = ClientInfo.newBuilder().setClientID(clientID)
                             .setVersion(VERSION).setLocalIPAddress(address)
-                            .setMacAddress(ByteString.copyFrom(macAddress));
+                            .setMacAddress(ByteString.copyFrom(macAddress))
+                            .build();
 
                     sendOutboundMessage(ClientMessage
                             .newBuilder()

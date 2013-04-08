@@ -18,5 +18,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="lib/nifty-lwjgl-renderer-1.3.2.jar"/>
 	<classpathentry kind="lib" path="lib/nifty-openal-soundsystem-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/nifty-style-black-1.3.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
