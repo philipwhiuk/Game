@@ -12,18 +12,24 @@
 	        </panel>
 	        <panel id="panel-centre" height="90%" width="100%" align="center" valign="center" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
 	        	<text id="header" font="aurulent-sans-16.fnt" color="#ffff" text="Login!" align="center" valign="top" />
-		        <panel id="form" height="90%" width="100%" backgroundColor="#555f" align="center" valign="bottom"  visibleToMouse="false" childLayout="center" >
-		           	<panel id="form-username" height="100" width="100%" align="left" valign="top" backgroundColor="#ffff" childLayout="center" visibleToMouse="false">
-		           		<control name="textfield" id="text_input_username" width="40%" align="center" valign="center" />
+	        	<panel id="panel-centre-left-margin" height="90%" width="6%" align="left" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+	        	</panel>
+		        <panel id="form" height="90%" width="90%" backgroundColor="#555f" align="center" valign="bottom"  visibleToMouse="false" childLayout="center" >
+		           	<panel id="form-username" height="90" width="100%" align="left" valign="top" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+		           		<text id="username" font="aurulent-sans-16.fnt" color="#ffff" text="Username" align="left" valign="center" />
+		           		<control name="textfield" id="text_input_username" width="40%" align="right" valign="center" />
 		        	</panel>
-		        	<panel id="form-password" height="100" width="100%" align="left" valign="center" backgroundColor="#000f" childLayout="center" visibleToMouse="false">
-			       		<control name="textfield" id="text_input_password" width="40%" align="center" />
+		        	<panel id="form-password" height="90" width="100%" align="left" valign="center" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+						<text id="password" font="aurulent-sans-16.fnt" color="#ffff" text="Password" align="left" valign="center" />
+			       		<control name="textfield" id="text_input_password" width="40%" align="right" passwordChar="*" />
 		        	</panel>
-		        	<panel id="form-bottom" height="*" width="100%" align="left" valign="bottom" backgroundColor="#888f" childLayout="center" visibleToMouse="false">
-		        		<control name="button" label="Send" valign="center">
+		        	<panel id="form-bottom" height="90" width="100%" align="left" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+		        		<control name="button" id="submit_button" label="Send" valign="center">
 							<interact onClick="sendLoginRequest()" />
 						</control>
 		        	</panel>
+	        	</panel>
+	        	<panel id="panel-centre-right-margin" height="90%" width="6%" align="right" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
 	        	</panel>
 			</panel>
 	        <panel id="panel-bottom-margin" height="5%" width="100%" align="center" valign="bottom" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
