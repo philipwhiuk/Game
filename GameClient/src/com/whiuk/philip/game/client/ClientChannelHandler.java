@@ -95,7 +95,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     @Override
     public final void exceptionCaught(final ChannelHandlerContext ctx,
             final ExceptionEvent e) {
-        LOGGER.info(format("Exception caught"), e.getCause());
+        logException("Exception caught", e.getCause());
         Channel ch = e.getChannel();
         ch.close();
     }
@@ -146,5 +146,14 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     public final void stopReconnecting() {
         reconnect = false;
         timer.stop();
+    }
+
+    public final void logException(String message, Throwable t) {
+        if (t instanceof java.io.IOException) {
+            LOGGER.info(format(message + " - " + t.getClass().getSimpleName()
+                    + ": " + t.getMessage()));
+        } else {
+            LOGGER.warn(format(message), t);
+        }
     }
 }

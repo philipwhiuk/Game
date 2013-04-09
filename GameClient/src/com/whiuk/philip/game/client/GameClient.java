@@ -400,8 +400,8 @@ public class GameClient {
                 if (future.isCancelled()) {
                     LOGGER.info("Connection attempt cancelled");
                 } else if (!future.isSuccess()) {
-                    LOGGER.warn("Connection attempt unsuccesful",
-                            future.getCause());
+                    channelHandler.logException(
+                            "Connection attempt unsuccesful", future.getCause());
                 } else {
                     channel = future.getChannel();
                     LOGGER.info("Sending connected message");
