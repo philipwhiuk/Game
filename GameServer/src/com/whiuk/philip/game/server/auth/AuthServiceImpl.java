@@ -38,6 +38,11 @@ public class AuthServiceImpl implements AuthService {
      */
     private static final String BAD_CONNECTION_LOGOUT_MESSAGE = "Attempting to logout a connection that doesn't exist";
     /**
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger
+            .getLogger(AuthServiceImpl.class);
+    /**
      *
      */
     @Autowired
@@ -108,6 +113,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public final void processMessage(final ClientInfo src, final AuthData data) {
         Connection con;
+        LOGGER.info("Processing authentication message");
         switch (data.getType()) {
             case LOGIN:
                 // Handle trying to login twice from the same source.

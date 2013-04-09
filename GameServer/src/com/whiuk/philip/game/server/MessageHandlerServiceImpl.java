@@ -3,6 +3,7 @@ package com.whiuk.philip.game.server;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,7 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  * @author Philip
  */
 @Service
-public class MessageHandlerServiceImpl implements Runnable,
-        MessageHandlerService {
+public class MessageHandlerServiceImpl implements MessageHandlerService {
     /**
      * Network service.
      */
@@ -69,6 +69,11 @@ public class MessageHandlerServiceImpl implements Runnable,
      * Amount of time handler tries to sleep when idle.
      */
     private static final int HANDLER_SLEEP_TIME = 100;
+    /**
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger
+            .getLogger(MessageHandlerServiceImpl.class);
 
     /**
      * Whether the message handler is running.
@@ -113,6 +118,7 @@ public class MessageHandlerServiceImpl implements Runnable,
      * @param message
      */
     private final void processInboundMessage(final ClientMessage message) {
+        LOGGER.info("Processing inbound message");
         if (message.hasSystemData()) {
             systemService.processMessage(message.getClientInfo(),
                     message.getSystemData());

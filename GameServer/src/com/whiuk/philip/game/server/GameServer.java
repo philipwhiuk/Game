@@ -2,10 +2,13 @@ package com.whiuk.philip.game.server;
 
 import java.util.Properties;
 
+import javax.annotation.PostConstruct;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.alarms.AlarmsService;
+import com.whiuk.philip.game.server.hibernate.HibernateUtils;
 import com.whiuk.philip.game.server.network.NetworkService;
 
 /**
@@ -22,6 +25,11 @@ public class GameServer {
      */
     @Autowired
     private NetworkService networkService;
+    /**
+    *
+    */
+    @Autowired
+    private MessageHandlerService messageHandlerService;
     /**
      *
      */
@@ -68,6 +76,16 @@ public class GameServer {
 	 *
      */
     public GameServer() {
+    }
+
+    /**
+     *
+     */
+    @PostConstruct
+    public final void init() {
+        new Thread(messageHandlerService).start();
+        // Just to ensure Hibernate is running
+        HibernateUtils.getSessionFactory();
     }
 
     /**

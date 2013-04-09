@@ -11,10 +11,10 @@ import com.whiuk.philip.game.shared.Messages.ServerMessage;
  * 
  * @author Philip Whitehouse
  */
-public interface MessageHandlerService {
+public interface MessageHandlerService extends Runnable {
     /**
      * @param message
-     *            Message to recieve
+     *            Message to receive
      */
     void queueInboundMessage(ClientMessage message);
 
