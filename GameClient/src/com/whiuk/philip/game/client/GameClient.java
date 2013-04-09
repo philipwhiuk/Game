@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
@@ -47,7 +49,8 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 /**
  * @author Philip Whitehouse
  */
-public class GameClient {
+public class GameClient implements AuthMessageHandler, ChatMessageHandler,
+        GameMessageHandler, SystemMessageHandler {
     /**
      * Game client singleton.
      */
@@ -94,6 +97,14 @@ public class GameClient {
      * Nifty GUI.
      */
     private Nifty nifty;
+
+    private SortedSet<AuthMessageHandler> authMessageHandlers;
+
+    private SortedSet<SystemMessageHandler> systemMessageHandlers;
+
+    private SortedSet<GameMessageHandler> gameMessageHandlers;
+
+    private SortedSet<ChatMessageHandler> chatMessageHandlers;
     /**
      * Class logger.
      */
@@ -136,10 +147,16 @@ public class GameClient {
 
     private static final boolean FULLSCREEN = false;
 
+    private static final int LAST_HANDLER = 100;
+
     /**
      * Bean constructor.
      */
     public GameClient() {
+        authMessageHandlers = new TreeSet<AuthMessageHandler>();
+        systemMessageHandlers = new TreeSet<SystemMessageHandler>();
+        gameMessageHandlers = new TreeSet<GameMessageHandler>();
+        chatMessageHandlers = new TreeSet<ChatMessageHandler>();
         clientID = new Random().nextInt();
     }
 
@@ -147,6 +164,12 @@ public class GameClient {
      * Run game client.
      */
     public final void run() {
+        // Register this as a default handler
+        registerAuthMessageHandler(this);
+        registerSystemMessageHandler(this);
+        registerGameMessageHandler(this);
+        registerChatMessageHandler(this);
+
         try {
             buildDisplay();
 
@@ -179,6 +202,22 @@ public class GameClient {
         inputSystem.shutdown();
         Display.destroy();
         System.exit(0);
+    }
+
+    public void registerChatMessageHandler(ChatMessageHandler h) {
+        chatMessageHandlers.add(h);
+    }
+
+    public void registerGameMessageHandler(GameMessageHandler h) {
+        gameMessageHandlers.add(h);
+    }
+
+    public void registerSystemMessageHandler(SystemMessageHandler h) {
+        systemMessageHandlers.add(h);
+    }
+
+    public void registerAuthMessageHandler(AuthMessageHandler h) {
+        authMessageHandlers.add(h);
     }
 
     /**
@@ -459,8 +498,20 @@ public class GameClient {
      * @param message
      *            Server message
      */
-    public void processInboundMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
+    public final void processInboundMessage(final ServerMessage message) {
+        // TODO: Unconsumed events
+        switch (message.getType()) {
+            case AUTH:
+                authMessageHandlers.first().handleAuthMessage(message);
+            case SYSTEM:
+                systemMessageHandlers.first().handleSystemMessage(message);
+            case GAME:
+                gameMessageHandlers.first().handleGameMessage(message);
+            case CHAT:
+                chatMessageHandlers.first().handleChatMessage(message);
+            default:
+                throw new IllegalArgumentException("Unhandled message type");
+        }
 
     }
 
@@ -518,5 +569,39 @@ public class GameClient {
      */
     public final ClientInfo getClientInfo() {
         return clientInfo;
+    }
+
+    @Override
+    public void handleSystemMessage(ServerMessage message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void handleGameMessage(ServerMessage message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void handleChatMessage(ServerMessage message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void handleAuthMessage(ServerMessage message) {
+        // TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public int compareTo(MessageHandler o) {
+        return this.getOrdering() - o.getOrdering();
+    }
+
+    @Override
+    public int getOrdering() {
+        return LAST_HANDLER;
     }
 }

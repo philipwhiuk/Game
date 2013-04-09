@@ -2,6 +2,7 @@ package com.whiuk.philip.game.client;
 
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
+import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
@@ -16,7 +17,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * 
  * @author Philip Whitehouse
  */
-public class StartScreen implements ScreenController {
+public class StartScreen implements ScreenController, AuthMessageHandler {
     /**
      *
      */
@@ -33,6 +34,7 @@ public class StartScreen implements ScreenController {
      *
      */
     private GameClient gameClient;
+    private int ordering;
 
     /**
      * @param g
@@ -40,6 +42,7 @@ public class StartScreen implements ScreenController {
      */
     public StartScreen(final GameClient g) {
         this.gameClient = g;
+        gameClient.registerAuthMessageHandler(this);
     }
 
     @Override
@@ -85,7 +88,7 @@ public class StartScreen implements ScreenController {
     }
 
     /**
-     * Sends a login request
+     * Sends a login request.
      */
     @SuppressWarnings("deprecation")
     // TODO: Work out how Nifty 1.3.2 uses controls.
@@ -113,5 +116,22 @@ public class StartScreen implements ScreenController {
                                                     .getRealText()).build())
                     .build());
         }
+    }
+
+    @Override
+    public void handleAuthMessage(final ServerMessage message) {
+        // TODO Handle authentication responses
+
+    }
+
+    @Override
+    public final int getOrdering() {
+        return ordering;
+    }
+
+    @Override
+    public final int compareTo(final MessageHandler o) {
+        // TODO Auto-generated method stub
+        return this.getOrdering() - o.getOrdering();
     }
 }
