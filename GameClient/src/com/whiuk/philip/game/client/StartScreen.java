@@ -1,5 +1,7 @@
 package com.whiuk.philip.game.client;
 
+import org.apache.log4j.Logger;
+
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
@@ -35,6 +37,7 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
      */
     private GameClient gameClient;
     private int ordering;
+    private static final Logger LOGGER = Logger.getLogger(StartScreen.class);
 
     /**
      * @param g
@@ -99,13 +102,13 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
                         .getRealText().isEmpty()) {
             // TODO: Handle blank field
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
-
             gameClient.sendOutboundMessage(ClientMessage
                     .newBuilder()
                     .setType(ClientMessage.Type.AUTH)
                     .setClientInfo(gameClient.getClientInfo())
                     .setAuthData(
                             AuthData.newBuilder()
+                                    .setType(AuthData.AccountDataType.LOGIN)
                                     .setUsername(
                                             textInputUsername.getControl(
                                                     TextFieldControl.class)
@@ -115,6 +118,8 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
                                                     TextFieldControl.class)
                                                     .getRealText()).build())
                     .build());
+        } else {
+            LOGGER.info("Client not connected");
         }
     }
 
