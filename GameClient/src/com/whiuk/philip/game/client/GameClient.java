@@ -83,7 +83,7 @@ public class GameClient {
     /**
      * Client Info object.
      */
-    protected ClientInfo clientInfo;
+    private ClientInfo clientInfo;
 
     /**
      * LWJGL input system.
@@ -284,9 +284,8 @@ public class GameClient {
     private void setupNifty() {
         nifty = new Nifty(new LwjglRenderDevice(), new OpenALSoundDevice(),
                 inputSystem, new AccurateTimeProvider());
-        final StartScreen screen = new StartScreen();
+        final StartScreen screen = new StartScreen(this);
         nifty.registerScreenController(screen);
-        screen.prepareStart(nifty);
     }
 
     /**
@@ -491,5 +490,33 @@ public class GameClient {
         if (channel != null) {
             channel.write(message);
         }
+    }
+
+    /**
+     * @return
+     */
+    public final boolean isConnected() {
+        if (channel != null) {
+            return channel.isConnected();
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * @return
+     */
+    public final boolean hasClientInfo() {
+        if (clientInfo != null) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * @return
+     */
+    public final ClientInfo getClientInfo() {
+        return clientInfo;
     }
 }
