@@ -1,6 +1,8 @@
 package com.whiuk.philip.game.client;
 
 import java.net.InetSocketAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -15,6 +17,9 @@ import org.jboss.netty.util.Timeout;
 import org.jboss.netty.util.Timer;
 import org.jboss.netty.util.TimerTask;
 
+import com.google.protobuf.ByteString;
+import com.whiuk.philip.game.shared.Messages.ClientInfo;
+import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 /**
@@ -56,6 +61,12 @@ public class ClientChannelHandler extends SimpleChannelHandler {
 	 */
     private volatile boolean reconnect = true;
 
+    private String address;
+
+    private ClientInfo clientInfo;
+
+    private byte[] macAddress;
+
     /**
      * @param gameClient
      * @param b
@@ -81,8 +92,37 @@ public class ClientChannelHandler extends SimpleChannelHandler {
         if (startTime < 0) {
             startTime = System.currentTimeMillis();
         }
-
         LOGGER.info(format("Connected to: " + getRemoteAddress()));
+
+        LOGGER.info("Sending connected message");
+        address = ((InetSocketAddress) ctx.getChannel().getLocalAddress())
+                .getAddress().toString();
+        try {
+            macAddress = NetworkInterface.getByInetAddress(
+                    ((InetSocketAddress) ctx.getChannel().getLocalAddress())
+                            .getAddress()).getHardwareAddress();
+        } catch (SocketException se) {
+            // Set the
+            macAddress = new byte[0];
+            logException("Exception getting MAC address.", se);
+        }
+        clientInfo = ClientInfo.newBuilder().setClientID(client.getClientID())
+                .setVersion(GameClient.VERSION).setLocalIPAddress(address)
+                .setMacAddress(ByteString.copyFrom(macAddress)).build();
+
+        ctx.getChannel()
+                .write(ClientMessage
+                        .newBuilder()
+                        .setClientInfo(clientInfo)
+                        .setType(ClientMessage.Type.SYSTEM)
+                        .setSystemData(
+                                ClientMessage.SystemData
+                                        .newBuilder()
+                                        .setType(
+                                                ClientMessage.SystemData.Type.CONNECTED)
+                                        .build()).build());
+        client.setClientInfo(clientInfo);
+        client.setChannel(ctx.getChannel());
     }
 
     @Override

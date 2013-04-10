@@ -36,7 +36,13 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
      *
      */
     private GameClient gameClient;
+    /**
+     *
+     */
     private int ordering;
+    /**
+     * Class logger.
+     */
     private static final Logger LOGGER = Logger.getLogger(StartScreen.class);
 
     /**
@@ -118,8 +124,12 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
                                                     TextFieldControl.class)
                                                     .getRealText()).build())
                     .build());
-        } else {
+        } else if (!gameClient.isConnected()) {
             LOGGER.info("Client not connected");
+        } else if (!gameClient.hasClientInfo()) {
+            LOGGER.info("Client info not set");
+        } else {
+            LOGGER.info("Logic bug");
         }
     }
 

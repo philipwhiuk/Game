@@ -1,7 +1,6 @@
 package com.whiuk.philip.game.client;
 
 import java.net.InetSocketAddress;
-import java.net.NetworkInterface;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,7 +34,6 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
-import com.google.protobuf.ByteString;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
@@ -86,7 +84,7 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
     /**
      * Client Info object.
      */
-    private ClientInfo clientInfo;
+    private volatile ClientInfo clientInfo;
 
     /**
      * LWJGL input system.
@@ -442,27 +440,6 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
                             "Connection attempt unsuccesful", future.getCause());
                 } else {
                     channel = future.getChannel();
-                    LOGGER.info("Sending connected message");
-                    address = ((InetSocketAddress) channel.getLocalAddress())
-                            .getAddress().toString();
-                    macAddress = NetworkInterface.getByInetAddress(
-                            ((InetSocketAddress) channel.getLocalAddress())
-                                    .getAddress()).getHardwareAddress();
-                    clientInfo = ClientInfo.newBuilder().setClientID(clientID)
-                            .setVersion(VERSION).setLocalIPAddress(address)
-                            .setMacAddress(ByteString.copyFrom(macAddress))
-                            .build();
-
-                    sendOutboundMessage(ClientMessage
-                            .newBuilder()
-                            .setClientInfo(clientInfo)
-                            .setType(ClientMessage.Type.SYSTEM)
-                            .setSystemData(
-                                    ClientMessage.SystemData
-                                            .newBuilder()
-                                            .setType(
-                                                    ClientMessage.SystemData.Type.CONNECTED)
-                                            .build()).build());
                 }
             }
         });
@@ -596,12 +573,33 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
     }
 
     @Override
-    public int compareTo(MessageHandler o) {
+    public final int compareTo(MessageHandler o) {
         return this.getOrdering() - o.getOrdering();
     }
 
     @Override
-    public int getOrdering() {
+    public final int getOrdering() {
         return LAST_HANDLER;
+    }
+
+    /**
+     * @return client id
+     */
+    public final int getClientID() {
+        return clientID;
+    }
+
+    /**
+     * @param cI
+     */
+    public final void setClientInfo(final ClientInfo cI) {
+        this.clientInfo = cI;
+    }
+
+    /**
+     * @param c
+     */
+    public final void setChannel(final Channel c) {
+        this.channel = c;
     }
 }
