@@ -2,8 +2,6 @@ package com.whiuk.philip.game.client;
 
 import org.apache.log4j.Logger;
 
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 import de.lessvoid.nifty.Nifty;
@@ -19,6 +17,8 @@ import de.lessvoid.nifty.screen.ScreenController;
  * 
  * @author Philip Whitehouse
  */
+@SuppressWarnings("deprecation")
+// TODO: Work out how Nifty 1.3.2 uses controls.
 public class StartScreen implements ScreenController, AuthMessageHandler {
     /**
      *
@@ -99,8 +99,6 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
     /**
      * Sends a login request.
      */
-    @SuppressWarnings("deprecation")
-    // TODO: Work out how Nifty 1.3.2 uses controls.
     public void sendLoginRequest() {
         if (textInputUsername.getControl(TextFieldControl.class).getRealText()
                 .isEmpty()
@@ -108,22 +106,11 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
                         .getRealText().isEmpty()) {
             // TODO: Handle blank field
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
-            gameClient.sendOutboundMessage(ClientMessage
-                    .newBuilder()
-                    .setType(ClientMessage.Type.AUTH)
-                    .setClientInfo(gameClient.getClientInfo())
-                    .setAuthData(
-                            AuthData.newBuilder()
-                                    .setType(AuthData.AccountDataType.LOGIN)
-                                    .setUsername(
-                                            textInputUsername.getControl(
-                                                    TextFieldControl.class)
-                                                    .getRealText())
-                                    .setPassword(
-                                            textInputPassword.getControl(
-                                                    TextFieldControl.class)
-                                                    .getRealText()).build())
-                    .build());
+            gameClient.attemptLogin(
+                    textInputUsername.getControl(TextFieldControl.class)
+                            .getRealText(),
+                    textInputPassword.getControl(TextFieldControl.class)
+                            .getRealText());
         } else if (!gameClient.isConnected()) {
             LOGGER.info("Client not connected");
         } else if (!gameClient.hasClientInfo()) {

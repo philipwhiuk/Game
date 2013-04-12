@@ -1,7 +1,10 @@
 package com.whiuk.philip.game.client;
 
+import java.io.UnsupportedEncodingException;
 import java.net.InetSocketAddress;
 import java.nio.IntBuffer;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -34,8 +37,10 @@ import org.lwjgl.opengl.DisplayMode;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import com.google.protobuf.ByteString;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
+import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
 
 import de.lessvoid.nifty.Nifty;
@@ -96,13 +101,30 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
      */
     private Nifty nifty;
 
+    /**
+     * Authentication Message handler
+     */
     private SortedSet<AuthMessageHandler> authMessageHandlers;
 
+    /**
+     * System Message handler
+     */
     private SortedSet<SystemMessageHandler> systemMessageHandlers;
 
+    /**
+     * Game message handler
+     */
     private SortedSet<GameMessageHandler> gameMessageHandlers;
 
+    /**
+     * Chat message handler
+     */
     private SortedSet<ChatMessageHandler> chatMessageHandlers;
+
+    /**
+     * SHA-256 encoder
+     */
+    private MessageDigest sha256digest;
     /**
      * Class logger.
      */
@@ -149,8 +171,16 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
 
     /**
      * Bean constructor.
+     * 
+     * @throws GeneralSecurityException
+     *             Indicates there was a problem with using security tools.
      */
     public GameClient() {
+        try {
+            sha256digest = MessageDigest.getInstance("SHA-256");
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
         authMessageHandlers = new TreeSet<AuthMessageHandler>();
         systemMessageHandlers = new TreeSet<SystemMessageHandler>();
         gameMessageHandlers = new TreeSet<GameMessageHandler>();
@@ -601,5 +631,24 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
      */
     public final void setChannel(final Channel c) {
         this.channel = c;
+    }
+
+    public void attemptLogin(String username, String password) {
+        byte[] hash;
+        try {
+            hash = sha256digest.digest(password.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        sendOutboundMessage(ClientMessage
+                .newBuilder()
+                .setType(ClientMessage.Type.AUTH)
+                .setClientInfo(gameClient.getClientInfo())
+                .setAuthData(
+                        AuthData.newBuilder()
+                                .setType(AuthData.AccountDataType.LOGIN)
+                                .setUsername(username)
+                                .setPassword(ByteString.copyFrom(hash)).build())
+                .build());
     }
 }

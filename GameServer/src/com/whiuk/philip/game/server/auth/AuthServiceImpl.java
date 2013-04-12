@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.protobuf.ByteString;
 import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
@@ -151,11 +152,11 @@ public class AuthServiceImpl implements AuthService {
      *            Client
      * @param username
      *            Username
-     * @param password
+     * @param byteString
      *            Password
      */
     private void processLoginAttempt(final Connection con,
-            final String username, final String password) {
+            final String username, final ByteString byteString) {
         // TODO Exceeded maximum login attempts
         HibernateUtils.beginTransaction();
         Account account = accountDAO.findByUsername(username);
@@ -168,7 +169,7 @@ public class AuthServiceImpl implements AuthService {
         loginAttemptDAO.save(attempt);
         HibernateUtils.commitTransaction();
         if (account != null) {
-            if (!account.getPassword().equals(password)) {
+            if (!account.getPassword().equals(byteString.toStringUtf8())) {
                 processFailedLogin(con, attempt, account);
             } else {
                 processSuccesfulLogin(con, attempt, account);
