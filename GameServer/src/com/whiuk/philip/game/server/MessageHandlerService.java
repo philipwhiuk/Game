@@ -1,7 +1,7 @@
 package com.whiuk.philip.game.server;
 
-import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.InvalidMappingException;
+import com.whiuk.philip.game.serverShared.Connection;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;

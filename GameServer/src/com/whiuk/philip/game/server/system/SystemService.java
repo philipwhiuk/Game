@@ -1,7 +1,8 @@
 package com.whiuk.philip.game.server.system;
 
-import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
+import com.whiuk.philip.game.serverShared.Connection;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
+import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
 
 /**
  * @author Philip Whitehouse

@@ -9,15 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
-import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
 import com.whiuk.philip.game.server.system.InvalidMappingException;
 import com.whiuk.philip.game.server.watchdog.WatchdogService;
+import com.whiuk.philip.game.serverShared.Account;
+import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.ActionInformation;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.CombatInformation;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.MovementInformation;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
 
 /**
  * Game Service implementation.

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.game.server.MessageHandlerService;
 import com.whiuk.philip.game.server.auth.AuthService;
+import com.whiuk.philip.game.serverShared.Connection;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
 
@@ -44,7 +45,7 @@ public class SystemServiceImpl implements SystemService {
     private MessageHandlerService messageHandler;
 
     /**
-     * Constructor
+     * Constructor.
      */
     public SystemServiceImpl() {
         connections = new HashMap<ClientInfo, Connection>();

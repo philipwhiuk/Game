@@ -5,9 +5,10 @@ import org.springframework.stereotype.Repository;
 
 import com.whiuk.philip.game.server.hibernate.GenericDAOImpl;
 import com.whiuk.philip.game.server.hibernate.HibernateUtils;
+import com.whiuk.philip.game.serverShared.LoginAttempt;
 
 /**
- * Hibernate Accounts Data Access Object
+ * Hibernate Accounts Data Access Object.
  * 
  * @author Philip Whitehouse
  */

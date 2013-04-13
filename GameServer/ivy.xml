@@ -20,7 +20,7 @@
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
-        organisation="org.whiuk.philip"
+        organisation="com.whiuk.philip"
         module="GameServer"
         status="integration">
 	</info>
@@ -31,6 +31,7 @@
 		<conf name="test-runtime" />		
 	</configurations>
 	<dependencies>
+		<dependency org="com.whiuk.philip" name="GameServerShared" rev="latest.integration" />
 		<!--  Hibernate -->
 		<dependency org="org.hibernate" name="hibernate-core" rev="4.1.10.Final"  conf="build->default"/>
 		<dependency org="org.hibernate.common" name="hibernate-commons-annotations" rev="4.0.1.Final" conf="build->default"/>	

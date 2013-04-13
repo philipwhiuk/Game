@@ -7,13 +7,13 @@ import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
 /**
- * Hibernate utilities
+ * Hibernate utilities.
  * 
  * @author Philip Whitehouse
  */
 public final class HibernateUtils {
     /**
-     * Utility class constructor
+     * Utility class constructor.
      */
     private HibernateUtils() {
     }

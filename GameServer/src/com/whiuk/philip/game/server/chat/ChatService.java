@@ -1,6 +1,6 @@
 package com.whiuk.philip.game.server.chat;
 
-import com.whiuk.philip.game.server.auth.Account;
+import com.whiuk.philip.game.serverShared.Account;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.ChatData;
 
 /**

@@ -7,15 +7,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.server.auth.Account;
 import com.whiuk.philip.game.server.auth.AuthService;
 import com.whiuk.philip.game.server.chat.ChatService;
 import com.whiuk.philip.game.server.game.GameService;
 import com.whiuk.philip.game.server.network.NetworkService;
 import com.whiuk.philip.game.server.security.SecurityService;
-import com.whiuk.philip.game.server.system.Connection;
 import com.whiuk.philip.game.server.system.InvalidMappingException;
 import com.whiuk.philip.game.server.system.SystemService;
+import com.whiuk.philip.game.serverShared.Account;
+import com.whiuk.philip.game.serverShared.Connection;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
@@ -113,7 +113,7 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
     }
 
     /**
-     * Process an inbound message
+     * Process an inbound message.
      * 
      * @param message
      */

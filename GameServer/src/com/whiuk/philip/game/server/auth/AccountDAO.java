@@ -1,6 +1,7 @@
 package com.whiuk.philip.game.server.auth;
 
 import com.whiuk.philip.game.server.hibernate.GenericDAO;
+import com.whiuk.philip.game.serverShared.Account;
 
 /**
  * Account data access object interface.
