@@ -117,7 +117,7 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
      * 
      * @param message
      */
-    private final void processInboundMessage(final ClientMessage message) {
+    private void processInboundMessage(final ClientMessage message) {
         LOGGER.info("Processing inbound message");
         if (message.hasSystemData()) {
             systemService.processMessage(message.getClientInfo(),

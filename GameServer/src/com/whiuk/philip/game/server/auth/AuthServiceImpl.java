@@ -148,8 +148,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * @param src
-     *            Client
+     * @param con
+     *            Connection
      * @param username
      *            Username
      * @param byteString

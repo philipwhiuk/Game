@@ -1,7 +1,6 @@
 package com.whiuk.philip.game.server.auth;
 
 import org.hibernate.Query;
-import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import com.whiuk.philip.game.server.hibernate.GenericDAOImpl;
@@ -22,7 +21,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
      * @return
      */
     @Override
-    public Account findByID(final Long id) {
+    public final Account findByID(final Long id) {
         Account account = null;
         String sql = "SELECT a FROM Account a WHERE a.id = :id";
         Query query = HibernateUtils.getSession().createQuery(sql)
@@ -37,7 +36,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
      * @param username
      * @return
      */
-    public Account findByUsername(final String username) {
+    public final Account findByUsername(final String username) {
         Account account = null;
         String sql = "SELECT a FROM Account a WHERE a.username = :username";
         Query query = HibernateUtils.getSession().createQuery(sql)

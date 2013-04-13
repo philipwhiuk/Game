@@ -30,14 +30,14 @@ public class Account {
     /**
      * @param nanoTime
      */
-    public void setLastLoginAttempt(LoginAttempt attempt) {
+    public final void setLastLoginAttempt(final LoginAttempt attempt) {
         lastLoginAttempt = attempt;
     }
 
     /**
      * @return
      */
-    public String getPassword() {
+    public final String getPassword() {
         return password;
     }
 
@@ -45,14 +45,14 @@ public class Account {
      * @param p
      *            password
      */
-    public void setPassword(String p) {
+    public final void setPassword(final String p) {
         password = p;
     }
 
     /**
      * @return
      */
-    public String getUsername() {
+    public final String getUsername() {
         // TODO Auto-generated method stub
         return username;
     }
@@ -61,7 +61,7 @@ public class Account {
      * @param u
      *            username
      */
-    public void setUsername(String u) {
+    public final void setUsername(final String u) {
         username = u;
     }
 }

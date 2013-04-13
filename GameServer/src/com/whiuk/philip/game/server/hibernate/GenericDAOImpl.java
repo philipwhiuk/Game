@@ -17,7 +17,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements
     /**
      * @return
      */
-    protected Session getSession() {
+    protected final Session getSession() {
         return HibernateUtils.getSession();
     }
 
@@ -57,8 +57,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements
         return t;
     }
 
-    @SuppressWarnings("unchecked")
-    // Hibernate
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    // Generic DAO, Hibernate
     @Override
     public final T findByID(Class clazz, Long id) {
         Session hibernateSession = this.getSession();
@@ -67,6 +67,8 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements
         return t;
     }
 
+    @SuppressWarnings("rawtypes")
+    // Generic DAO
     @Override
     public final List findAll(Class clazz) {
         Session hibernateSession = this.getSession();

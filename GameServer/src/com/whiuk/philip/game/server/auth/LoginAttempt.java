@@ -79,7 +79,7 @@ public class LoginAttempt {
     }
 
     /**
-     * @param con
+     * @param c
      *            the connection to set
      */
     public final void setConnection(final Connection c) {

@@ -67,7 +67,10 @@ public class Connection {
         active = false;
     }
 
-    public void setLastLoginAttempt(LoginAttempt attempt) {
+    /**
+     * @param attempt
+     */
+    public final void setLastLoginAttempt(LoginAttempt attempt) {
         this.lastLoginAttempt = attempt;
     }
 

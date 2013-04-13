@@ -21,7 +21,7 @@ public class LoginAttemptDAOImpl extends GenericDAOImpl<LoginAttempt, Long>
      * @return
      */
     @Override
-    public LoginAttempt findByID(final Long id) {
+    public final LoginAttempt findByID(final Long id) {
         LoginAttempt loginAttempt = null;
         String sql = "SELECT la FROM LoginAttempt la WHERE la.id = :id";
         Query query = HibernateUtils.getSession().createQuery(sql)

@@ -57,7 +57,9 @@ public interface GenericDAO<T, ID extends Serializable> {
      * @param clazz
      * @return
      */
-    public List findAll(Class clazz);
+    @SuppressWarnings("rawtypes")
+    // Generic DAO
+    List findAll(Class clazz);
 
     /**
      * Find by ID.
@@ -66,5 +68,7 @@ public interface GenericDAO<T, ID extends Serializable> {
      * @param id
      * @return
      */
-    public T findByID(Class clazz, Long id);
+    @SuppressWarnings("rawtypes")
+    // Generic DAO
+    T findByID(Class clazz, Long id);
 }
