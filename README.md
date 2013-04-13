@@ -27,3 +27,4 @@ Build notes:
 * LWJGL's libraries are also statically included because they have native libraries and there's no transparent solution for this in Ivy. If you're building on something else but Windows you'll want to change the referenced native library to the correct folder.
 * Nifty's libraries are statically included because it isn't in Maven Central. It's dependencies (EventBus and XPP3) are in Ivy however.
 * The rest are downloaded from Maven Central.
+* The server relies on a local MySQL database. The 'install.sql' file provides the schema. In the long term a more formalised install process will be established.
