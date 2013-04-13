@@ -31,6 +31,10 @@
 		<conf name="test-runtime" />		
 	</configurations>
 	<dependencies>
+		<!--  Hibernate -->
+		<dependency org="org.hibernate" name="hibernate-core" rev="4.1.10.Final"  conf="build->default"/>
+		<dependency org="org.hibernate.common" name="hibernate-commons-annotations" rev="4.0.1.Final" conf="build->default"/>	
+		<dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.1.Final" conf="build->default"/>
 		<!-- CLI -->
 		<dependency org="commons-cli" name="commons-cli" rev="1.2"/>		
 		<!-- Logging -->
@@ -39,7 +43,7 @@
 		<dependency org="org.springframework" name="spring-core" rev="3.2.2.RELEASE" conf="build->default" />
 		<dependency org="org.springframework" name="spring-beans" rev="3.2.2.RELEASE" conf="build->default" />
 		<dependency org="org.springframework" name="spring-context" rev="3.2.2.RELEASE" conf="build->default" />
-		<dependency org="org.hibernate" name="hibernate-core" rev="4.1.10.Final"  conf="build->default"/>		
+		<dependency org="org.springframework" name="spring-orm" rev="3.2.2.RELEASE" conf="build->default" />
 		<dependency org="mysql" name="mysql-connector-java" rev="5.1.24"/>
 		<dependency org="com.google.protobuf" name="protobuf-java" rev="2.5.0"/>
 		<dependency org="org.jboss.netty" name="netty" rev="3.2.5.Final" />

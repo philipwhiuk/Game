@@ -61,8 +61,7 @@ public class SystemServiceImpl implements SystemService {
             case DISCONNECTING:
                 LOGGER.info("Client <" + clientInfo + "> disconnected");
                 Connection connection = connections.get(clientInfo);
-                connection.disconnect();
-                authService.notifyDisconnection(connection);
+                disconnect(connection);
                 break;
             default:
                 messageHandler.handleUnknownMessageType(clientInfo);
@@ -77,7 +76,7 @@ public class SystemServiceImpl implements SystemService {
         if (connections.containsKey(clientInfo)) {
             LOGGER.info("Connection message from known client  <" + clientInfo
                     + "> .");
-            connections.get(clientInfo).connect();
+            connect(connections.get(clientInfo));
         } else {
             LOGGER.info("New client connected  <" + clientInfo + "> ");
             Connection con = new Connection(clientInfo, System.nanoTime(), true);
@@ -110,9 +109,24 @@ public class SystemServiceImpl implements SystemService {
     @Override
     public final void handleClientDisconnected(final ClientInfo clientInfo) {
         if (connections.containsKey(clientInfo)) {
-            connections.get(clientInfo).disconnect();
-            authService.notifyDisconnection(connections.get(clientInfo));
+            disconnect(connections.get(clientInfo));
         }
     }
 
+    /**
+     *
+     */
+    public final void connect(Connection con) {
+        con.setActive(true);
+        con.setLastConnectionTime(System.nanoTime());
+    }
+
+    /**
+     *
+     */
+    public final void disconnect(Connection con) {
+        con.setActive(false);
+        authService.notifyDisconnection(con);
+
+    }
 }

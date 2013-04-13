@@ -1,14 +1,14 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE hibernate-configuration PUBLIC
 	"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-	"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
 <session-factory>
     <property name="connection.url">jdbc:mysql://localhost/Game</property>
-    <property name="connection.username">root</property>
+    <property name="connection.username">gameServer</property>
     <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
 	<property name="dialect">org.hibernate.dialect.MySQLDialect</property>
-    <property name="connection.password">password</property>
+    <property name="connection.password">gameServerPassword</property>
 	<property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
 	<!-- thread is the short name for
 	org.hibernate.context.ThreadLocalSessionContext

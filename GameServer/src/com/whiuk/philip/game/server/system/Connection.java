@@ -1,5 +1,11 @@
 package com.whiuk.philip.game.server.system;
 
+import java.util.Set;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+
 import com.whiuk.philip.game.server.auth.LoginAttempt;
 import com.whiuk.philip.game.shared.Messages.ClientInfo;
 
@@ -8,8 +14,13 @@ import com.whiuk.philip.game.shared.Messages.ClientInfo;
  * 
  * @author Philip Whitehouse
  */
+@Entity
 public class Connection {
-
+    /**
+     * 
+     */
+    @Id
+    private long id;
     /**
 	 *
 	 */
@@ -25,7 +36,14 @@ public class Connection {
     /**
 	 *
 	 */
-    private LoginAttempt lastLoginAttempt;
+    @OneToMany(mappedBy = "connection")
+    private Set<LoginAttempt> loginAttempts;
+
+    /**
+     * Bean constructor.
+     */
+    public Connection() {
+    }
 
     /**
      * @param c
@@ -41,37 +59,22 @@ public class Connection {
     /**
 	 *
 	 */
-    final void setActive() {
-        active = true;
-    }
-
-    /**
-     * @param nanoTime
-     */
-    final void addNewConnnection(final long nanoTime) {
-        lastConnectionTime = nanoTime;
-    }
-
-    /**
-	 *
-	 */
-    public final void connect() {
-        lastConnectionTime = System.nanoTime();
-        active = true;
-    }
-
-    /**
-	 *
-	 */
-    public final void disconnect() {
-        active = false;
+    final void setActive(final boolean a) {
+        active = a;
     }
 
     /**
      * @param attempt
      */
-    public final void setLastLoginAttempt(LoginAttempt attempt) {
-        this.lastLoginAttempt = attempt;
+    public final void addLoginAttempt(final LoginAttempt attempt) {
+        this.loginAttempts.add(attempt);
+    }
+
+    /**
+     * @param nanoTime
+     */
+    public final void setLastConnectionTime(final long nanoTime) {
+        lastConnectionTime = nanoTime;
     }
 
 }

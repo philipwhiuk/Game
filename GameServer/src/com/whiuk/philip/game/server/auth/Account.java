@@ -1,7 +1,10 @@
 package com.whiuk.philip.game.server.auth;
 
+import java.util.Set;
+
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 /**
  * @author Philip
@@ -21,7 +24,8 @@ public class Account {
     /**
      *
      */
-    private LoginAttempt lastLoginAttempt;
+    @OneToMany(mappedBy = "account")
+    private Set<LoginAttempt> loginAttempts;
     /**
      *
      */
@@ -30,8 +34,8 @@ public class Account {
     /**
      * @param nanoTime
      */
-    public final void setLastLoginAttempt(final LoginAttempt attempt) {
-        lastLoginAttempt = attempt;
+    public final void addLoginAttempt(final LoginAttempt attempt) {
+        loginAttempts.add(attempt);
     }
 
     /**

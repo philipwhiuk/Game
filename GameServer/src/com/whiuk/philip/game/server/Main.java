@@ -13,9 +13,9 @@ import org.apache.commons.cli.Option;
 import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -53,7 +53,7 @@ public final class Main {
      */
     public static void main(final String[] args) throws IOException {
         // TODO: Initialize logging properly
-        BasicConfigurator.configure();
+        PropertyConfigurator.configure("log4j.properties");
         CommandLineParser parser = new BasicParser();
         Options options = new Options();
         Option help = new Option("help", "print this message");

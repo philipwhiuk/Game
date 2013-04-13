@@ -187,7 +187,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processFailedLogin(final Connection con,
             final LoginAttempt attempt) {
-        con.setLastLoginAttempt(attempt);
+        con.addLoginAttempt(attempt);
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
@@ -236,8 +236,8 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processFailedLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
-        account.setLastLoginAttempt(attempt);
-        con.setLastLoginAttempt(attempt);
+        account.addLoginAttempt(attempt);
+        con.addLoginAttempt(attempt);
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)

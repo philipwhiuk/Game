@@ -1,6 +1,8 @@
 package com.whiuk.philip.game.server.game;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 
 /**
  * Hibernate Character Entity.
@@ -10,10 +12,14 @@ import javax.persistence.Entity;
 @Entity
 public class GameCharacter {
 
+    @Id
+    private Long id;
+
     /**
      * Whether the player controlling the character has logged out. See {@link
      * logout()}.
      */
+    @Transient
     private boolean loggedOut;
 
     /**

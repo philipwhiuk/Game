@@ -1,6 +1,9 @@
 package com.whiuk.philip.game.server.auth;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.whiuk.philip.game.server.system.Connection;
 
@@ -12,10 +15,16 @@ public class LoginAttempt {
     /**
      *
      */
+    @Id
+    private Long id;
+    /**
+     *
+     */
     private Long time;
     /**
      *
      */
+    @ManyToOne(cascade = CascadeType.ALL)
     private Account account;
     /**
      *
@@ -24,6 +33,7 @@ public class LoginAttempt {
     /**
      *
      */
+    @ManyToOne(cascade = CascadeType.ALL)
     private Connection connection;
 
     /**
