@@ -10,8 +10,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.concurrent.Executors;
 
 import org.apache.log4j.Logger;
@@ -42,6 +40,7 @@ import com.whiuk.philip.game.shared.Messages.ClientInfo;
 import com.whiuk.philip.game.shared.Messages.ClientMessage;
 import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.game.shared.Messages.ServerMessage.AuthData.Type;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
@@ -52,8 +51,39 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 /**
  * @author Philip Whitehouse
  */
-public class GameClient implements AuthMessageHandler, ChatMessageHandler,
-        GameMessageHandler, SystemMessageHandler {
+public class GameClient {
+    /**
+     * Game states.
+     * 
+     * @author Philip Whitehouse
+     */
+    public enum State {
+        /**
+         * Startup.
+         */
+        STARTUP,
+        /**
+         * Login.
+         */
+        LOGIN,
+        /**
+         * Registration.
+         */
+        REGISTER,
+        /**
+         * Lobby.
+         */
+        LOBBY,
+        /**
+         * Game.
+         */
+        GAME,
+        /**
+         * Exit.
+         */
+        EXIT
+    }
+
     /**
      * Game client singleton.
      */
@@ -79,12 +109,12 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
     /**
      * Client ID
      */
-    protected int clientID;
+    private int clientID;
 
     /**
      * MAC Address.
      */
-    protected byte[] macAddress;
+    private byte[] macAddress;
 
     /**
      * Client Info object.
@@ -102,29 +132,30 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
     private Nifty nifty;
 
     /**
-     * Authentication Message handler
-     */
-    private SortedSet<AuthMessageHandler> authMessageHandlers;
-
-    /**
-     * System Message handler
-     */
-    private SortedSet<SystemMessageHandler> systemMessageHandlers;
-
-    /**
-     * Game message handler
-     */
-    private SortedSet<GameMessageHandler> gameMessageHandlers;
-
-    /**
-     * Chat message handler
-     */
-    private SortedSet<ChatMessageHandler> chatMessageHandlers;
-
-    /**
      * SHA-256 encoder
      */
     private MessageDigest sha256digest;
+
+    /**
+     *
+     */
+    private State state = State.LOGIN;
+
+    /**
+     *
+     */
+    private LoginScreen loginScreen;
+
+    /**
+     *
+     */
+    private RegisterScreen registerScreen;
+
+    /**
+     *
+     */
+    private LobbyScreen lobbyScreen;
+
     /**
      * Class logger.
      */
@@ -165,15 +196,18 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
      */
     private static final int ORTHO_DISTANCE_MAX = 9999;
 
+    /**
+     *
+     */
     private static final boolean FULLSCREEN = false;
 
+    /**
+     *
+     */
     private static final int LAST_HANDLER = 100;
 
     /**
      * Bean constructor.
-     * 
-     * @throws GeneralSecurityException
-     *             Indicates there was a problem with using security tools.
      */
     public GameClient() {
         try {
@@ -181,10 +215,6 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
-        authMessageHandlers = new TreeSet<AuthMessageHandler>();
-        systemMessageHandlers = new TreeSet<SystemMessageHandler>();
-        gameMessageHandlers = new TreeSet<GameMessageHandler>();
-        chatMessageHandlers = new TreeSet<ChatMessageHandler>();
         clientID = new Random().nextInt();
     }
 
@@ -192,12 +222,6 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
      * Run game client.
      */
     public final void run() {
-        // Register this as a default handler
-        registerAuthMessageHandler(this);
-        registerSystemMessageHandler(this);
-        registerGameMessageHandler(this);
-        registerChatMessageHandler(this);
-
         try {
             buildDisplay();
 
@@ -209,7 +233,7 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
         setupInputSystem();
         setupNifty();
 
-        nifty.fromXml("startscreen.xml", "start");
+        nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         boolean done = false;
         while (!Display.isCloseRequested() && !done) {
@@ -230,22 +254,6 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
         inputSystem.shutdown();
         Display.destroy();
         System.exit(0);
-    }
-
-    public void registerChatMessageHandler(ChatMessageHandler h) {
-        chatMessageHandlers.add(h);
-    }
-
-    public void registerGameMessageHandler(GameMessageHandler h) {
-        gameMessageHandlers.add(h);
-    }
-
-    public void registerSystemMessageHandler(SystemMessageHandler h) {
-        systemMessageHandlers.add(h);
-    }
-
-    public void registerAuthMessageHandler(AuthMessageHandler h) {
-        authMessageHandlers.add(h);
     }
 
     /**
@@ -351,8 +359,8 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
     private void setupNifty() {
         nifty = new Nifty(new LwjglRenderDevice(), new OpenALSoundDevice(),
                 inputSystem, new AccurateTimeProvider());
-        final StartScreen screen = new StartScreen(this);
-        nifty.registerScreenController(screen);
+        loginScreen = new LoginScreen(this);
+        nifty.registerScreenController(loginScreen);
     }
 
     /**
@@ -506,18 +514,37 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
      *            Server message
      */
     public final void processInboundMessage(final ServerMessage message) {
-        // TODO: Unconsumed events
         switch (message.getType()) {
             case AUTH:
-                authMessageHandlers.first().handleAuthMessage(message);
+                handleAuthMessage(message);
             case SYSTEM:
-                systemMessageHandlers.first().handleSystemMessage(message);
+                handleSystemMessage(message);
             case GAME:
-                gameMessageHandlers.first().handleGameMessage(message);
+                switch (state) {
+                    case GAME:
+                        handleGameMessage(message);
+                        break;
+                    default:
+                        LOGGER.info("Game message recieved in invalid state: "
+                                + state);
+                        break;
+                }
             case CHAT:
-                chatMessageHandlers.first().handleChatMessage(message);
+                switch (state) {
+                    case LOBBY:
+                        lobbyScreen.handleChatMessage(message);
+                        break;
+                    case GAME:
+                        handleChatMessage(message);
+                        break;
+                    default:
+                        LOGGER.info("Chat message recieved in invalid state: "
+                                + state);
+                        break;
+                }
             default:
-                throw new IllegalArgumentException("Unhandled message type");
+                LOGGER.info("Unhandled message type");
+                break;
         }
 
     }
@@ -578,38 +605,91 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
         return clientInfo;
     }
 
-    @Override
-    public void handleSystemMessage(ServerMessage message) {
+    /**
+     * @param message
+     */
+    public void handleSystemMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
-    public void handleGameMessage(ServerMessage message) {
+    /**
+     * @param message
+     */
+    public void handleGameMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
-    public void handleChatMessage(ServerMessage message) {
+    /**
+     * @param message
+     */
+    public void handleChatMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
 
-    @Override
-    public void handleAuthMessage(ServerMessage message) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public final int compareTo(MessageHandler o) {
-        return this.getOrdering() - o.getOrdering();
-    }
-
-    @Override
-    public final int getOrdering() {
-        return LAST_HANDLER;
+    /**
+     * @param message
+     */
+    public final void handleAuthMessage(final ServerMessage message) {
+        Type type = message.getAuthData().getType();
+        switch (state) {
+            case LOGIN:
+                switch (message.getAuthData().getType()) {
+                    case LOGIN_FAILED:
+                        loginScreen.loginFailed(message.getAuthData()
+                                .getErrorMessage());
+                        break;
+                    case LOGIN_SUCCESSFUL:
+                        // TODO: Switch to lobby state
+                        break;
+                    case EXTRA_AUTH_FAILED:
+                        // TODO: Handle extra authentication failure
+                        LOGGER.info("Extra authentication failed");
+                    default:
+                        LOGGER.info("Auth message type " + type
+                                + " recieved in invalid state: " + state);
+                }
+                break;
+            case REGISTER: // Register Screen
+                switch (message.getAuthData().getType()) {
+                    case REGISTRATION_FAILED:
+                        registerScreen.registrationFailed(message.getAuthData()
+                                .getErrorMessage());
+                        break;
+                    case LOGIN_SUCCESSFUL:
+                        // TODO: Switch to lobby state
+                        break;
+                    default:
+                        LOGGER.info("Auth message type " + type
+                                + " recieved in invalid state: " + state);
+                }
+                break;
+            case LOBBY:
+                switch (message.getAuthData().getType()) {
+                    case LOGOUT_SUCCESSFUL:
+                        // TODO: Switch to login state
+                        break;
+                    default:
+                        LOGGER.info("Auth message type " + type
+                                + " recieved in invalid state: " + state);
+                }
+                break;
+            case GAME: // Game
+                switch (message.getAuthData().getType()) {
+                    case LOGOUT_SUCCESSFUL:
+                        // TODO: Switch to login state
+                        break;
+                    default:
+                        LOGGER.info("Auth message type " + type
+                                + " recieved in invalid state: " + state);
+                }
+                break;
+            default:
+                LOGGER.info("Auth message recieved in invalid state: " + state);
+                break;
+        }
     }
 
     /**
@@ -633,7 +713,11 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
         this.channel = c;
     }
 
-    public void attemptLogin(String username, String password) {
+    /**
+     * @param username
+     * @param password
+     */
+    public final void attemptLogin(final String username, final String password) {
         byte[] hash;
         try {
             hash = sha256digest.digest(password.getBytes("UTF-8"));
@@ -650,5 +734,41 @@ public class GameClient implements AuthMessageHandler, ChatMessageHandler,
                                 .setUsername(username)
                                 .setPassword(ByteString.copyFrom(hash)).build())
                 .build());
+    }
+
+    /**
+     *
+     */
+    public final void switchToRegisterScreen() {
+        registerScreen = new RegisterScreen(this);
+        nifty.registerScreenController(registerScreen);
+        nifty.fromXml("registerScreen.xml", "start");
+    }
+
+    /**
+     * Attempt to register an account.
+     * 
+     * @param username
+     * @param password
+     * @param email
+     */
+    public final void attemptRegister(final String username,
+            final String password, final String email) {
+        byte[] hash;
+        try {
+            hash = sha256digest.digest(password.getBytes("UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
+        sendOutboundMessage(ClientMessage
+                .newBuilder()
+                .setType(ClientMessage.Type.AUTH)
+                .setClientInfo(gameClient.getClientInfo())
+                .setAuthData(
+                        AuthData.newBuilder()
+                                .setType(AuthData.AccountDataType.LOGIN)
+                                .setUsername(username)
+                                .setPassword(ByteString.copyFrom(hash))
+                                .setEmail(email).build()).build());
     }
 }

@@ -31,10 +31,12 @@ message ClientMessage {
 	message AuthData {
 		required AccountDataType type = 1;
 		required string username = 2;
-		optional bytes password = 3;
+		required bytes password = 3;
+		optional string email = 4;
 		enum AccountDataType {
 			LOGIN = 1;
 			LOGOUT = 2;
+			REGISTER = 3;
 		}
 	}
 	//Format of messages relating to system information
@@ -104,9 +106,11 @@ message ServerMessage {
 			EXTRA_AUTH_FAILED = 1;
 			LOGIN_SUCCESSFUL = 2;
 			LOGOUT_SUCCESSFUL = 3;
+			REGISTRATION_FAILED = 4;
 		}
 		required Type type = 1;
 		optional string username = 2;
+		optional string errorMessage = 3;
 	}
 
 	message GameData {

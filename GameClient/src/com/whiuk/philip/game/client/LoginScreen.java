@@ -2,8 +2,6 @@ package com.whiuk.philip.game.client;
 
 import org.apache.log4j.Logger;
 
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
@@ -13,13 +11,13 @@ import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
 /**
- * Start screen.
+ * Login screen.
  * 
  * @author Philip Whitehouse
  */
 @SuppressWarnings("deprecation")
 // TODO: Work out how Nifty 1.3.2 uses controls.
-public class StartScreen implements ScreenController, AuthMessageHandler {
+public class LoginScreen implements ScreenController {
     /**
      *
      */
@@ -43,48 +41,53 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
     /**
      * Class logger.
      */
-    private static final Logger LOGGER = Logger.getLogger(StartScreen.class);
+    private static final Logger LOGGER = Logger.getLogger(LoginScreen.class);
 
     /**
      * @param g
      *            Game client
      */
-    public StartScreen(final GameClient g) {
+    public LoginScreen(final GameClient g) {
         this.gameClient = g;
-        gameClient.registerAuthMessageHandler(this);
     }
 
     @Override
-    public void bind(final Nifty newNifty, final Screen screen) {
+    public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
         textInputUsername = screen.findElementByName("text_input_username");
         textInputPassword = screen.findElementByName("text_input_password");
     }
 
     @Override
-    public void onStartScreen() {
+    public final void onStartScreen() {
         textInputUsername.addInputHandler(new KeyInputHandler() {
             @Override
-            public boolean keyEvent(NiftyInputEvent inputEvent) {
-                if (inputEvent == null)
+            public boolean keyEvent(final NiftyInputEvent inputEvent) {
+                if (inputEvent == null) {
                     return false;
+                }
                 switch (inputEvent) {
                     case SubmitText:
                         textInputPassword.setFocus();
                         return true;
+                    default:
+                        break;
                 }
                 return false;
             }
         });
         textInputPassword.addInputHandler(new KeyInputHandler() {
             @Override
-            public boolean keyEvent(NiftyInputEvent inputEvent) {
-                if (inputEvent == null)
+            public boolean keyEvent(final NiftyInputEvent inputEvent) {
+                if (inputEvent == null) {
                     return false;
+                }
                 switch (inputEvent) {
                     case SubmitText:
                         sendLoginRequest();
                         return true;
+                    default:
+                        break;
                 }
                 return false;
             }
@@ -99,7 +102,7 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
     /**
      * Sends a login request.
      */
-    public void sendLoginRequest() {
+    public final void sendLoginRequest() {
         if (textInputUsername.getControl(TextFieldControl.class).getRealText()
                 .isEmpty()
                 || textInputPassword.getControl(TextFieldControl.class)
@@ -120,20 +123,18 @@ public class StartScreen implements ScreenController, AuthMessageHandler {
         }
     }
 
-    @Override
-    public void handleAuthMessage(final ServerMessage message) {
-        // TODO Handle authentication responses
-
+    /**
+     *
+     */
+    public final void register() {
+        gameClient.switchToRegisterScreen();
     }
 
-    @Override
-    public final int getOrdering() {
-        return ordering;
-    }
-
-    @Override
-    public final int compareTo(final MessageHandler o) {
+    /**
+     * @param errorMessage
+     */
+    public void loginFailed(final String errorMessage) {
         // TODO Auto-generated method stub
-        return this.getOrdering() - o.getOrdering();
+
     }
 }

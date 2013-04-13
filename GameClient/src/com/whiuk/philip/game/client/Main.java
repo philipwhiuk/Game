@@ -6,6 +6,11 @@ import org.apache.log4j.PropertyConfigurator;
  * @author Philip
  */
 public class Main {
+    /**
+     * Utility class.
+     */
+    private Main() {
+    }
 
     /**
      * @param args
@@ -20,6 +25,9 @@ public class Main {
         client.run();
     }
 
+    /**
+     * Fix Java Logging API usage.
+     */
     private static void fixJavaLogging() {
         // Fix Java Logging
         java.util.logging.Logger topLogger = java.util.logging.Logger

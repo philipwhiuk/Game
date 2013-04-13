@@ -43,7 +43,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     /**
      *
      */
-    final ClientBootstrap bootstrap;
+    private final ClientBootstrap bootstrap;
     /**
 	 *
 	 */
@@ -61,10 +61,19 @@ public class ClientChannelHandler extends SimpleChannelHandler {
 	 */
     private volatile boolean reconnect = true;
 
+    /**
+     *
+     */
     private String address;
 
+    /**
+     *
+     */
     private ClientInfo clientInfo;
 
+    /**
+     *
+     */
     private byte[] macAddress;
 
     /**
@@ -188,7 +197,11 @@ public class ClientChannelHandler extends SimpleChannelHandler {
         timer.stop();
     }
 
-    public final void logException(String message, Throwable t) {
+    /**
+     * @param message
+     * @param t
+     */
+    public final void logException(final String message, final Throwable t) {
         if (t instanceof java.io.IOException) {
             LOGGER.info(format(message + " - " + t.getClass().getSimpleName()
                     + ": " + t.getMessage()));
