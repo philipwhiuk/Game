@@ -8,7 +8,7 @@ import javax.persistence.Entity;
  * @author Philip Whitehouse
  */
 @Entity
-public class Character {
+public class GameCharacter {
 
     /**
      * Whether the player controlling the character has logged out. See {@link

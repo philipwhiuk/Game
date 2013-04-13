@@ -7,10 +7,10 @@ import com.whiuk.philip.game.server.hibernate.GenericDAO;
  * 
  * @author Philip Whitehouse
  */
-public interface CharacterDAO extends GenericDAO<Character, Long> {
+public interface GameCharacterDAO extends GenericDAO<GameCharacter, Long> {
     /**
      * @param id
      * @return
      */
-    Character findByID(Long id);
+    GameCharacter findByID(Long id);
 }

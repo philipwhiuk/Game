@@ -44,11 +44,11 @@ public class GameServiceImpl implements GameService {
     /**
      * Character -> Account mapping.
      */
-    private Map<Character, Account> accounts;
+    private Map<GameCharacter, Account> accounts;
     /**
      * Account -> Character mapping.
      */
-    private Map<Account, Character> characters;
+    private Map<Account, GameCharacter> characters;
 
     /**
      * Watchdog service.
@@ -143,7 +143,7 @@ public class GameServiceImpl implements GameService {
      * @param character
      * @param combatInformation
      */
-    private void combat(final Character character,
+    private void combat(final GameCharacter character,
             final CombatInformation combatInformation) {
         // TODO Auto-generated method stub
 
@@ -155,7 +155,7 @@ public class GameServiceImpl implements GameService {
      * @param character
      * @param actionInformation
      */
-    private void action(final Character character,
+    private void action(final GameCharacter character,
             final ActionInformation actionInformation) {
         // TODO Auto-generated method stub
 
@@ -167,7 +167,7 @@ public class GameServiceImpl implements GameService {
      * @param character
      * @param movementInformation
      */
-    private void move(final Character character,
+    private void move(final GameCharacter character,
             final MovementInformation movementInformation) {
         // TODO Auto-generated method stub
 
@@ -175,7 +175,7 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public final void notifyLogout(final Account account) {
-        Character c = characters.remove(account);
+        GameCharacter c = characters.remove(account);
         accounts.remove(c);
         c.logout();
     }

@@ -8,12 +8,12 @@ import com.whiuk.philip.game.server.hibernate.HibernateUtils;
 /**
  * @author Philip Whitehouse
  */
-public class CharacterDAOImpl extends GenericDAOImpl<Character, Long> implements
-        CharacterDAO {
+public class GameCharacterDAOImpl extends GenericDAOImpl<GameCharacter, Long> implements
+        GameCharacterDAO {
 
     @Override
-    public final Character findByID(Long id) {
-        Character character = null;
+    public final GameCharacter findByID(Long id) {
+        GameCharacter character = null;
         String sql = "SELECT c FROM Character c WHERE c.id = :id";
         Query query = HibernateUtils.getSession().createQuery(sql)
                 .setParameter("id", id);
