@@ -19,7 +19,7 @@ import de.lessvoid.nifty.screen.ScreenController;
 // TODO: Work out how Nifty 1.3.2 uses controls.
 public class LoginScreen implements ScreenController {
     /**
-     *
+     * Nifty.
      */
     private Nifty nifty;
     /**
@@ -35,13 +35,17 @@ public class LoginScreen implements ScreenController {
      */
     private GameClient gameClient;
     /**
-     *
+     * Number of login failures.
      */
-    private int ordering;
+    private int loginFailures;
     /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger.getLogger(LoginScreen.class);
+    /**
+     * Maximum login failures.
+     */
+    private static final int MAX_LOGIN_FAILURES = 10;
 
     /**
      * @param g
@@ -104,10 +108,13 @@ public class LoginScreen implements ScreenController {
      */
     public final void sendLoginRequest() {
         if (textInputUsername.getControl(TextFieldControl.class).getRealText()
-                .isEmpty()
-                || textInputPassword.getControl(TextFieldControl.class)
-                        .getRealText().isEmpty()) {
-            // TODO: Handle blank field
+                .isEmpty()) {
+            setMessage("Please enter your username");
+        } else if (textInputPassword.getControl(TextFieldControl.class)
+                .getRealText().isEmpty()) {
+            setMessage("Please enter your password");
+        } else if (loginFailures > MAX_LOGIN_FAILURES) {
+            setMessage("Exceeded maximum login attempts");
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
             gameClient.attemptLogin(
                     textInputUsername.getControl(TextFieldControl.class)
@@ -115,12 +122,22 @@ public class LoginScreen implements ScreenController {
                     textInputPassword.getControl(TextFieldControl.class)
                             .getRealText());
         } else if (!gameClient.isConnected()) {
+            setMessage("Not connected to game server");
             LOGGER.info("Client not connected");
         } else if (!gameClient.hasClientInfo()) {
+            setMessage("Not connected to game server");
             LOGGER.info("Client info not set");
         } else {
             LOGGER.info("Logic bug");
         }
+    }
+
+    /**
+     * Set a message for the user.
+     * @param m Message
+     */
+    private void setMessage(final String m) {
+        // TODO Auto-generated method stub
     }
 
     /**
@@ -133,8 +150,15 @@ public class LoginScreen implements ScreenController {
     /**
      * @param errorMessage
      */
-    public void loginFailed(final String errorMessage) {
-        // TODO Auto-generated method stub
+    public final void loginFailed(final String errorMessage) {
+        loginFailures++;
+        setMessage(errorMessage);
+    }
 
+    /**
+     * Handle extra authentication information failure.
+     */
+    public final void handleExtraAuthFailed() {
+        LOGGER.info("Extra authentication failed");
     }
 }

@@ -46,10 +46,12 @@ public class RegisterScreen implements ScreenController {
      *
      */
     private int ordering;
+    private int registrationFailures;
     /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger.getLogger(RegisterScreen.class);
+    private static final int MAX_REGISTRATION_FAILURES = 0;
 
     /**
      * @param g
@@ -154,13 +156,15 @@ public class RegisterScreen implements ScreenController {
                         .getRealText().isEmpty()
                 || textInputEmail.getControl(TextFieldControl.class)
                         .getRealText().isEmpty()) {
-            // TODO: Handle blank field
+            setMessage("Please complete all required fields");
         } else if (!textInputPassword
                 .getControl(TextFieldControl.class)
                 .getRealText()
                 .equals(textInputPasswordConfirm.getControl(
                         TextFieldControl.class).getRealText())) {
-            // TODO: Handle non-matching passwords
+            setMessage("Please ensure the passwords match");
+        } else if (registrationFailures > MAX_REGISTRATION_FAILURES) {
+            setMessage("Exceeded maximum registration attempts");
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
             gameClient.attemptRegister(
                     textInputUsername.getControl(TextFieldControl.class)
@@ -180,10 +184,19 @@ public class RegisterScreen implements ScreenController {
 
     /**
      * 
+     * @param m message
+     */
+    private void setMessage(String m) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /**
+     * 
      * @param errorMessage
      */
-    public void registrationFailed(final String errorMessage) {
-        // TODO Auto-generated method stub
-
+    public final void registrationFailed(final String errorMessage) {
+        registrationFailures++;
+        setMessage(errorMessage);
     }
 }

@@ -578,7 +578,7 @@ public class GameClient {
     }
 
     /**
-     * @return
+     * @return <code>true</code> if connected to the server
      */
     public final boolean isConnected() {
         if (channel != null) {
@@ -589,7 +589,7 @@ public class GameClient {
     }
 
     /**
-     * @return
+     * @return <code>true</code> if client info is set
      */
     public final boolean hasClientInfo() {
         if (clientInfo != null) {
@@ -599,13 +599,14 @@ public class GameClient {
     }
 
     /**
-     * @return
+     * @return Client Information
      */
     public final ClientInfo getClientInfo() {
         return clientInfo;
     }
 
     /**
+     * Handle a System message from the server.
      * @param message Message
      */
     public void handleSystemMessage(final ServerMessage message) {
@@ -614,6 +615,7 @@ public class GameClient {
     }
 
     /**
+     * Handle a Game message from the server.
      * @param message Message
      */
     public void handleGameMessage(final ServerMessage message) {
@@ -622,6 +624,7 @@ public class GameClient {
     }
 
     /**
+     * Handle a chat message from the server.
      * @param message Message
      */
     public void handleChatMessage(final ServerMessage message) {
@@ -630,6 +633,7 @@ public class GameClient {
     }
 
     /**
+     * Handle an authentication message from the server.
      * @param message Message
      */
     public final void handleAuthMessage(final ServerMessage message) {
@@ -642,11 +646,12 @@ public class GameClient {
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        // TODO: Switch to lobby state
+                        switchToLobbyScreen();
+                        state = State.LOBBY;
                         break;
                     case EXTRA_AUTH_FAILED:
-                        // TODO: Handle extra authentication failure
-                        LOGGER.info("Extra authentication failed");
+                        loginScreen.handleExtraAuthFailed();
+                        break;
                     default:
                         LOGGER.info("Auth message type " + type
                                 + " recieved in invalid state: " + state);
@@ -659,7 +664,8 @@ public class GameClient {
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        // TODO: Switch to lobby state
+                        switchToLobbyScreen();
+                        state = State.LOBBY;
                         break;
                     default:
                         LOGGER.info("Auth message type " + type
@@ -743,6 +749,12 @@ public class GameClient {
         registerScreen = new RegisterScreen(this);
         nifty.registerScreenController(registerScreen);
         nifty.fromXml("registerScreen.xml", "start");
+    }
+
+    private void switchToLobbyScreen() {
+        lobbyScreen = new LobbyScreen(this);
+        nifty.registerScreenController(lobbyScreen);
+        nifty.fromXml("lobbyScreen.xml", "start");
     }
 
     /**
