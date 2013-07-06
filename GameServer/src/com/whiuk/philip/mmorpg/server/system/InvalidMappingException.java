@@ -12,10 +12,10 @@ public class InvalidMappingException extends Exception {
     private static final long serialVersionUID = -5349781703664400372L;
 
     /**
-     * @param string
+     * @param message Message
      */
-    public InvalidMappingException(final String string) {
-        // TODO Auto-generated constructor stub
+    public InvalidMappingException(final String message) {
+        super(message);
     }
 
 }
