@@ -11,13 +11,13 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
 public interface AccountDAO extends GenericDAO<Account, Long> {
     /**
      * @param id
-     * @return
+     * @return Account
      */
     Account findByID(Long id);
 
     /**
-     * @param username
-     * @return
+     * @param username Username
+     * @return Account
      */
     Account findByUsername(String username);
 }
