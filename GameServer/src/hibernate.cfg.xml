@@ -19,5 +19,8 @@
 	<property name="hibernate.show_sql">true</property>
 
 	<!-- mapping files -->
+	<mapping class="com.whiuk.philip.mmorpg.serverShared.Account" />
+	<mapping class="com.whiuk.philip.mmorpg.serverShared.LoginAttempt" />
+	<mapping class="com.whiuk.philip.mmorpg.serverShared.Connection" />
 </session-factory>
 </hibernate-configuration>

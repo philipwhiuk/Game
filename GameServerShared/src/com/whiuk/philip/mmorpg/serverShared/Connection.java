@@ -1,8 +1,10 @@
 package com.whiuk.philip.mmorpg.serverShared;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -13,12 +15,10 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
  * 
  * @author Philip Whitehouse
  */
-@Entity
 public class Connection {
     /**
      * 
      */
-    @Id
     private long id;
     /**
 	 *
@@ -53,6 +53,7 @@ public class Connection {
         this.clientInfo = c;
         this.lastConnectionTime = nanoTime;
         this.active = b;
+        loginAttempts = new HashSet<LoginAttempt>();
     }
 
     /**
@@ -66,7 +67,7 @@ public class Connection {
      * @param attempt
      */
     public final void addLoginAttempt(final LoginAttempt attempt) {
-        this.loginAttempts.add(attempt);
+        loginAttempts.add(attempt);
     }
 
     /**
@@ -75,5 +76,16 @@ public class Connection {
     public final void setLastConnectionTime(final long nanoTime) {
         lastConnectionTime = nanoTime;
     }
+    
+    @Override
+    public String toString() {
+        return "Local:"+clientInfo.getLocalIPAddress() + "\n"
+                + "Remote:"+clientInfo.getRemoteIPAddress() + "\n"
+                + "Client:"+clientInfo.getClientID() + " \n"
+                + "ConnectionTime:"+lastConnectionTime;
+    }
 
+    public ClientInfo getClientInfo() {
+        return clientInfo;
+    }
 }

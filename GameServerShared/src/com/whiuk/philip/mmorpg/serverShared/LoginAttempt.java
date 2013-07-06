@@ -2,7 +2,9 @@ package com.whiuk.philip.mmorpg.serverShared;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.whiuk.philip.mmorpg.serverShared.Connection;
@@ -15,7 +17,7 @@ public class LoginAttempt {
     /**
      *
      */
-    @Id
+    @Id @GeneratedValue
     private Long id;
     /**
      *
@@ -25,6 +27,7 @@ public class LoginAttempt {
      *
      */
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "account")
     private Account account;
     /**
      *
@@ -33,8 +36,7 @@ public class LoginAttempt {
     /**
      *
      */
-    @ManyToOne(cascade = CascadeType.ALL)
-    private Connection connection;
+    private String connection;
 
     /**
      * @return the time
@@ -84,7 +86,7 @@ public class LoginAttempt {
     /**
      * @return the connection
      */
-    public final Connection getConnection() {
+    public final String getConnection() {
         return connection;
     }
 
@@ -92,7 +94,7 @@ public class LoginAttempt {
      * @param c
      *            the connection to set
      */
-    public final void setConnection(final Connection c) {
+    public final void setConnection(final String c) {
         this.connection = c;
     }
 

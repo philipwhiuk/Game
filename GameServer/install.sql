@@ -21,6 +21,6 @@ CREATE TABLE IF NOT EXISTS LoginAttempt (
 id INT(11) NOT NULL AUTO_INCREMENT,
 time INT(11) DEFAULT 0,
 successful BOOLEAN,
-connection INT(11),
+connection text,
 account INT(11) DEFAULT 0,
 PRIMARY KEY (Id));
