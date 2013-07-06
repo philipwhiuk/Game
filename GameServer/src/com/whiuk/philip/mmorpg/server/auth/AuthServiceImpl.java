@@ -165,9 +165,10 @@ public class AuthServiceImpl implements AuthService {
         HibernateUtils.commitTransaction();
         HibernateUtils.beginTransaction();
         LoginAttempt attempt = new LoginAttempt();
-        attempt.setTime(System.nanoTime());
+        attempt.setTime(System.currentTimeMillis());
         attempt.setAccount(account);
-        attempt.setConnection(con);
+        attempt.setConnection(con.toString());
+        System.out.println(attempt.getTime());
         loginAttemptDAO.save(attempt);
         HibernateUtils.commitTransaction();
         if (account != null) {
@@ -186,6 +187,8 @@ public class AuthServiceImpl implements AuthService {
      * 
      * @param con
      *            Connection
+     * @param attempt
+     *            LoginAttempt
      */
     private void processFailedLogin(final Connection con,
             final LoginAttempt attempt) {
@@ -193,22 +196,24 @@ public class AuthServiceImpl implements AuthService {
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
+                .setClientInfo(con.getClientInfo())
                 .setAuthData(
-                        ServerMessage.AuthData
-                                .newBuilder()
-                                .setType(
-                                        ServerMessage.AuthData.Type.LOGIN_FAILED)
-                                .build()).build();
+                ServerMessage.AuthData
+                        .newBuilder()
+                        .setType(
+                        ServerMessage.AuthData.Type.LOGIN_FAILED)
+                        .build()).build();
         messageHandler.queueOutboundMessage(message);
     }
 
     /**
      * Handle a successful login attempt.
-     * 
      * @param con
      *            Connection
      * @param account
      *            Account
+     * @param attempt
+     *            LoginAttempt
      */
     private void processSuccesfulLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
@@ -218,12 +223,13 @@ public class AuthServiceImpl implements AuthService {
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
+                .setClientInfo(con.getClientInfo())
                 .setAuthData(
-                        ServerMessage.AuthData
-                                .newBuilder()
-                                .setType(
-                                        ServerMessage.AuthData.Type.LOGIN_SUCCESSFUL)
-                                .setUsername(account.getUsername()).build())
+                ServerMessage.AuthData
+                        .newBuilder()
+                        .setType(
+                                ServerMessage.AuthData.Type.LOGIN_SUCCESSFUL)
+                        .setUsername(account.getUsername()).build())
                 .build();
         messageHandler.queueOutboundMessage(message);
     }
@@ -235,6 +241,8 @@ public class AuthServiceImpl implements AuthService {
      *            Connection
      * @param account
      *            Account
+     * @param attempt
+     *            LoginAttempt
      */
     private void processFailedLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
@@ -243,6 +251,7 @@ public class AuthServiceImpl implements AuthService {
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
+                .setClientInfo(con.getClientInfo())
                 .setAuthData(
                         ServerMessage.AuthData
                                 .newBuilder()

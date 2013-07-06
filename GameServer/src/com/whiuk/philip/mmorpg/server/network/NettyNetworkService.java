@@ -6,6 +6,7 @@ import java.util.concurrent.Executors;
 import javax.annotation.PostConstruct;
 
 import org.jboss.netty.bootstrap.ServerBootstrap;
+import org.jboss.netty.channel.Channel;
 import org.jboss.netty.channel.ChannelFactory;
 import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 
@@ -31,6 +32,8 @@ public class NettyNetworkService implements NetworkService {
     @Autowired
     private NettyNetworkServiceHandler handler;
 
+    private Channel channel;
+
     /**
 	 *
 	 */
@@ -52,12 +55,11 @@ public class NettyNetworkService implements NetworkService {
                 handler));
         bootstrap.setOption("child.tcpNoDelay", true);
         bootstrap.setOption("child.keepAlive", true);
-        bootstrap.bind(new InetSocketAddress(PORT));
+        channel = bootstrap.bind(new InetSocketAddress(PORT));
     }
 
     @Override
-    public void processMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
+    public void sendMessage(final ServerMessage message) {
 
     }
 

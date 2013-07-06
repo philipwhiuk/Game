@@ -13,6 +13,6 @@ public interface NetworkService {
      * @param message
      *            The message
      */
-    void processMessage(ServerMessage message);
+    void sendMessage(ServerMessage message);
 
 }

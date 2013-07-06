@@ -174,6 +174,7 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
 
     @Override
     public final void queueOutboundMessage(final ServerMessage message) {
+        LOGGER.info("Queuing outbound message");
         outbound.add(message);
     }
 
@@ -189,6 +190,7 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
     private void sendOutboundMessage(final ServerMessage message) {
         // TODO: Work out if it's better just to send stuff directly to the
         // network service
-        networkService.processMessage(message);
+        LOGGER.info("Sending outbound message");
+        networkService.sendMessage(message);
     }
 }
