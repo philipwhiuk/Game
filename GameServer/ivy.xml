@@ -32,6 +32,7 @@
 	</configurations>
 	<dependencies>
 		<dependency org="com.whiuk.philip" name="GameServerShared" rev="latest.integration" />
+		<dependency org="com.whiuk.philip" name="GameShared" rev="latest.integration" />
 		<!--  Hibernate -->
 		<dependency org="org.hibernate" name="hibernate-core" rev="4.1.10.Final"  conf="build->default"/>
 		<dependency org="org.hibernate.common" name="hibernate-commons-annotations" rev="4.0.1.Final" conf="build->default"/>	
