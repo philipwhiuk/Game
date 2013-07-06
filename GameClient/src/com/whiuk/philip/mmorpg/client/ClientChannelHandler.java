@@ -137,6 +137,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     @Override
     public final void messageReceived(final ChannelHandlerContext ctx,
             final MessageEvent e) {
+        LOGGER.info("Recieved message");
         ServerMessage message = (ServerMessage) e.getMessage();
         GameClient.getGameClient().processInboundMessage(message);
     }
