@@ -57,7 +57,6 @@ public class Account {
      * @return
      */
     public final String getUsername() {
-        // TODO Auto-generated method stub
         return username;
     }
 
