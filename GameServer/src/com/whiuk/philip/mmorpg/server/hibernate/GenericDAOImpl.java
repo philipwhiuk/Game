@@ -60,7 +60,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements
     @SuppressWarnings({ "rawtypes", "unchecked" })
     // Generic DAO, Hibernate
     @Override
-    public final T findByID(Class clazz, Long id) {
+    public final T findByID(final Class clazz, final Long id) {
         Session hibernateSession = this.getSession();
         T t = null;
         t = (T) hibernateSession.get(clazz, id);
@@ -70,7 +70,7 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements
     @SuppressWarnings("rawtypes")
     // Generic DAO
     @Override
-    public final List findAll(Class clazz) {
+    public final List findAll(final Class clazz) {
         Session hibernateSession = this.getSession();
         List t = null;
         Query query = hibernateSession.createQuery("from " + clazz.getName());

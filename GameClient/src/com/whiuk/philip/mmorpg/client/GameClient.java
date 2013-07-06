@@ -259,7 +259,7 @@ public class GameClient {
     /**
      * Build LWJGL display.
      * 
-     * @throws LWJGLException
+     * @throws LWJGLException Exception
      */
     private void buildDisplay() throws LWJGLException {
         int width = WIDTH;
@@ -296,7 +296,7 @@ public class GameClient {
     /**
      * Select LWJGL display mode.
      * 
-     * @throws LWJGLException
+     * @throws LWJGLException Exception
      */
     private void selectDisplayMode() throws LWJGLException {
         DisplayMode currentMode = Display.getDisplayMode();
@@ -492,15 +492,15 @@ public class GameClient {
             synchronized (channel) {
                 if (channel.isConnected()) {
                     sendOutboundMessage(ClientMessage
-                            .newBuilder()
-                            .setClientInfo(clientInfo)
-                            .setType(ClientMessage.Type.SYSTEM)
-                            .setSystemData(
-                                    ClientMessage.SystemData
-                                            .newBuilder()
-                                            .setType(
-                                                    ClientMessage.SystemData.Type.DISCONNECTING)
-                                            .build()).build());
+                        .newBuilder()
+                        .setClientInfo(clientInfo)
+                        .setType(ClientMessage.Type.SYSTEM)
+                        .setSystemData(
+                            ClientMessage.SystemData
+                                .newBuilder()
+                                .setType(
+                                    ClientMessage.SystemData.Type.DISCONNECTING)
+                                .build()).build());
                     channel.close();
                 }
             }
@@ -569,7 +569,7 @@ public class GameClient {
     }
 
     /**
-     * @param message
+     * @param message Message
      */
     public final void sendOutboundMessage(final ClientMessage message) {
         if (channel != null) {
@@ -606,7 +606,7 @@ public class GameClient {
     }
 
     /**
-     * @param message
+     * @param message Message
      */
     public void handleSystemMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
@@ -614,7 +614,7 @@ public class GameClient {
     }
 
     /**
-     * @param message
+     * @param message Message
      */
     public void handleGameMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
@@ -622,7 +622,7 @@ public class GameClient {
     }
 
     /**
-     * @param message
+     * @param message Message
      */
     public void handleChatMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
@@ -630,7 +630,7 @@ public class GameClient {
     }
 
     /**
-     * @param message
+     * @param message Message
      */
     public final void handleAuthMessage(final ServerMessage message) {
         Type type = message.getAuthData().getType();
@@ -714,7 +714,7 @@ public class GameClient {
     }
 
     /**
-     * @param username
+     * @param username Username
      * @param password
      */
     public final void attemptLogin(final String username, final String password) {
@@ -748,7 +748,7 @@ public class GameClient {
     /**
      * Attempt to register an account.
      * 
-     * @param username
+     * @param username Username
      * @param password
      * @param email
      */

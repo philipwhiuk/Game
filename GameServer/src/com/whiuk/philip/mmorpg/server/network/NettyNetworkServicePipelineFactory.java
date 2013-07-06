@@ -8,7 +8,7 @@ import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
 import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 
 /**
  * Netty pipeline factory to integrate protobuf coding.

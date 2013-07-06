@@ -14,7 +14,6 @@ import de.lessvoid.nifty.screen.ScreenController;
  * 
  * @author Philip Whitehouse
  */
-@SuppressWarnings("deprecation")
 // TODO: Work out how Nifty 1.3.2 uses controls.
 public class LobbyScreen implements ScreenController {
     /**
@@ -80,7 +79,7 @@ public class LobbyScreen implements ScreenController {
     /**
      * Handle chat message
      * 
-     * @param message
+     * @param message Message
      */
     public void handleChatMessage(final ServerMessage message) {
         // TODO Auto-generated method stub

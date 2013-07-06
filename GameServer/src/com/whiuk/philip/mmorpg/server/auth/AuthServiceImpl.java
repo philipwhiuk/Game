@@ -9,10 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.protobuf.ByteString;
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.chat.ChatService;
 import com.whiuk.philip.mmorpg.server.game.GameService;

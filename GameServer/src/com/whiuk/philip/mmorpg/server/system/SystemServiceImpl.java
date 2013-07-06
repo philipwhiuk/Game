@@ -7,8 +7,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.SystemData;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.serverShared.Connection;
@@ -117,7 +117,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      *
      */
-    public final void connect(Connection con) {
+    public final void connect(final Connection con) {
         con.setActive(true);
         con.setLastConnectionTime(System.nanoTime());
     }
@@ -125,7 +125,7 @@ public class SystemServiceImpl implements SystemService {
     /**
      *
      */
-    public final void disconnect(Connection con) {
+    public final void disconnect(final Connection con) {
         con.setActive(false);
         authService.notifyDisconnection(con);
 

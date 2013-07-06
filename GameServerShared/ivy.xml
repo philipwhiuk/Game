@@ -33,6 +33,7 @@
 	<dependencies>
 		<dependency org="com.google.protobuf" name="protobuf-java" rev="2.5.0"/>
 		<dependency org="org.hibernate.common" name="hibernate-commons-annotations" rev="4.0.1.Final" conf="build->default"/>	
-		<dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.1.Final" conf="build->default"/>	
+		<dependency org="org.hibernate.javax.persistence" name="hibernate-jpa-2.0-api" rev="1.0.1.Final" conf="build->default"/>		
+		<dependency org="com.whiuk.philip" name="GameShared" rev="integration" conf="build->build"/>
     </dependencies>
 </ivy-module>

@@ -5,7 +5,7 @@ import org.apache.log4j.PropertyConfigurator;
 /**
  * @author Philip
  */
-public class Main {
+public final class Main {
     /**
      * Utility class.
      */

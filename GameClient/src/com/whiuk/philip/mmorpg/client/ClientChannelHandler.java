@@ -198,8 +198,8 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     }
 
     /**
-     * @param message
-     * @param t
+     * @param message Message
+     * @param t Thrown exception
      */
     public final void logException(final String message, final Throwable t) {
         if (t instanceof java.io.IOException) {

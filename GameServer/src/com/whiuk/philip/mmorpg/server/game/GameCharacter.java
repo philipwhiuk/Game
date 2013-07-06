@@ -12,6 +12,9 @@ import javax.persistence.Transient;
 @Entity
 public class GameCharacter {
 
+    /**
+     * 
+     */
     @Id
     private Long id;
 

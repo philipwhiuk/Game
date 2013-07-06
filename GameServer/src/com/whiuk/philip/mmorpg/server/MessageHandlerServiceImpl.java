@@ -7,9 +7,9 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.server.chat.ChatService;
 import com.whiuk.philip.mmorpg.server.game.GameService;
@@ -107,6 +107,7 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
                 try {
                     Thread.sleep(HANDLER_SLEEP_TIME);
                 } catch (InterruptedException e) {
+                    //TODO: Handle Interrupt
                 }
             }
         }
@@ -115,7 +116,7 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
     /**
      * Process an inbound message.
      * 
-     * @param message
+     * @param message Message
      */
     private void processInboundMessage(final ClientMessage message) {
         LOGGER.info("Processing inbound message");

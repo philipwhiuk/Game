@@ -1,7 +1,7 @@
 package com.whiuk.philip.mmorpg.server.chat;
 
-import com.whiuk.philip.game.serverShared.Account;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.ChatData;
+import com.whiuk.philip.mmorpg.serverShared.Account;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
 
 /**
  * @author Philip Whitehouse
@@ -20,7 +20,7 @@ public interface ChatService {
     /**
      * Notify the chat service an account has logged out.
      * 
-     * @param account
+     * @param account Account
      */
     void notifyLogout(Account account);
 

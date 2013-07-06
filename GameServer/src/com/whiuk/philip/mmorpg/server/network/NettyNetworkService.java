@@ -12,7 +12,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 /**
  * @author Philip Whitehouse

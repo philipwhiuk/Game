@@ -8,11 +8,11 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.ActionInformation;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.CombatInformation;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.GameData.MovementInformation;
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.server.system.InvalidMappingException;
@@ -76,19 +76,38 @@ public class GameServiceImpl implements GameService {
             characterSelection(account, data);
         } else if (data.getType() == GameData.Type.EXIT) {
             if (accounts.get(account) != null) {
-                // TODO: Logout
+                handleLogout(account);
             }
         } else if (characters.get(account) != null) {
             update(account, data);
         } else {
-            // TODO: Log action attempted when no character selected
+            handleActionInInvalidState(account, data);
         }
+    }
+
+    /**
+     * Logs action attempted when no character selected.
+     * @param account Account
+     * @param data Data
+     */
+    private void handleActionInInvalidState(
+            final Account account, final GameData data) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    /**
+     * Handle a logout message.
+     * @param account
+     */
+    private void handleLogout(final Account account) {
+        // TODO Auto-generated method stub
     }
 
     /**
      * Handle client game update.
      * 
-     * @param account
+     * @param account Account
      * @param data
      */
     private void update(final Account account, final GameData data) {
@@ -117,7 +136,7 @@ public class GameServiceImpl implements GameService {
     /**
      * Handle character selection messages.
      * 
-     * @param account
+     * @param account Account
      * @param data
      */
     private void characterSelection(final Account account, final GameData data) {
@@ -133,8 +152,16 @@ public class GameServiceImpl implements GameService {
                     .build();
             messageHandlerService.queueOutboundMessage(message);
         } else {
-            // TODO: Load character
+            loadCharacters(account);
         }
+    }
+
+    /**
+     * Load character.
+     * @param account Account
+     */
+    private void loadCharacters(final Account account) {
+        // TODO Auto-generated method stub
     }
 
     /**

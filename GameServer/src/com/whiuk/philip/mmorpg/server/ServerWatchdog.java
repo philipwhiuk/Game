@@ -37,7 +37,7 @@ public class ServerWatchdog implements Runnable {
     public final void run() {
         for (Watchdog watchdog : watchdogs) {
             long timeSincePat = System.currentTimeMillis() - watchdog.lastPat();
-            if (timeSincePat > watchdog.getWarningTime()) {
+            if (timeSincePat > THREAD_WARN_TIME) {
                 String message = String.format(THREAD_EXCEEDED_WARNING_TIME,
                         watchdog.getThread(), timeSincePat);
                 LOGGER.log(Level.WARN, message);

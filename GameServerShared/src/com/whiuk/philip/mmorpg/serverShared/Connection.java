@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.whiuk.philip.mmorpg.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 
 /**
  * Information about a connection.

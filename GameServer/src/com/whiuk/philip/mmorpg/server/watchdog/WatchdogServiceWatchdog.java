@@ -60,6 +60,7 @@ public class WatchdogServiceWatchdog implements Watchdog {
             try {
                 Thread.sleep(THREAD_START_UP_TIME);
             } catch (InterruptedException e1) {
+                //TODO: Handle interrupt
             }
             started = true;
             while (started) {
@@ -73,6 +74,7 @@ public class WatchdogServiceWatchdog implements Watchdog {
                 try {
                     Thread.sleep(CHECK_TIME);
                 } catch (InterruptedException e) {
+                    //TODO: Handle interrupt
                 }
             }
         }

@@ -14,8 +14,8 @@ import org.jboss.netty.channel.SimpleChannelHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.system.SystemService;
 

@@ -178,7 +178,11 @@ public class RegisterScreen implements ScreenController {
         }
     }
 
-    public void registrationFailed(String errorMessage) {
+    /**
+     * 
+     * @param errorMessage
+     */
+    public void registrationFailed(final String errorMessage) {
         // TODO Auto-generated method stub
 
     }

@@ -19,7 +19,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
      * Retrieves an account by it's id.
      * 
      * @param username
-     * @return
+     * @return Account
      */
     @Override
     public final Account findByID(final Long id) {
@@ -34,8 +34,8 @@ public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
     /**
      * Retrieves an account by it's username.
      * 
-     * @param username
-     * @return
+     * @param username Username
+     * @return Account
      */
     public final Account findByUsername(final String username) {
         Account account = null;

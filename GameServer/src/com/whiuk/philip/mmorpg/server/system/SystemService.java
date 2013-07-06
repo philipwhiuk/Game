@@ -1,8 +1,8 @@
 package com.whiuk.philip.mmorpg.server.system;
 
-import com.whiuk.philip.game.serverShared.Connection;
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.SystemData;
+import com.whiuk.philip.mmorpg.serverShared.Connection;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.SystemData;
 
 /**
  * @author Philip Whitehouse
@@ -30,7 +30,7 @@ public interface SystemService {
     /**
      * @param connection
      * @return
-     * @throws InvalidMappingException
+     * @throws InvalidMappingException Exception
      */
     ClientInfo getClientInfo(Connection connection)
             throws InvalidMappingException;

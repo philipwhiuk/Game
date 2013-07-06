@@ -1,6 +1,6 @@
 package com.whiuk.philip.mmorpg.server.network;
 
-import com.whiuk.philip.game.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 /**
  * @author Philip

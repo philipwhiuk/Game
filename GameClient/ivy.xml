@@ -20,7 +20,7 @@
 <ivy-module version="2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
     <info
-        organisation="org.whiuk.philip"
+        organisation="com.whiuk.philip"
         module="GameClient"
         status="integration">
 	</info>
@@ -35,5 +35,6 @@
 		<dependency org="org.jboss.netty" name="netty" rev="3.2.5.Final" />
 		<dependency org="org.bushe" name="eventbus" rev="1.4"/>
 		<dependency org="xpp3" name="xpp3_min" rev="1.1.4c"/>
+		<dependency org="com.whiuk.philip" name="GameShared" rev="integration" conf="build->build"/>
 	</dependencies>
 </ivy-module>

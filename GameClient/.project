@@ -21,16 +21,4 @@
 		<nature>org.apache.ivyde.eclipse.ivynature</nature>
 		<nature>net.sf.eclipsecs.core.CheckstyleNature</nature>
 	</natures>
-	<linkedResources>
-		<link>
-			<name>src-gen</name>
-			<type>2</type>
-			<location>C:/Users/Philip/git/Game/GameShared/src-gen</location>
-		</link>
-		<link>
-			<name>src-shared</name>
-			<type>2</type>
-			<location>C:/Users/Philip/git/Game/GameShared/src</location>
-		</link>
-	</linkedResources>
 </projectDescription>

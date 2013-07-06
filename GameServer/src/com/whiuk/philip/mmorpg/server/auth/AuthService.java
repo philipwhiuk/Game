@@ -1,10 +1,10 @@
 package com.whiuk.philip.mmorpg.server.auth;
 
-import com.whiuk.philip.game.serverShared.Account;
-import com.whiuk.philip.game.serverShared.Connection;
-import com.whiuk.philip.game.shared.Messages.ClientInfo;
-import com.whiuk.philip.game.shared.Messages.ClientMessage;
-import com.whiuk.philip.game.shared.Messages.ClientMessage.AuthData;
+import com.whiuk.philip.mmorpg.serverShared.Account;
+import com.whiuk.philip.mmorpg.serverShared.Connection;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
 
 /**
  * @author Philip

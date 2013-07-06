@@ -12,7 +12,7 @@ public class GameCharacterDAOImpl extends GenericDAOImpl<GameCharacter, Long> im
         GameCharacterDAO {
 
     @Override
-    public final GameCharacter findByID(Long id) {
+    public final GameCharacter findByID(final Long id) {
         GameCharacter character = null;
         String sql = "SELECT c FROM Character c WHERE c.id = :id";
         Query query = HibernateUtils.getSession().createQuery(sql)
