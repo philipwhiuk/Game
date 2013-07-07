@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage
     .GameData.CharacterInformation;
 
@@ -84,8 +85,11 @@ public class LobbyScreen implements ScreenController {
      * Send message.
      */
     protected final void sendMessage() {
-        gameClient.sendChatMessage(textInputMessage
-                .getRenderer(TextRenderer.class).getOriginalText());
+        gameClient.sendChatData(
+            ChatData.newBuilder()
+            .setMessage(textInputMessage
+                .getRenderer(TextRenderer.class).getOriginalText())
+            .build());
         textInputMessage.getRenderer(TextRenderer.class).setText("");
     }
 
@@ -122,7 +126,7 @@ public class LobbyScreen implements ScreenController {
      * @param name Character name
      */
     public final void selectCharacter(final String name) {
-        gameClient.sendGameMessage(ClientMessage.GameData.newBuilder()
+        gameClient.sendGameData(ClientMessage.GameData.newBuilder()
             .setType(ClientMessage.GameData.Type.CHARACTER_SELECTION)
             .setCharacter(name)
             .build());

@@ -814,7 +814,6 @@ public class GameClient {
 
     /**
      * Attempt to register an account.
-     * 
      * @param username Username
      * @param password Password (plain)
      * @param email Email
@@ -841,26 +840,25 @@ public class GameClient {
 
 
     /**
-     * Helper method to remove server message
-     * handling code from implementations.
-     * @param message Chat message to send to server
+     * Helper method to send chat data to server and
+     * keep server message handling code from core classes.
+     * @param data Chat data to send to server
      */
-    public final void sendChatMessage(final String message) {
+    public final void sendChatData(final ChatData data) {
         sendOutboundMessage(ClientMessage
                 .newBuilder()
                 .setType(ClientMessage.Type.CHAT)
                 .setClientInfo(gameClient.getClientInfo())
-                .setChatData(ChatData.newBuilder()
-                        .setMessage(message)
-                        .build())
+                .setChatData(data)
                 .build());
     }
 
     /**
-     * Select character.
-     * @param name
+     * Helper method to send game data to server and
+     * keep server message handling code from core classes.
+     * @param data Game data to send to server
      */
-    public final void sendGameMessage(final GameData data) {
+    public final void sendGameData(final GameData data) {
         sendOutboundMessage(ClientMessage
                 .newBuilder()
                 .setType(ClientMessage.Type.GAME)
