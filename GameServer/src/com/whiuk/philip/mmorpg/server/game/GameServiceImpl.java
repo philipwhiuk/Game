@@ -1,6 +1,8 @@
 package com.whiuk.philip.mmorpg.server.game;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 import javax.annotation.PostConstruct;
 
@@ -60,6 +62,7 @@ public class GameServiceImpl implements GameService {
      * Game world.
      */
     private GameWorld gameWorld;
+    private Random random;
 
     /**
      * Initialize the service.
@@ -67,6 +70,8 @@ public class GameServiceImpl implements GameService {
     @PostConstruct
     public final void init() {
         gameWorld = GameWorld.load();
+        characters = new HashMap<Account, GameCharacter>();
+        accounts = new HashMap<GameCharacter, Account>();
         watchdogService.monitor(gameWorld);
     }
 
@@ -93,7 +98,6 @@ public class GameServiceImpl implements GameService {
     private void handleActionInInvalidState(
             final Account account, final GameData data) {
         // TODO Auto-generated method stub
-        
     }
 
     /**
@@ -106,7 +110,6 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Handle client game update.
-     * 
      * @param account Account
      * @param data
      */
@@ -135,20 +138,21 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Handle character selection messages.
-     * 
      * @param account Account
      * @param data
      */
-    private void characterSelection(final Account account, final GameData data) {
+    private void characterSelection(
+            final Account account, final GameData data) {
         if (characters.get(account) != null) {
             ServerMessage message = ServerMessage
-                    .newBuilder()
-                    .setType(ServerMessage.Type.GAME)
-                    .setGameData(
-                            ServerMessage.GameData
-                                    .newBuilder()
-                                    .setError(
-                                            ServerMessage.GameData.Error.CHARACTER_ALREADY_SELECTED))
+                .newBuilder()
+                .setType(ServerMessage.Type.GAME)
+                .setGameData(
+                ServerMessage.GameData
+                        .newBuilder()
+                        .setError(
+                        ServerMessage.
+                GameData.Error.CHARACTER_ALREADY_SELECTED))
                     .build();
             messageHandlerService.queueOutboundMessage(message);
         } else {
@@ -166,7 +170,6 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Handles character combat messages.
-     * 
      * @param character
      * @param combatInformation
      */
@@ -184,13 +187,86 @@ public class GameServiceImpl implements GameService {
      */
     private void action(final GameCharacter character,
             final ActionInformation actionInformation) {
+        switch (actionInformation.getAction()) {
+            case CRAFT:
+                craft(character, actionInformation.getSource(),
+                        actionInformation.getTarget());
+                break;
+            case MINE:
+                mine(character, actionInformation.getSource(),
+                        actionInformation.getTarget());
+                break;
+            case SMITH:
+                smith(character, actionInformation.getSource(),
+                        actionInformation.getTarget());
+                break;
+            case USE:
+                use(character, actionInformation.getSource(),
+                        actionInformation.getTarget());
+                break;
+        }
+    }
+
+    /**
+     * 
+     * @param character
+     * @param i1ID
+     * @param i2ID
+     */
+    private void use(final GameCharacter character,
+            final int i1ID, final int i2ID) {
+        Item i1 = character.getItemById(i1ID);
+        Item i2 = character.getItemById(i2ID);
+        if (i1.canUseOn(i2)) {
+            //TODO: Multiple action possibilities
+            Action a = i1.getAction(i2);
+            if (character.canPerform(a)) {
+                character.doAction(a);
+            } else {
+                //TODO: Send message, need reqs.
+            }
+        } else {
+            //TODO: Send message, not valid action.
+        }
+    }
+
+    /**
+     * 
+     * @param character
+     * @param source
+     * @param target
+     */
+    private void smith(final GameCharacter character,
+            final int source, final int target) {
+        // TODO Auto-generated method stub
+
+    }
+
+    /**
+     * 
+     * @param character
+     * @param source
+     * @param target
+     */
+    private void mine(final GameCharacter character,
+            final int source, final int target) {
+        // TODO Auto-generated method stub
+    }
+
+    /**
+     * 
+     * @param character
+     * @param source
+     * @param target
+     */
+    private void craft(GameCharacter character,
+            int source, int target) {
         // TODO Auto-generated method stub
 
     }
 
     /**
      * Handles character movement messages.
-     * 
      * @param character
      * @param movementInformation
      */
@@ -202,9 +278,16 @@ public class GameServiceImpl implements GameService {
 
     @Override
     public final void notifyLogout(final Account account) {
-        GameCharacter c = characters.remove(account);
-        accounts.remove(c);
-        c.logout();
+        if (characters.containsKey(account)) {
+            GameCharacter c = characters.remove(account);
+            accounts.remove(c);
+            c.logout();
+        }
+    }
+
+    @Override
+    public Random getRandom() {
+        return random;
     }
 
 }

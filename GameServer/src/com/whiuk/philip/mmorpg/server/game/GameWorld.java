@@ -7,7 +7,6 @@ import com.whiuk.philip.util.watchdog.Watchdog;
 
 /**
  * Game world.
- * 
  * @author Philip Whitehouse
  */
 public class GameWorld extends Thread implements Watchable {
@@ -73,7 +72,6 @@ public class GameWorld extends Thread implements Watchable {
 
     /**
      * Loads the game world.
-     * 
      * @return world
      */
     public static GameWorld load() {

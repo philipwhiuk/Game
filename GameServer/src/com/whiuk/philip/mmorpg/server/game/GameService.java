@@ -1,5 +1,7 @@
 package com.whiuk.philip.mmorpg.server.game;
 
+import java.util.Random;
+
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 
@@ -19,5 +21,11 @@ public interface GameService {
      * @param account Account
      */
     void notifyLogout(Account account);
+
+    /**
+     * 
+     * @return random
+     */
+    Random getRandom();
 
 }

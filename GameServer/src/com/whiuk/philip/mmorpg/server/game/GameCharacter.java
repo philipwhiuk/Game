@@ -33,4 +33,34 @@ public class GameCharacter {
         this.loggedOut = true;
     }
 
+    /**
+     * 
+     * @param a
+     * @return
+     */
+    public boolean canPerform(Action a) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    /**
+     * 
+     * @param i2id
+     * @return
+     */
+    public Item getItemById(int i2id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    /**
+     * 
+     * @param a
+     * @return
+     */
+    public void doAction(Action a) {
+        // TODO Auto-generated method stub
+        
+    }
+
 }
