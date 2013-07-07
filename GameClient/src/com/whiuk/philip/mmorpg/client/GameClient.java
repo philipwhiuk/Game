@@ -542,8 +542,10 @@ public class GameClient {
         switch (message.getType()) {
             case AUTH:
                 handleAuthMessage(message);
+                break;
             case SYSTEM:
                 handleSystemMessage(message);
+                break;
             case GAME:
                 switch (state) {
                     case GAME:
@@ -554,6 +556,7 @@ public class GameClient {
                                 + state);
                         break;
                 }
+                break;
             case CHAT:
                 switch (state) {
                     case LOBBY:
@@ -567,6 +570,7 @@ public class GameClient {
                                 + state);
                         break;
                 }
+                break;
             default:
                 LOGGER.info("Unhandled message type");
                 break;
