@@ -41,10 +41,15 @@ public class AuthServiceImpl implements AuthService {
      */
     private static final String BAD_CONNECTION_LOGOUT_MESSAGE = "Attempting to logout a connection that doesn't exist";
     /**
+     * Error message when invalid / unknown authentication message type is received.
+     */
+    private static final String INVALID_AUTHENTICATION_MESSAGE_TYPE = "Received unknown / unsupported authentication message type";
+    /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger
             .getLogger(AuthServiceImpl.class);
+
     /**
      *
      */
@@ -145,7 +150,8 @@ public class AuthServiceImpl implements AuthService {
                 }
                 break;
             default:
-                break;
+                logger.log(Level.INFO, INVALID_AUTHENTICATION_MESSAGE_TYPE);
+                throw new UnsupportedOperationException();
         }
     }
 
