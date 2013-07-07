@@ -50,8 +50,11 @@ message ClientMessage {
 	}
 	//Format of chat data
 	message ChatData {
-		required int32 channel = 1;
-		required string message = 2;
+		required bool private = 1;
+		required int32 channel = 2;
+		required string message = 3;
+		//Necessary if private
+		optional string target = 4;
 	}
 	message GameData {
 		required Type type = 1;
