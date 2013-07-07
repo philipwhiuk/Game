@@ -5,12 +5,11 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
 
 /**
  * Account data access object interface.
- * 
  * @author Philip Whitehouse
  */
 public interface AccountDAO extends GenericDAO<Account, Long> {
     /**
-     * @param id
+     * @param id ID
      * @return Account
      */
     Account findByID(Long id);

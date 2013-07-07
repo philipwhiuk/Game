@@ -13,7 +13,6 @@ public interface AuthService {
 
     /**
      * Get an account associated with a client message.
-     * 
      * @param event
      *            Event from client
      * @return Account connected to the client
@@ -22,7 +21,6 @@ public interface AuthService {
 
     /**
      * Process client account message.
-     * 
      * @param src
      *            ClientInfo
      * @param data
@@ -31,8 +29,7 @@ public interface AuthService {
     void processMessage(ClientInfo src, AuthData data);
 
     /**
-     * Get account by connection.
-     * 
+     * Get account by client info.
      * @param clientInfo
      *            ClientInfo
      * @return Account
@@ -41,7 +38,6 @@ public interface AuthService {
 
     /**
      * Get connection by account.
-     * 
      * @param acc
      *            Account
      * @return ClientInfo
@@ -50,8 +46,7 @@ public interface AuthService {
 
     /**
      * Notify the service of a client disconnection.
-     * 
-     * @param clientInfo
+     * @param connection connection
      */
     void notifyDisconnection(Connection connection);
 

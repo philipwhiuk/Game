@@ -3,11 +3,6 @@ package com.whiuk.philip.mmorpg.serverShared;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 
 /**
@@ -35,8 +30,11 @@ public class Connection {
     /**
 	 *
 	 */
-    @OneToMany(mappedBy = "connection")
     private Set<LoginAttempt> loginAttempts;
+    /**
+    *
+    */
+    private Set<RegistrationAttempt> registrationAttempts;
 
     /**
      * Bean constructor.
@@ -54,6 +52,13 @@ public class Connection {
         this.lastConnectionTime = nanoTime;
         this.active = b;
         loginAttempts = new HashSet<LoginAttempt>();
+    }
+
+    /**
+     *
+     */
+    public final boolean isActive() {
+        return active;
     }
 
     /**
@@ -85,7 +90,34 @@ public class Connection {
                 + "ConnectionTime:"+lastConnectionTime;
     }
 
+    /**
+     * 
+     * @return
+     */
     public ClientInfo getClientInfo() {
         return clientInfo;
+    }
+
+    /**
+     * 
+     * @param attempt
+     */
+    public void addRegistrationAttempt(RegistrationAttempt attempt) {
+        registrationAttempts.add(attempt);
+        
+    }
+
+    /**
+     * @return the id
+     */
+    public long getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(long id) {
+        this.id = id;
     }
 }

@@ -9,7 +9,6 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
 
 /**
  * Hibernate Accounts Data Access Object.
- * 
  * @author Philip Whitehouse
  */
 @Repository
@@ -17,8 +16,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
         AccountDAO {
     /**
      * Retrieves an account by it's id.
-     * 
-     * @param username
+     * @param id ID
      * @return Account
      */
     @Override
@@ -33,7 +31,6 @@ public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
 
     /**
      * Retrieves an account by it's username.
-     * 
      * @param username Username
      * @return Account
      */

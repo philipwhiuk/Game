@@ -111,6 +111,7 @@ message ServerMessage {
 			LOGIN_SUCCESSFUL = 2;
 			LOGOUT_SUCCESSFUL = 3;
 			REGISTRATION_FAILED = 4;
+			REGISTRATION_SUCCESSFUL = 5;
 		}
 		required Type type = 1;
 		optional string username = 2;

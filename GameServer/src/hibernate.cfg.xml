@@ -21,7 +21,7 @@
 	<!-- mapping files -->
 	<mapping class="com.whiuk.philip.mmorpg.serverShared.Account" />
 	<mapping class="com.whiuk.philip.mmorpg.serverShared.LoginAttempt" />
-	<mapping class="com.whiuk.philip.mmorpg.serverShared.Connection" />
+	<mapping class="com.whiuk.philip.mmorpg.serverShared.RegistrationAttempt" />
 	<mapping class="com.whiuk.philip.mmorpg.server.chat.ChatChannel" />
 </session-factory>
 </hibernate-configuration>

@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
  * @author Philip Whitehouse
  */
 @Entity
-public class LoginAttempt {
+public class RegistrationAttempt {
     /**
      *
      */
@@ -35,6 +35,10 @@ public class LoginAttempt {
      *
      */
     private String connection;
+    /**
+     * 
+     */
+    private String email;
 
     /**
      * @return the time
@@ -94,6 +98,20 @@ public class LoginAttempt {
      */
     public final void setConnection(final String c) {
         this.connection = c;
+    }
+
+    /**
+     * @return email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email
+     */
+    public void setEmail(String email) {
+       this.email = email;
     }
 
 }

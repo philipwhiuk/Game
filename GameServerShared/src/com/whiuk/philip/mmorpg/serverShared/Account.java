@@ -3,6 +3,7 @@ package com.whiuk.philip.mmorpg.serverShared;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
@@ -15,7 +16,7 @@ public class Account {
     /**
      *
      */
-    @Id
+    @Id @GeneratedValue
     private Long id;
     /**
      *
@@ -30,6 +31,10 @@ public class Account {
      *
      */
     private String password;
+    /**
+     * 
+     */
+    private String email;
 
     /**
      * @param nanoTime
@@ -66,5 +71,19 @@ public class Account {
      */
     public final void setUsername(final String u) {
         username = u;
+    }
+
+    /**
+     * @return the email
+     */
+    public String getEmail() {
+        return email;
+    }
+
+    /**
+     * @param email the email to set
+     */
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

@@ -21,6 +21,7 @@ import com.whiuk.philip.mmorpg.server.system.SystemService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.serverShared.Connection;
 import com.whiuk.philip.mmorpg.serverShared.LoginAttempt;
+import com.whiuk.philip.mmorpg.serverShared.RegistrationAttempt;
 
 /**
  * @author Philip
@@ -30,25 +31,37 @@ public class AuthServiceImpl implements AuthService {
     /**
      * Message for multiple logins detected.
      */
-    private static final String MULTIPLE_LOGINS_ATTEMPT_MESSAGE = "Attempting to login from a connection with an existing login"
+    private static final String MULTIPLE_LOGINS_ATTEMPT_MESSAGE =
+            "Attempting to login from a connection with an existing login"
             + ", logging out the other client";
     /**
      * Error message when invalid login occurs.
      */
-    private static final String BAD_CONNECTION_LOGIN_MESSAGE = "Attempting to login from a connection that doesn't exist";
+    private static final String BAD_CONNECTION_LOGIN_MESSAGE =
+            "Attempting to login from a connection that doesn't exist";
     /**
      * Error message when invalid logout occurs.
      */
-    private static final String BAD_CONNECTION_LOGOUT_MESSAGE = "Attempting to logout a connection that doesn't exist";
+    private static final String BAD_CONNECTION_LOGOUT_MESSAGE =
+            "Attempting to logout a connection that doesn't exist";
     /**
-     * Error message when invalid / unknown authentication message type is received.
+     * Error message when invalid / unknown
+     * authentication message type is received.
      */
-    private static final String INVALID_AUTHENTICATION_MESSAGE_TYPE = "Received unknown / unsupported authentication message type";
+    private static final String INVALID_AUTHENTICATION_MESSAGE_TYPE =
+            "Received unknown / unsupported authentication message type";
+    /**
+     * Error message when registration received from client that is logged in.
+     */
+    private static final String REGISTER_FROM_EXISTING_LOGIN_ATTEMPT_MESSAGE =
+            "Attempting to register from a connection with an existing login"
+            + ", logging out the other client";
     /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger
             .getLogger(AuthServiceImpl.class);
+    
 
     /**
      *
@@ -93,6 +106,11 @@ public class AuthServiceImpl implements AuthService {
     */
     @Autowired
     private LoginAttemptDAO loginAttemptDAO;
+    /**
+     * 
+     */
+    @Autowired
+    private RegistrationAttemptDAO registrationAttemptDAO;
 
     /**
      *
@@ -149,6 +167,21 @@ public class AuthServiceImpl implements AuthService {
                     accounts.remove(connections.remove(con));
                 }
                 break;
+            case REGISTER:
+                con = systemService.getConnection(src);
+                if (systemService.getConnection(src) == null) {
+                    logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
+                    systemService.processLostConnection(src);
+                } else {
+                    if (connections.containsKey(con)) {
+                        logger.log(Level.INFO,
+                                REGISTER_FROM_EXISTING_LOGIN_ATTEMPT_MESSAGE);
+                        accounts.remove(connections.remove(con));
+                    }
+                    processRegistrationAttempt(systemService.getConnection(src),
+                    data.getUsername(), data.getPassword(), data.getEmail());
+                }
+                break;
             default:
                 logger.log(Level.INFO, INVALID_AUTHENTICATION_MESSAGE_TYPE);
                 throw new UnsupportedOperationException();
@@ -189,8 +222,90 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
+     * @param con
+     * @param username
+     * @param password
+     * @param email
+     */
+    private void processRegistrationAttempt(Connection con,
+            String username, ByteString password, String email) {
+        // TODO Exceeded maximum registration attempts
+        HibernateUtils.beginTransaction();
+        Account account = accountDAO.findByUsername(username);
+        HibernateUtils.commitTransaction();
+        HibernateUtils.beginTransaction();
+        RegistrationAttempt attempt = new RegistrationAttempt();
+        attempt.setTime(System.currentTimeMillis());
+        attempt.setAccount(account);
+        attempt.setEmail(email);
+        attempt.setConnection(con.toString());
+        System.out.println(attempt.getTime());
+        registrationAttemptDAO.save(attempt);
+        HibernateUtils.commitTransaction();
+        if (account != null) {
+            processFailedRegistration(con, attempt);
+        } else {
+            HibernateUtils.beginTransaction();
+            account = new Account();
+            account.setUsername(username);
+            account.setPassword(password.toStringUtf8());
+            account.setEmail(email);
+            accountDAO.save(account);
+            HibernateUtils.commitTransaction();
+            processSuccesfulRegistration(con, attempt, account);
+        }
+    }
+
+    /**
+     * Handles a successful registration.
+     * @param con Connection
+     * @param attempt Attempt
+     * @param account Account
+     */
+    private void processSuccesfulRegistration(final Connection con,
+            final RegistrationAttempt attempt, final Account account) {
+        // TODO Any other post-registration steps? Email sign-up?
+        accounts.put(account, con);
+        ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.AUTH)
+                .setClientInfo(con.getClientInfo())
+                .setAuthData(
+                ServerMessage.AuthData
+                        .newBuilder()
+                        .setType(
+                        ServerMessage.AuthData.Type.REGISTRATION_SUCCESSFUL)
+                        .setUsername(account.getUsername()).build())
+                .build();
+        messageHandler.queueOutboundMessage(message);
+    }
+
+    /**
+     * Handles a registration attempt which matched an existing account.
+     * @param con
+     *            Connection
+     * @param attempt
+     *            RegistrationAttempt
+     */
+    private void processFailedRegistration(final Connection con,
+            final RegistrationAttempt attempt) {
+        con.addRegistrationAttempt(attempt);
+        ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.AUTH)
+                .setClientInfo(con.getClientInfo())
+                .setAuthData(
+                ServerMessage.AuthData
+                        .newBuilder()
+                        .setType(
+                        ServerMessage.AuthData.Type.REGISTRATION_FAILED)
+                        .setErrorMessage("Account already exists")
+                        .build()).build();
+        messageHandler.queueOutboundMessage(message);
+    }
+
+    /**
      * Handles a login attempt which didn't match an account.
-     * 
      * @param con
      *            Connection
      * @param attempt
@@ -243,7 +358,6 @@ public class AuthServiceImpl implements AuthService {
 
     /**
      * Handle a failed login against an account.
-     * 
      * @param con
      *            Connection
      * @param account
@@ -260,11 +374,11 @@ public class AuthServiceImpl implements AuthService {
                 .setType(ServerMessage.Type.AUTH)
                 .setClientInfo(con.getClientInfo())
                 .setAuthData(
-                        ServerMessage.AuthData
-                                .newBuilder()
-                                .setType(
-                                        ServerMessage.AuthData.Type.LOGIN_FAILED)
-                                .build()).build();
+                ServerMessage.AuthData
+                        .newBuilder()
+                        .setType(
+                                ServerMessage.AuthData.Type.LOGIN_FAILED)
+                        .build()).build();
         messageHandler.queueOutboundMessage(message);
     }
 
