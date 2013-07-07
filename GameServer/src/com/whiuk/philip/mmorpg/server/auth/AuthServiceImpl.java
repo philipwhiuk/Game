@@ -202,6 +202,7 @@ public class AuthServiceImpl implements AuthService {
                         .newBuilder()
                         .setType(
                         ServerMessage.AuthData.Type.LOGIN_FAILED)
+                        .setErrorMessage("Invalid username / password")
                         .build()).build();
         messageHandler.queueOutboundMessage(message);
     }
