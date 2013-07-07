@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import com.whiuk.philip.mmorpg.serverShared.Account;
 
@@ -14,29 +17,39 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
  */
 @Entity
 public class ChatChannel {
+    /**
+     * ID.
+     */
+    @Id @GeneratedValue
+    private int id;
 
     /**
-     * Member privileges
+     * Member privileges.
      */
+    @Transient
+    //TODO: Un-transient this field.
     private Map<Account, ChannelPriveleges> members;
+
     /**
-     * Members currently online
+     * Members currently online.
      */
+    @Transient
     private Set<Account> online;
+
     /**
-     * 
+     * Whether the channel is system or user controlled.
      */
     private boolean systemChannel;
 
     /**
-     * 
+     *
      */
     public ChatChannel() {
 
     }
 
     /**
-     * 
+     *
      */
     public final boolean allowOfflineMessages() {
         return false;
