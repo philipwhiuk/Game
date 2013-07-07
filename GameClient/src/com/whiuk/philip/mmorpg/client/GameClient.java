@@ -107,7 +107,7 @@ public class GameClient {
     private ClientChannelHandler channelHandler;
 
     /**
-     * Client ID
+     * Client ID.
      */
     private int clientID;
 
@@ -155,6 +155,10 @@ public class GameClient {
      *
      */
     private LobbyScreen lobbyScreen;
+
+    private Account account;
+
+    private GameCharacter character;
 
     /**
      * Class logger.
@@ -624,7 +628,7 @@ public class GameClient {
      * Handle a System message from the server.
      * @param message Message
      */
-    public void handleSystemMessage(final ServerMessage message) {
+    public final void handleSystemMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
@@ -633,7 +637,7 @@ public class GameClient {
      * Handle a Game message from the server.
      * @param message Message
      */
-    public void handleGameMessage(final ServerMessage message) {
+    public final void handleGameMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
@@ -642,7 +646,7 @@ public class GameClient {
      * Handle a chat message from the server.
      * @param message Message
      */
-    public void handleChatMessage(final ServerMessage message) {
+    public final void handleChatMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
@@ -661,8 +665,15 @@ public class GameClient {
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        switchToLobbyScreen();
-                        state = State.LOBBY;
+                        if (!message.getAuthData().hasUsername()) {
+                            LOGGER.error("Username not provided, failed login");
+                            loginScreen.loginFailed("Server error occurred");
+                        } else {
+                            account = new Account(
+                                    message.getAuthData().getUsername());
+                            switchToLobbyScreen();
+                            state = State.LOBBY;
+                        }
                         break;
                     case EXTRA_AUTH_FAILED:
                         loginScreen.handleExtraAuthFailed();
@@ -690,7 +701,9 @@ public class GameClient {
             case LOBBY:
                 switch (message.getAuthData().getType()) {
                     case LOGOUT_SUCCESSFUL:
-                        // TODO: Switch to login state
+                        account = null;
+                        switchToLoginScreen();
+                        state = State.LOGIN;
                         break;
                     default:
                         LOGGER.info("Auth message type " + type
@@ -700,7 +713,10 @@ public class GameClient {
             case GAME: // Game
                 switch (message.getAuthData().getType()) {
                     case LOGOUT_SUCCESSFUL:
-                        // TODO: Switch to login state
+                        account = null;
+                        character = null;
+                        switchToLoginScreen();
+                        state = State.LOGIN;
                         break;
                     default:
                         LOGGER.info("Auth message type " + type
@@ -758,7 +774,7 @@ public class GameClient {
     }
 
     /**
-     *
+     * Switch from the previous screen to the account registration screen.
      */
     public final void switchToRegisterScreen() {
         registerScreen = new RegisterScreen(this);
@@ -766,10 +782,22 @@ public class GameClient {
         nifty.fromXml("registerScreen.xml", "start");
     }
 
+    /**
+     * Switch from the previous screen to the lobby screen.
+     */
     private void switchToLobbyScreen() {
         lobbyScreen = new LobbyScreen(this);
         nifty.registerScreenController(lobbyScreen);
         nifty.fromXml("lobbyScreen.xml", "start");
+    }
+
+    /**
+     * Switch from the previous screen to the login screen.
+     */
+    private void switchToLoginScreen() {
+        loginScreen = new LoginScreen(this);
+        nifty.registerScreenController(loginScreen);
+        nifty.fromXml("loginScreen.xml", "start");
     }
 
     /**
