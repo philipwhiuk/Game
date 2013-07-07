@@ -13,6 +13,9 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
 @Service
 public class ChatServiceImpl implements ChatService {
 
+    /**
+     * Mapping of channels by ID.
+     */
     private Map<Integer, ChatChannel> channels;
 
     @Override
