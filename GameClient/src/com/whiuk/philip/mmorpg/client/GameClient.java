@@ -836,7 +836,7 @@ public class GameClient {
                 .setClientInfo(gameClient.getClientInfo())
                 .setAuthData(
                         AuthData.newBuilder()
-                                .setType(AuthData.AccountDataType.LOGIN)
+                                .setType(AuthData.AccountDataType.REGISTER)
                                 .setUsername(username)
                                 .setPassword(ByteString.copyFrom(hash))
                                 .setEmail(email).build()).build());
