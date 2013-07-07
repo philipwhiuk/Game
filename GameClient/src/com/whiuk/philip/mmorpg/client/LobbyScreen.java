@@ -4,6 +4,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.elements.Element;
+import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -68,8 +69,8 @@ public class LobbyScreen implements ScreenController {
      *
      */
     protected void sendMessage() {
-        // TODO Auto-generated method stub
-
+        gameClient.sendChatMessage(textInputMessage.getRenderer(TextRenderer.class).getOriginalText());
+        textInputMessage.getRenderer(TextRenderer.class).setText("");
     }
 
     @Override

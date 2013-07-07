@@ -40,6 +40,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.AuthData.Type;
 
 import de.lessvoid.nifty.Nifty;
@@ -159,6 +160,8 @@ public class GameClient {
     private Account account;
 
     private GameCharacter character;
+
+    private Game game;
 
     /**
      * Class logger.
@@ -639,7 +642,6 @@ public class GameClient {
      */
     public final void handleGameMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
-
     }
 
     /**
@@ -647,8 +649,13 @@ public class GameClient {
      * @param message Message
      */
     public final void handleChatMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
-
+        if (state.equals(State.LOBBY)) {
+            lobbyScreen.handleChatMessage(message);
+        } else if (state.equals(State.GAME)) {
+            game.handleChatMessage(message);
+        } else {
+            LOGGER.info("Chat message recieved in invalid state: " + state);
+        }
     }
 
     /**
@@ -751,8 +758,9 @@ public class GameClient {
     }
 
     /**
+     * Attempts a login.
      * @param username Username
-     * @param password
+     * @param password Password (plain)
      */
     public final void attemptLogin(final String username, final String password) {
         byte[] hash;
@@ -764,7 +772,7 @@ public class GameClient {
         sendOutboundMessage(ClientMessage
                 .newBuilder()
                 .setType(ClientMessage.Type.AUTH)
-                .setClientInfo(gameClient.getClientInfo())
+                .setClientInfo(getClientInfo())
                 .setAuthData(
                         AuthData.newBuilder()
                                 .setType(AuthData.AccountDataType.LOGIN)
@@ -804,8 +812,8 @@ public class GameClient {
      * Attempt to register an account.
      * 
      * @param username Username
-     * @param password
-     * @param email
+     * @param password Password (plain)
+     * @param email Email
      */
     public final void attemptRegister(final String username,
             final String password, final String email) {
@@ -825,5 +833,22 @@ public class GameClient {
                                 .setUsername(username)
                                 .setPassword(ByteString.copyFrom(hash))
                                 .setEmail(email).build()).build());
+    }
+
+
+    /**
+     * Helper method to remove server message
+     * handling code from implementations.
+     * @param message Chat message to send to server
+     */
+    public final void sendChatMessage(final String message) {
+        sendOutboundMessage(ClientMessage
+                .newBuilder()
+                .setType(ClientMessage.Type.CHAT)
+                .setClientInfo(gameClient.getClientInfo())
+                .setChatData(ChatData.newBuilder()
+                        .setMessage(message)
+                        .build())
+                .build());
     }
 }
