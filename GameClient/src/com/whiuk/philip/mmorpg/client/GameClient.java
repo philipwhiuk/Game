@@ -202,9 +202,24 @@ public class GameClient {
     private static final boolean FULLSCREEN = false;
 
     /**
-     *
+     * Bits per pixel.
      */
-    private static final int LAST_HANDLER = 100;
+    private static final int BITS_PER_PIXEL = 32;
+
+    /**
+     * Viewport buffer size.
+     */
+    private static final int VIEWPORT_BUFFERSIZE = 4 * 4;
+
+    /**
+     * Viewport buffer - width index.
+     */
+    private static final int VIEWPORT_WIDTH_INDEX = 2;
+
+    /**
+     * Viewport buffer - height index.
+     */
+    private static final int VIEWPORT_HEIGHT_INDEX = 3;
 
     /**
      * Bean constructor.
@@ -305,7 +320,7 @@ public class GameClient {
         for (int i = 0; i < modes.length; i++) {
             DisplayMode mode = modes[i];
             if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT
-                    && mode.getBitsPerPixel() == 32) {
+                    && mode.getBitsPerPixel() == BITS_PER_PIXEL) {
                 LOGGER.info(mode.getWidth() + ", " + mode.getHeight() + ", "
                         + mode.getBitsPerPixel() + ", " + mode.getFrequency());
                 matching.add(mode);
@@ -379,10 +394,10 @@ public class GameClient {
      * Setup OpenGL.
      */
     private void setupOpenGL() {
-        IntBuffer viewportBuffer = BufferUtils.createIntBuffer(4 * 4);
+        IntBuffer viewportBuffer = BufferUtils.createIntBuffer(VIEWPORT_BUFFERSIZE);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
-        int viewportWidth = viewportBuffer.get(2);
-        int viewportHeight = viewportBuffer.get(3);
+        int viewportWidth = viewportBuffer.get(VIEWPORT_WIDTH_INDEX);
+        int viewportHeight = viewportBuffer.get(VIEWPORT_HEIGHT_INDEX);
 
         // GL11.glViewport(0, 0, Display.getDisplayMode().getWidth(),
         // Display.getDisplayMode().getHeight());
