@@ -670,21 +670,23 @@ public class GameClient {
      * @param message Message
      */
     public final void handleAuthMessage(final ServerMessage message) {
+        ServerMessage.AuthData data = message.getAuthData();
         Type type = message.getAuthData().getType();
+        
         switch (state) {
             case LOGIN:
-                switch (message.getAuthData().getType()) {
+                switch (type) {
                     case LOGIN_FAILED:
-                        loginScreen.loginFailed(message.getAuthData()
+                        loginScreen.loginFailed(data
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        if (!message.getAuthData().hasUsername()) {
+                        if (!data.hasUsername()) {
                             LOGGER.error("Username not provided, failed login");
                             loginScreen.loginFailed("Server error occurred");
                         } else {
                             account = new Account(
-                                    message.getAuthData().getUsername());
+                                    data.getUsername());
                             switchToLobbyScreen();
                             state = State.LOBBY;
                         }
@@ -698,10 +700,20 @@ public class GameClient {
                 }
                 break;
             case REGISTER: // Register Screen
-                switch (message.getAuthData().getType()) {
+                switch (data.getType()) {
                     case REGISTRATION_FAILED:
                         registerScreen.registrationFailed(message.getAuthData()
                                 .getErrorMessage());
+                        break;
+                    case REGISTRATION_SUCCESSFUL:
+                        if(!data.hasUsername()) {
+                            LOGGER.error("Username not provided, failed login");
+                            registerScreen.registrationFailed("Server error occurred");
+                        } else {
+                            switchToLoginScreen();
+                            loginScreen.setMessage("Account '"+data.getUsername()+"' succesfully registered.");
+                            state = State.LOGIN;
+                        }
                         break;
                     case LOGIN_SUCCESSFUL:
                         switchToLobbyScreen();
@@ -713,7 +725,7 @@ public class GameClient {
                 }
                 break;
             case LOBBY:
-                switch (message.getAuthData().getType()) {
+                switch (type) {
                     case LOGOUT_SUCCESSFUL:
                         account = null;
                         switchToLoginScreen();
@@ -725,7 +737,7 @@ public class GameClient {
                 }
                 break;
             case GAME: // Game
-                switch (message.getAuthData().getType()) {
+                switch (type) {
                     case LOGOUT_SUCCESSFUL:
                         account = null;
                         character = null;
@@ -742,7 +754,7 @@ public class GameClient {
                 break;
         }
     }
-
+//
     /**
      * @return client id
      */
@@ -796,6 +808,8 @@ public class GameClient {
         registerScreen = new RegisterScreen(this);
         nifty.registerScreenController(registerScreen);
         nifty.fromXml("registerScreen.xml", "start");
+        state = State.REGISTER;
+
     }
 
     /**
