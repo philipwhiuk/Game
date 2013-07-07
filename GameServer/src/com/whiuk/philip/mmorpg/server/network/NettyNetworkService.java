@@ -60,7 +60,7 @@ public class NettyNetworkService implements NetworkService {
 
     @Override
     public void sendMessage(final ServerMessage message) {
-
+        handler.writeMessage(message);
     }
 
 }
