@@ -38,6 +38,7 @@ import org.lwjgl.util.glu.GLU;
 import com.google.protobuf.ByteString;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
@@ -55,7 +56,6 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 public class GameClient {
     /**
      * Game states.
-     * 
      * @author Philip Whitehouse
      */
     public enum State {
@@ -157,10 +157,19 @@ public class GameClient {
      */
     private LobbyScreen lobbyScreen;
 
+    /**
+     * Account.
+     */
     private Account account;
 
+    /**
+     * Character.
+     */
     private GameCharacter character;
 
+    /**
+     * Game.
+     */
     private Game game;
 
     /**
@@ -317,7 +326,6 @@ public class GameClient {
 
     /**
      * Select LWJGL display mode.
-     * 
      * @throws LWJGLException Exception
      */
     private void selectDisplayMode() throws LWJGLException {
@@ -362,16 +370,12 @@ public class GameClient {
                     }
                 }
             });
-
-            for (int i = 0; i < matchingModes.length; i++) {
-                LOGGER.info("using fallback mode: "
-                        + matchingModes[i].getWidth() + ", "
-                        + matchingModes[i].getHeight() + ", "
-                        + matchingModes[i].getBitsPerPixel() + ", "
-                        + matchingModes[i].getFrequency());
-                Display.setDisplayMode(matchingModes[i]);
-                break;
-            }
+            LOGGER.info("using fallback mode: "
+                    + matchingModes[0].getWidth() + ", "
+                    + matchingModes[0].getHeight() + ", "
+                    + matchingModes[0].getBitsPerPixel() + ", "
+                    + matchingModes[0].getFrequency());
+            Display.setDisplayMode(matchingModes[0]);
         }
     }
 
@@ -445,7 +449,7 @@ public class GameClient {
     }
 
     /**
-     * @param e
+     * @param e Exception
      */
     private void handleInputException(final Exception e) {
         LOGGER.fatal("Failed to create input system", e);
@@ -472,7 +476,8 @@ public class GameClient {
                 ChannelPipeline p = Channels.pipeline();
                 p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
                 p.addLast("protobufDecoder",
-                        new ProtobufDecoder(ServerMessage.getDefaultInstance()));
+                        new ProtobufDecoder(
+                                ServerMessage.getDefaultInstance()));
                 p.addLast("frameEncoder",
                         new ProtobufVarint32LengthFieldPrepender());
                 p.addLast("protobufEncoder", new ProtobufEncoder());
@@ -487,9 +492,6 @@ public class GameClient {
         bootstrap.setOption("remoteAddress", remoteAddress);
         final ChannelFuture f = bootstrap.connect();
         f.addListener(new ChannelFutureListener() {
-
-            private String address;
-
             @Override
             public void operationComplete(final ChannelFuture future)
                     throws Exception {
@@ -497,7 +499,8 @@ public class GameClient {
                     LOGGER.info("Connection attempt cancelled");
                 } else if (!future.isSuccess()) {
                     channelHandler.logException(
-                            "Connection attempt unsuccesful", future.getCause());
+                            "Connection attempt unsuccesful",
+                            future.getCause());
                 } else {
                     channel = future.getChannel();
                 }
@@ -762,7 +765,8 @@ public class GameClient {
      * @param username Username
      * @param password Password (plain)
      */
-    public final void attemptLogin(final String username, final String password) {
+    public final void attemptLogin(
+            final String username, final String password) {
         byte[] hash;
         try {
             hash = sha256digest.digest(password.getBytes("UTF-8"));
@@ -794,7 +798,7 @@ public class GameClient {
      * Switch from the previous screen to the lobby screen.
      */
     private void switchToLobbyScreen() {
-        lobbyScreen = new LobbyScreen(this);
+        lobbyScreen = new LobbyScreen(this, account);
         nifty.registerScreenController(lobbyScreen);
         nifty.fromXml("lobbyScreen.xml", "start");
     }
@@ -849,6 +853,19 @@ public class GameClient {
                 .setChatData(ChatData.newBuilder()
                         .setMessage(message)
                         .build())
+                .build());
+    }
+
+    /**
+     * Select character.
+     * @param name
+     */
+    public final void sendGameMessage(final GameData data) {
+        sendOutboundMessage(ClientMessage
+                .newBuilder()
+                .setType(ClientMessage.Type.GAME)
+                .setClientInfo(gameClient.getClientInfo())
+                .setGameData(data)
                 .build());
     }
 }
