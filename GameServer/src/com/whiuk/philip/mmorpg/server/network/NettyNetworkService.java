@@ -32,6 +32,9 @@ public class NettyNetworkService implements NetworkService {
     @Autowired
     private NettyNetworkServiceHandler handler;
 
+    /**
+     * 
+     */
     private Channel channel;
 
     /**
@@ -59,7 +62,7 @@ public class NettyNetworkService implements NetworkService {
     }
 
     @Override
-    public void sendMessage(final ServerMessage message) {
+    public final void sendMessage(final ServerMessage message) {
         handler.writeMessage(message);
     }
 

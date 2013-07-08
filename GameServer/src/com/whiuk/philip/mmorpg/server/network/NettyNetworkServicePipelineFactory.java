@@ -3,10 +3,14 @@ package com.whiuk.philip.mmorpg.server.network;
 import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
-import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufDecoder;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufEncoder;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufVarint32FrameDecoder;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufVarint32LengthFieldPrepender;
 
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 
@@ -26,7 +30,8 @@ public class NettyNetworkServicePipelineFactory implements
     /**
      * @param h
      */
-    public NettyNetworkServicePipelineFactory(final NettyNetworkServiceHandler h) {
+    public NettyNetworkServicePipelineFactory(
+            final NettyNetworkServiceHandler h) {
         super();
         this.handler = h;
     }
