@@ -17,7 +17,6 @@ import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import com.whiuk.philip.mmorpg.server.GameServer.GameServerProperties;
@@ -40,11 +39,16 @@ public final class Main {
     /**
      *
      */
-    private static final String DEFAULT_PROPERTIES_FILENAME = "/etc/opt/philipwhiuk/gameServer.properties";
+    private static final String DEFAULT_PROPERTIES_FILENAME =
+            "/etc/opt/philipwhiuk/gameServer.properties";
     /**
      *
      */
     private static String propertiesFilename = DEFAULT_PROPERTIES_FILENAME;
+    /**
+     * 
+     */
+    private static ClassPathXmlApplicationContext context;
 
     /**
      * @param args
@@ -82,7 +86,7 @@ public final class Main {
             logger.log(Level.WARN, "Unable to read command line arguments", e);
         }
 
-        ApplicationContext context = new ClassPathXmlApplicationContext(
+        context = new ClassPathXmlApplicationContext(
                 "META-INF/beans.xml");
         BeanFactory factory = context;
         GameServer gameServer = (GameServer) factory.getBean("gameServer");
@@ -101,4 +105,12 @@ public final class Main {
         gameServer.setProperties(gsProp);
     }
 
+    /**
+     * 
+     * @param status
+     */
+    public static void exit(final int status) {
+        context.close();
+        System.exit(status);
+    }
 }
