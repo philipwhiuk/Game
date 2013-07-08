@@ -1,11 +1,22 @@
 package com.whiuk.philip.mmorpg.server.game.ai;
 import java.util.Queue;
 
-
+/**
+ * 
+ * @author Philip
+ *
+ */
 public class Plan {
-    Queue<AgentAction> actions;
-
-    public AgentAction getNextAction() {
+    /**
+     * 
+     */
+    private Queue<AgentAction> actions;
+    
+    /**
+     * 
+     * @return
+     */
+    public final AgentAction getNextAction() {
         return null;
         // TODO Auto-generated method stub
     }

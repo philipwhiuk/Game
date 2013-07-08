@@ -8,8 +8,9 @@ import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 /**
  * @author Philip Whitehouse
  */
-public class GameCharacterDAOImpl extends GenericDAOImpl<GameCharacter, Long> implements
-        GameCharacterDAO {
+public class GameCharacterDAOImpl
+    extends GenericDAOImpl<GameCharacter, Long>
+    implements GameCharacterDAO {
 
     @Override
     public final GameCharacter findByID(final Long id) {

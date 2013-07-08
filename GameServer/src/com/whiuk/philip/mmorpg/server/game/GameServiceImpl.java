@@ -10,10 +10,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.
+    ClientMessage.GameData;
+import com.whiuk.philip.mmorpg.shared.Messages.
+    ClientMessage.GameData.ActionInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.
+    ClientMessage.GameData.CombatInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.
+    ClientMessage.GameData.MovementInformation;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
@@ -62,6 +66,9 @@ public class GameServiceImpl implements GameService {
      * Game world.
      */
     private GameWorld gameWorld;
+    /**
+     * 
+     */
     private Random random;
 
     /**
@@ -76,7 +83,8 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public final void processMessage(final Account account, final GameData data) {
+    public final void processMessage(
+            final Account account, final GameData data) {
         if (data.getType() == GameData.Type.CHARACTER_SELECTION) {
             characterSelection(account, data);
         } else if (data.getType() == GameData.Type.EXIT) {
@@ -204,6 +212,8 @@ public class GameServiceImpl implements GameService {
                 use(character, actionInformation.getSource(),
                         actionInformation.getTarget());
                 break;
+            default:
+                throw new UnsupportedOperationException();
         }
     }
 
@@ -259,8 +269,8 @@ public class GameServiceImpl implements GameService {
      * @param source
      * @param target
      */
-    private void craft(GameCharacter character,
-            int source, int target) {
+    private void craft(final GameCharacter character,
+            final int source, final int target) {
         // TODO Auto-generated method stub
 
     }
@@ -286,7 +296,7 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public Random getRandom() {
+    public final Random getRandom() {
         return random;
     }
 

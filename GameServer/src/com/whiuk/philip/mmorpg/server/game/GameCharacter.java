@@ -38,7 +38,7 @@ public class GameCharacter {
      * @param a
      * @return
      */
-    public boolean canPerform(Action a) {
+    public final boolean canPerform(final Action a) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -48,7 +48,7 @@ public class GameCharacter {
      * @param i2id
      * @return
      */
-    public Item getItemById(int i2id) {
+    public final Item getItemById(final int i2id) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -58,7 +58,7 @@ public class GameCharacter {
      * @param a
      * @return
      */
-    public void doAction(Action a) {
+    public void doAction(final Action a) {
         // TODO Auto-generated method stub
         
     }

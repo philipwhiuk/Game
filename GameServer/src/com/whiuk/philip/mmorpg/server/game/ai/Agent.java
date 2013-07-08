@@ -3,26 +3,42 @@ import java.util.List;
 
 import com.whiuk.philip.mmorpg.server.game.Goal;
 
-
+/**
+ *
+ * @author Philip
+ *
+ */
 public abstract class Agent {
-    Plan plan;
-    List<Goal> goals;
-    
-    void update() {
+    /**
+     *
+     */
+    private Plan plan;
+    /**
+     *
+     */
+    private List<Goal> goals;
+    /**
+     *
+     */
+    public final void update() {
         if (planIsInvalid()) {
             replan();
         }
         plan.getNextAction().perform();
 
     }
-
+    /**
+     *
+     * @return
+     */
     private boolean planIsInvalid() {
         // TODO Auto-generated method stub
         return false;
     }
-
+    /**
+     *
+     */
     private void replan() {
         // TODO Auto-generated method stub
-        
     }
 }

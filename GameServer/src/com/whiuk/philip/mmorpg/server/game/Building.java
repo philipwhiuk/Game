@@ -1,5 +1,10 @@
 package com.whiuk.philip.mmorpg.server.game;
 
-public class Building {
+/**
+ *
+ * @author Philip
+ *
+ */
+public class Building extends Structure {
 
 }
