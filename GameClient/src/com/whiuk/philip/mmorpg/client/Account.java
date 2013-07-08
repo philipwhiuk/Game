@@ -7,12 +7,12 @@ package com.whiuk.philip.mmorpg.client;
  */
 public class Account {
     /**
-     * 
+     *
      */
     private String username;
 
     /**
-     * 
+     *
      * @param u Username
      */
     Account(final String u) {

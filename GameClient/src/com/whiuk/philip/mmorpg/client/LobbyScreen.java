@@ -9,8 +9,8 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage
     .GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
@@ -57,7 +57,7 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
-        textInputMessage = screen.findElementByName("text_input_message");
+        textInputMessage = screen.findElementByName("text_input");
     }
 
     @Override
@@ -88,9 +88,9 @@ public class LobbyScreen implements ScreenController {
         gameClient.sendChatData(
             ChatData.newBuilder()
             .setMessage(textInputMessage
-                .getRenderer(TextRenderer.class).getOriginalText())
+                .getControl(TextFieldControl.class).getRealText())
             .build());
-        textInputMessage.getRenderer(TextRenderer.class).setText("");
+        textInputMessage.getControl(TextFieldControl.class).setText("");
     }
 
     @Override

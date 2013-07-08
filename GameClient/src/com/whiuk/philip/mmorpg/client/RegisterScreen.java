@@ -46,11 +46,17 @@ public class RegisterScreen implements ScreenController {
      *
      */
     private int ordering;
+    /**
+     * 
+     */
     private int registrationFailures;
     /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger.getLogger(RegisterScreen.class);
+    /**
+     * 
+     */
     private static final int MAX_REGISTRATION_FAILURES = 0;
 
     /**
@@ -186,7 +192,7 @@ public class RegisterScreen implements ScreenController {
      * 
      * @param m message
      */
-    private void setMessage(String m) {
+    private void setMessage(final String m) {
         // TODO Auto-generated method stub
         
     }

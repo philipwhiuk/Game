@@ -136,7 +136,7 @@ public class LoginScreen implements ScreenController {
      * Set a message for the user.
      * @param m Message
      */
-    void setMessage(final String m) {
+    final void setMessage(final String m) {
         LOGGER.info("Setting message: " + m);
         // TODO Auto-generated method stub
     }

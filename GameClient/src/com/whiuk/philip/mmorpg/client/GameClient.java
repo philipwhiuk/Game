@@ -21,10 +21,14 @@ import org.jboss.netty.channel.ChannelPipeline;
 import org.jboss.netty.channel.ChannelPipelineFactory;
 import org.jboss.netty.channel.Channels;
 import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-import org.jboss.netty.handler.codec.protobuf.ProtobufDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufEncoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
-import org.jboss.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufDecoder;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufEncoder;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufVarint32FrameDecoder;
+import org.jboss.netty.handler.codec.protobuf.
+    ProtobufVarint32LengthFieldPrepender;
 import org.jboss.netty.util.HashedWheelTimer;
 import org.jboss.netty.util.Timer;
 import org.lwjgl.BufferUtils;
@@ -405,7 +409,8 @@ public class GameClient {
      * Setup OpenGL.
      */
     private void setupOpenGL() {
-        IntBuffer viewportBuffer = BufferUtils.createIntBuffer(VIEWPORT_BUFFERSIZE);
+        IntBuffer viewportBuffer = BufferUtils.
+                createIntBuffer(VIEWPORT_BUFFERSIZE);
         GL11.glGetInteger(GL11.GL_VIEWPORT, viewportBuffer);
         int viewportWidth = viewportBuffer.get(VIEWPORT_WIDTH_INDEX);
         int viewportHeight = viewportBuffer.get(VIEWPORT_HEIGHT_INDEX);
@@ -672,7 +677,7 @@ public class GameClient {
     public final void handleAuthMessage(final ServerMessage message) {
         ServerMessage.AuthData data = message.getAuthData();
         Type type = message.getAuthData().getType();
-        
+
         switch (state) {
             case LOGIN:
                 switch (type) {
@@ -700,29 +705,7 @@ public class GameClient {
                 }
                 break;
             case REGISTER: // Register Screen
-                switch (data.getType()) {
-                    case REGISTRATION_FAILED:
-                        registerScreen.registrationFailed(message.getAuthData()
-                                .getErrorMessage());
-                        break;
-                    case REGISTRATION_SUCCESSFUL:
-                        if(!data.hasUsername()) {
-                            LOGGER.error("Username not provided, failed login");
-                            registerScreen.registrationFailed("Server error occurred");
-                        } else {
-                            switchToLoginScreen();
-                            loginScreen.setMessage("Account '"+data.getUsername()+"' succesfully registered.");
-                            state = State.LOGIN;
-                        }
-                        break;
-                    case LOGIN_SUCCESSFUL:
-                        switchToLobbyScreen();
-                        state = State.LOBBY;
-                        break;
-                    default:
-                        LOGGER.info("Auth message type " + type
-                                + " recieved in invalid state: " + state);
-                }
+                handleAuthMessageInRegisterState(message, data, type);
                 break;
             case LOBBY:
                 switch (type) {
@@ -754,7 +737,41 @@ public class GameClient {
                 break;
         }
     }
-//
+
+    /**
+     * 
+     * @param message
+     * @param data
+     * @param type
+     */
+    private void handleAuthMessageInRegisterState(final ServerMessage message,
+            final ServerMessage.AuthData data, final Type type) {
+        switch (data.getType()) {
+            case REGISTRATION_FAILED:
+                registerScreen.registrationFailed(message.getAuthData()
+                        .getErrorMessage());
+                break;
+            case REGISTRATION_SUCCESSFUL:
+                if (!data.hasUsername()) {
+                    LOGGER.error("Username not provided, failed login");
+                    registerScreen.registrationFailed("Server error occurred");
+                } else {
+                    switchToLoginScreen();
+                    loginScreen.setMessage("Account '"
+                            + data.getUsername()
+                            + "' succesfully registered.");
+                    state = State.LOGIN;
+                }
+                break;
+            case LOGIN_SUCCESSFUL:
+                switchToLobbyScreen();
+                state = State.LOBBY;
+                break;
+            default:
+                LOGGER.info("Auth message type " + type
+                        + " recieved in invalid state: " + state);
+        }
+    }
     /**
      * @return client id
      */
@@ -807,7 +824,7 @@ public class GameClient {
     public final void switchToRegisterScreen() {
         registerScreen = new RegisterScreen(this);
         nifty.registerScreenController(registerScreen);
-        nifty.fromXml("registerScreen.xml", "start");
+        nifty.fromXml("registerScreen.xml", "register");
         state = State.REGISTER;
 
     }
@@ -818,7 +835,8 @@ public class GameClient {
     private void switchToLobbyScreen() {
         lobbyScreen = new LobbyScreen(this, account);
         nifty.registerScreenController(lobbyScreen);
-        nifty.fromXml("lobbyScreen.xml", "start");
+        nifty.fromXml("lobbyScreen.xml", "lobby");
+        state = State.LOBBY;
     }
 
     /**

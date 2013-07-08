@@ -120,16 +120,16 @@ public class ClientChannelHandler extends SimpleChannelHandler {
                 .setMacAddress(ByteString.copyFrom(macAddress)).build();
 
         ctx.getChannel()
-                .write(ClientMessage
+        .write(ClientMessage
+                .newBuilder()
+                .setClientInfo(clientInfo)
+                .setType(ClientMessage.Type.SYSTEM)
+                .setSystemData(
+                ClientMessage.SystemData
                         .newBuilder()
-                        .setClientInfo(clientInfo)
-                        .setType(ClientMessage.Type.SYSTEM)
-                        .setSystemData(
-                                ClientMessage.SystemData
-                                        .newBuilder()
-                                        .setType(
-                                                ClientMessage.SystemData.Type.CONNECTED)
-                                        .build()).build());
+                        .setType(
+                                ClientMessage.SystemData.Type.CONNECTED)
+                        .build()).build());
         client.setClientInfo(clientInfo);
         client.setChannel(ctx.getChannel());
     }
