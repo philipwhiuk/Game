@@ -62,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private static final Logger LOGGER = Logger
             .getLogger(AuthServiceImpl.class);
+    private static final Object MISSING_LOGIN_DATA_MESSAGE = null;
     /**
      *
      */
@@ -199,19 +200,25 @@ public class AuthServiceImpl implements AuthService {
     private void processLoginMessage(
             final ClientInfo src, final AuthData data) {
         Connection con;
-        // Handle trying to login twice from the same source.
+        
         con = systemService.getConnection(src);
-        if (systemService.getConnection(src) == null) {
+        //Handle logging in from disconnected client.
+        if (con == null) {
             logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
             systemService.processLostConnection(src);
         } else {
+            //Handle already logged in
             if (connections.containsKey(con)) {
                 logger.log(Level.INFO, MULTIPLE_LOGINS_ATTEMPT_MESSAGE);
-                accounts.remove(connections.remove(con));
+                performLogout(connections.get(con));
             }
-            processValidLoginAttempt(systemService.getConnection(src),
-                    data.getUsername(),
-                    data.getPassword().toStringUtf8());
+            if (!data.hasUsername() || !data.hasPassword()) {
+                logger.log(Level.INFO, MISSING_LOGIN_DATA_MESSAGE);
+            } else {
+                processLoginAttempt(systemService.getConnection(src),
+                        data.getUsername(),
+                        data.getPassword().toStringUtf8());
+            }
         }
     }
 
@@ -223,7 +230,7 @@ public class AuthServiceImpl implements AuthService {
      * @param byteString
      *            Password
      */
-    private void processValidLoginAttempt(final Connection con,
+    private void processLoginAttempt(final Connection con,
             final String username, final String password) {
         // TODO Exceeded maximum login attempts
         HibernateUtils.beginTransaction();
@@ -291,7 +298,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processSuccesfulRegistration(final Connection con,
             final RegistrationAttempt attempt, final Account account) {
-        // TODO Any other post-registration steps? Email sign-up?
+        // TODO Any other post-registration steps?
         try {
             emailService.sendRegistrationEmail(account);
         } catch (InvalidEmailException e) {
@@ -421,11 +428,19 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public final void notifyDisconnection(final Connection con) {
         if (connections.containsKey(con)) {
-            Account account = connections.remove(con);
-            accounts.remove(account);
-            chatService.notifyLogout(account);
-            gameService.notifyLogout(account);
+            performLogout(connections.get(con));
         }
+    }
+
+    /**
+     * 
+     * @param account
+     */
+    private void performLogout(final Account account) {
+        connections.remove(accounts.remove(account));
+        //TODO: Consider event listener model
+        chatService.notifyLogout(account);
+        gameService.notifyLogout(account);
     }
 
 }
