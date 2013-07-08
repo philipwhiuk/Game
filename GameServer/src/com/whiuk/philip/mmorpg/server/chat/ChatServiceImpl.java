@@ -47,8 +47,8 @@ public class ChatServiceImpl implements ChatService {
      * @param message Message contents
      * @param target Target
      */
-    private void handlePrivateMessage(Account src, String message,
-            String target) {
+    private void handlePrivateMessage(final Account src, final String message,
+            final String target) {
         // TODO Auto-generated method stub
     }
 

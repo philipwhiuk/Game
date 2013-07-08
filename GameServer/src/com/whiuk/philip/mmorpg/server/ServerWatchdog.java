@@ -20,7 +20,9 @@ public class ServerWatchdog implements Runnable {
     /**
      *
      */
-    private static final String THREAD_EXCEEDED_WARNING_TIME = "Watched thread '%s' exceeded warning time, last notified %sms ago.";
+    private static final String THREAD_EXCEEDED_WARNING_TIME =
+            "Watched thread '%s' exceeded warning time, "
+            + "last notified %sms ago.";
 
     /**
      *

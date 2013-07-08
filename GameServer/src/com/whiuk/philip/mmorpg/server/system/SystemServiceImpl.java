@@ -80,7 +80,8 @@ public class SystemServiceImpl implements SystemService {
             connect(connections.get(clientInfo));
         } else {
             LOGGER.info("New client connected  <" + clientInfo + "> ");
-            Connection con = new Connection(clientInfo, System.nanoTime(), true);
+            Connection con = new Connection(clientInfo,
+                    System.nanoTime(), true);
             connections.put(clientInfo, con);
             clients.put(con, clientInfo);
         }

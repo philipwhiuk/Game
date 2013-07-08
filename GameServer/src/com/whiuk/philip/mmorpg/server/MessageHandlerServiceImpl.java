@@ -160,15 +160,15 @@ public class MessageHandlerServiceImpl implements MessageHandlerService {
     @Override
     public final void handleUnknownMessageType(final ClientInfo clientInfo) {
         ServerMessage response = ServerMessage
+        .newBuilder()
+        .setClientInfo(clientInfo)
+        .setType(ServerMessage.Type.SYSTEM)
+        .setSystemData(
+        ServerMessage.SystemData
                 .newBuilder()
-                .setClientInfo(clientInfo)
-                .setType(ServerMessage.Type.SYSTEM)
-                .setSystemData(
-                        ServerMessage.SystemData
-                                .newBuilder()
-                                .setType(
-                                        ServerMessage.SystemData.Type.UNKNOWN_MESSAGE_TYPE)
-                                .build()).build();
+                .setType(
+                ServerMessage.SystemData.Type.UNKNOWN_MESSAGE_TYPE)
+                .build()).build();
         outbound.add(response);
     }
 
