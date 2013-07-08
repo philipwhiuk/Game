@@ -8,13 +8,14 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.google.protobuf.ByteString;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.chat.ChatService;
+import com.whiuk.philip.mmorpg.server.email.EmailService;
+import com.whiuk.philip.mmorpg.server.email.InvalidEmailException;
 import com.whiuk.philip.mmorpg.server.game.GameService;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.server.system.SystemService;
@@ -61,8 +62,6 @@ public class AuthServiceImpl implements AuthService {
      */
     private static final Logger LOGGER = Logger
             .getLogger(AuthServiceImpl.class);
-    
-
     /**
      *
      */
@@ -107,11 +106,14 @@ public class AuthServiceImpl implements AuthService {
     @Autowired
     private LoginAttemptDAO loginAttemptDAO;
     /**
-     * 
+     *
      */
     @Autowired
     private RegistrationAttemptDAO registrationAttemptDAO;
-
+    /**
+     *
+     */
+    private EmailService emailService;
     /**
      *
      */
@@ -137,54 +139,79 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public final void processMessage(final ClientInfo src, final AuthData data) {
+    public final void processMessage(
+            final ClientInfo src, final AuthData data) {
         Connection con;
         LOGGER.info("Processing authentication message");
         switch (data.getType()) {
             case LOGIN:
-                // Handle trying to login twice from the same source.
-                con = systemService.getConnection(src);
-                if (systemService.getConnection(src) == null) {
-                    logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
-                    systemService.processLostConnection(src);
-                } else {
-                    if (connections.containsKey(con)) {
-                        logger.log(Level.INFO, MULTIPLE_LOGINS_ATTEMPT_MESSAGE);
-                        accounts.remove(connections.remove(con));
-                    }
-                    processLoginAttempt(systemService.getConnection(src),
-                            data.getUsername(), data.getPassword());
-                }
+                processLoginMessage(src, data);
                 break;
             case LOGOUT:
                 con = systemService.getConnection(src);
                 if (systemService.getConnection(src) == null) {
                     logger.log(Level.INFO, BAD_CONNECTION_LOGOUT_MESSAGE);
                 } else {
-                    /*
-                     * Remove the c->a and a->c mapping
-                     */
+                    // Remove the c->a and a->c mapping
                     accounts.remove(connections.remove(con));
                 }
                 break;
             case REGISTER:
-                con = systemService.getConnection(src);
-                if (systemService.getConnection(src) == null) {
-                    logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
-                    systemService.processLostConnection(src);
-                } else {
-                    if (connections.containsKey(con)) {
-                        logger.log(Level.INFO,
-                                REGISTER_FROM_EXISTING_LOGIN_ATTEMPT_MESSAGE);
-                        accounts.remove(connections.remove(con));
-                    }
-                    processRegistrationAttempt(systemService.getConnection(src),
-                    data.getUsername(), data.getPassword(), data.getEmail());
-                }
+                processRegisterMessage(src, data);
                 break;
             default:
                 logger.log(Level.INFO, INVALID_AUTHENTICATION_MESSAGE_TYPE);
                 throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     *
+     * @param src
+     * @param data
+     */
+    private void processRegisterMessage(final ClientInfo src,
+            final AuthData data) {
+        Connection con;
+        con = systemService.getConnection(src);
+        if (systemService.getConnection(src) == null) {
+            logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
+            systemService.processLostConnection(src);
+        } else {
+            if (connections.containsKey(con)) {
+                logger.log(Level.INFO,
+                        REGISTER_FROM_EXISTING_LOGIN_ATTEMPT_MESSAGE);
+                accounts.remove(connections.remove(con));
+            }
+            processRegistrationAttempt(
+                    systemService.getConnection(src),
+                    data.getUsername(),
+                    data.getPassword().toStringUtf8(),
+                    data.getEmail());
+        }
+    }
+
+    /**
+     *
+     * @param src
+     * @param data
+     */
+    private void processLoginMessage(
+            final ClientInfo src, final AuthData data) {
+        Connection con;
+        // Handle trying to login twice from the same source.
+        con = systemService.getConnection(src);
+        if (systemService.getConnection(src) == null) {
+            logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
+            systemService.processLostConnection(src);
+        } else {
+            if (connections.containsKey(con)) {
+                logger.log(Level.INFO, MULTIPLE_LOGINS_ATTEMPT_MESSAGE);
+                accounts.remove(connections.remove(con));
+            }
+            processValidLoginAttempt(systemService.getConnection(src),
+                    data.getUsername(),
+                    data.getPassword().toStringUtf8());
         }
     }
 
@@ -196,8 +223,8 @@ public class AuthServiceImpl implements AuthService {
      * @param byteString
      *            Password
      */
-    private void processLoginAttempt(final Connection con,
-            final String username, final ByteString byteString) {
+    private void processValidLoginAttempt(final Connection con,
+            final String username, final String password) {
         // TODO Exceeded maximum login attempts
         HibernateUtils.beginTransaction();
         Account account = accountDAO.findByUsername(username);
@@ -211,7 +238,7 @@ public class AuthServiceImpl implements AuthService {
         loginAttemptDAO.save(attempt);
         HibernateUtils.commitTransaction();
         if (account != null) {
-            if (!account.getPassword().equals(byteString.toStringUtf8())) {
+            if (!account.getPassword().equals(password)) {
                 processFailedLogin(con, attempt, account);
             } else {
                 processSuccesfulLogin(con, attempt, account);
@@ -227,8 +254,8 @@ public class AuthServiceImpl implements AuthService {
      * @param password
      * @param email
      */
-    private void processRegistrationAttempt(Connection con,
-            String username, ByteString password, String email) {
+    private void processRegistrationAttempt(final Connection con,
+            final String username, final String password, final String email) {
         // TODO Exceeded maximum registration attempts
         HibernateUtils.beginTransaction();
         Account account = accountDAO.findByUsername(username);
@@ -248,7 +275,7 @@ public class AuthServiceImpl implements AuthService {
             HibernateUtils.beginTransaction();
             account = new Account();
             account.setUsername(username);
-            account.setPassword(password.toStringUtf8());
+            account.setPassword(password);
             account.setEmail(email);
             accountDAO.save(account);
             HibernateUtils.commitTransaction();
@@ -265,6 +292,15 @@ public class AuthServiceImpl implements AuthService {
     private void processSuccesfulRegistration(final Connection con,
             final RegistrationAttempt attempt, final Account account) {
         // TODO Any other post-registration steps? Email sign-up?
+        try {
+            emailService.sendRegistrationEmail(account);
+        } catch (InvalidEmailException e) {
+            HibernateUtils.beginTransaction();
+            account.setEmailInvalid(true);
+            accountDAO.save(account);
+            HibernateUtils.commitTransaction();
+        }
+
         accounts.put(account, con);
         ServerMessage message = ServerMessage
                 .newBuilder()

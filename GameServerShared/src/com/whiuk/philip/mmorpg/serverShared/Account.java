@@ -35,6 +35,10 @@ public class Account {
      * 
      */
     private String email;
+    /**
+     * 
+     */
+    private boolean emailInvalid;
 
     /**
      * @param nanoTime
@@ -85,5 +89,13 @@ public class Account {
      */
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    /**
+     * 
+     * @param b true if the email address is invalid.
+     */
+    public void setEmailInvalid(boolean b) {
+        this.emailInvalid = b;
     }
 }
