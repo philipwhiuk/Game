@@ -17,53 +17,44 @@ import com.whiuk.philip.mmorpg.server.network.NetworkService;
 @Service
 public class GameServer {
     /**
-	 *
+	 * The watchdog for the game server.
 	 */
     private ServerWatchdog watchdog;
     /**
-     *
+     * Network connection service.
      */
     @Autowired
     private NetworkService networkService;
     /**
-    *
+    * Message handling service.
     */
     @Autowired
     private MessageHandlerService messageHandlerService;
     /**
-     *
+     * Alarms service.
      */
     @Autowired
     private AlarmsService alarmsService;
 
     /**
+     * Provides a way to load properties.
      * @author Philip
      */
-    public static class GameServerProperties {
+    public static class GameServerProperties extends Properties {
         /**
-         *
+         * Serial version UID.
          */
-        private static final int PORT = 8443;
+        private static final long serialVersionUID = 1L;
         /**
-         *
+         * Default listening port for server.
          */
-        private int port;
-
+        private static final String DEFALT_PORT = "8443";
         /**
          *
          */
         public GameServerProperties() {
-
-        }
-
-        /**
-         * @param prop
-         *            Key-value properties
-         */
-        public GameServerProperties(final Properties prop) {
-            if (prop.containsKey("port")) {
-                this.port = Integer.parseInt(prop.getProperty("port"));
-            }
+            super();
+            setProperty("port", DEFALT_PORT);
         }
     }
 
@@ -93,5 +84,12 @@ public class GameServer {
      */
     public final void setProperties(final GameServerProperties gsProp) {
         this.properties = gsProp;
+    }
+
+    /**
+     * @return properties
+     */
+    public final GameServerProperties getProperties() {
+        return this.properties;
     }
 }

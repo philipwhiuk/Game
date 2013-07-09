@@ -13,6 +13,7 @@ import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.whiuk.philip.mmorpg.server.GameServer;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 /**
@@ -20,17 +21,16 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  */
 @Service
 public class NettyNetworkService implements NetworkService {
-
-    /**
-     * Default listening port for server.
-     */
-    private static final int PORT = 8443;
-
     /**
 	 *
 	 */
     @Autowired
     private NettyNetworkServiceHandler handler;
+    /**
+    * Game Server
+    */
+   @Autowired
+   private GameServer gameServer;
 
     /**
      * 
@@ -58,7 +58,11 @@ public class NettyNetworkService implements NetworkService {
                 handler));
         bootstrap.setOption("child.tcpNoDelay", true);
         bootstrap.setOption("child.keepAlive", true);
-        channel = bootstrap.bind(new InetSocketAddress(PORT));
+        channel = bootstrap.bind(
+                new InetSocketAddress(
+                    Integer.parseInt(
+                            gameServer.getProperties().getProperty("port"))
+                ));
     }
 
     @Override
