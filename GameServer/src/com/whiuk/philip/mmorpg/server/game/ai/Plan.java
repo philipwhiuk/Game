@@ -16,8 +16,18 @@ public class Plan {
      * 
      * @return
      */
-    public final AgentAction getNextAction() {
+    public final AgentAction getFirstAction() {
         return null;
         // TODO Auto-generated method stub
+    }
+
+    public void setActions(Queue<AgentAction> fullList) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    public void removeFirstAction() {
+        // TODO Auto-generated method stub
+        
     }
 }
