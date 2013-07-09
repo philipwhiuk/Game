@@ -11,6 +11,10 @@ import com.whiuk.philip.mmorpg.server.game.ai.Requirement;
  */
 public interface Goal {
 
+    /**
+     * 
+     * @return
+     */
     List<Requirement> getRequirements();
 
 }
