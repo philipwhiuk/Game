@@ -90,19 +90,16 @@ public final class Main {
                 "META-INF/beans.xml");
         BeanFactory factory = context;
         GameServer gameServer = (GameServer) factory.getBean("gameServer");
-        GameServerProperties gsProp;
+        GameServerProperties prop  = new GameServerProperties();
         File file = new File(propertiesFilename);
         try {
-            Properties prop = new Properties();
             prop.load(new FileReader(file));
-            gsProp = new GameServerProperties(prop);
         } catch (Exception e) {
             System.out.println(file.getAbsolutePath());
             logger.log(Level.WARN, "Error reading properties file: "
                     + propertiesFilename, e);
-            gsProp = new GameServerProperties();
         }
-        gameServer.setProperties(gsProp);
+        gameServer.setProperties(prop);
     }
 
     /**
