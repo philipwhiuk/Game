@@ -2,12 +2,14 @@ package com.whiuk.philip.mmorpg.server.game;
 
 import java.util.List;
 
+import com.whiuk.philip.mmorpg.server.game.ai.Environment;
+
 /**
  * Zone.
  * @author Philip
  *
  */
-public class Zone {
+public class Zone implements Environment {
     /**
      * 
      */

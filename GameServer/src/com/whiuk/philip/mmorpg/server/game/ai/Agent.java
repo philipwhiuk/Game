@@ -11,11 +11,36 @@ import java.util.Set;
 import com.whiuk.philip.mmorpg.server.game.Goal;
 
 /**
- *
+ * An Agent is an intelligent computer system that is situated in
+ * some {@link Environment}, and that is capable of autonomous
+ * action ({@link AgentAction}s) in this {@link Environment}
+ * in order to meet it's delegated objectives ({@link Goal}s).
+ * <p>Description from:</p>
+ * <p>
+ * [Wooldridge and Jennings, 1995]
+ * Intelligent agents: Theory and practice,
+ * The Knowledge Engineering Review, 10(2):115-152
+ * </p>
+ * <p>via</p>
+ * <p>
+ * [Wooldridge, 2009]
+ * An Introduction to MultiAgent Systems (John Wiley & Sons Ltd.)
+ * </p>
+ * <p>The actual implementation here draws on mainly deductive reasoning.
+ * There's no use of beliefs or sensors here. It would be nice for the agent to
+ * maintain state on the world and update it's internal model.</p>
+ * <p>In practice this would likely involve a 'DerivedEnvironment' per Agent,
+ * with each Agent's DerivedEnvironment being updated by triggers
+ * from the real Environment. More intelligent agents would have more triggers
+ * (as well as more {@link AgentAction}s.</p>
  * @author Philip
  *
  */
 public abstract class Agent {
+    /**
+     * Environment.
+     */
+    private Environment environment;
     /**
      *
      */
@@ -25,7 +50,20 @@ public abstract class Agent {
      */
     private Set<Goal> goals;
     /**
-     *
+     * @param e new environment
+     */
+    public final void setEnvironment(final Environment e) {
+        environment = e;
+    }
+    /**
+    * @return environment
+    */
+    public final Environment getEnvironment() {
+        return environment;
+    }
+
+    /**
+     * Update the agent.
      */
     public final void update() {
         if (!planIsValid()) {
@@ -40,10 +78,10 @@ public abstract class Agent {
     }
     /**
      * Perform an action.
-     * @param firstAction
+     * @param action The action to perform
      * @return <code>true</code> if complete.
      */
-    abstract boolean perform(AgentAction firstAction);
+    abstract boolean perform(AgentAction action);
     /**
      * Checks whether the plan is still valid.
      * @return <code>true</code> if valid.
@@ -63,8 +101,8 @@ public abstract class Agent {
      */
     private void replan() {
         //Turn it into an array and sort it
-        Goal[] priortisedGoals = goals.toArray(new Goal[goals.size()]);
-         Arrays.sort(priortisedGoals,
+        Goal[] prioritisedGoals = goals.toArray(new Goal[goals.size()]);
+         Arrays.sort(prioritisedGoals,
                 new Comparator<Goal>() {
             @Override
             public int compare(final Goal o1, final Goal o2) {
@@ -79,7 +117,7 @@ public abstract class Agent {
          * TODO: Improve approach to solving multiple goals.
          */
         Queue<AgentAction> fullList = new ArrayDeque<AgentAction>();
-        for (Goal g: priortisedGoals) {
+        for (Goal g: prioritisedGoals) {
             fullList.addAll(solve(g));
         }
         plan = new Plan();
