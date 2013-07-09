@@ -2,7 +2,6 @@ package com.whiuk.philip.mmorpg.server.game.ai;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Queue;
@@ -81,7 +80,9 @@ public abstract class Agent {
      * @param action The action to perform
      * @return <code>true</code> if complete.
      */
-    abstract boolean perform(AgentAction action);
+    final boolean perform(final AgentAction action) {
+        return action.perform();
+    }
     /**
      * Checks whether the plan is still valid.
      * @return <code>true</code> if valid.
@@ -95,7 +96,10 @@ public abstract class Agent {
      * @param firstAction
      * @return <code>true</code> if it can be done.
      */
-    abstract boolean canPerform(AgentAction action);
+    final boolean canPerform(final AgentAction action) {
+        //TODO Auto-generated method stub
+        return true;
+    }
     /**
      * Replans the agent's actions based on current goals.
      */
