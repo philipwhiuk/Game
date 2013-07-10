@@ -50,11 +50,11 @@ public class GameServiceImpl implements GameService {
     /**
      * Character -> Account mapping.
      */
-    private Map<GameCharacter, Account> accounts;
+    private Map<PlayerCharacter, Account> accounts;
     /**
      * Account -> Character mapping.
      */
-    private Map<Account, GameCharacter> characters;
+    private Map<Account, PlayerCharacter> characters;
 
     /**
      * Watchdog service.
@@ -77,8 +77,8 @@ public class GameServiceImpl implements GameService {
     @PostConstruct
     public final void init() {
         gameWorld = GameWorld.load();
-        characters = new HashMap<Account, GameCharacter>();
-        accounts = new HashMap<GameCharacter, Account>();
+        characters = new HashMap<Account, PlayerCharacter>();
+        accounts = new HashMap<PlayerCharacter, Account>();
         watchdogService.monitor(gameWorld);
     }
 
@@ -181,7 +181,7 @@ public class GameServiceImpl implements GameService {
      * @param character
      * @param combatInformation
      */
-    private void combat(final GameCharacter character,
+    private void combat(final PlayerCharacter character,
             final CombatInformation combatInformation) {
         // TODO Auto-generated method stub
 
@@ -193,7 +193,7 @@ public class GameServiceImpl implements GameService {
      * @param character
      * @param actionInformation
      */
-    private void action(final GameCharacter character,
+    private void action(final PlayerCharacter character,
             final ActionInformation actionInformation) {
         switch (actionInformation.getAction()) {
             case CRAFT:
@@ -223,7 +223,7 @@ public class GameServiceImpl implements GameService {
      * @param i1ID
      * @param i2ID
      */
-    private void use(final GameCharacter character,
+    private void use(final PlayerCharacter character,
             final int i1ID, final int i2ID) {
         Item i1 = character.getItemById(i1ID);
         Item i2 = character.getItemById(i2ID);
@@ -246,7 +246,7 @@ public class GameServiceImpl implements GameService {
      * @param source
      * @param target
      */
-    private void smith(final GameCharacter character,
+    private void smith(final PlayerCharacter character,
             final int source, final int target) {
         // TODO Auto-generated method stub
 
@@ -258,7 +258,7 @@ public class GameServiceImpl implements GameService {
      * @param source
      * @param target
      */
-    private void mine(final GameCharacter character,
+    private void mine(final PlayerCharacter character,
             final int source, final int target) {
         // TODO Auto-generated method stub
     }
@@ -269,7 +269,7 @@ public class GameServiceImpl implements GameService {
      * @param source
      * @param target
      */
-    private void craft(final GameCharacter character,
+    private void craft(final PlayerCharacter character,
             final int source, final int target) {
         // TODO Auto-generated method stub
 
@@ -280,7 +280,7 @@ public class GameServiceImpl implements GameService {
      * @param character
      * @param movementInformation
      */
-    private void move(final GameCharacter character,
+    private void move(final PlayerCharacter character,
             final MovementInformation movementInformation) {
         // TODO Auto-generated method stub
 
@@ -289,7 +289,7 @@ public class GameServiceImpl implements GameService {
     @Override
     public final void notifyLogout(final Account account) {
         if (characters.containsKey(account)) {
-            GameCharacter c = characters.remove(account);
+            PlayerCharacter c = characters.remove(account);
             accounts.remove(c);
             c.logout();
         }

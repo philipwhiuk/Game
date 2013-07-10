@@ -1,5 +1,6 @@
 package com.whiuk.philip.mmorpg.server.game;
 import java.util.Map;
+import java.util.Set;
 
 import com.whiuk.philip.mmorpg.server.game.ai.Agent;
 
@@ -8,19 +9,23 @@ import com.whiuk.philip.mmorpg.server.game.ai.Agent;
  * @author Philip
  *
  */
-public class Tribe extends Agent {
+public class Tribe extends Agent implements GameCharacterGroup {
     /**
      * 
      */
-    private Map<Character, Relationship> characterRelationships;
+    private Map<GameCharacter, Relationship> characterRelationships;
     /**
      * 
      */
-    private Map<Tribe, Relationship> tribalRelationships;
+    private Map<GameCharacterGroup, Relationship> tribalRelationships;
     /**
      * 
      */
     private GameService gameService;
+    /**
+     * 
+     */
+    private Set<GameCharacter> members;
 
     /**
      * 
@@ -28,5 +33,16 @@ public class Tribe extends Agent {
      */
     final void assignPosition(final Character c) {
         gameService.getRandom().nextInt();
+    }
+
+    @Override
+    public void add(GameCharacter newMember) {
+        members.add(newMember);
+    }
+
+    @Override
+    public void remove(GameCharacter oldMember) {
+        members.remove(oldMember);
+        
     }
 }

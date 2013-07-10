@@ -6,17 +6,18 @@ import java.util.Map;
 import com.whiuk.philip.mmorpg.server.game.ai.Agent;
 
 /**
- * 
+ * Represents a non-player character
+ * (one controlled by the game server and not a player).
  * @author Philip
  *
  */
-public class NPC extends Agent {
+public class NPC extends Agent implements GameCharacter {
     /**
-     * 
+     * Relationships with other characters.
      */
-    private Map<NPC, Relationship> characterRelationships;
+    private Map<GameCharacter, Relationship> characterRelationships;
     /**
-     * 
+     * Relationships with tribes.
      */
     private Map<Tribe, Relationship> tribalRelationships;
     /**
