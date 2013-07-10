@@ -3,7 +3,7 @@ package com.whiuk.philip.mmorpg.server.auth;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.whiuk.philip.mmorpg.server.hibernate.GenericDAOImpl;
+import com.whiuk.philip.mmorpg.server.hibernate.HibernateDAO;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.serverShared.LoginAttempt;
 
@@ -12,7 +12,7 @@ import com.whiuk.philip.mmorpg.serverShared.LoginAttempt;
  * @author Philip Whitehouse
  */
 @Repository
-public class LoginAttemptDAOImpl extends GenericDAOImpl<LoginAttempt, Long>
+public class LoginAttemptHibernateDAO extends HibernateDAO<LoginAttempt, Long>
         implements LoginAttemptDAO {
     @Override
     public final LoginAttempt findByID(final Long id) {

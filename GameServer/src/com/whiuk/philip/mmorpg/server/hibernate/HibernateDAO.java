@@ -11,7 +11,7 @@ import org.hibernate.Session;
  * @param <T>
  * @param <ID>
  */
-public abstract class GenericDAOImpl<T, ID extends Serializable> implements
+public abstract class HibernateDAO<T, ID extends Serializable> implements
         GenericDAO<T, ID> {
 
     /**

@@ -3,7 +3,7 @@ package com.whiuk.philip.mmorpg.server.auth;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.whiuk.philip.mmorpg.server.hibernate.GenericDAOImpl;
+import com.whiuk.philip.mmorpg.server.hibernate.HibernateDAO;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.serverShared.RegistrationAttempt;
 
@@ -12,8 +12,8 @@ import com.whiuk.philip.mmorpg.serverShared.RegistrationAttempt;
  * @author Philip Whitehouse
  */
 @Repository
-public class RegistrationAttemptDAOImpl
-        extends GenericDAOImpl<RegistrationAttempt, Long>
+public class RegistrationAttemptHibernateDAO
+        extends HibernateDAO<RegistrationAttempt, Long>
         implements RegistrationAttemptDAO {
     @Override
     public final RegistrationAttempt findByID(final Long id) {

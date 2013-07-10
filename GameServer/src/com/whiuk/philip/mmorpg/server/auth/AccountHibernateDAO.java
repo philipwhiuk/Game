@@ -3,7 +3,7 @@ package com.whiuk.philip.mmorpg.server.auth;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
-import com.whiuk.philip.mmorpg.server.hibernate.GenericDAOImpl;
+import com.whiuk.philip.mmorpg.server.hibernate.HibernateDAO;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 
@@ -12,7 +12,7 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
  * @author Philip Whitehouse
  */
 @Repository
-public class AccountDAOImpl extends GenericDAOImpl<Account, Long> implements
+public class AccountHibernateDAO extends HibernateDAO<Account, Long> implements
         AccountDAO {
     /**
      * Retrieves an account by it's id.

@@ -3,14 +3,14 @@ package com.whiuk.philip.mmorpg.server.game.repository;
 import org.hibernate.Query;
 
 import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
-import com.whiuk.philip.mmorpg.server.hibernate.GenericDAOImpl;
+import com.whiuk.philip.mmorpg.server.hibernate.HibernateDAO;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 
 /**
  * @author Philip Whitehouse
  */
-public class GameCharacterDAOImpl
-    extends GenericDAOImpl<PlayerCharacter, Long>
+public class GameCharacterHibernateDAO
+    extends HibernateDAO<PlayerCharacter, Long>
     implements GameCharacterDAO {
 
     @Override
