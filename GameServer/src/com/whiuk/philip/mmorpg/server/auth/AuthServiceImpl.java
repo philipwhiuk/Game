@@ -200,7 +200,7 @@ public class AuthServiceImpl implements AuthService {
     private void processLoginMessage(
             final ClientInfo src, final AuthData data) {
         Connection con;
-        
+
         con = systemService.getConnection(src);
         //Handle logging in from disconnected client.
         if (con == null) {

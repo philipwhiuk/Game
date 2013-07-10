@@ -33,10 +33,10 @@ public class ChatAreaController implements Controller {
 
     @Override
     public final void bind(final Nifty nifty,
-            final Screen screen, final Element element,
+            final Screen s, final Element element,
             final Properties parameter,
             final Attributes controlDefinitionAttributes) {
-        this.screen = screen;
+        this.screen = s;
         scrollPanel = element.findControl("scroll_panel",
                 ScrollPanelControl.class);
         textArea = element.findElementByName("text_area");

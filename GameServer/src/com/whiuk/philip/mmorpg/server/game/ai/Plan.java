@@ -42,9 +42,9 @@ public class Plan {
     }
 
     /**
-     * @param goals the goals this plan will achieve.
+     * @param g the goals this plan will achieve.
      */
-    public final void setGoals(final Set<Goal> goals) {
-        this.goals = goals;
+    public final void setGoals(final Set<Goal> g) {
+        this.goals = g;
     }
 }
