@@ -16,7 +16,7 @@ import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.chat.ChatService;
 import com.whiuk.philip.mmorpg.server.email.EmailService;
 import com.whiuk.philip.mmorpg.server.email.InvalidEmailException;
-import com.whiuk.philip.mmorpg.server.game.GameService;
+import com.whiuk.philip.mmorpg.server.game.service.GameService;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.server.system.SystemService;
 import com.whiuk.philip.mmorpg.serverShared.Account;

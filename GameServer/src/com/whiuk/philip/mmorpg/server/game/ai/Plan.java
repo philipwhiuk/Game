@@ -2,7 +2,6 @@ package com.whiuk.philip.mmorpg.server.game.ai;
 import java.util.Queue;
 import java.util.Set;
 
-import com.whiuk.philip.mmorpg.server.game.Goal;
 
 /**
  * A sequence of {@link AgentAction}s that

@@ -75,13 +75,19 @@ message ClientMessage {
 		message ActionInformation {
 			enum Action {
 				USE = 0;
-				CRAFT = 1;
-				MINE = 2;
-				SMITH = 3;
+				EXAMINE = 1;
+				EQUIP = 2;
+				UNEQUIP = 3;
+				TAKE = 4;
+				DROP = 5;
+				CRAFT = 6;
+				MINE = 7;
+				SMITH = 8;
+				CAST = 9;
 			}
 			required Action action = 1;
-			required int32 source = 2;
-			required int32 target = 3;
+			optional int32 source = 2;
+			optional int32 target = 3;
 		}
 		message CombatInformation {
 

@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-import com.whiuk.philip.mmorpg.server.game.Goal;
 
 /**
  * An Agent is an intelligent computer system that is situated in
