@@ -1,0 +1,18 @@
+syntax = "proto2";
+option java_package = "com.whiuk.philip.mmorpg.server.game.ai";
+option java_outer_classname = "Messages";
+message InformMessage {
+
+}
+message RequestMessage {
+
+}
+message OfferMessage {
+
+}
+message PromiseMessage {
+
+}
+message DeclineMessage {
+
+}

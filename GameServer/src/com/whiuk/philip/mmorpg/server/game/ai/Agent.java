@@ -7,6 +7,15 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
+import org.apache.log4j.Logger;
+
+import com.google.protobuf.InvalidProtocolBufferException;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.DeclineMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.InformMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.OfferMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.PromiseMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.RequestMessage;
+
 
 /**
  * An Agent is an intelligent computer system that is situated in
@@ -36,6 +45,14 @@ import java.util.Set;
  */
 public abstract class Agent {
     /**
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(Agent.class);
+    /**
+     *
+     */
+    private int id;
+    /**
      * Environment.
      */
     private Environment environment;
@@ -48,6 +65,39 @@ public abstract class Agent {
      */
     private Set<Goal> goals;
     /**
+     * 
+     */
+    private Set<Belief> beliefs;
+    /**
+     * 
+     */
+    private Set<Commitment> commitments;
+    /**
+     * 
+     */
+    private Set<Capability> capabilities;
+    /**
+     * 
+     */
+    private Set<Choice> choices;
+    /**
+     * 
+     */
+    private AgentContainer container;
+    /**
+     * @param e new environment
+     */
+    public final void setID(final int i) {
+        id = i;
+    }
+    /**
+    * @return environment
+    */
+    public final int getID() {
+        return id;
+    }
+    
+    /**
      * @param e new environment
      */
     public final void setEnvironment(final Environment e) {
@@ -59,11 +109,29 @@ public abstract class Agent {
     public final Environment getEnvironment() {
         return environment;
     }
+    
+    /**
+     * @param c new container
+     */
+    public final void setContainer(final AgentContainer c) {
+        container = c;
+    }
+    /**
+    * @return container
+    */
+    public final AgentContainer getContainer() {
+        return container;
+    }
+
 
     /**
      * Update the agent.
      */
     public final void update() {
+        while (container.hasMessageForAgent(this)) {
+            AgentMessage m = container.getMessageForAgent(this);
+            process(m);
+        }
         if (!planIsValid()) {
             replan();
         }
@@ -72,6 +140,41 @@ public abstract class Agent {
             if (completed) {
                 plan.removeFirstAction();
             }
+        }
+    }
+    /**
+     * Deal with an inbound message.
+     * @param m
+     */
+    private void process(final AgentMessage m) {
+        try {
+            switch (m.getType()) {
+                case INFORM:
+                    processInform(m.getSource(),
+                            InformMessage.parseFrom(m.getMessage()));
+                    break;
+                case REQUEST:
+                    processRequest(m.getSource(),
+                            RequestMessage.parseFrom(m.getMessage()));
+                    break;
+                case OFFER:
+                    processOffer(m.getSource(),
+                            OfferMessage.parseFrom(m.getMessage()));
+                    break;
+                case PROMISE:
+                    processPromise(m.getSource(),
+                            PromiseMessage.parseFrom(m.getMessage()));
+                    break;
+                case DECLINE:
+                    processDecline(m.getSource(),
+                            DeclineMessage.parseFrom(m.getMessage()));
+                    break;
+                default:
+                    LOGGER.error("Unknown message type");
+                    break;
+            }
+        } catch (InvalidProtocolBufferException e) {
+            LOGGER.error("Unknown agent message format");
         }
     }
     /**
@@ -158,4 +261,40 @@ public abstract class Agent {
         // TODO Auto-generated method stub
         return null;
     }
+    
+    /**
+     * Handle an inform message.
+     * @param srcAgent
+     * @param msg
+     */
+    public abstract void processInform(Agent srcAgent, InformMessage msg);
+
+    /**
+     * Handle a request message.
+     * @param srcAgent
+     * @param msg
+     */
+    public abstract void processRequest(Agent srcAgent, RequestMessage msg);
+
+    /**
+     * Handle a request message.
+     * @param srcAgent
+     * @param msg
+     */
+    public abstract void processOffer(Agent srcAgent, OfferMessage msg);
+    
+    /**
+     * Handle a request message.
+     * @param srcAgent
+     * @param msg
+     */
+    public abstract void processPromise(Agent srcAgent, PromiseMessage msg);
+
+    /**
+     * Handle a request message.
+     * @param srcAgent
+     * @param msg
+     */
+    public abstract void processDecline(Agent srcAgent, DeclineMessage msg);
+    
 }
