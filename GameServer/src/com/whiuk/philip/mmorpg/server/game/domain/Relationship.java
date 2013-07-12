@@ -26,4 +26,11 @@ public class Relationship {
      * Party 2
      */
     private RelatableEntity p2;
+    /**
+     * 
+     * @return
+     */
+    public State getState() {
+        return state;
+    }
 }
