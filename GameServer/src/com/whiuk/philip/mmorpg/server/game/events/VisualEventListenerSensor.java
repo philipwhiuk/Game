@@ -2,64 +2,68 @@ package com.whiuk.philip.mmorpg.server.game.events;
 
 
 /**
- * 
+ * A visual event listener sensor is a sensor
+ * by which agents are notified of events within their visual range.
+ * As an event listener it follows the event listener model, in which
+ * eventlisteners register to a source, which notifies the listener
+ * by firing events.
  * @author Philip
  *
  */
 public interface VisualEventListenerSensor extends EventListenerSensor {
     /**
-     * 
-     * @param c
+     * Indicates the given character arrived.
+     * @param c Character event
      */
     void characterArrived(GameCharacterEvent c);
     /**
-     * 
-     * @param c
+     * Indicates the given character left.
+     * @param c Character event
      */
     void characterLeft(GameCharacterEvent c);
     /**
-     * 
-     * @param c
+     * Indicates the given character moved.
+     * @param c Character event
      */
     void characterMoved(GameCharacterEvent c);
     /**
-     * 
-     * @param c
+     * Indicates the given item was spawned.
+     * @param i Item event
      */
     void itemSpawned(ItemEvent i);
     /**
-     * 
-     * @param c
+     * Indicates the given item was consumed.
+     * @param i Item event
      */
     void itemConsumed(ItemEvent i);
     /**
-     * 
-     * @param c
+     * Indicates the given resource was spawned.
+     * @param r Resource event
      */
     void resourceSpawned(ResourceEvent r);
     /**
-     * 
-     * @param c
+     * Indicates the given resource was consumed.
+     * @param r Resource event
      */
     void resourceConsumed(ResourceEvent r);
     /**
-     * 
-     * @param t
+     * Indicates the given tile was modified.
+     * @param t Tile event
      */
     void tileModified(TileEvent t);
     /**
-     * 
-     * @param t
+     * Indicates the given building was created.
+     * @param b Building Event
      */
-    void buildingCreated(BuildingEvent t);
+    void buildingCreated(BuildingEvent b);
     /**
-     * 
-     * @param t
+     * Indicates the given building was modified.
+     * @param b Building Event
      */
-    void buildingModified(BuildingEvent t);
+    void buildingModified(BuildingEvent b);
     /**
-     * 
-     * @param t
+     * Indicates the given building was destroyed.
+     * @param b Building Event
      */
-    void buildingDestroyed(BuildingEvent t);
+    void buildingDestroyed(BuildingEvent b);
 }
