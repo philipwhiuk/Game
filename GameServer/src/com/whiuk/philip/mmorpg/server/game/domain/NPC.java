@@ -4,6 +4,11 @@ import java.awt.Point;
 import java.util.Map;
 
 import com.whiuk.philip.mmorpg.server.game.ai.Agent;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.DeclineMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.InformMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.OfferMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.PromiseMessage;
+import com.whiuk.philip.mmorpg.server.game.ai.Messages.RequestMessage;
 
 /**
  * Represents a non-player character
@@ -11,15 +16,7 @@ import com.whiuk.philip.mmorpg.server.game.ai.Agent;
  * @author Philip
  *
  */
-public class NPC extends Agent implements GameCharacter {
-    /**
-     * Relationships with other characters.
-     */
-    private Map<GameCharacter, Relationship> characterRelationships;
-    /**
-     * Relationships with groups.
-     */
-    private Map<GameCharacterGroup, Relationship> tribalRelationships;
+public class NPC extends GameAgent implements GameCharacter {
     /**
      * 
      */
