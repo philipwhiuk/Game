@@ -143,35 +143,7 @@ public abstract class Agent {
      * @param m
      */
     private void process(final AgentMessage m) {
-        try {
-            switch (m.getType()) {
-                case INFORM:
-                    processInform(m.getSource(),
-                            InformMessage.parseFrom(m.getMessage()));
-                    break;
-                case REQUEST:
-                    processRequest(m.getSource(),
-                            RequestMessage.parseFrom(m.getMessage()));
-                    break;
-                case OFFER:
-                    processOffer(m.getSource(),
-                            OfferMessage.parseFrom(m.getMessage()));
-                    break;
-                case PROMISE:
-                    processPromise(m.getSource(),
-                            PromiseMessage.parseFrom(m.getMessage()));
-                    break;
-                case DECLINE:
-                    processDecline(m.getSource(),
-                            DeclineMessage.parseFrom(m.getMessage()));
-                    break;
-                default:
-                    LOGGER.error("Unknown message type");
-                    break;
-            }
-        } catch (InvalidProtocolBufferException e) {
-            LOGGER.error("Unknown agent message format");
-        }
+        //TODO
     }
     /**
      * Perform an action.
@@ -257,34 +229,4 @@ public abstract class Agent {
         // TODO Auto-generated method stub
         return null;
     }
-    /**
-     * Handle an inform message.
-     * @param srcAgent
-     * @param msg
-     */
-    public abstract void processInform(Agent srcAgent, InformMessage msg);
-    /**
-     * Handle a request message.
-     * @param srcAgent
-     * @param msg
-     */
-    public abstract void processRequest(Agent srcAgent, RequestMessage msg);
-    /**
-     * Handle a request message.
-     * @param srcAgent
-     * @param msg
-     */
-    public abstract void processOffer(Agent srcAgent, OfferMessage msg);
-    /**
-     * Handle a request message.
-     * @param srcAgent
-     * @param msg
-     */
-    public abstract void processPromise(Agent srcAgent, PromiseMessage msg);
-    /**
-     * Handle a request message.
-     * @param srcAgent
-     * @param msg
-     */
-    public abstract void processDecline(Agent srcAgent, DeclineMessage msg);
 }
