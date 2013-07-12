@@ -70,4 +70,9 @@ public class NettyNetworkService implements NetworkService {
         handler.writeMessage(message);
     }
 
+    @Override
+    public long getConnectionCount() {
+        return handler.getConnectionCount();
+    }
+
 }
