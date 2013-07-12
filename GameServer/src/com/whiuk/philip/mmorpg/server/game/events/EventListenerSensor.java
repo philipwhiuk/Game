@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.server.game.domain;
+package com.whiuk.philip.mmorpg.server.game.events;
 
 import java.util.EventListener;
 
