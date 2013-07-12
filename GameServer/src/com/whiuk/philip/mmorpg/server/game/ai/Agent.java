@@ -49,7 +49,7 @@ public abstract class Agent {
      */
     private static final Logger LOGGER = Logger.getLogger(Agent.class);
     /**
-     *
+     * Unique identifier
      */
     private int id;
     /**
@@ -96,7 +96,6 @@ public abstract class Agent {
     public final int getID() {
         return id;
     }
-    
     /**
      * @param e new environment
      */
@@ -109,7 +108,6 @@ public abstract class Agent {
     public final Environment getEnvironment() {
         return environment;
     }
-    
     /**
      * @param c new container
      */
@@ -122,8 +120,6 @@ public abstract class Agent {
     public final AgentContainer getContainer() {
         return container;
     }
-
-
     /**
      * Update the agent.
      */
@@ -261,40 +257,34 @@ public abstract class Agent {
         // TODO Auto-generated method stub
         return null;
     }
-    
     /**
      * Handle an inform message.
      * @param srcAgent
      * @param msg
      */
     public abstract void processInform(Agent srcAgent, InformMessage msg);
-
     /**
      * Handle a request message.
      * @param srcAgent
      * @param msg
      */
     public abstract void processRequest(Agent srcAgent, RequestMessage msg);
-
     /**
      * Handle a request message.
      * @param srcAgent
      * @param msg
      */
     public abstract void processOffer(Agent srcAgent, OfferMessage msg);
-    
     /**
      * Handle a request message.
      * @param srcAgent
      * @param msg
      */
     public abstract void processPromise(Agent srcAgent, PromiseMessage msg);
-
     /**
      * Handle a request message.
      * @param srcAgent
      * @param msg
      */
     public abstract void processDecline(Agent srcAgent, DeclineMessage msg);
-    
 }
