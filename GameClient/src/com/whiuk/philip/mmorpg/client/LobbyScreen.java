@@ -65,7 +65,7 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
-        chatElement = screen.findElementByName("nifty-chat");
+        chatElement = screen.findElementByName("chatId");
     }
 
     @Override
@@ -94,22 +94,21 @@ public class LobbyScreen implements ScreenController {
 
     /**
      * Handle chat message.
-     * @param message Message
+     * @param chatData Chat Data
      */
-    public void handleChatMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
-
+    public final void handleChatMessage(final ServerMessage.ChatData chatData) {
+        String text = chatData.getMessage();
+        chatElement.getControl(ChatControl.class).receivedChatLine(text, null);
     }
 
     /**
      * Handle game message.
-     * @param message Message
+     * @param gameData Game Data
      */
-    public final void handleGameMessage(final ServerMessage message) {
-        ServerMessage.GameData data = message.getGameData();
-        switch (data.getType()) {
+    public final void handleGameMessage(final ServerMessage.GameData gameData) {
+        switch (gameData.getType()) {
             case CHARACTER_SELECTION:
-                characters = data.getCharacterInformationList();
+                characters = gameData.getCharacterInformationList();
                 break;
             default:
                 throw new IllegalStateException();

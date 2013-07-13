@@ -584,18 +584,7 @@ public class GameClient {
                 }
                 break;
             case CHAT:
-                switch (state) {
-                    case LOBBY:
-                        lobbyScreen.handleChatMessage(message);
-                        break;
-                    case GAME:
-                        handleChatMessage(message);
-                        break;
-                    default:
-                        LOGGER.info("Chat message recieved in invalid state: "
-                                + state);
-                        break;
-                }
+                handleChatMessage(message);
                 break;
             default:
                 LOGGER.info("Unhandled message type");
@@ -683,7 +672,11 @@ public class GameClient {
      */
     public final void handleChatMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            lobbyScreen.handleChatMessage(message);
+            queuedNiftyEvents.add(new Runnable() {
+                public void run() {
+                    lobbyScreen.handleChatMessage(message.getChatData());
+                }
+            });
         } else if (state.equals(State.GAME)) {
             game.handleChatMessage(message);
         } else {
