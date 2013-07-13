@@ -29,7 +29,7 @@ public class LobbyScreen implements ScreenController {
     /**
      *
      */
-    private Element textInputMessage;
+    private Element chatControl;
     /**
      *
      */
@@ -57,40 +57,18 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
-        textInputMessage = screen.findElementByName("text_input");
     }
 
     @Override
     public final void onStartScreen() {
-        textInputMessage.addInputHandler(new KeyInputHandler() {
-            @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
-                switch (inputEvent) {
-                    case SubmitText:
-                        sendMessage();
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        textInputMessage.setFocus();
+        //TODO Auto-generated method stub
     }
 
     /**
      * Send message.
      */
     protected final void sendMessage() {
-        gameClient.sendChatData(
-            ChatData.newBuilder()
-            .setMessage(textInputMessage
-                .getControl(TextFieldControl.class).getRealText())
-            .build());
-        textInputMessage.getControl(TextFieldControl.class).setText("");
+        //TODO Auto-generated method stub
     }
 
     @Override
