@@ -176,6 +176,8 @@ public class GameClient {
      */
     private Game game;
 
+    private boolean finished;
+
     /**
      * Class logger.
      */
@@ -257,6 +259,7 @@ public class GameClient {
      * Run game client.
      */
     public final void run() {
+        finished = false;
         try {
             buildDisplay();
 
@@ -270,13 +273,12 @@ public class GameClient {
 
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
-        boolean done = false;
-        while (!Display.isCloseRequested() && !done) {
+        while (!Display.isCloseRequested() && !finished) {
 
             // render OpenGL here
             Display.update();
             if (nifty.update()) {
-                done = true;
+                finished = true;
             }
             nifty.render(true);
             int error = GL11.glGetError();
@@ -901,5 +903,9 @@ public class GameClient {
                 .setClientInfo(gameClient.getClientInfo())
                 .setGameData(data)
                 .build());
+    }
+
+    public final void quit() {
+        finished = true;
     }
 }
