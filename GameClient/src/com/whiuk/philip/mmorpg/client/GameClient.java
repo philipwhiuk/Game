@@ -184,6 +184,8 @@ public class GameClient {
      */
     private BlockingQueue<Runnable> queuedNiftyEvents;
 
+    private boolean unprocessedLoginResponse;
+
     /**
      * Class logger.
      */
@@ -679,6 +681,12 @@ public class GameClient {
             });
         } else if (state.equals(State.GAME)) {
             game.handleChatMessage(message);
+        } else if (unprocessedLoginResponse) {
+            queuedNiftyEvents.add(new Runnable() {
+                public void run() {
+                    lobbyScreen.handleChatMessage(message.getChatData());
+                }
+            });
         } else {
             LOGGER.info("Chat message recieved in invalid state: " + state);
         }
@@ -753,11 +761,13 @@ public class GameClient {
             loginScreen.loginFailed("Server error occurred");
         } else {
             account = new Account(data.getUsername());
+            unprocessedLoginResponse = true;
             Runnable switchToLobby = new Runnable() {
                 @Override
                 public void run() {
                     switchToLobbyScreen();
                     state = State.LOBBY;
+                    unprocessedLoginResponse = false;
                 }
             };
             try {
