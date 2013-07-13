@@ -100,6 +100,7 @@ message ServerMessage {
 	optional SystemData systemData = 3;
 	optional AuthData authData = 4;
 	optional GameData gameData = 5;
+	optional ChatData chatData = 6;
 
 	enum Type {
 		SYSTEM = 0;
@@ -161,6 +162,13 @@ message ServerMessage {
 			required string race = 2;
 			required GraphicsData graphics = 3;
 		}
+	}
+
+	message ChatData {
+		required bool private = 1;
+		required int32 channel = 2;
+		required string source = 3;
+		required string message = 4;
 	}
 
 	message GraphicsData {

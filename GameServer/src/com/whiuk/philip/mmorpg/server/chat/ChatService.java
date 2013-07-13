@@ -17,5 +17,13 @@ public interface ChatService extends AuthEventListener {
      *            Chat message
      */
     void processMessage(Account account, ChatData chatData);
-    
+    /**
+     * Send a message to an account on behalf of a channel.
+     * @param id Channel ID
+     * @param src Source
+     * @param target Target
+     * @param message Message
+     */
+    void sendMessageFromChannel(int id, Account src,
+            Account target, String message);
 }

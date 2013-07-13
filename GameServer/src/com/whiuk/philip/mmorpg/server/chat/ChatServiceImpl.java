@@ -8,8 +8,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
 
 /**
@@ -27,6 +29,11 @@ public class ChatServiceImpl implements ChatService {
      */
     @Autowired
     private AuthService authService;
+    /**
+    *
+    */
+    @Autowired
+    private MessageHandlerService messageHandler;
 
     /**
      * <p>Create a new chat service.</p>
@@ -37,6 +44,7 @@ public class ChatServiceImpl implements ChatService {
      */
     public ChatServiceImpl() {
         channels = new HashMap<Integer, ChatChannel>();
+        //TODO: Consider database storage of channel data
         //Create server public channel
         channels.put(0, new ChatChannel());
     }
@@ -61,7 +69,7 @@ public class ChatServiceImpl implements ChatService {
             if (c != null
                     && c.hasAccountRegistered(account)
                     && c.hasAccountSendPrivilege(account)) {
-                c.sendMessage(account, chatData.getMessage());
+                c.processMessage(account, chatData.getMessage());
             } else {
                 //Handle unauthorised message.
             }
@@ -86,9 +94,32 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void notifyLogin(Account account) {
-        // TODO Auto-generated method stub
-        
+    public void notifyLogin(final Account account) {
+        //TODO: Move this to account creation
+        //Register un-registered accounts to the public chat channel
+        if (!channels.get(0).hasAccountRegistered(account)) {
+            channels.get(0).registerAccount(account);
+        }
+    }
+
+    @Override
+    public final void sendMessageFromChannel(final int id,
+            final Account src, final Account target,
+            final String messageText) {
+        ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.AUTH)
+                .setClientInfo(authService.getConnection(target)
+                        .getClientInfo())
+                .setChatData(
+                        ServerMessage.ChatData
+                        .newBuilder()
+                        .setSource(target.getUsername())
+                        .setChannel(id)
+                        .setMessage(messageText)
+                        .build())
+                .build();
+        messageHandler.queueOutboundMessage(message);
     }
 
 }
