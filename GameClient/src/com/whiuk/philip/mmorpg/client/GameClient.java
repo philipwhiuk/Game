@@ -692,8 +692,7 @@ public class GameClient {
                         } else {
                             account = new Account(
                                     data.getUsername());
-                            switchToLobbyScreen();
-                            state = State.LOBBY;
+                            //TODO: GUI events from network threads
                         }
                         break;
                     case EXTRA_AUTH_FAILED:
