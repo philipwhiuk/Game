@@ -8,7 +8,7 @@
    <screen id="lobby" controller="com.whiuk.philip.mmorpg.client.LobbyScreen">
       <layer id="layer" backgroundColor="#000f" childLayout="center">
          <panel id="dialog" style="nifty-panel" childLayout="center"
-                width="70%" height="90%" align="center" valign="center"
+                width="70%" height="70%" align="center" valign="center"
                 visibleToMouse="true">
              <control id="chatId" name="nifty-chat" width="100%"
                 height="100%" lines="14" sendLabel="Send Message" />
