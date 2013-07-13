@@ -1,6 +1,5 @@
 package com.whiuk.philip.mmorpg.server;
 
-import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 
@@ -37,30 +36,9 @@ public class GameServer {
     private AlarmsService alarmsService;
 
     /**
-     * Provides a way to load properties.
-     * @author Philip
-     */
-    public static class GameServerProperties extends Properties {
-        /**
-         * Serial version UID.
-         */
-        private static final long serialVersionUID = 1L;
-        /**
-         * Default listening port for server.
-         */
-        private static final String DEFALT_PORT = "8443";
-        /**
-         *
-         */
-        public GameServerProperties() {
-            super();
-            setProperty("port", DEFALT_PORT);
-        }
-    }
-
-    /**
      *
      */
+    @Autowired
     private GameServerProperties properties;
 
     /**
