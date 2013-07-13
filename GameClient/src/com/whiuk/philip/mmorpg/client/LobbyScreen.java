@@ -2,6 +2,8 @@ package com.whiuk.philip.mmorpg.client;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
@@ -9,7 +11,9 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage
     .GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ChatTextSendEvent;
+import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -23,25 +27,29 @@ import de.lessvoid.nifty.screen.ScreenController;
 // TODO: Work out how Nifty 1.3.2 uses controls.
 public class LobbyScreen implements ScreenController {
     /**
-     *
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(LobbyScreen.class);
+    /**
+     * Nifty GUI
      */
     private Nifty nifty;
     /**
-     *
-     */
-    private Element textInputMessage;
-    /**
-     *
+     * Game client
      */
     private GameClient gameClient;
     /**
-     *
+     * Account data
      */
     private Account account;
     /**
-     *
+     * List of characters.
      */
     private List<CharacterInformation> characters;
+    /**
+     * Chat box element
+     */
+    private Element chatElement;
 
     /**
      * @param g
@@ -57,6 +65,7 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
+        chatElement = screen.findElementByName("nifty-chat");
     }
 
     @Override
@@ -65,14 +74,18 @@ public class LobbyScreen implements ScreenController {
 
     /**
      * Send message.
+     * @param id ID
+     * @param event Event
      */
-    protected final void sendMessage() {
-        //TODO: Get Message
+    @NiftyEventSubscriber(id = "chatId")
+    public final void onChatTextSendEvent(
+            final String id, final ChatTextSendEvent event) {
         gameClient.sendChatData(
-            ChatData.newBuilder()
-            .setMessage("")
-            .build());
-        //textInputMessage.getControl(TextFieldControl.class).setText("");
+                ChatData.newBuilder()
+                .setPrivate(false)
+                .setChannel(0)
+                .setMessage(event.getText())
+                .build());
     }
 
     @Override
