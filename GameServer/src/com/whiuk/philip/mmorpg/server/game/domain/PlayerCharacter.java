@@ -34,31 +34,19 @@ public class PlayerCharacter implements GameCharacter {
         this.loggedOut = true;
     }
 
-    /**
-     * 
-     * @param a
-     * @return
-     */
+    @Override
     public final boolean canPerform(final Action a) {
         // TODO Auto-generated method stub
         return false;
     }
 
-    /**
-     * 
-     * @param i2id
-     * @return
-     */
+    @Override
     public final Item getItemById(final int i2id) {
         // TODO Auto-generated method stub
         return null;
     }
 
-    /**
-     * 
-     * @param a
-     * @return
-     */
+    @Override
     public void doAction(final Action a) {
         // TODO Auto-generated method stub
         
