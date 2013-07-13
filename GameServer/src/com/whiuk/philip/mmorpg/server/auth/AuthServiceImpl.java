@@ -415,9 +415,6 @@ public class AuthServiceImpl implements AuthService {
         // TODO: Further authentication checks
         connections.put(con, account);
         accounts.put(account, con);
-        for(AuthEventListener l : authEventListeners) {
-            l.notifyLogin(account);
-        }
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
@@ -430,6 +427,9 @@ public class AuthServiceImpl implements AuthService {
                         .setUsername(account.getUsername()).build())
                 .build();
         messageHandler.queueOutboundMessage(message);
+        for(AuthEventListener l : authEventListeners) {
+            l.notifyLogin(account);
+        }
     }
 
     /**
