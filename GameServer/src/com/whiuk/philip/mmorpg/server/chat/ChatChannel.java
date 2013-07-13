@@ -28,7 +28,7 @@ public class ChatChannel {
      */
     @Transient
     //TODO: Un-transient this field.
-    private Map<Account, ChannelPriveleges> members;
+    private Map<Account, ChannelPrivileges> members;
 
     /**
      * Members currently online.

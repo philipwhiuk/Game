@@ -4,7 +4,7 @@ package com.whiuk.philip.mmorpg.server.chat;
  * @author Philip
  *
  */
-public class ChannelPriveleges {
+public class ChannelPrivileges {
     /**
      *
      */
