@@ -2,6 +2,8 @@ package com.whiuk.philip.mmorpg.client;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
@@ -9,7 +11,9 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage
     .GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.NiftyEventSubscriber;
+import de.lessvoid.nifty.controls.ChatTextSendEvent;
+import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -23,25 +27,29 @@ import de.lessvoid.nifty.screen.ScreenController;
 // TODO: Work out how Nifty 1.3.2 uses controls.
 public class LobbyScreen implements ScreenController {
     /**
-     *
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(LobbyScreen.class);
+    /**
+     * Nifty GUI
      */
     private Nifty nifty;
     /**
-     *
-     */
-    private Element textInputMessage;
-    /**
-     *
+     * Game client
      */
     private GameClient gameClient;
     /**
-     *
+     * Account data
      */
     private Account account;
     /**
-     *
+     * List of characters.
      */
     private List<CharacterInformation> characters;
+    /**
+     * Chat box element
+     */
+    private Element chatElement;
 
     /**
      * @param g
@@ -57,40 +65,27 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
-        textInputMessage = screen.findElementByName("text_input");
+        chatElement = screen.findElementByName("chatId");
     }
 
     @Override
     public final void onStartScreen() {
-        textInputMessage.addInputHandler(new KeyInputHandler() {
-            @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
-                switch (inputEvent) {
-                    case SubmitText:
-                        sendMessage();
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        textInputMessage.setFocus();
     }
 
     /**
      * Send message.
+     * @param id ID
+     * @param event Event
      */
-    protected final void sendMessage() {
+    @NiftyEventSubscriber(id = "chatId")
+    public final void onChatTextSendEvent(
+            final String id, final ChatTextSendEvent event) {
         gameClient.sendChatData(
-            ChatData.newBuilder()
-            .setMessage(textInputMessage
-                .getControl(TextFieldControl.class).getRealText())
-            .build());
-        textInputMessage.getControl(TextFieldControl.class).setText("");
+                ChatData.newBuilder()
+                .setPrivate(false)
+                .setChannel(0)
+                .setMessage(event.getText())
+                .build());
     }
 
     @Override
@@ -99,22 +94,37 @@ public class LobbyScreen implements ScreenController {
 
     /**
      * Handle chat message.
-     * @param message Message
+     * @param chatData Chat Data
      */
-    public void handleChatMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
-
+    public final void handleChatMessage(final ServerMessage.ChatData chatData) {
+        switch(chatData.getType()) {
+            case PLAYER_JOINED:
+                chatElement.getControl(ChatControl.class)
+                    .addPlayer(chatData.getSource(), null);
+                break;
+            case PLAYER_LEFT:
+                chatElement.getControl(ChatControl.class)
+                    .removePlayer(chatData.getSource());
+                break;
+            case MESSAGE:
+                String text = chatData.getMessage();
+                chatElement.getControl(ChatControl.class)
+                    .receivedChatLine(text, null);
+                break;
+            default:
+                LOGGER.error("Unhandled chat message");
+                break;
+        }
     }
 
     /**
      * Handle game message.
-     * @param message Message
+     * @param gameData Game Data
      */
-    public final void handleGameMessage(final ServerMessage message) {
-        ServerMessage.GameData data = message.getGameData();
-        switch (data.getType()) {
+    public final void handleGameMessage(final ServerMessage.GameData gameData) {
+        switch (gameData.getType()) {
             case CHARACTER_SELECTION:
-                characters = data.getCharacterInformationList();
+                characters = gameData.getCharacterInformationList();
                 break;
             default:
                 throw new IllegalStateException();
