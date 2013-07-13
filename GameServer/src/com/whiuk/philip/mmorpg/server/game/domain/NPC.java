@@ -32,4 +32,20 @@ public class NPC extends Agent implements GameCharacter {
      * 
      */
     private Map<Skill, Integer> skills;
+    
+    @Override
+    public Item getItemById(int i1id) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public boolean canPerform(Action a) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+    @Override
+    public void doAction(Action a) {
+        // TODO Auto-generated method stub
+        
+    }
 }

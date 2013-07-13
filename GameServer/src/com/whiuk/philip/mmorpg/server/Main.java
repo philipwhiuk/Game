@@ -19,7 +19,6 @@ import org.apache.log4j.PropertyConfigurator;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
-import com.whiuk.philip.mmorpg.server.GameServer.GameServerProperties;
 
 /**
  * @author Philip
@@ -85,21 +84,10 @@ public final class Main {
             // oops, something went wrong
             logger.log(Level.WARN, "Unable to read command line arguments", e);
         }
-
         context = new ClassPathXmlApplicationContext(
                 "META-INF/beans.xml");
         BeanFactory factory = context;
-        GameServer gameServer = (GameServer) factory.getBean("gameServer");
-        GameServerProperties prop  = new GameServerProperties();
-        File file = new File(propertiesFilename);
-        try {
-            prop.load(new FileReader(file));
-        } catch (Exception e) {
-            System.out.println(file.getAbsolutePath());
-            logger.log(Level.WARN, "Error reading properties file: "
-                    + propertiesFilename, e);
-        }
-        gameServer.setProperties(prop);
+        factory.getBean("gameServer");
     }
 
     /**

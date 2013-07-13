@@ -8,4 +8,24 @@ package com.whiuk.philip.mmorpg.server.game.domain;
  */
 public interface GameCharacter extends RelatableEntity {
 
+    /**
+     * 
+     * @param i1id
+     * @return
+     */
+    Item getItemById(int i1id);
+
+    /**
+     * 
+     * @param a
+     * @return
+     */
+    boolean canPerform(Action a);
+
+    /**
+     * 
+     * @param a
+     */
+    void doAction(Action a);
+
 }
