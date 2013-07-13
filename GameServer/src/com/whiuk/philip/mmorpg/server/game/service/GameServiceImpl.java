@@ -91,6 +91,7 @@ public class GameServiceImpl implements GameService {
         characters = new HashMap<Account, PlayerCharacter>();
         accounts = new HashMap<PlayerCharacter, Account>();
         watchdogService.monitor(gameWorld);
+        authService.registerAuthEventListener(this);
     }
 
     @Override
@@ -100,7 +101,7 @@ public class GameServiceImpl implements GameService {
             characterSelection(account, data);
         } else if (data.getType() == GameData.Type.EXIT) {
             if (accounts.get(account) != null) {
-                handleLogout(account);
+                handleExit(account);
             }
         } else if (characters.get(account) != null) {
             update(account, data);
@@ -110,20 +111,19 @@ public class GameServiceImpl implements GameService {
     }
 
     /**
+     * @param account
+     */
+    private void handleExit(final Account account) {
+        // TODO Auto-generated method stub
+    }
+
+    /**
      * Logs action attempted when no character selected.
      * @param account Account
      * @param data Data
      */
     private void handleActionInInvalidState(
             final Account account, final GameData data) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * Handle a logout message.
-     * @param account
-     */
-    private void handleLogout(final Account account) {
         // TODO Auto-generated method stub
     }
 
@@ -274,6 +274,12 @@ public class GameServiceImpl implements GameService {
     @Override
     public final Random getRandom() {
         return random;
+    }
+
+    @Override
+    public void notifyLogin(Account account) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

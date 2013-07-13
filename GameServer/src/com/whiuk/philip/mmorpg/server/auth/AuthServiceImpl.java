@@ -1,5 +1,6 @@
 package com.whiuk.philip.mmorpg.server.auth;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -116,11 +117,16 @@ public class AuthServiceImpl implements AuthService {
      */
     private EmailService emailService;
     /**
+     * Authentication event listeners
+     */
+    private ArrayList<AuthEventListener> authEventListeners;
+    /**
      *
      */
     public AuthServiceImpl() {
         accounts = new HashMap<Account, Connection>();
         connections = new HashMap<Connection, Account>();
+        authEventListeners = new ArrayList<AuthEventListener>();
     }
 
     @Override
@@ -385,6 +391,9 @@ public class AuthServiceImpl implements AuthService {
         // TODO: Further authentication checks
         connections.put(con, account);
         accounts.put(account, con);
+        for(AuthEventListener l : authEventListeners) {
+            l.notifyLogin(account);
+        }
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
@@ -433,14 +442,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 
      * @param account
      */
     private void performLogout(final Account account) {
         connections.remove(accounts.remove(account));
-        //TODO: Consider event listener model
-        chatService.notifyLogout(account);
-        gameService.notifyLogout(account);
+        for (AuthEventListener l : authEventListeners) {
+            l.notifyLogout(account);
+        }
+    }
+
+    @Override
+    public final void registerAuthEventListener(
+            final AuthEventListener listener) {
+        authEventListeners.add(listener);
+    }
+
+    @Override
+    public final void deregisterAuthEventListener(
+            final AuthEventListener listener) {
+        authEventListeners.remove(listener);
     }
 
 }

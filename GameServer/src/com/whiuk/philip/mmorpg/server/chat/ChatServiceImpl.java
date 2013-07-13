@@ -3,8 +3,12 @@ package com.whiuk.philip.mmorpg.server.chat;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
 
@@ -18,6 +22,11 @@ public class ChatServiceImpl implements ChatService {
      * Mapping of channels by ID.
      */
     private Map<Integer, ChatChannel> channels;
+    /**
+     * 
+     */
+    @Autowired
+    private AuthService authService;
 
     /**
      * <p>Create a new chat service.</p>
@@ -30,6 +39,11 @@ public class ChatServiceImpl implements ChatService {
         channels = new HashMap<Integer, ChatChannel>();
         //Create server public channel
         channels.put(0, new ChatChannel());
+    }
+
+    @PostConstruct
+    public final void init() {
+        authService.registerAuthEventListener(this);
     }
 
     @Override
@@ -69,6 +83,12 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public void notifyLogout(final Account account) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void notifyLogin(Account account) {
+        // TODO Auto-generated method stub
+        
     }
 
 }
