@@ -97,8 +97,24 @@ public class LobbyScreen implements ScreenController {
      * @param chatData Chat Data
      */
     public final void handleChatMessage(final ServerMessage.ChatData chatData) {
-        String text = chatData.getMessage();
-        chatElement.getControl(ChatControl.class).receivedChatLine(text, null);
+        switch(chatData.getType()) {
+            case PLAYER_JOINED:
+                chatElement.getControl(ChatControl.class)
+                    .addPlayer(chatData.getSource(), null);
+                break;
+            case PLAYER_LEFT:
+                chatElement.getControl(ChatControl.class)
+                    .removePlayer(chatData.getSource());
+                break;
+            case MESSAGE:
+                String text = chatData.getMessage();
+                chatElement.getControl(ChatControl.class)
+                    .receivedChatLine(text, null);
+                break;
+            default:
+                LOGGER.error("Unhandled chat message");
+                break;
+        }
     }
 
     /**

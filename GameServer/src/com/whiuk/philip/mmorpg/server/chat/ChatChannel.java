@@ -138,6 +138,9 @@ public class ChatChannel {
      */
     public final void join(final Account account) {
         online.add(account);
+        for (Account a : online) {
+            chatService.sendPlayerJoinedChannel(this.id, account, a);
+        }
     }
 
     /**

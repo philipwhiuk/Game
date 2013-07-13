@@ -18,7 +18,8 @@ public interface ChatService extends AuthEventListener {
      */
     void processMessage(Account account, ChatData chatData);
     /**
-     * Send a message to an account on behalf of a channel.
+     * Send a message to the <code>target</code> account
+     * that the <code>src</code> send a message to the channel.
      * @param id Channel ID
      * @param src Source
      * @param target Target
@@ -26,4 +27,12 @@ public interface ChatService extends AuthEventListener {
      */
     void sendMessageFromChannel(int id, Account src,
             Account target, String message);
+    /**
+     * Inform the <code>target</code> account that
+     * the <code>src</code> account joined the channel.
+     * @param id Channel ID
+     * @param src Source
+     * @param target Target
+     */
+    void sendPlayerJoinedChannel(int id, Account src, Account target);
 }

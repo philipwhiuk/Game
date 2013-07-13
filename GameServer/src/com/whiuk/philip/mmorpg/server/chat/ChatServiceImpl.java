@@ -15,6 +15,7 @@ import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.ChatData.Type;
 
 /**
  * @author Philip Whitehouse
@@ -123,7 +124,7 @@ public class ChatServiceImpl implements ChatService {
     public final void sendMessageFromChannel(final int id,
             final Account src, final Account target,
             final String messageText) {
-        logger.info("Sending message from channel");
+        logger.trace("Sending message from channel");
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.CHAT)
@@ -132,10 +133,32 @@ public class ChatServiceImpl implements ChatService {
                 .setChatData(
                         ServerMessage.ChatData
                         .newBuilder()
+                        .setType(Type.MESSAGE)
                         .setPrivate(false)
-                        .setSource(target.getUsername())
+                        .setSource(src.getUsername())
                         .setChannel(id)
                         .setMessage(messageText)
+                        .build())
+                .build();
+        messageHandler.queueOutboundMessage(message);
+    }
+
+    @Override
+    public void sendPlayerJoinedChannel(
+            final int id, final Account src, final Account target) {
+        logger.trace("Sending joined channel");
+        ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.CHAT)
+                .setClientInfo(authService.getConnection(target)
+                        .getClientInfo())
+                .setChatData(
+                        ServerMessage.ChatData
+                        .newBuilder()
+                        .setType(Type.PLAYER_JOINED)
+                        .setPrivate(false)
+                        .setSource(src.getUsername())
+                        .setChannel(id)
                         .build())
                 .build();
         messageHandler.queueOutboundMessage(message);
