@@ -4,7 +4,7 @@ package com.whiuk.philip.mmorpg.server.chat;
  * @author Philip
  *
  */
-public class ChannelPriveleges {
+public class ChannelPrivileges {
     /**
      *
      */
@@ -35,6 +35,31 @@ public class ChannelPriveleges {
     private boolean banPrivilege;
 
     /**
+     * Default constructor.
+     */
+    public ChannelPrivileges() {
+        
+    }
+
+    /**
+     * Construct from mask
+     * @param privileges
+     */
+    public ChannelPrivileges(final boolean[] mask) {
+        this();
+        setPrivilegeMask(mask);
+    }
+
+    /**
+     * Copy constructor
+     * @param privileges
+     */
+    public ChannelPrivileges(final ChannelPrivileges privileges) {
+        this();
+        this.setPrivilegeMask(privileges.getPrivilegeMask());
+    }
+
+    /**
      * Get privilege mask.
      * @return
      */
@@ -59,5 +84,21 @@ public class ChannelPriveleges {
         stopWritePrivelege = newPrivileges[4];
         kickPrivilege = newPrivileges[5];
         banPrivilege = newPrivileges[6];
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean getReadPrivilege() {
+        return readPrivilege;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean getWritePrivilege() {
+        return readPrivilege;
     }
 }
