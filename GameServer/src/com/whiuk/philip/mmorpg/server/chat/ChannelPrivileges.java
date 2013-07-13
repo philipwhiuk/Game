@@ -85,4 +85,20 @@ public class ChannelPrivileges {
         kickPrivilege = newPrivileges[5];
         banPrivilege = newPrivileges[6];
     }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean getReadPrivilege() {
+        return readPrivilege;
+    }
+
+    /**
+     * 
+     * @return
+     */
+    public boolean getWritePrivilege() {
+        return readPrivilege;
+    }
 }
