@@ -2,9 +2,11 @@ package com.whiuk.philip.mmorpg.server.chat;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,10 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
  */
 @Service
 public class ChatServiceImpl implements ChatService {
+    /**
+    *
+    */
+   private final transient Logger logger = Logger.getLogger(getClass());
 
     /**
      * Mapping of channels by ID.
@@ -46,7 +52,9 @@ public class ChatServiceImpl implements ChatService {
         channels = new HashMap<Integer, ChatChannel>();
         //TODO: Consider database storage of channel data
         //Create server public channel
-        channels.put(0, new ChatChannel());
+        ChatChannel publicChatChannel = new ChatChannel();
+        publicChatChannel.setChatService(this);
+        channels.put(0, publicChatChannel);
     }
 
     @PostConstruct
@@ -57,6 +65,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public final void processMessage(
             final Account account, final ChatData chatData) {
+        logger.info("Processing chat message");
         if (chatData.getPrivate()) {
             if (chatData.hasTarget()) {
                 handlePrivateMessage(account, chatData.getMessage(),
@@ -66,9 +75,11 @@ public class ChatServiceImpl implements ChatService {
             }
         } else {
             ChatChannel c = channels.get(chatData.getChannel());
+            logger.info("Processing chat message for channel: " + c.getId());
             if (c != null
                     && c.hasAccountRegistered(account)
                     && c.hasAccountSendPrivilege(account)) {
+                logger.info("Processing allowed chat message for channel: " + c.getId());
                 c.processMessage(account, chatData.getMessage());
             } else {
                 //Handle unauthorised message.
@@ -100,20 +111,28 @@ public class ChatServiceImpl implements ChatService {
         if (!channels.get(0).hasAccountRegistered(account)) {
             channels.get(0).registerAccount(account);
         }
+        //TODO: User channel join settings
+        for(Entry<Integer, ChatChannel> e : channels.entrySet()) {
+            if (e.getValue().hasAccountRegistered(account)) {
+                e.getValue().join(account);
+            }
+        }
     }
 
     @Override
     public final void sendMessageFromChannel(final int id,
             final Account src, final Account target,
             final String messageText) {
+        logger.info("Sending message from channel");
         ServerMessage message = ServerMessage
                 .newBuilder()
-                .setType(ServerMessage.Type.AUTH)
+                .setType(ServerMessage.Type.CHAT)
                 .setClientInfo(authService.getConnection(target)
                         .getClientInfo())
                 .setChatData(
                         ServerMessage.ChatData
                         .newBuilder()
+                        .setPrivate(false)
                         .setSource(target.getUsername())
                         .setChannel(id)
                         .setMessage(messageText)

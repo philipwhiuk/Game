@@ -1,6 +1,7 @@
 package com.whiuk.philip.mmorpg.server.chat;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -12,7 +13,6 @@ import javax.persistence.Transient;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.whiuk.philip.mmorpg.serverShared.Account;
-import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 /**
  *
@@ -60,7 +60,7 @@ public class ChatChannel {
     private ChannelPrivileges newAccountPrivileges =
             DEFAULT_NEW_ACCOUNT_PRIVILEGES;
 
-    @Autowired
+    @Transient
     private ChatService chatService;
 
     /**
@@ -68,6 +68,7 @@ public class ChatChannel {
      */
     public ChatChannel() {
         members = new HashMap<Account, ChannelPrivileges>();
+        online = new HashSet<Account>();
     }
 
     /**
@@ -84,8 +85,7 @@ public class ChatChannel {
      */
     public final boolean hasAccountSendPrivilege(
             final Account account) {
-        // TODO Auto-generated method stub
-        return false;
+        return members.get(account).getWritePrivilege();
     }
 
     /**
@@ -138,6 +138,20 @@ public class ChatChannel {
      */
     public final void join(final Account account) {
         online.add(account);
+    }
+
+    /**
+     * @return id
+     */
+    public final int getId() {
+        return id;
+    }
+
+    /**
+     * @param service Service
+     */
+    public final void setChatService(final ChatService service) {
+        this.chatService = service;
     }
 
 }
