@@ -3,6 +3,7 @@ package com.whiuk.philip.mmorpg.server.auth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
@@ -63,7 +64,19 @@ public class AuthServiceImpl implements AuthService {
      */
     private static final Logger LOGGER = Logger
             .getLogger(AuthServiceImpl.class);
-    private static final Object MISSING_LOGIN_DATA_MESSAGE = null;
+    /**
+     * Error message when login received without both username and password
+     * (should be impossible on a valid client).
+     */
+    private static final String MISSING_LOGIN_DATA_MESSAGE =
+            "Attempting to login without providing both a username and "
+            + "password";
+    /**
+     * Error message when login received for account already logged in.
+     */
+    private static final String ALREADY_LOGGED_IN_MESSAGE =
+            "Attempting to login (using valid credentials to an account that's"
+            + " already logged in. Ignoring request.";
     /**
      *
      */
@@ -72,11 +85,11 @@ public class AuthServiceImpl implements AuthService {
     /**
      *
      */
-    private Map<Account, Connection> accounts;
+    private volatile Map<Account, Connection> accounts;
     /**
      *
      */
-    private Map<Connection, Account> connections;
+    private volatile Map<Connection, Account> connections;
     /**
      *
      */
@@ -149,7 +162,7 @@ public class AuthServiceImpl implements AuthService {
     public final void processMessage(
             final ClientInfo src, final AuthData data) {
         Connection con;
-        LOGGER.info("Processing authentication message");
+        LOGGER.trace("Processing authentication message");
         switch (data.getType()) {
             case LOGIN:
                 processLoginMessage(src, data);
@@ -205,6 +218,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processLoginMessage(
             final ClientInfo src, final AuthData data) {
+        LOGGER.trace("Processing login message");
         Connection con;
 
         con = systemService.getConnection(src);
@@ -213,7 +227,7 @@ public class AuthServiceImpl implements AuthService {
             logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
             systemService.processLostConnection(src);
         } else {
-            //Handle already logged in
+            //Handle client already logged in
             if (connections.containsKey(con)) {
                 logger.log(Level.INFO, MULTIPLE_LOGINS_ATTEMPT_MESSAGE);
                 performLogout(connections.get(con));
@@ -238,6 +252,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processLoginAttempt(final Connection con,
             final String username, final String password) {
+        LOGGER.trace("Processing login attempt");
         // TODO Exceeded maximum login attempts
         HibernateUtils.beginTransaction();
         Account account = accountDAO.findByUsername(username);
@@ -254,6 +269,15 @@ public class AuthServiceImpl implements AuthService {
             if (!account.getPassword().equals(password)) {
                 processFailedLogin(con, attempt, account);
             } else {
+                //Handle account already logged in
+                logger.log(Level.INFO, ALREADY_LOGGED_IN_MESSAGE);
+                Set<Account> currentAccounts = accounts.keySet();
+                for (Account a: currentAccounts) {
+                    if (a.getUsername().equals(username)) {
+                        processFailedLogin(con, attempt, account);
+                        return;
+                    }
+                }
                 processSuccesfulLogin(con, attempt, account);
             }
         } else {
