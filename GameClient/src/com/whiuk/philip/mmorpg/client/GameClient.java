@@ -329,21 +329,21 @@ public class GameClient {
         Display.setFullscreen(FULLSCREEN);
         Display.setVSyncEnabled(false);
         Display.setTitle(GAME_CLIENT_TITLE);
-        LOGGER.info("Width: " + Display.getDisplayMode().getWidth()
+        LOGGER.trace("Width: " + Display.getDisplayMode().getWidth()
                 + ", Height: " + Display.getDisplayMode().getHeight()
                 + ", Bits per pixel: "
                 + Display.getDisplayMode().getBitsPerPixel() + ", Frequency: "
                 + Display.getDisplayMode().getFrequency() + ", Title: "
                 + Display.getTitle());
-        LOGGER.info("plattform: " + LWJGLUtil.getPlatformName());
-        LOGGER.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
-        LOGGER.info("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
-        LOGGER.info("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
+        LOGGER.trace("plattform: " + LWJGLUtil.getPlatformName());
+        LOGGER.trace("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
+        LOGGER.trace("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
+        LOGGER.trace("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
         String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
         if (extensions != null) {
             String[] ext = extensions.split(" ");
             for (int i = 0; i < ext.length; i++) {
-                LOGGER.info("opengl extensions: " + ext[i]);
+                LOGGER.trace("opengl extensions: " + ext[i]);
             }
         }
 
@@ -361,7 +361,7 @@ public class GameClient {
             DisplayMode mode = modes[i];
             if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT
                     && mode.getBitsPerPixel() == BITS_PER_PIXEL) {
-                LOGGER.info(mode.getWidth() + ", " + mode.getHeight() + ", "
+                LOGGER.trace(mode.getWidth() + ", " + mode.getHeight() + ", "
                         + mode.getBitsPerPixel() + ", " + mode.getFrequency());
                 matching.add(mode);
             }
@@ -373,7 +373,7 @@ public class GameClient {
         boolean found = false;
         for (int i = 0; i < matchingModes.length; i++) {
             if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-                LOGGER.info("using mode: " + matchingModes[i].getWidth() + ", "
+                LOGGER.trace("using mode: " + matchingModes[i].getWidth() + ", "
                         + matchingModes[i].getHeight() + ", "
                         + matchingModes[i].getBitsPerPixel() + ", "
                         + matchingModes[i].getFrequency());
