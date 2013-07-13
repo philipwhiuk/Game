@@ -7,6 +7,10 @@
    <!-- Control definition of chat area -->
    <screen id="lobby" controller="com.whiuk.philip.mmorpg.client.LobbyScreen">
       <layer id="layer" backgroundColor="#000f" childLayout="center">
+       	<panel id="panel-header" height="40" width="100%"
+				align="left" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
+			<text id="header" font="aurulent-sans-16.fnt" color="#ffff" text="Lobby" align="center" valign="center" />
+		</panel>
          <panel id="dialog" style="nifty-panel" childLayout="center"
                 width="70%" height="70%" align="center" valign="center"
                 visibleToMouse="true">
