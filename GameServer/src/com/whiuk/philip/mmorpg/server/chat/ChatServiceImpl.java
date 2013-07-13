@@ -1,5 +1,6 @@
 package com.whiuk.philip.mmorpg.server.chat;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.stereotype.Service;
@@ -17,6 +18,19 @@ public class ChatServiceImpl implements ChatService {
      * Mapping of channels by ID.
      */
     private Map<Integer, ChatChannel> channels;
+
+    /**
+     * <p>Create a new chat service.</p>
+     * <ul>
+     * <li>Creates a chat service to serve channels.</li>
+     * <li>Creates the global public channel (ID:0).</li>
+     * </ul>
+     */
+    public ChatServiceImpl() {
+        channels = new HashMap<Integer, ChatChannel>();
+        //Create server public channel
+        channels.put(0, new ChatChannel());
+    }
 
     @Override
     public final void processMessage(
