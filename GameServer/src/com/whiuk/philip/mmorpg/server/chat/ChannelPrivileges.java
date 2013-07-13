@@ -35,6 +35,31 @@ public class ChannelPrivileges {
     private boolean banPrivilege;
 
     /**
+     * Default constructor.
+     */
+    public ChannelPrivileges() {
+        
+    }
+
+    /**
+     * Construct from mask
+     * @param privileges
+     */
+    public ChannelPrivileges(final boolean[] mask) {
+        this();
+        setPrivilegeMask(mask);
+    }
+
+    /**
+     * Copy constructor
+     * @param privileges
+     */
+    public ChannelPrivileges(final ChannelPrivileges privileges) {
+        this();
+        this.setPrivilegeMask(privileges.getPrivilegeMask());
+    }
+
+    /**
      * Get privilege mask.
      * @return
      */
