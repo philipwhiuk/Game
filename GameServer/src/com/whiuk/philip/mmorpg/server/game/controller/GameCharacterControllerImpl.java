@@ -1,5 +1,7 @@
 package com.whiuk.philip.mmorpg.server.game.controller;
 
+import org.springframework.stereotype.Service;
+
 import com.whiuk.philip.mmorpg.server.game.domain.Action;
 import com.whiuk.philip.mmorpg.server.game.domain.GameCharacter;
 import com.whiuk.philip.mmorpg.server.game.domain.Item;
@@ -10,6 +12,7 @@ import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
  * @author Philip
  *
  */
+@Service
 public class GameCharacterControllerImpl implements GameCharacterController {
 
     /**
