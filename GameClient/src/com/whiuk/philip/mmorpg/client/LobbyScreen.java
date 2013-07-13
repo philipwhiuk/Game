@@ -57,40 +57,22 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
-        textInputMessage = screen.findElementByName("text_input");
     }
 
     @Override
     public final void onStartScreen() {
-        textInputMessage.addInputHandler(new KeyInputHandler() {
-            @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
-                switch (inputEvent) {
-                    case SubmitText:
-                        sendMessage();
-                        return true;
-                    default:
-                        break;
-                }
-                return false;
-            }
-        });
-        textInputMessage.setFocus();
     }
 
     /**
      * Send message.
      */
     protected final void sendMessage() {
+        //TODO: Get Message
         gameClient.sendChatData(
             ChatData.newBuilder()
-            .setMessage(textInputMessage
-                .getControl(TextFieldControl.class).getRealText())
+            .setMessage("")
             .build());
-        textInputMessage.getControl(TextFieldControl.class).setText("");
+        //textInputMessage.getControl(TextFieldControl.class).setText("");
     }
 
     @Override
