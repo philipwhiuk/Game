@@ -10,7 +10,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -175,6 +179,10 @@ public class GameClient {
      * Game.
      */
     private Game game;
+    /**
+     * 
+     */
+    private BlockingQueue<Runnable> queuedNiftyEvents;
 
     /**
      * Class logger.
@@ -245,6 +253,7 @@ public class GameClient {
      * Bean constructor.
      */
     public GameClient() {
+        queuedNiftyEvents = new LinkedBlockingQueue<Runnable>();
         try {
             sha256digest = MessageDigest.getInstance("SHA-256");
         } catch (GeneralSecurityException e) {
@@ -267,7 +276,7 @@ public class GameClient {
         setupOpenGL();
         setupInputSystem();
         setupNifty();
-
+        System.out.println(SwingUtilities.isEventDispatchThread());
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         boolean done = false;
@@ -275,6 +284,8 @@ public class GameClient {
 
             // render OpenGL here
             Display.update();
+            runQueuedNiftyEvents();
+            
             if (nifty.update()) {
                 done = true;
             }
@@ -289,6 +300,16 @@ public class GameClient {
         inputSystem.shutdown();
         Display.destroy();
         System.exit(0);
+    }
+
+    /**
+     * Run any queued events on the Nifty thread.
+     */
+    private void runQueuedNiftyEvents() {
+        while (!queuedNiftyEvents.isEmpty()) {
+            Runnable runnable = queuedNiftyEvents.poll();
+            runnable.run();
+        }
     }
 
     /**
@@ -686,15 +707,7 @@ public class GameClient {
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        if (!data.hasUsername()) {
-                            LOGGER.error("Username not provided, failed login");
-                            loginScreen.loginFailed("Server error occurred");
-                        } else {
-                            account = new Account(
-                                    data.getUsername());
-                            switchToLobbyScreen();
-                            state = State.LOBBY;
-                        }
+                        handleSuccessfuLogin(data);
                         break;
                     case EXTRA_AUTH_FAILED:
                         loginScreen.handleExtraAuthFailed();
@@ -735,6 +748,31 @@ public class GameClient {
             default:
                 LOGGER.info("Auth message recieved in invalid state: " + state);
                 break;
+        }
+    }
+
+    /**
+     * @param data Authentication data
+     */
+    private void handleSuccessfuLogin(final ServerMessage.AuthData data) {
+        if (!data.hasUsername()) {
+            LOGGER.error("Username not provided, failed login");
+            loginScreen.loginFailed("Server error occurred");
+        } else {
+            account = new Account(data.getUsername());
+            Runnable switchToLobby = new Runnable() {
+                @Override
+                public void run() {
+                    switchToLobbyScreen();
+                    state = State.LOBBY;
+                }
+            };
+            try {
+                queuedNiftyEvents.put(switchToLobby);
+            } catch (InterruptedException e) {
+                LOGGER.error(
+                        "Interrupted while waiting to queue switch to lobby");
+            }
         }
     }
 
@@ -820,6 +858,7 @@ public class GameClient {
 
     /**
      * Switch from the previous screen to the account registration screen.
+     * Must be run on the OpenGL context thread.
      */
     public final void switchToRegisterScreen() {
         registerScreen = new RegisterScreen(this);
@@ -831,6 +870,7 @@ public class GameClient {
 
     /**
      * Switch from the previous screen to the lobby screen.
+     * Must be run on the OpenGL context thread.
      */
     private void switchToLobbyScreen() {
         lobbyScreen = new LobbyScreen(this, account);
@@ -841,6 +881,7 @@ public class GameClient {
 
     /**
      * Switch from the previous screen to the login screen.
+     * Must be run on the OpenGL context thread.
      */
     private void switchToLoginScreen() {
         loginScreen = new LoginScreen(this);
