@@ -174,7 +174,7 @@ public class GameClient {
     /**
      * Character.
      */
-    private GameCharacter character;
+    private PlayerCharacter character;
 
     /**
      * Game.
@@ -288,7 +288,6 @@ public class GameClient {
         setupOpenGL();
         setupInputSystem();
         setupNifty();
-        System.out.println(SwingUtilities.isEventDispatchThread());
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
@@ -326,7 +325,7 @@ public class GameClient {
                     runnable.run();
                 } else {
                     try {
-                        LOGGER.info("Re-queuing event.");
+                        LOGGER.trace("Re-queuing event.");
                         newQueue.put(runnable);
                     } catch (InterruptedException e) {
                         LOGGER.info("Interrupted while re-queuing event.");
@@ -997,6 +996,7 @@ public class GameClient {
      * @param data Game data to send to server
      */
     public final void sendGameData(final GameData data) {
+        LOGGER.trace("Sending game data.");
         sendOutboundMessage(ClientMessage
                 .newBuilder()
                 .setType(ClientMessage.Type.GAME)
