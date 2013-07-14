@@ -1,0 +1,183 @@
+syntax = "proto2";
+option java_package = "com.whiuk.philip.mmorpg.shared";
+option java_outer_classname = "Messages";
+
+//Format of messages relating to authentication and login
+
+message ClientInfo {
+    required int32 clientID = 1;
+    required string version = 2;
+    required bytes macAddress = 3;
+    required string localIPAddress = 4;
+    optional string remoteIPAddress = 5;
+}
+
+message ClientMessage {
+	required Type type = 1;
+	required ClientInfo clientInfo = 2;
+	optional SystemData systemData = 3;
+	optional AuthData authData = 4;
+	optional ChatData chatData = 5;
+	optional GameData gameData = 6;
+
+	enum Type {
+		SYSTEM = 0;
+		AUTH = 1;
+		CHAT = 2;
+		GAME = 3;
+	}
+
+
+	message AuthData {
+		required AccountDataType type = 1;
+		required string username = 2;
+		required bytes password = 3;
+		optional string email = 4;
+		enum AccountDataType {
+			LOGIN = 1;
+			LOGOUT = 2;
+			REGISTER = 3;
+		}
+	}
+	//Format of messages relating to system information
+	message SystemData {
+		required Type type = 1;
+		enum Type {
+			CONNECTED = 0;
+			DISCONNECTING = 1;
+		}
+
+	}
+	//Format of chat data
+	message ChatData {
+		required bool private = 1;
+		required int32 channel = 2;
+		required string message = 3;
+		//Necessary if private
+		optional string target = 4;
+	}
+	message GameData {
+		required Type type = 1;
+		optional MovementInformation movementInformation = 2;
+		optional ActionInformation actionInformation = 3;
+		optional CombatInformation combatInformation = 4;
+		optional string character = 5;
+		enum Type {
+				CHARACTER_SELECTION = 0;
+				EXIT = 1;
+				MOVEMENT = 2;
+				ACTION = 3;
+				COMBAT = 4;
+		}
+		message MovementInformation {
+
+		}
+		message ActionInformation {
+			enum Action {
+				USE = 0;
+				EXAMINE = 1;
+				EQUIP = 2;
+				UNEQUIP = 3;
+				TAKE = 4;
+				DROP = 5;
+				CRAFT = 6;
+				MINE = 7;
+				SMITH = 8;
+				CAST = 9;
+			}
+			required Action action = 1;
+			optional int32 source = 2;
+			optional int32 target = 3;
+		}
+		message CombatInformation {
+
+		}
+	}
+}
+message ServerMessage {
+	required Type type = 1;
+	required ClientInfo clientInfo = 2;
+	optional SystemData systemData = 3;
+	optional AuthData authData = 4;
+	optional GameData gameData = 5;
+	optional ChatData chatData = 6;
+
+	enum Type {
+		SYSTEM = 0;
+		AUTH = 1;
+		CHAT = 2;
+		GAME = 3;
+	}
+	message SystemData {
+		enum Type {
+			UNKNOWN_MESSAGE_TYPE = 0;
+			INVALID_FORMAT = 1;
+			CONNECTED_SUCCESSFULLY = 2;
+			DISCONNECTING = 3;
+		}
+		required Type type = 1;
+		optional string details = 2;
+	}
+
+	message AuthData {
+		enum Type {
+			LOGIN_FAILED = 0;
+			EXTRA_AUTH_FAILED = 1;
+			LOGIN_SUCCESSFUL = 2;
+			LOGOUT_SUCCESSFUL = 3;
+			REGISTRATION_FAILED = 4;
+			REGISTRATION_SUCCESSFUL = 5;
+		}
+		required Type type = 1;
+		optional string username = 2;
+		optional string errorMessage = 3;
+	}
+
+	message GameData {
+		optional Type type = 1;
+		optional MovementInformation movementInformation = 2;
+		optional ActionInformation actionInformation = 3;
+		optional CombatInformation combatInformation = 4;
+		repeated CharacterInformation characterInformation = 5;
+		optional Error error = 6;
+		enum Type {
+				CHARACTER_SELECTION = 0;
+				EXIT = 1;
+				MOVEMENT = 2;
+				ACTION = 3;
+				COMBAT = 4;
+		}
+		enum Error {
+			CHARACTER_ALREADY_SELECTED = 0;
+		}
+		message MovementInformation {
+
+		}
+		message ActionInformation {
+		}
+		message CombatInformation {
+		}
+		message CharacterInformation {
+			required string name = 1;
+			required string race = 2;
+			required GraphicsData graphics = 3;
+		}
+	}
+
+	message ChatData {
+		enum Type {
+			MESSAGE = 0;
+			PLAYER_JOINED = 1;
+			PLAYER_LEFT = 2;
+		}
+		required Type type = 1;
+		required bool private = 2;
+		optional int32 channel = 3;
+		required string source = 4;
+		optional string message = 5;
+	}
+
+	message GraphicsData {
+
+	}
+}

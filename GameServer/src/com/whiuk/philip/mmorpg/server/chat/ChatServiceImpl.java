@@ -66,7 +66,7 @@ public class ChatServiceImpl implements ChatService {
     @Override
     public final void processMessage(
             final Account account, final ChatData chatData) {
-        logger.info("Processing chat message");
+        logger.trace("Processing chat message");
         if (chatData.getPrivate()) {
             if (chatData.hasTarget()) {
                 handlePrivateMessage(account, chatData.getMessage(),
@@ -76,11 +76,11 @@ public class ChatServiceImpl implements ChatService {
             }
         } else {
             ChatChannel c = channels.get(chatData.getChannel());
-            logger.info("Processing chat message for channel: " + c.getId());
+            logger.trace("Processing chat message for channel: " + c.getId());
             if (c != null
                     && c.hasAccountRegistered(account)
                     && c.hasAccountSendPrivilege(account)) {
-                logger.info("Processing allowed chat message for channel: " + c.getId());
+                logger.trace("Processing allowed chat message for channel: " + c.getId());
                 c.processMessage(account, chatData.getMessage());
             } else {
                 //Handle unauthorised message.
