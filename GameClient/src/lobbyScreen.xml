@@ -11,18 +11,67 @@
 				align="left" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
 			<text id="header" font="aurulent-sans-16.fnt" color="#ffff" text="Lobby" align="center" valign="center" />
 		</panel>
-		<panel id="panel-center" valign="center" align="center" width="100%" height="70%" childLayout="center" visibleToMouse="false">
-			<control id="tabs" name="tabGroup" buttonWidth="50%" buttonHeight="50px">
-				<control id="tab_1" name="tab" caption="Game">
+		<panel id="panel-center" valign="center" align="center" width="100%" height="70%" childLayout="vertical" visibleToMouse="false">
+			<control id="tabs" name="tabGroup" buttonWidth="50%" buttonHeight="50px" valign="top">
+				<control id="tab_1" name="tab" caption="Game" height="240" childLayout="vertical">
 			       	<panel id="character-selection" height="40" width="100%"
-						align="left" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
-						<control name="button" id="create_character_button" label="Create Character" align="left" valign="center" width="200">
-							<interact onClick="createCharacter()" />
-						</control>
-						<control id="character_drop_down" name="dropDown" align="center" width="200" />
-						<control name="button" id="play_button" label="Play" align="right" valign="center" width="100">
-							<interact onClick="play()" />
-						</control>
+						align="center" valign="top" backgroundColor="#555f" childLayout="horizontal" visibleToMouse="false">
+						<panel id="create_character-panel" width="33%" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+							<control name="button" id="create_character_button" label="Create Character" align="center" valign="center" width="200">
+								<interact onClick="createCharacter()" />
+							</control>
+						</panel>
+						<panel id="character_list-panel" width="33%" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+							<control id="character_drop_down" name="dropDown" valign="center" align="center" width="200" />
+						</panel>
+						<panel id="play-panel" width="33%" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+							<control name="button" id="play_button" label="Play" align="center" valign="center" width="100">
+								<interact onClick="play()" />
+							</control>
+						</panel>
+					</panel>
+					<panel id="character-display" height="200" width="100%"
+						align="center" valign="center"  backgroundColor="#555f" childLayout="horizontal" visibleToMouse="false">
+						<panel id="character-stats" height="200" width="33%"
+						align="center" valign="top"  backgroundColor="#555f" childLayout="vertical" visibleToMouse="false">
+				           	<panel id="name" height="40" width="100%" align="left" valign="center" backgroundColor="#555f" childLayout="horizontal"
+				           			visibleToMouse="false">
+			           			<panel id="name-title-panel" width="100" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+				           			<text id="name-title" font="aurulent-sans-16.fnt" color="#ffff" text="Name" align="center" valign="center" />
+				           		</panel>
+      					        <panel id="name-input-panel" width="250" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+			           				<control id="name-input" name="textfield" valign="center" align="center" width="200" />
+			           			</panel>
+			        		</panel>
+				           	<panel id="race" height="40" width="100%" align="left" valign="center" backgroundColor="#555f" childLayout="horizontal"
+				           			visibleToMouse="false">
+			           			<panel id="race-title-panel" width="100" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+				           			<text id="race-title" font="aurulent-sans-16.fnt" color="#ffff" text="Race" align="center" valign="center" />
+			           			</panel>
+			           			<panel id="race-input-panel" width="250" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+				           			<control id="race-drop_down" name="dropDown" align="center" valign="center" width="200" />
+			           			</panel>
+			        		</panel>
+			        		<panel id="location" height="40" width="100%" align="left" valign="center" backgroundColor="#555f" childLayout="horizontal"
+				           			visibleToMouse="false">
+			           			<panel id="location-title-panel" width="100" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+				           			<text id="location-title" font="aurulent-sans-16.fnt" color="#ffff" text="Location" align="center" valign="center" />
+			           			</panel>
+			           			<panel id="location-data-panel" width="250" align="left" valign="center" backgroundColor="#555f" childLayout="center"
+				           			visibleToMouse="false">
+				           			<text id="location-data" font="aurulent-sans-16.fnt" color="#ffff" text="" align="center" valign="center" />
+			           			</panel>
+			        		</panel>
+							<text id="stats" font="aurulent-sans-16.fnt" color="#ffff" text="Stats" align="center" valign="center" />
+						</panel>
 					</panel>
 				</control>
 				<control id="tab_2" name="tab" caption="Chat">
