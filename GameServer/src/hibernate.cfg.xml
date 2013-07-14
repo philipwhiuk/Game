@@ -23,5 +23,6 @@
 	<mapping class="com.whiuk.philip.mmorpg.serverShared.LoginAttempt" />
 	<mapping class="com.whiuk.philip.mmorpg.serverShared.RegistrationAttempt" />
 	<mapping class="com.whiuk.philip.mmorpg.server.chat.ChatChannel" />
+	<mapping class="com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter" />
 </session-factory>
 </hibernate-configuration>
