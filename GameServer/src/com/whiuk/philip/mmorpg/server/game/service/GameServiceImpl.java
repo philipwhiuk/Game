@@ -1,6 +1,7 @@
 package com.whiuk.philip.mmorpg.server.game.service;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
@@ -10,22 +11,15 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.whiuk.philip.mmorpg.shared.Messages.
-    ClientMessage.GameData;
-import com.whiuk.philip.mmorpg.shared.Messages.
-    ClientMessage.GameData.ActionInformation;
-import com.whiuk.philip.mmorpg.shared.Messages.
-    ClientMessage.GameData.CombatInformation;
-import com.whiuk.philip.mmorpg.shared.Messages.
-    ClientMessage.GameData.MovementInformation;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.server.game.controller.GameCharacterController;
 import com.whiuk.philip.mmorpg.server.game.controller.ZoneController;
 import com.whiuk.philip.mmorpg.server.game.domain.GameWorld;
-import com.whiuk.philip.mmorpg.server.game.domain.Item;
 import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
+import com.whiuk.philip.mmorpg.server.game.repository.PlayerCharacterDAO;
 import com.whiuk.philip.mmorpg.server.system.InvalidMappingException;
 import com.whiuk.philip.mmorpg.server.watchdog.WatchdogService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
@@ -81,6 +75,11 @@ public class GameServiceImpl implements GameService {
      * 
      */
     private Random random;
+    /**
+     * 
+     */
+    @Autowired
+    private PlayerCharacterDAO playerCharacterDAO;
 
     /**
      * Initialize the service.
@@ -95,19 +94,86 @@ public class GameServiceImpl implements GameService {
     }
 
     @Override
-    public final void processMessage(
-            final Account account, final GameData data) {
-        if (data.getType() == GameData.Type.CHARACTER_SELECTION) {
-            characterSelection(account, data);
-        } else if (data.getType() == GameData.Type.EXIT) {
-            if (accounts.get(account) != null) {
-                handleExit(account);
-            }
-        } else if (characters.get(account) != null) {
-            update(account, data);
-        } else {
-            handleActionInInvalidState(account, data);
+    public void notifyLogin(final Account account) {
+        provideCharacters(account);
+
+    }
+
+    /**
+     * Provide the account with a list of their characters.
+     * @param account Account
+     */
+    private void provideCharacters(final Account account) {
+        List<PlayerCharacter> pcs = playerCharacterDAO.findByAccount(account);
+        ServerMessage.GameData.Builder gdb =
+                ServerMessage.GameData.newBuilder();
+        gdb.setType(ServerMessage.GameData.Type.CHARACTER_SELECTION);
+        for (PlayerCharacter pc : pcs) {
+                gdb.addCharacterInformation(
+                        ServerMessage.GameData.CharacterInformation.newBuilder()
+                        .setName(pc.getName())
+                        .setRace(pc.getRace().getName()).build());
         }
+        ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.GAME)
+                .setGameData(gdb)
+                    .build();
+        messageHandlerService.queueOutboundMessage(message);
+    }
+
+    @Override
+    public final void processMessage(
+            final Account account, final ClientMessage.GameData data) {
+        switch(data.getType()) {
+            case CHARACTER_SELECTION:
+                characterSelection(account, data);
+                break;
+            case EXIT:
+                if (accounts.get(account) != null) {
+                    handleExit(account);
+                }
+                break;
+            default:
+                if (characters.get(account) != null) {
+                    update(account, data);
+                } else {
+                    handleActionInInvalidState(account, data);
+                }
+                break;
+        }
+    }
+
+    /**
+     * Handle character selection messages.
+     * @param account Account
+     * @param data
+     */
+    private void characterSelection(
+            final Account account, final ClientMessage.GameData data) {
+        if (characters.get(account) != null) {
+            ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.GAME)
+                .setGameData(
+                ServerMessage.GameData
+                        .newBuilder()
+                        .setError(
+                        ServerMessage.
+                GameData.Error.CHARACTER_ALREADY_SELECTED))
+                    .build();
+            messageHandlerService.queueOutboundMessage(message);
+        } else {
+            loadCharacter(account, data);
+        }
+    }
+
+    /**
+     * Load selected character.
+     * @param account Account
+     */
+    private void loadCharacter(final Account account, ClientMessage.GameData data) {
+        // TODO Auto-generated method stub
     }
 
     /**
@@ -123,7 +189,7 @@ public class GameServiceImpl implements GameService {
      * @param data Data
      */
     private void handleActionInInvalidState(
-            final Account account, final GameData data) {
+            final Account account, final ClientMessage.GameData data) {
         // TODO Auto-generated method stub
     }
 
@@ -132,7 +198,7 @@ public class GameServiceImpl implements GameService {
      * @param account Account
      * @param data
      */
-    private void update(final Account account, final GameData data) {
+    private void update(final Account account, final ClientMessage.GameData data) {
         switch (data.getType()) {
             case MOVEMENT:
                 move(characters.get(account), data.getMovementInformation());
@@ -156,44 +222,12 @@ public class GameServiceImpl implements GameService {
     }
 
     /**
-     * Handle character selection messages.
-     * @param account Account
-     * @param data
-     */
-    private void characterSelection(
-            final Account account, final GameData data) {
-        if (characters.get(account) != null) {
-            ServerMessage message = ServerMessage
-                .newBuilder()
-                .setType(ServerMessage.Type.GAME)
-                .setGameData(
-                ServerMessage.GameData
-                        .newBuilder()
-                        .setError(
-                        ServerMessage.
-                GameData.Error.CHARACTER_ALREADY_SELECTED))
-                    .build();
-            messageHandlerService.queueOutboundMessage(message);
-        } else {
-            loadCharacters(account);
-        }
-    }
-
-    /**
-     * Load character.
-     * @param account Account
-     */
-    private void loadCharacters(final Account account) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
      * Handles character combat messages.
      * @param character
      * @param combatInformation
      */
     private void combat(final PlayerCharacter character,
-            final CombatInformation combatInformation) {
+            final ClientMessage.GameData.CombatInformation combatInformation) {
         // TODO Auto-generated method stub
 
     }
@@ -204,7 +238,7 @@ public class GameServiceImpl implements GameService {
      * @param movementInformation
      */
     private void move(final PlayerCharacter character,
-            final MovementInformation movementInformation) {
+            final ClientMessage.GameData.MovementInformation movementInformation) {
         // TODO Auto-generated method stub
 
     }
@@ -215,7 +249,7 @@ public class GameServiceImpl implements GameService {
      * @param actionInformation Action message
      */
     private void action(final PlayerCharacter character,
-            final ActionInformation actionInformation) {
+            final ClientMessage.GameData.ActionInformation actionInformation) {
         switch (actionInformation.getAction()) {
             case TAKE:
                 charController.take(character, actionInformation.getSource());
@@ -274,12 +308,6 @@ public class GameServiceImpl implements GameService {
     @Override
     public final Random getRandom() {
         return random;
-    }
-
-    @Override
-    public void notifyLogin(Account account) {
-        // TODO Auto-generated method stub
-        
     }
 
 }
