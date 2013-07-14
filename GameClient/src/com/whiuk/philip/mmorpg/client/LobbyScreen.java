@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.GameClient.State;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
@@ -15,6 +16,7 @@ import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
 import de.lessvoid.nifty.controls.dropdown.DropDownControl;
+import de.lessvoid.nifty.controls.tabs.TabControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -63,6 +65,14 @@ public class LobbyScreen implements ScreenController {
      * Play button
      */
     private Element playButton;
+    /**
+     * Tab 1
+     */
+    private Element tab1;
+    /**
+     * Tab 2
+     */
+    private Element tab2;
 
     /**
      * @param g
@@ -78,9 +88,12 @@ public class LobbyScreen implements ScreenController {
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
+        tab1 = screen.findElementByName("tab_1");
+        tab2 = screen.findElementByName("tab_2");
         chatElement = screen.findElementByName("chatId");
         characterListElement = screen.findElementByName("character_drop_down");
         playButton = screen.findElementByName("play_button");
+        gameClient.setState(State.LOBBY);
     }
 
     @Override
