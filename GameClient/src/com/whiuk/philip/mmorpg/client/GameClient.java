@@ -667,7 +667,23 @@ public class GameClient {
      * @param message Message
      */
     public final void handleGameMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
+        if (state.equals(State.LOBBY)) {
+            queuedNiftyEvents.add(new Runnable() {
+                public void run() {
+                    lobbyScreen.handleGameMessage(message.getGameData());
+                }
+            });
+        } else if (state.equals(State.GAME)) {
+            game.handleGameMessage(message);
+        } else if (unprocessedLoginResponse) {
+            queuedNiftyEvents.add(new Runnable() {
+                public void run() {
+                    lobbyScreen.handleGameMessage(message.getGameData());
+                }
+            });
+        } else {
+            LOGGER.info("Game message recieved in invalid state: " + state);
+        }
     }
 
     /**

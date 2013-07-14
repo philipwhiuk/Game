@@ -14,6 +14,7 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
+import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -50,6 +51,18 @@ public class LobbyScreen implements ScreenController {
      * Chat box element
      */
     private Element chatElement;
+    /**
+     * Drop down Character List element
+     */
+    private Element characterListElement;
+    /**
+     * Create Character Button
+     */
+    private Element createCharacterButton;
+    /**
+     * Play button
+     */
+    private Element playButton;
 
     /**
      * @param g
@@ -66,6 +79,8 @@ public class LobbyScreen implements ScreenController {
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
         chatElement = screen.findElementByName("chatId");
+        characterListElement = screen.findElementByName("character_drop_down");
+        playButton = screen.findElementByName("play_button");
     }
 
     @Override
@@ -124,7 +139,12 @@ public class LobbyScreen implements ScreenController {
     public final void handleGameMessage(final ServerMessage.GameData gameData) {
         switch (gameData.getType()) {
             case CHARACTER_SELECTION:
+                LOGGER.info("Recieved character selection message");
                 characters = gameData.getCharacterInformationList();
+                for (CharacterInformation c: characters) {
+                    characterListElement
+                        .getControl(DropDownControl.class).addItem(c);
+                }
                 break;
             default:
                 throw new IllegalStateException();
@@ -132,13 +152,17 @@ public class LobbyScreen implements ScreenController {
     }
 
     /**
-     * Select a character.
-     * @param name Character name
+     * Play with the selected character.
      */
-    public final void selectCharacter(final String name) {
-        gameClient.sendGameData(ClientMessage.GameData.newBuilder()
-            .setType(ClientMessage.GameData.Type.CHARACTER_SELECTION)
-            .setCharacter(name)
-            .build());
+    public final void play() {
+        Object selection = characterListElement
+                .getControl(DropDownControl.class).getSelection();
+        if (selection != null) {
+            String name = ((CharacterInformation) selection).getName();
+            gameClient.sendGameData(ClientMessage.GameData.newBuilder()
+                    .setType(ClientMessage.GameData.Type.CHARACTER_SELECTION)
+                    .setCharacter(name)
+                    .build());
+        }
     }
 }
