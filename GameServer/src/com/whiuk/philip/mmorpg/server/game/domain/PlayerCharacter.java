@@ -2,7 +2,10 @@ package com.whiuk.philip.mmorpg.server.game.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
+
+import com.whiuk.philip.mmorpg.serverShared.Account;
 
 
 /**
@@ -18,6 +21,12 @@ public class PlayerCharacter implements GameCharacter {
      */
     @Id
     private Long id;
+    
+    /**
+     * 
+     */
+    @ManyToOne
+    private Account account;
 
     /**
      * Whether the player controlling the character has logged out. See {@link
@@ -50,6 +59,18 @@ public class PlayerCharacter implements GameCharacter {
     public void doAction(final Action a) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    
+    @Override
+    public Race getRace() {
+        // TODO Auto-generated method stub
+        return null;
     }
 
 }
