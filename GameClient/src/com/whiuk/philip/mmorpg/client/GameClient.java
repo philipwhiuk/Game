@@ -577,15 +577,7 @@ public class GameClient {
                 handleSystemMessage(message);
                 break;
             case GAME:
-                switch (state) {
-                    case GAME:
-                        handleGameMessage(message);
-                        break;
-                    default:
-                        LOGGER.info("Game message recieved in invalid state: "
-                                + state);
-                        break;
-                }
+                handleGameMessage(message);
                 break;
             case CHAT:
                 handleChatMessage(message);
