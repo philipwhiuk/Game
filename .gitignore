@@ -5,4 +5,4 @@
 *.ear
 # Repository #
 bin/
-GameServer/src-gen/com/whiuk/philip/mmorpg/server/game/ai/Messages.java
+target/
