@@ -128,8 +128,8 @@ public class GameServiceImpl implements GameService {
     public final void processMessage(
             final Account account, final ClientMessage.GameData data) {
         switch(data.getType()) {
-            case CHARACTER_SELECTION:
-                characterSelection(account, data);
+            case CHARACTER_SELECTED:
+                characterSelected(account, data);
                 break;
             case EXIT:
                 if (accounts.get(account) != null) {
@@ -151,7 +151,7 @@ public class GameServiceImpl implements GameService {
      * @param account Account
      * @param data
      */
-    private void characterSelection(
+    private void characterSelected(
             final Account account, final ClientMessage.GameData data) {
         if (characters.get(account) != null) {
             ServerMessage message = ServerMessage

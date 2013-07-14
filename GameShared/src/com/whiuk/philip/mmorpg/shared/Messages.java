@@ -3638,62 +3638,61 @@ public final class Messages {
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type getType();
 
-      // optional .ClientMessage.GameData.MovementInformation movementInformation = 2;
+      // optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;
       /**
-       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+       * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+       */
+      boolean hasCharacterInformation();
+      /**
+       * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+       */
+      com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation getCharacterInformation();
+      /**
+       * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+       */
+      com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder getCharacterInformationOrBuilder();
+
+      // optional .ClientMessage.GameData.MovementInformation movementInformation = 3;
+      /**
+       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
        */
       boolean hasMovementInformation();
       /**
-       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation getMovementInformation();
       /**
-       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformationOrBuilder getMovementInformationOrBuilder();
 
-      // optional .ClientMessage.GameData.ActionInformation actionInformation = 3;
+      // optional .ClientMessage.GameData.ActionInformation actionInformation = 4;
       /**
-       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
        */
       boolean hasActionInformation();
       /**
-       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation getActionInformation();
       /**
-       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformationOrBuilder getActionInformationOrBuilder();
 
-      // optional .ClientMessage.GameData.CombatInformation combatInformation = 4;
+      // optional .ClientMessage.GameData.CombatInformation combatInformation = 5;
       /**
-       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
        */
       boolean hasCombatInformation();
       /**
-       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation getCombatInformation();
       /**
-       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformationOrBuilder getCombatInformationOrBuilder();
-
-      // optional string character = 5;
-      /**
-       * <code>optional string character = 5;</code>
-       */
-      boolean hasCharacter();
-      /**
-       * <code>optional string character = 5;</code>
-       */
-      java.lang.String getCharacter();
-      /**
-       * <code>optional string character = 5;</code>
-       */
-      com.google.protobuf.ByteString
-          getCharacterBytes();
     }
     /**
      * Protobuf type {@code ClientMessage.GameData}
@@ -3758,8 +3757,21 @@ public final class Messages {
                 break;
               }
               case 18: {
-                com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.Builder subBuilder = null;
+                com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder subBuilder = null;
                 if (((bitField0_ & 0x00000002) == 0x00000002)) {
+                  subBuilder = characterInformation_.toBuilder();
+                }
+                characterInformation_ = input.readMessage(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.PARSER, extensionRegistry);
+                if (subBuilder != null) {
+                  subBuilder.mergeFrom(characterInformation_);
+                  characterInformation_ = subBuilder.buildPartial();
+                }
+                bitField0_ |= 0x00000002;
+                break;
+              }
+              case 26: {
+                com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.Builder subBuilder = null;
+                if (((bitField0_ & 0x00000004) == 0x00000004)) {
                   subBuilder = movementInformation_.toBuilder();
                 }
                 movementInformation_ = input.readMessage(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.PARSER, extensionRegistry);
@@ -3767,12 +3779,12 @@ public final class Messages {
                   subBuilder.mergeFrom(movementInformation_);
                   movementInformation_ = subBuilder.buildPartial();
                 }
-                bitField0_ |= 0x00000002;
+                bitField0_ |= 0x00000004;
                 break;
               }
-              case 26: {
+              case 34: {
                 com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.Builder subBuilder = null;
-                if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                if (((bitField0_ & 0x00000008) == 0x00000008)) {
                   subBuilder = actionInformation_.toBuilder();
                 }
                 actionInformation_ = input.readMessage(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.PARSER, extensionRegistry);
@@ -3780,12 +3792,12 @@ public final class Messages {
                   subBuilder.mergeFrom(actionInformation_);
                   actionInformation_ = subBuilder.buildPartial();
                 }
-                bitField0_ |= 0x00000004;
+                bitField0_ |= 0x00000008;
                 break;
               }
-              case 34: {
+              case 42: {
                 com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.Builder subBuilder = null;
-                if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                if (((bitField0_ & 0x00000010) == 0x00000010)) {
                   subBuilder = combatInformation_.toBuilder();
                 }
                 combatInformation_ = input.readMessage(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.PARSER, extensionRegistry);
@@ -3793,12 +3805,7 @@ public final class Messages {
                   subBuilder.mergeFrom(combatInformation_);
                   combatInformation_ = subBuilder.buildPartial();
                 }
-                bitField0_ |= 0x00000008;
-                break;
-              }
-              case 42: {
                 bitField0_ |= 0x00000010;
-                character_ = input.readBytes();
                 break;
               }
             }
@@ -3846,58 +3853,67 @@ public final class Messages {
       public enum Type
           implements com.google.protobuf.ProtocolMessageEnum {
         /**
-         * <code>CHARACTER_SELECTION = 0;</code>
+         * <code>CHARACTER_CREATION = 0;</code>
          */
-        CHARACTER_SELECTION(0, 0),
+        CHARACTER_CREATION(0, 0),
         /**
-         * <code>EXIT = 1;</code>
+         * <code>CHARACTER_SELECTED = 1;</code>
          */
-        EXIT(1, 1),
+        CHARACTER_SELECTED(1, 1),
         /**
-         * <code>MOVEMENT = 2;</code>
+         * <code>EXIT = 2;</code>
          */
-        MOVEMENT(2, 2),
+        EXIT(2, 2),
         /**
-         * <code>ACTION = 3;</code>
+         * <code>MOVEMENT = 3;</code>
          */
-        ACTION(3, 3),
+        MOVEMENT(3, 3),
         /**
-         * <code>COMBAT = 4;</code>
+         * <code>ACTION = 4;</code>
          */
-        COMBAT(4, 4),
+        ACTION(4, 4),
+        /**
+         * <code>COMBAT = 5;</code>
+         */
+        COMBAT(5, 5),
         ;
 
         /**
-         * <code>CHARACTER_SELECTION = 0;</code>
+         * <code>CHARACTER_CREATION = 0;</code>
          */
-        public static final int CHARACTER_SELECTION_VALUE = 0;
+        public static final int CHARACTER_CREATION_VALUE = 0;
         /**
-         * <code>EXIT = 1;</code>
+         * <code>CHARACTER_SELECTED = 1;</code>
          */
-        public static final int EXIT_VALUE = 1;
+        public static final int CHARACTER_SELECTED_VALUE = 1;
         /**
-         * <code>MOVEMENT = 2;</code>
+         * <code>EXIT = 2;</code>
          */
-        public static final int MOVEMENT_VALUE = 2;
+        public static final int EXIT_VALUE = 2;
         /**
-         * <code>ACTION = 3;</code>
+         * <code>MOVEMENT = 3;</code>
          */
-        public static final int ACTION_VALUE = 3;
+        public static final int MOVEMENT_VALUE = 3;
         /**
-         * <code>COMBAT = 4;</code>
+         * <code>ACTION = 4;</code>
          */
-        public static final int COMBAT_VALUE = 4;
+        public static final int ACTION_VALUE = 4;
+        /**
+         * <code>COMBAT = 5;</code>
+         */
+        public static final int COMBAT_VALUE = 5;
 
 
         public final int getNumber() { return value; }
 
         public static Type valueOf(int value) {
           switch (value) {
-            case 0: return CHARACTER_SELECTION;
-            case 1: return EXIT;
-            case 2: return MOVEMENT;
-            case 3: return ACTION;
-            case 4: return COMBAT;
+            case 0: return CHARACTER_CREATION;
+            case 1: return CHARACTER_SELECTED;
+            case 2: return EXIT;
+            case 3: return MOVEMENT;
+            case 4: return ACTION;
+            case 5: return COMBAT;
             default: return null;
           }
         }
@@ -3947,6 +3963,641 @@ public final class Messages {
         }
 
         // @@protoc_insertion_point(enum_scope:ClientMessage.GameData.Type)
+      }
+
+      public interface CharacterInformationOrBuilder
+          extends com.google.protobuf.MessageOrBuilder {
+
+        // required string name = 1;
+        /**
+         * <code>required string name = 1;</code>
+         */
+        boolean hasName();
+        /**
+         * <code>required string name = 1;</code>
+         */
+        java.lang.String getName();
+        /**
+         * <code>required string name = 1;</code>
+         */
+        com.google.protobuf.ByteString
+            getNameBytes();
+
+        // optional string race = 2;
+        /**
+         * <code>optional string race = 2;</code>
+         */
+        boolean hasRace();
+        /**
+         * <code>optional string race = 2;</code>
+         */
+        java.lang.String getRace();
+        /**
+         * <code>optional string race = 2;</code>
+         */
+        com.google.protobuf.ByteString
+            getRaceBytes();
+      }
+      /**
+       * Protobuf type {@code ClientMessage.GameData.CharacterInformation}
+       */
+      public static final class CharacterInformation extends
+          com.google.protobuf.GeneratedMessage
+          implements CharacterInformationOrBuilder {
+        // Use CharacterInformation.newBuilder() to construct.
+        private CharacterInformation(com.google.protobuf.GeneratedMessage.Builder<?> builder) {
+          super(builder);
+          this.unknownFields = builder.getUnknownFields();
+        }
+        private CharacterInformation(boolean noInit) { this.unknownFields = com.google.protobuf.UnknownFieldSet.getDefaultInstance(); }
+
+        private static final CharacterInformation defaultInstance;
+        public static CharacterInformation getDefaultInstance() {
+          return defaultInstance;
+        }
+
+        public CharacterInformation getDefaultInstanceForType() {
+          return defaultInstance;
+        }
+
+        private final com.google.protobuf.UnknownFieldSet unknownFields;
+        @java.lang.Override
+        public final com.google.protobuf.UnknownFieldSet
+            getUnknownFields() {
+          return this.unknownFields;
+        }
+        private CharacterInformation(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          initFields();
+          int mutable_bitField0_ = 0;
+          com.google.protobuf.UnknownFieldSet.Builder unknownFields =
+              com.google.protobuf.UnknownFieldSet.newBuilder();
+          try {
+            boolean done = false;
+            while (!done) {
+              int tag = input.readTag();
+              switch (tag) {
+                case 0:
+                  done = true;
+                  break;
+                default: {
+                  if (!parseUnknownField(input, unknownFields,
+                                         extensionRegistry, tag)) {
+                    done = true;
+                  }
+                  break;
+                }
+                case 10: {
+                  bitField0_ |= 0x00000001;
+                  name_ = input.readBytes();
+                  break;
+                }
+                case 18: {
+                  bitField0_ |= 0x00000002;
+                  race_ = input.readBytes();
+                  break;
+                }
+              }
+            }
+          } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+            throw e.setUnfinishedMessage(this);
+          } catch (java.io.IOException e) {
+            throw new com.google.protobuf.InvalidProtocolBufferException(
+                e.getMessage()).setUnfinishedMessage(this);
+          } finally {
+            this.unknownFields = unknownFields.build();
+            makeExtensionsImmutable();
+          }
+        }
+        public static final com.google.protobuf.Descriptors.Descriptor
+            getDescriptor() {
+          return com.whiuk.philip.mmorpg.shared.Messages.internal_static_ClientMessage_GameData_CharacterInformation_descriptor;
+        }
+
+        protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+            internalGetFieldAccessorTable() {
+          return com.whiuk.philip.mmorpg.shared.Messages.internal_static_ClientMessage_GameData_CharacterInformation_fieldAccessorTable
+              .ensureFieldAccessorsInitialized(
+                  com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.class, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder.class);
+        }
+
+        public static com.google.protobuf.Parser<CharacterInformation> PARSER =
+            new com.google.protobuf.AbstractParser<CharacterInformation>() {
+          public CharacterInformation parsePartialFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws com.google.protobuf.InvalidProtocolBufferException {
+            return new CharacterInformation(input, extensionRegistry);
+          }
+        };
+
+        @java.lang.Override
+        public com.google.protobuf.Parser<CharacterInformation> getParserForType() {
+          return PARSER;
+        }
+
+        private int bitField0_;
+        // required string name = 1;
+        public static final int NAME_FIELD_NUMBER = 1;
+        private java.lang.Object name_;
+        /**
+         * <code>required string name = 1;</code>
+         */
+        public boolean hasName() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required string name = 1;</code>
+         */
+        public java.lang.String getName() {
+          java.lang.Object ref = name_;
+          if (ref instanceof java.lang.String) {
+            return (java.lang.String) ref;
+          } else {
+            com.google.protobuf.ByteString bs = 
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              name_ = s;
+            }
+            return s;
+          }
+        }
+        /**
+         * <code>required string name = 1;</code>
+         */
+        public com.google.protobuf.ByteString
+            getNameBytes() {
+          java.lang.Object ref = name_;
+          if (ref instanceof java.lang.String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            name_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+
+        // optional string race = 2;
+        public static final int RACE_FIELD_NUMBER = 2;
+        private java.lang.Object race_;
+        /**
+         * <code>optional string race = 2;</code>
+         */
+        public boolean hasRace() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>optional string race = 2;</code>
+         */
+        public java.lang.String getRace() {
+          java.lang.Object ref = race_;
+          if (ref instanceof java.lang.String) {
+            return (java.lang.String) ref;
+          } else {
+            com.google.protobuf.ByteString bs = 
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              race_ = s;
+            }
+            return s;
+          }
+        }
+        /**
+         * <code>optional string race = 2;</code>
+         */
+        public com.google.protobuf.ByteString
+            getRaceBytes() {
+          java.lang.Object ref = race_;
+          if (ref instanceof java.lang.String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            race_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+
+        private void initFields() {
+          name_ = "";
+          race_ = "";
+        }
+        private byte memoizedIsInitialized = -1;
+        public final boolean isInitialized() {
+          byte isInitialized = memoizedIsInitialized;
+          if (isInitialized != -1) return isInitialized == 1;
+
+          if (!hasName()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+          memoizedIsInitialized = 1;
+          return true;
+        }
+
+        public void writeTo(com.google.protobuf.CodedOutputStream output)
+                            throws java.io.IOException {
+          getSerializedSize();
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            output.writeBytes(1, getNameBytes());
+          }
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            output.writeBytes(2, getRaceBytes());
+          }
+          getUnknownFields().writeTo(output);
+        }
+
+        private int memoizedSerializedSize = -1;
+        public int getSerializedSize() {
+          int size = memoizedSerializedSize;
+          if (size != -1) return size;
+
+          size = 0;
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeBytesSize(1, getNameBytes());
+          }
+          if (((bitField0_ & 0x00000002) == 0x00000002)) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeBytesSize(2, getRaceBytes());
+          }
+          size += getUnknownFields().getSerializedSize();
+          memoizedSerializedSize = size;
+          return size;
+        }
+
+        private static final long serialVersionUID = 0L;
+        @java.lang.Override
+        protected java.lang.Object writeReplace()
+            throws java.io.ObjectStreamException {
+          return super.writeReplace();
+        }
+
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(
+            com.google.protobuf.ByteString data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(
+            com.google.protobuf.ByteString data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(byte[] data)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(
+            byte[] data,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws com.google.protobuf.InvalidProtocolBufferException {
+          return PARSER.parseFrom(data, extensionRegistry);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(java.io.InputStream input)
+            throws java.io.IOException {
+          return PARSER.parseFrom(input);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          return PARSER.parseFrom(input, extensionRegistry);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseDelimitedFrom(java.io.InputStream input)
+            throws java.io.IOException {
+          return PARSER.parseDelimitedFrom(input);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseDelimitedFrom(
+            java.io.InputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          return PARSER.parseDelimitedFrom(input, extensionRegistry);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(
+            com.google.protobuf.CodedInputStream input)
+            throws java.io.IOException {
+          return PARSER.parseFrom(input);
+        }
+        public static com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parseFrom(
+            com.google.protobuf.CodedInputStream input,
+            com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+            throws java.io.IOException {
+          return PARSER.parseFrom(input, extensionRegistry);
+        }
+
+        public static Builder newBuilder() { return Builder.create(); }
+        public Builder newBuilderForType() { return newBuilder(); }
+        public static Builder newBuilder(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation prototype) {
+          return newBuilder().mergeFrom(prototype);
+        }
+        public Builder toBuilder() { return newBuilder(this); }
+
+        @java.lang.Override
+        protected Builder newBuilderForType(
+            com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+          Builder builder = new Builder(parent);
+          return builder;
+        }
+        /**
+         * Protobuf type {@code ClientMessage.GameData.CharacterInformation}
+         */
+        public static final class Builder extends
+            com.google.protobuf.GeneratedMessage.Builder<Builder>
+           implements com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder {
+          public static final com.google.protobuf.Descriptors.Descriptor
+              getDescriptor() {
+            return com.whiuk.philip.mmorpg.shared.Messages.internal_static_ClientMessage_GameData_CharacterInformation_descriptor;
+          }
+
+          protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
+              internalGetFieldAccessorTable() {
+            return com.whiuk.philip.mmorpg.shared.Messages.internal_static_ClientMessage_GameData_CharacterInformation_fieldAccessorTable
+                .ensureFieldAccessorsInitialized(
+                    com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.class, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder.class);
+          }
+
+          // Construct using com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.newBuilder()
+          private Builder() {
+            maybeForceBuilderInitialization();
+          }
+
+          private Builder(
+              com.google.protobuf.GeneratedMessage.BuilderParent parent) {
+            super(parent);
+            maybeForceBuilderInitialization();
+          }
+          private void maybeForceBuilderInitialization() {
+            if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            }
+          }
+          private static Builder create() {
+            return new Builder();
+          }
+
+          public Builder clear() {
+            super.clear();
+            name_ = "";
+            bitField0_ = (bitField0_ & ~0x00000001);
+            race_ = "";
+            bitField0_ = (bitField0_ & ~0x00000002);
+            return this;
+          }
+
+          public Builder clone() {
+            return create().mergeFrom(buildPartial());
+          }
+
+          public com.google.protobuf.Descriptors.Descriptor
+              getDescriptorForType() {
+            return com.whiuk.philip.mmorpg.shared.Messages.internal_static_ClientMessage_GameData_CharacterInformation_descriptor;
+          }
+
+          public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation getDefaultInstanceForType() {
+            return com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance();
+          }
+
+          public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation build() {
+            com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation result = buildPartial();
+            if (!result.isInitialized()) {
+              throw newUninitializedMessageException(result);
+            }
+            return result;
+          }
+
+          public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation buildPartial() {
+            com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation result = new com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation(this);
+            int from_bitField0_ = bitField0_;
+            int to_bitField0_ = 0;
+            if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+              to_bitField0_ |= 0x00000001;
+            }
+            result.name_ = name_;
+            if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
+              to_bitField0_ |= 0x00000002;
+            }
+            result.race_ = race_;
+            result.bitField0_ = to_bitField0_;
+            onBuilt();
+            return result;
+          }
+
+          public Builder mergeFrom(com.google.protobuf.Message other) {
+            if (other instanceof com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation) {
+              return mergeFrom((com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation)other);
+            } else {
+              super.mergeFrom(other);
+              return this;
+            }
+          }
+
+          public Builder mergeFrom(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation other) {
+            if (other == com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance()) return this;
+            if (other.hasName()) {
+              bitField0_ |= 0x00000001;
+              name_ = other.name_;
+              onChanged();
+            }
+            if (other.hasRace()) {
+              bitField0_ |= 0x00000002;
+              race_ = other.race_;
+              onChanged();
+            }
+            this.mergeUnknownFields(other.getUnknownFields());
+            return this;
+          }
+
+          public final boolean isInitialized() {
+            if (!hasName()) {
+              
+              return false;
+            }
+            return true;
+          }
+
+          public Builder mergeFrom(
+              com.google.protobuf.CodedInputStream input,
+              com.google.protobuf.ExtensionRegistryLite extensionRegistry)
+              throws java.io.IOException {
+            com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation parsedMessage = null;
+            try {
+              parsedMessage = PARSER.parsePartialFrom(input, extensionRegistry);
+            } catch (com.google.protobuf.InvalidProtocolBufferException e) {
+              parsedMessage = (com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation) e.getUnfinishedMessage();
+              throw e;
+            } finally {
+              if (parsedMessage != null) {
+                mergeFrom(parsedMessage);
+              }
+            }
+            return this;
+          }
+          private int bitField0_;
+
+          // required string name = 1;
+          private java.lang.Object name_ = "";
+          /**
+           * <code>required string name = 1;</code>
+           */
+          public boolean hasName() {
+            return ((bitField0_ & 0x00000001) == 0x00000001);
+          }
+          /**
+           * <code>required string name = 1;</code>
+           */
+          public java.lang.String getName() {
+            java.lang.Object ref = name_;
+            if (!(ref instanceof java.lang.String)) {
+              java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                  .toStringUtf8();
+              name_ = s;
+              return s;
+            } else {
+              return (java.lang.String) ref;
+            }
+          }
+          /**
+           * <code>required string name = 1;</code>
+           */
+          public com.google.protobuf.ByteString
+              getNameBytes() {
+            java.lang.Object ref = name_;
+            if (ref instanceof String) {
+              com.google.protobuf.ByteString b = 
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                      (java.lang.String) ref);
+              name_ = b;
+              return b;
+            } else {
+              return (com.google.protobuf.ByteString) ref;
+            }
+          }
+          /**
+           * <code>required string name = 1;</code>
+           */
+          public Builder setName(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+            name_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>required string name = 1;</code>
+           */
+          public Builder clearName() {
+            bitField0_ = (bitField0_ & ~0x00000001);
+            name_ = getDefaultInstance().getName();
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>required string name = 1;</code>
+           */
+          public Builder setNameBytes(
+              com.google.protobuf.ByteString value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+            name_ = value;
+            onChanged();
+            return this;
+          }
+
+          // optional string race = 2;
+          private java.lang.Object race_ = "";
+          /**
+           * <code>optional string race = 2;</code>
+           */
+          public boolean hasRace() {
+            return ((bitField0_ & 0x00000002) == 0x00000002);
+          }
+          /**
+           * <code>optional string race = 2;</code>
+           */
+          public java.lang.String getRace() {
+            java.lang.Object ref = race_;
+            if (!(ref instanceof java.lang.String)) {
+              java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                  .toStringUtf8();
+              race_ = s;
+              return s;
+            } else {
+              return (java.lang.String) ref;
+            }
+          }
+          /**
+           * <code>optional string race = 2;</code>
+           */
+          public com.google.protobuf.ByteString
+              getRaceBytes() {
+            java.lang.Object ref = race_;
+            if (ref instanceof String) {
+              com.google.protobuf.ByteString b = 
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                      (java.lang.String) ref);
+              race_ = b;
+              return b;
+            } else {
+              return (com.google.protobuf.ByteString) ref;
+            }
+          }
+          /**
+           * <code>optional string race = 2;</code>
+           */
+          public Builder setRace(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+            race_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>optional string race = 2;</code>
+           */
+          public Builder clearRace() {
+            bitField0_ = (bitField0_ & ~0x00000002);
+            race_ = getDefaultInstance().getRace();
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>optional string race = 2;</code>
+           */
+          public Builder setRaceBytes(
+              com.google.protobuf.ByteString value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000002;
+            race_ = value;
+            onChanged();
+            return this;
+          }
+
+          // @@protoc_insertion_point(builder_scope:ClientMessage.GameData.CharacterInformation)
+        }
+
+        static {
+          defaultInstance = new CharacterInformation(true);
+          defaultInstance.initFields();
+        }
+
+        // @@protoc_insertion_point(class_scope:ClientMessage.GameData.CharacterInformation)
       }
 
       public interface MovementInformationOrBuilder
@@ -5313,121 +5964,100 @@ public final class Messages {
         return type_;
       }
 
-      // optional .ClientMessage.GameData.MovementInformation movementInformation = 2;
-      public static final int MOVEMENTINFORMATION_FIELD_NUMBER = 2;
-      private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation movementInformation_;
+      // optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;
+      public static final int CHARACTERINFORMATION_FIELD_NUMBER = 2;
+      private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation characterInformation_;
       /**
-       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+       * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
        */
-      public boolean hasMovementInformation() {
+      public boolean hasCharacterInformation() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+       * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+       */
+      public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation getCharacterInformation() {
+        return characterInformation_;
+      }
+      /**
+       * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+       */
+      public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder getCharacterInformationOrBuilder() {
+        return characterInformation_;
+      }
+
+      // optional .ClientMessage.GameData.MovementInformation movementInformation = 3;
+      public static final int MOVEMENTINFORMATION_FIELD_NUMBER = 3;
+      private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation movementInformation_;
+      /**
+       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
+       */
+      public boolean hasMovementInformation() {
+        return ((bitField0_ & 0x00000004) == 0x00000004);
+      }
+      /**
+       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
        */
       public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation getMovementInformation() {
         return movementInformation_;
       }
       /**
-       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+       * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
        */
       public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformationOrBuilder getMovementInformationOrBuilder() {
         return movementInformation_;
       }
 
-      // optional .ClientMessage.GameData.ActionInformation actionInformation = 3;
-      public static final int ACTIONINFORMATION_FIELD_NUMBER = 3;
+      // optional .ClientMessage.GameData.ActionInformation actionInformation = 4;
+      public static final int ACTIONINFORMATION_FIELD_NUMBER = 4;
       private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation actionInformation_;
       /**
-       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
        */
       public boolean hasActionInformation() {
-        return ((bitField0_ & 0x00000004) == 0x00000004);
+        return ((bitField0_ & 0x00000008) == 0x00000008);
       }
       /**
-       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
        */
       public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation getActionInformation() {
         return actionInformation_;
       }
       /**
-       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+       * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
        */
       public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformationOrBuilder getActionInformationOrBuilder() {
         return actionInformation_;
       }
 
-      // optional .ClientMessage.GameData.CombatInformation combatInformation = 4;
-      public static final int COMBATINFORMATION_FIELD_NUMBER = 4;
+      // optional .ClientMessage.GameData.CombatInformation combatInformation = 5;
+      public static final int COMBATINFORMATION_FIELD_NUMBER = 5;
       private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation combatInformation_;
       /**
-       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
        */
       public boolean hasCombatInformation() {
-        return ((bitField0_ & 0x00000008) == 0x00000008);
+        return ((bitField0_ & 0x00000010) == 0x00000010);
       }
       /**
-       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
        */
       public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation getCombatInformation() {
         return combatInformation_;
       }
       /**
-       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+       * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
        */
       public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformationOrBuilder getCombatInformationOrBuilder() {
         return combatInformation_;
       }
 
-      // optional string character = 5;
-      public static final int CHARACTER_FIELD_NUMBER = 5;
-      private java.lang.Object character_;
-      /**
-       * <code>optional string character = 5;</code>
-       */
-      public boolean hasCharacter() {
-        return ((bitField0_ & 0x00000010) == 0x00000010);
-      }
-      /**
-       * <code>optional string character = 5;</code>
-       */
-      public java.lang.String getCharacter() {
-        java.lang.Object ref = character_;
-        if (ref instanceof java.lang.String) {
-          return (java.lang.String) ref;
-        } else {
-          com.google.protobuf.ByteString bs = 
-              (com.google.protobuf.ByteString) ref;
-          java.lang.String s = bs.toStringUtf8();
-          if (bs.isValidUtf8()) {
-            character_ = s;
-          }
-          return s;
-        }
-      }
-      /**
-       * <code>optional string character = 5;</code>
-       */
-      public com.google.protobuf.ByteString
-          getCharacterBytes() {
-        java.lang.Object ref = character_;
-        if (ref instanceof java.lang.String) {
-          com.google.protobuf.ByteString b = 
-              com.google.protobuf.ByteString.copyFromUtf8(
-                  (java.lang.String) ref);
-          character_ = b;
-          return b;
-        } else {
-          return (com.google.protobuf.ByteString) ref;
-        }
-      }
-
       private void initFields() {
-        type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_SELECTION;
+        type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_CREATION;
+        characterInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance();
         movementInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.getDefaultInstance();
         actionInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.getDefaultInstance();
         combatInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.getDefaultInstance();
-        character_ = "";
       }
       private byte memoizedIsInitialized = -1;
       public final boolean isInitialized() {
@@ -5437,6 +6067,12 @@ public final class Messages {
         if (!hasType()) {
           memoizedIsInitialized = 0;
           return false;
+        }
+        if (hasCharacterInformation()) {
+          if (!getCharacterInformation().isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
         }
         if (hasActionInformation()) {
           if (!getActionInformation().isInitialized()) {
@@ -5455,16 +6091,16 @@ public final class Messages {
           output.writeEnum(1, type_.getNumber());
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
-          output.writeMessage(2, movementInformation_);
+          output.writeMessage(2, characterInformation_);
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
-          output.writeMessage(3, actionInformation_);
+          output.writeMessage(3, movementInformation_);
         }
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
-          output.writeMessage(4, combatInformation_);
+          output.writeMessage(4, actionInformation_);
         }
         if (((bitField0_ & 0x00000010) == 0x00000010)) {
-          output.writeBytes(5, getCharacterBytes());
+          output.writeMessage(5, combatInformation_);
         }
         getUnknownFields().writeTo(output);
       }
@@ -5481,19 +6117,19 @@ public final class Messages {
         }
         if (((bitField0_ & 0x00000002) == 0x00000002)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(2, movementInformation_);
+            .computeMessageSize(2, characterInformation_);
         }
         if (((bitField0_ & 0x00000004) == 0x00000004)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(3, actionInformation_);
+            .computeMessageSize(3, movementInformation_);
         }
         if (((bitField0_ & 0x00000008) == 0x00000008)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeMessageSize(4, combatInformation_);
+            .computeMessageSize(4, actionInformation_);
         }
         if (((bitField0_ & 0x00000010) == 0x00000010)) {
           size += com.google.protobuf.CodedOutputStream
-            .computeBytesSize(5, getCharacterBytes());
+            .computeMessageSize(5, combatInformation_);
         }
         size += getUnknownFields().getSerializedSize();
         memoizedSerializedSize = size;
@@ -5603,6 +6239,7 @@ public final class Messages {
         }
         private void maybeForceBuilderInitialization() {
           if (com.google.protobuf.GeneratedMessage.alwaysUseFieldBuilders) {
+            getCharacterInformationFieldBuilder();
             getMovementInformationFieldBuilder();
             getActionInformationFieldBuilder();
             getCombatInformationFieldBuilder();
@@ -5614,27 +6251,31 @@ public final class Messages {
 
         public Builder clear() {
           super.clear();
-          type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_SELECTION;
+          type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_CREATION;
           bitField0_ = (bitField0_ & ~0x00000001);
+          if (characterInformationBuilder_ == null) {
+            characterInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance();
+          } else {
+            characterInformationBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000002);
           if (movementInformationBuilder_ == null) {
             movementInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.getDefaultInstance();
           } else {
             movementInformationBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000004);
           if (actionInformationBuilder_ == null) {
             actionInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.getDefaultInstance();
           } else {
             actionInformationBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
           if (combatInformationBuilder_ == null) {
             combatInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.getDefaultInstance();
           } else {
             combatInformationBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000008);
-          character_ = "";
           bitField0_ = (bitField0_ & ~0x00000010);
           return this;
         }
@@ -5671,31 +6312,35 @@ public final class Messages {
           if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
             to_bitField0_ |= 0x00000002;
           }
+          if (characterInformationBuilder_ == null) {
+            result.characterInformation_ = characterInformation_;
+          } else {
+            result.characterInformation_ = characterInformationBuilder_.build();
+          }
+          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+            to_bitField0_ |= 0x00000004;
+          }
           if (movementInformationBuilder_ == null) {
             result.movementInformation_ = movementInformation_;
           } else {
             result.movementInformation_ = movementInformationBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
-            to_bitField0_ |= 0x00000004;
+          if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+            to_bitField0_ |= 0x00000008;
           }
           if (actionInformationBuilder_ == null) {
             result.actionInformation_ = actionInformation_;
           } else {
             result.actionInformation_ = actionInformationBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
-            to_bitField0_ |= 0x00000008;
+          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+            to_bitField0_ |= 0x00000010;
           }
           if (combatInformationBuilder_ == null) {
             result.combatInformation_ = combatInformation_;
           } else {
             result.combatInformation_ = combatInformationBuilder_.build();
           }
-          if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
-            to_bitField0_ |= 0x00000010;
-          }
-          result.character_ = character_;
           result.bitField0_ = to_bitField0_;
           onBuilt();
           return result;
@@ -5715,6 +6360,9 @@ public final class Messages {
           if (other.hasType()) {
             setType(other.getType());
           }
+          if (other.hasCharacterInformation()) {
+            mergeCharacterInformation(other.getCharacterInformation());
+          }
           if (other.hasMovementInformation()) {
             mergeMovementInformation(other.getMovementInformation());
           }
@@ -5724,11 +6372,6 @@ public final class Messages {
           if (other.hasCombatInformation()) {
             mergeCombatInformation(other.getCombatInformation());
           }
-          if (other.hasCharacter()) {
-            bitField0_ |= 0x00000010;
-            character_ = other.character_;
-            onChanged();
-          }
           this.mergeUnknownFields(other.getUnknownFields());
           return this;
         }
@@ -5737,6 +6380,12 @@ public final class Messages {
           if (!hasType()) {
             
             return false;
+          }
+          if (hasCharacterInformation()) {
+            if (!getCharacterInformation().isInitialized()) {
+              
+              return false;
+            }
           }
           if (hasActionInformation()) {
             if (!getActionInformation().isInitialized()) {
@@ -5767,7 +6416,7 @@ public final class Messages {
         private int bitField0_;
 
         // required .ClientMessage.GameData.Type type = 1;
-        private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_SELECTION;
+        private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_CREATION;
         /**
          * <code>required .ClientMessage.GameData.Type type = 1;</code>
          */
@@ -5797,23 +6446,140 @@ public final class Messages {
          */
         public Builder clearType() {
           bitField0_ = (bitField0_ & ~0x00000001);
-          type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_SELECTION;
+          type_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.Type.CHARACTER_CREATION;
           onChanged();
           return this;
         }
 
-        // optional .ClientMessage.GameData.MovementInformation movementInformation = 2;
+        // optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;
+        private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation characterInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance();
+        private com.google.protobuf.SingleFieldBuilder<
+            com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder> characterInformationBuilder_;
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public boolean hasCharacterInformation() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation getCharacterInformation() {
+          if (characterInformationBuilder_ == null) {
+            return characterInformation_;
+          } else {
+            return characterInformationBuilder_.getMessage();
+          }
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public Builder setCharacterInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation value) {
+          if (characterInformationBuilder_ == null) {
+            if (value == null) {
+              throw new NullPointerException();
+            }
+            characterInformation_ = value;
+            onChanged();
+          } else {
+            characterInformationBuilder_.setMessage(value);
+          }
+          bitField0_ |= 0x00000002;
+          return this;
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public Builder setCharacterInformation(
+            com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder builderForValue) {
+          if (characterInformationBuilder_ == null) {
+            characterInformation_ = builderForValue.build();
+            onChanged();
+          } else {
+            characterInformationBuilder_.setMessage(builderForValue.build());
+          }
+          bitField0_ |= 0x00000002;
+          return this;
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public Builder mergeCharacterInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation value) {
+          if (characterInformationBuilder_ == null) {
+            if (((bitField0_ & 0x00000002) == 0x00000002) &&
+                characterInformation_ != com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance()) {
+              characterInformation_ =
+                com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.newBuilder(characterInformation_).mergeFrom(value).buildPartial();
+            } else {
+              characterInformation_ = value;
+            }
+            onChanged();
+          } else {
+            characterInformationBuilder_.mergeFrom(value);
+          }
+          bitField0_ |= 0x00000002;
+          return this;
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public Builder clearCharacterInformation() {
+          if (characterInformationBuilder_ == null) {
+            characterInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.getDefaultInstance();
+            onChanged();
+          } else {
+            characterInformationBuilder_.clear();
+          }
+          bitField0_ = (bitField0_ & ~0x00000002);
+          return this;
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder getCharacterInformationBuilder() {
+          bitField0_ |= 0x00000002;
+          onChanged();
+          return getCharacterInformationFieldBuilder().getBuilder();
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder getCharacterInformationOrBuilder() {
+          if (characterInformationBuilder_ != null) {
+            return characterInformationBuilder_.getMessageOrBuilder();
+          } else {
+            return characterInformation_;
+          }
+        }
+        /**
+         * <code>optional .ClientMessage.GameData.CharacterInformation characterInformation = 2;</code>
+         */
+        private com.google.protobuf.SingleFieldBuilder<
+            com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder> 
+            getCharacterInformationFieldBuilder() {
+          if (characterInformationBuilder_ == null) {
+            characterInformationBuilder_ = new com.google.protobuf.SingleFieldBuilder<
+                com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CharacterInformationOrBuilder>(
+                    characterInformation_,
+                    getParentForChildren(),
+                    isClean());
+            characterInformation_ = null;
+          }
+          return characterInformationBuilder_;
+        }
+
+        // optional .ClientMessage.GameData.MovementInformation movementInformation = 3;
         private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation movementInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformationOrBuilder> movementInformationBuilder_;
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public boolean hasMovementInformation() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
+          return ((bitField0_ & 0x00000004) == 0x00000004);
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation getMovementInformation() {
           if (movementInformationBuilder_ == null) {
@@ -5823,7 +6589,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public Builder setMovementInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation value) {
           if (movementInformationBuilder_ == null) {
@@ -5835,11 +6601,11 @@ public final class Messages {
           } else {
             movementInformationBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public Builder setMovementInformation(
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.Builder builderForValue) {
@@ -5849,15 +6615,15 @@ public final class Messages {
           } else {
             movementInformationBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public Builder mergeMovementInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation value) {
           if (movementInformationBuilder_ == null) {
-            if (((bitField0_ & 0x00000002) == 0x00000002) &&
+            if (((bitField0_ & 0x00000004) == 0x00000004) &&
                 movementInformation_ != com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.getDefaultInstance()) {
               movementInformation_ =
                 com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.newBuilder(movementInformation_).mergeFrom(value).buildPartial();
@@ -5868,11 +6634,11 @@ public final class Messages {
           } else {
             movementInformationBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public Builder clearMovementInformation() {
           if (movementInformationBuilder_ == null) {
@@ -5881,19 +6647,19 @@ public final class Messages {
           } else {
             movementInformationBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000002);
+          bitField0_ = (bitField0_ & ~0x00000004);
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.Builder getMovementInformationBuilder() {
-          bitField0_ |= 0x00000002;
+          bitField0_ |= 0x00000004;
           onChanged();
           return getMovementInformationFieldBuilder().getBuilder();
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformationOrBuilder getMovementInformationOrBuilder() {
           if (movementInformationBuilder_ != null) {
@@ -5903,7 +6669,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 2;</code>
+         * <code>optional .ClientMessage.GameData.MovementInformation movementInformation = 3;</code>
          */
         private com.google.protobuf.SingleFieldBuilder<
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformationOrBuilder> 
@@ -5919,18 +6685,18 @@ public final class Messages {
           return movementInformationBuilder_;
         }
 
-        // optional .ClientMessage.GameData.ActionInformation actionInformation = 3;
+        // optional .ClientMessage.GameData.ActionInformation actionInformation = 4;
         private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation actionInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformationOrBuilder> actionInformationBuilder_;
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public boolean hasActionInformation() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
+          return ((bitField0_ & 0x00000008) == 0x00000008);
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation getActionInformation() {
           if (actionInformationBuilder_ == null) {
@@ -5940,7 +6706,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public Builder setActionInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation value) {
           if (actionInformationBuilder_ == null) {
@@ -5952,11 +6718,11 @@ public final class Messages {
           } else {
             actionInformationBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public Builder setActionInformation(
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.Builder builderForValue) {
@@ -5966,15 +6732,15 @@ public final class Messages {
           } else {
             actionInformationBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public Builder mergeActionInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation value) {
           if (actionInformationBuilder_ == null) {
-            if (((bitField0_ & 0x00000004) == 0x00000004) &&
+            if (((bitField0_ & 0x00000008) == 0x00000008) &&
                 actionInformation_ != com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.getDefaultInstance()) {
               actionInformation_ =
                 com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.newBuilder(actionInformation_).mergeFrom(value).buildPartial();
@@ -5985,11 +6751,11 @@ public final class Messages {
           } else {
             actionInformationBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public Builder clearActionInformation() {
           if (actionInformationBuilder_ == null) {
@@ -5998,19 +6764,19 @@ public final class Messages {
           } else {
             actionInformationBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000004);
+          bitField0_ = (bitField0_ & ~0x00000008);
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.Builder getActionInformationBuilder() {
-          bitField0_ |= 0x00000004;
+          bitField0_ |= 0x00000008;
           onChanged();
           return getActionInformationFieldBuilder().getBuilder();
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformationOrBuilder getActionInformationOrBuilder() {
           if (actionInformationBuilder_ != null) {
@@ -6020,7 +6786,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 3;</code>
+         * <code>optional .ClientMessage.GameData.ActionInformation actionInformation = 4;</code>
          */
         private com.google.protobuf.SingleFieldBuilder<
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.ActionInformationOrBuilder> 
@@ -6036,18 +6802,18 @@ public final class Messages {
           return actionInformationBuilder_;
         }
 
-        // optional .ClientMessage.GameData.CombatInformation combatInformation = 4;
+        // optional .ClientMessage.GameData.CombatInformation combatInformation = 5;
         private com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation combatInformation_ = com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.getDefaultInstance();
         private com.google.protobuf.SingleFieldBuilder<
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformationOrBuilder> combatInformationBuilder_;
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public boolean hasCombatInformation() {
-          return ((bitField0_ & 0x00000008) == 0x00000008);
+          return ((bitField0_ & 0x00000010) == 0x00000010);
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation getCombatInformation() {
           if (combatInformationBuilder_ == null) {
@@ -6057,7 +6823,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public Builder setCombatInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation value) {
           if (combatInformationBuilder_ == null) {
@@ -6069,11 +6835,11 @@ public final class Messages {
           } else {
             combatInformationBuilder_.setMessage(value);
           }
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public Builder setCombatInformation(
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.Builder builderForValue) {
@@ -6083,15 +6849,15 @@ public final class Messages {
           } else {
             combatInformationBuilder_.setMessage(builderForValue.build());
           }
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public Builder mergeCombatInformation(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation value) {
           if (combatInformationBuilder_ == null) {
-            if (((bitField0_ & 0x00000008) == 0x00000008) &&
+            if (((bitField0_ & 0x00000010) == 0x00000010) &&
                 combatInformation_ != com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.getDefaultInstance()) {
               combatInformation_ =
                 com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.newBuilder(combatInformation_).mergeFrom(value).buildPartial();
@@ -6102,11 +6868,11 @@ public final class Messages {
           } else {
             combatInformationBuilder_.mergeFrom(value);
           }
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public Builder clearCombatInformation() {
           if (combatInformationBuilder_ == null) {
@@ -6115,19 +6881,19 @@ public final class Messages {
           } else {
             combatInformationBuilder_.clear();
           }
-          bitField0_ = (bitField0_ & ~0x00000008);
+          bitField0_ = (bitField0_ & ~0x00000010);
           return this;
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.Builder getCombatInformationBuilder() {
-          bitField0_ |= 0x00000008;
+          bitField0_ |= 0x00000010;
           onChanged();
           return getCombatInformationFieldBuilder().getBuilder();
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformationOrBuilder getCombatInformationOrBuilder() {
           if (combatInformationBuilder_ != null) {
@@ -6137,7 +6903,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 4;</code>
+         * <code>optional .ClientMessage.GameData.CombatInformation combatInformation = 5;</code>
          */
         private com.google.protobuf.SingleFieldBuilder<
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformation.Builder, com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.CombatInformationOrBuilder> 
@@ -6151,80 +6917,6 @@ public final class Messages {
             combatInformation_ = null;
           }
           return combatInformationBuilder_;
-        }
-
-        // optional string character = 5;
-        private java.lang.Object character_ = "";
-        /**
-         * <code>optional string character = 5;</code>
-         */
-        public boolean hasCharacter() {
-          return ((bitField0_ & 0x00000010) == 0x00000010);
-        }
-        /**
-         * <code>optional string character = 5;</code>
-         */
-        public java.lang.String getCharacter() {
-          java.lang.Object ref = character_;
-          if (!(ref instanceof java.lang.String)) {
-            java.lang.String s = ((com.google.protobuf.ByteString) ref)
-                .toStringUtf8();
-            character_ = s;
-            return s;
-          } else {
-            return (java.lang.String) ref;
-          }
-        }
-        /**
-         * <code>optional string character = 5;</code>
-         */
-        public com.google.protobuf.ByteString
-            getCharacterBytes() {
-          java.lang.Object ref = character_;
-          if (ref instanceof String) {
-            com.google.protobuf.ByteString b = 
-                com.google.protobuf.ByteString.copyFromUtf8(
-                    (java.lang.String) ref);
-            character_ = b;
-            return b;
-          } else {
-            return (com.google.protobuf.ByteString) ref;
-          }
-        }
-        /**
-         * <code>optional string character = 5;</code>
-         */
-        public Builder setCharacter(
-            java.lang.String value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-          character_ = value;
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>optional string character = 5;</code>
-         */
-        public Builder clearCharacter() {
-          bitField0_ = (bitField0_ & ~0x00000010);
-          character_ = getDefaultInstance().getCharacter();
-          onChanged();
-          return this;
-        }
-        /**
-         * <code>optional string character = 5;</code>
-         */
-        public Builder setCharacterBytes(
-            com.google.protobuf.ByteString value) {
-          if (value == null) {
-    throw new NullPointerException();
-  }
-  bitField0_ |= 0x00000010;
-          character_ = value;
-          onChanged();
-          return this;
         }
 
         // @@protoc_insertion_point(builder_scope:ClientMessage.GameData)
@@ -9549,21 +10241,25 @@ public final class Messages {
          */
         CHARACTER_SELECTION(0, 0),
         /**
-         * <code>EXIT = 1;</code>
+         * <code>CHARACTER_CREATED = 1;</code>
          */
-        EXIT(1, 1),
+        CHARACTER_CREATED(1, 1),
         /**
-         * <code>MOVEMENT = 2;</code>
+         * <code>EXIT = 2;</code>
          */
-        MOVEMENT(2, 2),
+        EXIT(2, 2),
         /**
-         * <code>ACTION = 3;</code>
+         * <code>MOVEMENT = 3;</code>
          */
-        ACTION(3, 3),
+        MOVEMENT(3, 3),
         /**
-         * <code>COMBAT = 4;</code>
+         * <code>ACTION = 4;</code>
          */
-        COMBAT(4, 4),
+        ACTION(4, 4),
+        /**
+         * <code>COMBAT = 5;</code>
+         */
+        COMBAT(5, 5),
         ;
 
         /**
@@ -9571,21 +10267,25 @@ public final class Messages {
          */
         public static final int CHARACTER_SELECTION_VALUE = 0;
         /**
-         * <code>EXIT = 1;</code>
+         * <code>CHARACTER_CREATED = 1;</code>
          */
-        public static final int EXIT_VALUE = 1;
+        public static final int CHARACTER_CREATED_VALUE = 1;
         /**
-         * <code>MOVEMENT = 2;</code>
+         * <code>EXIT = 2;</code>
          */
-        public static final int MOVEMENT_VALUE = 2;
+        public static final int EXIT_VALUE = 2;
         /**
-         * <code>ACTION = 3;</code>
+         * <code>MOVEMENT = 3;</code>
          */
-        public static final int ACTION_VALUE = 3;
+        public static final int MOVEMENT_VALUE = 3;
         /**
-         * <code>COMBAT = 4;</code>
+         * <code>ACTION = 4;</code>
          */
-        public static final int COMBAT_VALUE = 4;
+        public static final int ACTION_VALUE = 4;
+        /**
+         * <code>COMBAT = 5;</code>
+         */
+        public static final int COMBAT_VALUE = 5;
 
 
         public final int getNumber() { return value; }
@@ -9593,10 +10293,11 @@ public final class Messages {
         public static Type valueOf(int value) {
           switch (value) {
             case 0: return CHARACTER_SELECTION;
-            case 1: return EXIT;
-            case 2: return MOVEMENT;
-            case 3: return ACTION;
-            case 4: return COMBAT;
+            case 1: return CHARACTER_CREATED;
+            case 2: return EXIT;
+            case 3: return MOVEMENT;
+            case 4: return ACTION;
+            case 5: return COMBAT;
             default: return null;
           }
         }
@@ -10681,17 +11382,32 @@ public final class Messages {
         com.google.protobuf.ByteString
             getRaceBytes();
 
-        // required .ServerMessage.GraphicsData graphics = 3;
+        // required string location = 3;
         /**
-         * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+         * <code>required string location = 3;</code>
+         */
+        boolean hasLocation();
+        /**
+         * <code>required string location = 3;</code>
+         */
+        java.lang.String getLocation();
+        /**
+         * <code>required string location = 3;</code>
+         */
+        com.google.protobuf.ByteString
+            getLocationBytes();
+
+        // optional .ServerMessage.GraphicsData graphics = 4;
+        /**
+         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
          */
         boolean hasGraphics();
         /**
-         * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
          */
         com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData getGraphics();
         /**
-         * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
          */
         com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder getGraphicsOrBuilder();
       }
@@ -10757,8 +11473,13 @@ public final class Messages {
                   break;
                 }
                 case 26: {
+                  bitField0_ |= 0x00000004;
+                  location_ = input.readBytes();
+                  break;
+                }
+                case 34: {
                   com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder subBuilder = null;
-                  if (((bitField0_ & 0x00000004) == 0x00000004)) {
+                  if (((bitField0_ & 0x00000008) == 0x00000008)) {
                     subBuilder = graphics_.toBuilder();
                   }
                   graphics_ = input.readMessage(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.PARSER, extensionRegistry);
@@ -10766,7 +11487,7 @@ public final class Messages {
                     subBuilder.mergeFrom(graphics_);
                     graphics_ = subBuilder.buildPartial();
                   }
-                  bitField0_ |= 0x00000004;
+                  bitField0_ |= 0x00000008;
                   break;
                 }
               }
@@ -10895,23 +11616,66 @@ public final class Messages {
           }
         }
 
-        // required .ServerMessage.GraphicsData graphics = 3;
-        public static final int GRAPHICS_FIELD_NUMBER = 3;
-        private com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData graphics_;
+        // required string location = 3;
+        public static final int LOCATION_FIELD_NUMBER = 3;
+        private java.lang.Object location_;
         /**
-         * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+         * <code>required string location = 3;</code>
          */
-        public boolean hasGraphics() {
+        public boolean hasLocation() {
           return ((bitField0_ & 0x00000004) == 0x00000004);
         }
         /**
-         * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+         * <code>required string location = 3;</code>
+         */
+        public java.lang.String getLocation() {
+          java.lang.Object ref = location_;
+          if (ref instanceof java.lang.String) {
+            return (java.lang.String) ref;
+          } else {
+            com.google.protobuf.ByteString bs = 
+                (com.google.protobuf.ByteString) ref;
+            java.lang.String s = bs.toStringUtf8();
+            if (bs.isValidUtf8()) {
+              location_ = s;
+            }
+            return s;
+          }
+        }
+        /**
+         * <code>required string location = 3;</code>
+         */
+        public com.google.protobuf.ByteString
+            getLocationBytes() {
+          java.lang.Object ref = location_;
+          if (ref instanceof java.lang.String) {
+            com.google.protobuf.ByteString b = 
+                com.google.protobuf.ByteString.copyFromUtf8(
+                    (java.lang.String) ref);
+            location_ = b;
+            return b;
+          } else {
+            return (com.google.protobuf.ByteString) ref;
+          }
+        }
+
+        // optional .ServerMessage.GraphicsData graphics = 4;
+        public static final int GRAPHICS_FIELD_NUMBER = 4;
+        private com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData graphics_;
+        /**
+         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         */
+        public boolean hasGraphics() {
+          return ((bitField0_ & 0x00000008) == 0x00000008);
+        }
+        /**
+         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData getGraphics() {
           return graphics_;
         }
         /**
-         * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder getGraphicsOrBuilder() {
           return graphics_;
@@ -10920,6 +11684,7 @@ public final class Messages {
         private void initFields() {
           name_ = "";
           race_ = "";
+          location_ = "";
           graphics_ = com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance();
         }
         private byte memoizedIsInitialized = -1;
@@ -10935,7 +11700,7 @@ public final class Messages {
             memoizedIsInitialized = 0;
             return false;
           }
-          if (!hasGraphics()) {
+          if (!hasLocation()) {
             memoizedIsInitialized = 0;
             return false;
           }
@@ -10953,7 +11718,10 @@ public final class Messages {
             output.writeBytes(2, getRaceBytes());
           }
           if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            output.writeMessage(3, graphics_);
+            output.writeBytes(3, getLocationBytes());
+          }
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            output.writeMessage(4, graphics_);
           }
           getUnknownFields().writeTo(output);
         }
@@ -10974,7 +11742,11 @@ public final class Messages {
           }
           if (((bitField0_ & 0x00000004) == 0x00000004)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeMessageSize(3, graphics_);
+              .computeBytesSize(3, getLocationBytes());
+          }
+          if (((bitField0_ & 0x00000008) == 0x00000008)) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeMessageSize(4, graphics_);
           }
           size += getUnknownFields().getSerializedSize();
           memoizedSerializedSize = size;
@@ -11097,12 +11869,14 @@ public final class Messages {
             bitField0_ = (bitField0_ & ~0x00000001);
             race_ = "";
             bitField0_ = (bitField0_ & ~0x00000002);
+            location_ = "";
+            bitField0_ = (bitField0_ & ~0x00000004);
             if (graphicsBuilder_ == null) {
               graphics_ = com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance();
             } else {
               graphicsBuilder_.clear();
             }
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
             return this;
           }
 
@@ -11142,6 +11916,10 @@ public final class Messages {
             if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
               to_bitField0_ |= 0x00000004;
             }
+            result.location_ = location_;
+            if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+              to_bitField0_ |= 0x00000008;
+            }
             if (graphicsBuilder_ == null) {
               result.graphics_ = graphics_;
             } else {
@@ -11173,6 +11951,11 @@ public final class Messages {
               race_ = other.race_;
               onChanged();
             }
+            if (other.hasLocation()) {
+              bitField0_ |= 0x00000004;
+              location_ = other.location_;
+              onChanged();
+            }
             if (other.hasGraphics()) {
               mergeGraphics(other.getGraphics());
             }
@@ -11189,7 +11972,7 @@ public final class Messages {
               
               return false;
             }
-            if (!hasGraphics()) {
+            if (!hasLocation()) {
               
               return false;
             }
@@ -11363,18 +12146,92 @@ public final class Messages {
             return this;
           }
 
-          // required .ServerMessage.GraphicsData graphics = 3;
+          // required string location = 3;
+          private java.lang.Object location_ = "";
+          /**
+           * <code>required string location = 3;</code>
+           */
+          public boolean hasLocation() {
+            return ((bitField0_ & 0x00000004) == 0x00000004);
+          }
+          /**
+           * <code>required string location = 3;</code>
+           */
+          public java.lang.String getLocation() {
+            java.lang.Object ref = location_;
+            if (!(ref instanceof java.lang.String)) {
+              java.lang.String s = ((com.google.protobuf.ByteString) ref)
+                  .toStringUtf8();
+              location_ = s;
+              return s;
+            } else {
+              return (java.lang.String) ref;
+            }
+          }
+          /**
+           * <code>required string location = 3;</code>
+           */
+          public com.google.protobuf.ByteString
+              getLocationBytes() {
+            java.lang.Object ref = location_;
+            if (ref instanceof String) {
+              com.google.protobuf.ByteString b = 
+                  com.google.protobuf.ByteString.copyFromUtf8(
+                      (java.lang.String) ref);
+              location_ = b;
+              return b;
+            } else {
+              return (com.google.protobuf.ByteString) ref;
+            }
+          }
+          /**
+           * <code>required string location = 3;</code>
+           */
+          public Builder setLocation(
+              java.lang.String value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+            location_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>required string location = 3;</code>
+           */
+          public Builder clearLocation() {
+            bitField0_ = (bitField0_ & ~0x00000004);
+            location_ = getDefaultInstance().getLocation();
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>required string location = 3;</code>
+           */
+          public Builder setLocationBytes(
+              com.google.protobuf.ByteString value) {
+            if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000004;
+            location_ = value;
+            onChanged();
+            return this;
+          }
+
+          // optional .ServerMessage.GraphicsData graphics = 4;
           private com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData graphics_ = com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance();
           private com.google.protobuf.SingleFieldBuilder<
               com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder> graphicsBuilder_;
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public boolean hasGraphics() {
-            return ((bitField0_ & 0x00000004) == 0x00000004);
+            return ((bitField0_ & 0x00000008) == 0x00000008);
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData getGraphics() {
             if (graphicsBuilder_ == null) {
@@ -11384,7 +12241,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public Builder setGraphics(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData value) {
             if (graphicsBuilder_ == null) {
@@ -11396,11 +12253,11 @@ public final class Messages {
             } else {
               graphicsBuilder_.setMessage(value);
             }
-            bitField0_ |= 0x00000004;
+            bitField0_ |= 0x00000008;
             return this;
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public Builder setGraphics(
               com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder builderForValue) {
@@ -11410,15 +12267,15 @@ public final class Messages {
             } else {
               graphicsBuilder_.setMessage(builderForValue.build());
             }
-            bitField0_ |= 0x00000004;
+            bitField0_ |= 0x00000008;
             return this;
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public Builder mergeGraphics(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData value) {
             if (graphicsBuilder_ == null) {
-              if (((bitField0_ & 0x00000004) == 0x00000004) &&
+              if (((bitField0_ & 0x00000008) == 0x00000008) &&
                   graphics_ != com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance()) {
                 graphics_ =
                   com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.newBuilder(graphics_).mergeFrom(value).buildPartial();
@@ -11429,11 +12286,11 @@ public final class Messages {
             } else {
               graphicsBuilder_.mergeFrom(value);
             }
-            bitField0_ |= 0x00000004;
+            bitField0_ |= 0x00000008;
             return this;
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public Builder clearGraphics() {
             if (graphicsBuilder_ == null) {
@@ -11442,19 +12299,19 @@ public final class Messages {
             } else {
               graphicsBuilder_.clear();
             }
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
             return this;
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder getGraphicsBuilder() {
-            bitField0_ |= 0x00000004;
+            bitField0_ |= 0x00000008;
             onChanged();
             return getGraphicsFieldBuilder().getBuilder();
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder getGraphicsOrBuilder() {
             if (graphicsBuilder_ != null) {
@@ -11464,7 +12321,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>required .ServerMessage.GraphicsData graphics = 3;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
            */
           private com.google.protobuf.SingleFieldBuilder<
               com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder> 
@@ -15206,6 +16063,11 @@ public final class Messages {
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
       internal_static_ClientMessage_GameData_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
+    internal_static_ClientMessage_GameData_CharacterInformation_descriptor;
+  private static
+    com.google.protobuf.GeneratedMessage.FieldAccessorTable
+      internal_static_ClientMessage_GameData_CharacterInformation_fieldAccessorTable;
+  private static com.google.protobuf.Descriptors.Descriptor
     internal_static_ClientMessage_GameData_MovementInformation_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
@@ -15283,7 +16145,7 @@ public final class Messages {
       "s.proto\"t\n\nClientInfo\022\020\n\010clientID\030\001 \002(\005\022" +
       "\017\n\007version\030\002 \002(\t\022\022\n\nmacAddress\030\003 \002(\014\022\026\n\016" +
       "localIPAddress\030\004 \002(\t\022\027\n\017remoteIPAddress\030" +
-      "\005 \001(\t\"\246\n\n\rClientMessage\022!\n\004type\030\001 \002(\0162\023." +
+      "\005 \001(\t\"\252\013\n\rClientMessage\022!\n\004type\030\001 \002(\0162\023." +
       "ClientMessage.Type\022\037\n\nclientInfo\030\002 \002(\0132\013" +
       ".ClientInfo\022-\n\nsystemData\030\003 \001(\0132\031.Client" +
       "Message.SystemData\022)\n\010authData\030\004 \001(\0132\027.C" +
@@ -15298,66 +16160,70 @@ public final class Messages {
       "essage.SystemData.Type\"(\n\004Type\022\r\n\tCONNEC" +
       "TED\020\000\022\021\n\rDISCONNECTING\020\001\032M\n\010ChatData\022\017\n\007" +
       "private\030\001 \002(\010\022\017\n\007channel\030\002 \002(\005\022\017\n\007messag" +
-      "e\030\003 \002(\t\022\016\n\006target\030\004 \001(\t\032\212\005\n\010GameData\022*\n\004",
+      "e\030\003 \002(\t\022\016\n\006target\030\004 \001(\t\032\216\006\n\010GameData\022*\n\004",
       "type\030\001 \002(\0162\034.ClientMessage.GameData.Type" +
-      "\022H\n\023movementInformation\030\002 \001(\0132+.ClientMe" +
-      "ssage.GameData.MovementInformation\022D\n\021ac" +
-      "tionInformation\030\003 \001(\0132).ClientMessage.Ga" +
-      "meData.ActionInformation\022D\n\021combatInform" +
-      "ation\030\004 \001(\0132).ClientMessage.GameData.Com" +
-      "batInformation\022\021\n\tcharacter\030\005 \001(\t\032\025\n\023Mov" +
-      "ementInformation\032\353\001\n\021ActionInformation\022@" +
-      "\n\006action\030\001 \002(\01620.ClientMessage.GameData." +
-      "ActionInformation.Action\022\016\n\006source\030\002 \001(\005",
-      "\022\016\n\006target\030\003 \001(\005\"t\n\006Action\022\007\n\003USE\020\000\022\013\n\007E" +
-      "XAMINE\020\001\022\t\n\005EQUIP\020\002\022\013\n\007UNEQUIP\020\003\022\010\n\004TAKE" +
-      "\020\004\022\010\n\004DROP\020\005\022\t\n\005CRAFT\020\006\022\010\n\004MINE\020\007\022\t\n\005SMI" +
-      "TH\020\010\022\010\n\004CAST\020\t\032\023\n\021CombatInformation\"O\n\004T" +
-      "ype\022\027\n\023CHARACTER_SELECTION\020\000\022\010\n\004EXIT\020\001\022\014" +
-      "\n\010MOVEMENT\020\002\022\n\n\006ACTION\020\003\022\n\n\006COMBAT\020\004\"0\n\004" +
-      "Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004" +
-      "GAME\020\003\"\312\014\n\rServerMessage\022!\n\004type\030\001 \002(\0162\023" +
-      ".ServerMessage.Type\022\037\n\nclientInfo\030\002 \002(\0132" +
-      "\013.ClientInfo\022-\n\nsystemData\030\003 \001(\0132\031.Serve",
-      "rMessage.SystemData\022)\n\010authData\030\004 \001(\0132\027." +
-      "ServerMessage.AuthData\022)\n\010gameData\030\005 \001(\013" +
-      "2\027.ServerMessage.GameData\022)\n\010chatData\030\006 " +
-      "\001(\0132\027.ServerMessage.ChatData\032\260\001\n\nSystemD" +
-      "ata\022,\n\004type\030\001 \002(\0162\036.ServerMessage.System" +
-      "Data.Type\022\017\n\007details\030\002 \001(\t\"c\n\004Type\022\030\n\024UN" +
-      "KNOWN_MESSAGE_TYPE\020\000\022\022\n\016INVALID_FORMAT\020\001" +
-      "\022\032\n\026CONNECTED_SUCCESSFULLY\020\002\022\021\n\rDISCONNE" +
-      "CTING\020\003\032\363\001\n\010AuthData\022*\n\004type\030\001 \002(\0162\034.Ser" +
-      "verMessage.AuthData.Type\022\020\n\010username\030\002 \001",
-      "(\t\022\024\n\014errorMessage\030\003 \001(\t\"\222\001\n\004Type\022\020\n\014LOG" +
-      "IN_FAILED\020\000\022\025\n\021EXTRA_AUTH_FAILED\020\001\022\024\n\020LO" +
-      "GIN_SUCCESSFUL\020\002\022\025\n\021LOGOUT_SUCCESSFUL\020\003\022" +
-      "\027\n\023REGISTRATION_FAILED\020\004\022\033\n\027REGISTRATION" +
-      "_SUCCESSFUL\020\005\032\244\005\n\010GameData\022*\n\004type\030\001 \001(\016" +
-      "2\034.ServerMessage.GameData.Type\022H\n\023moveme" +
-      "ntInformation\030\002 \001(\0132+.ServerMessage.Game" +
-      "Data.MovementInformation\022D\n\021actionInform" +
-      "ation\030\003 \001(\0132).ServerMessage.GameData.Act" +
-      "ionInformation\022D\n\021combatInformation\030\004 \001(",
-      "\0132).ServerMessage.GameData.CombatInforma" +
-      "tion\022J\n\024characterInformation\030\005 \003(\0132,.Ser" +
-      "verMessage.GameData.CharacterInformation" +
-      "\022,\n\005error\030\006 \001(\0162\035.ServerMessage.GameData" +
-      ".Error\032\025\n\023MovementInformation\032\023\n\021ActionI" +
-      "nformation\032\023\n\021CombatInformation\032a\n\024Chara" +
-      "cterInformation\022\014\n\004name\030\001 \002(\t\022\014\n\004race\030\002 " +
-      "\002(\t\022-\n\010graphics\030\003 \002(\0132\033.ServerMessage.Gr" +
-      "aphicsData\"O\n\004Type\022\027\n\023CHARACTER_SELECTIO" +
-      "N\020\000\022\010\n\004EXIT\020\001\022\014\n\010MOVEMENT\020\002\022\n\n\006ACTION\020\003\022",
-      "\n\n\006COMBAT\020\004\"\'\n\005Error\022\036\n\032CHARACTER_ALREAD" +
-      "Y_SELECTED\020\000\032\262\001\n\010ChatData\022*\n\004type\030\001 \002(\0162" +
-      "\034.ServerMessage.ChatData.Type\022\017\n\007private" +
-      "\030\002 \002(\010\022\017\n\007channel\030\003 \001(\005\022\016\n\006source\030\004 \002(\t\022" +
-      "\017\n\007message\030\005 \001(\t\"7\n\004Type\022\013\n\007MESSAGE\020\000\022\021\n" +
-      "\rPLAYER_JOINED\020\001\022\017\n\013PLAYER_LEFT\020\002\032\016\n\014Gra" +
-      "phicsData\"0\n\004Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022" +
-      "\010\n\004CHAT\020\002\022\010\n\004GAME\020\003B*\n\036com.whiuk.philip." +
-      "mmorpg.sharedB\010Messages"
+      "\022J\n\024characterInformation\030\002 \001(\0132,.ClientM" +
+      "essage.GameData.CharacterInformation\022H\n\023" +
+      "movementInformation\030\003 \001(\0132+.ClientMessag" +
+      "e.GameData.MovementInformation\022D\n\021action" +
+      "Information\030\004 \001(\0132).ClientMessage.GameDa" +
+      "ta.ActionInformation\022D\n\021combatInformatio" +
+      "n\030\005 \001(\0132).ClientMessage.GameData.CombatI" +
+      "nformation\0322\n\024CharacterInformation\022\014\n\004na" +
+      "me\030\001 \002(\t\022\014\n\004race\030\002 \001(\t\032\025\n\023MovementInform",
+      "ation\032\353\001\n\021ActionInformation\022@\n\006action\030\001 " +
+      "\002(\01620.ClientMessage.GameData.ActionInfor" +
+      "mation.Action\022\016\n\006source\030\002 \001(\005\022\016\n\006target\030" +
+      "\003 \001(\005\"t\n\006Action\022\007\n\003USE\020\000\022\013\n\007EXAMINE\020\001\022\t\n" +
+      "\005EQUIP\020\002\022\013\n\007UNEQUIP\020\003\022\010\n\004TAKE\020\004\022\010\n\004DROP\020" +
+      "\005\022\t\n\005CRAFT\020\006\022\010\n\004MINE\020\007\022\t\n\005SMITH\020\010\022\010\n\004CAS" +
+      "T\020\t\032\023\n\021CombatInformation\"f\n\004Type\022\026\n\022CHAR" +
+      "ACTER_CREATION\020\000\022\026\n\022CHARACTER_SELECTED\020\001" +
+      "\022\010\n\004EXIT\020\002\022\014\n\010MOVEMENT\020\003\022\n\n\006ACTION\020\004\022\n\n\006" +
+      "COMBAT\020\005\"0\n\004Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010",
+      "\n\004CHAT\020\002\022\010\n\004GAME\020\003\"\363\014\n\rServerMessage\022!\n\004" +
+      "type\030\001 \002(\0162\023.ServerMessage.Type\022\037\n\nclien" +
+      "tInfo\030\002 \002(\0132\013.ClientInfo\022-\n\nsystemData\030\003" +
+      " \001(\0132\031.ServerMessage.SystemData\022)\n\010authD" +
+      "ata\030\004 \001(\0132\027.ServerMessage.AuthData\022)\n\010ga" +
+      "meData\030\005 \001(\0132\027.ServerMessage.GameData\022)\n" +
+      "\010chatData\030\006 \001(\0132\027.ServerMessage.ChatData" +
+      "\032\260\001\n\nSystemData\022,\n\004type\030\001 \002(\0162\036.ServerMe" +
+      "ssage.SystemData.Type\022\017\n\007details\030\002 \001(\t\"c" +
+      "\n\004Type\022\030\n\024UNKNOWN_MESSAGE_TYPE\020\000\022\022\n\016INVA",
+      "LID_FORMAT\020\001\022\032\n\026CONNECTED_SUCCESSFULLY\020\002" +
+      "\022\021\n\rDISCONNECTING\020\003\032\363\001\n\010AuthData\022*\n\004type" +
+      "\030\001 \002(\0162\034.ServerMessage.AuthData.Type\022\020\n\010" +
+      "username\030\002 \001(\t\022\024\n\014errorMessage\030\003 \001(\t\"\222\001\n" +
+      "\004Type\022\020\n\014LOGIN_FAILED\020\000\022\025\n\021EXTRA_AUTH_FA" +
+      "ILED\020\001\022\024\n\020LOGIN_SUCCESSFUL\020\002\022\025\n\021LOGOUT_S" +
+      "UCCESSFUL\020\003\022\027\n\023REGISTRATION_FAILED\020\004\022\033\n\027" +
+      "REGISTRATION_SUCCESSFUL\020\005\032\315\005\n\010GameData\022*" +
+      "\n\004type\030\001 \001(\0162\034.ServerMessage.GameData.Ty" +
+      "pe\022H\n\023movementInformation\030\002 \001(\0132+.Server",
+      "Message.GameData.MovementInformation\022D\n\021" +
+      "actionInformation\030\003 \001(\0132).ServerMessage." +
+      "GameData.ActionInformation\022D\n\021combatInfo" +
+      "rmation\030\004 \001(\0132).ServerMessage.GameData.C" +
+      "ombatInformation\022J\n\024characterInformation" +
+      "\030\005 \003(\0132,.ServerMessage.GameData.Characte" +
+      "rInformation\022,\n\005error\030\006 \001(\0162\035.ServerMess" +
+      "age.GameData.Error\032\025\n\023MovementInformatio" +
+      "n\032\023\n\021ActionInformation\032\023\n\021CombatInformat" +
+      "ion\032s\n\024CharacterInformation\022\014\n\004name\030\001 \002(",
+      "\t\022\014\n\004race\030\002 \002(\t\022\020\n\010location\030\003 \002(\t\022-\n\010gra" +
+      "phics\030\004 \001(\0132\033.ServerMessage.GraphicsData" +
+      "\"f\n\004Type\022\027\n\023CHARACTER_SELECTION\020\000\022\025\n\021CHA" +
+      "RACTER_CREATED\020\001\022\010\n\004EXIT\020\002\022\014\n\010MOVEMENT\020\003" +
+      "\022\n\n\006ACTION\020\004\022\n\n\006COMBAT\020\005\"\'\n\005Error\022\036\n\032CHA" +
+      "RACTER_ALREADY_SELECTED\020\000\032\262\001\n\010ChatData\022*" +
+      "\n\004type\030\001 \002(\0162\034.ServerMessage.ChatData.Ty" +
+      "pe\022\017\n\007private\030\002 \002(\010\022\017\n\007channel\030\003 \001(\005\022\016\n\006" +
+      "source\030\004 \002(\t\022\017\n\007message\030\005 \001(\t\"7\n\004Type\022\013\n" +
+      "\007MESSAGE\020\000\022\021\n\rPLAYER_JOINED\020\001\022\017\n\013PLAYER_",
+      "LEFT\020\002\032\016\n\014GraphicsData\"0\n\004Type\022\n\n\006SYSTEM" +
+      "\020\000\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003B*\n\036com." +
+      "whiuk.philip.mmorpg.sharedB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -15399,21 +16265,27 @@ public final class Messages {
           internal_static_ClientMessage_GameData_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ClientMessage_GameData_descriptor,
-              new java.lang.String[] { "Type", "MovementInformation", "ActionInformation", "CombatInformation", "Character", });
-          internal_static_ClientMessage_GameData_MovementInformation_descriptor =
+              new java.lang.String[] { "Type", "CharacterInformation", "MovementInformation", "ActionInformation", "CombatInformation", });
+          internal_static_ClientMessage_GameData_CharacterInformation_descriptor =
             internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(0);
+          internal_static_ClientMessage_GameData_CharacterInformation_fieldAccessorTable = new
+            com.google.protobuf.GeneratedMessage.FieldAccessorTable(
+              internal_static_ClientMessage_GameData_CharacterInformation_descriptor,
+              new java.lang.String[] { "Name", "Race", });
+          internal_static_ClientMessage_GameData_MovementInformation_descriptor =
+            internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(1);
           internal_static_ClientMessage_GameData_MovementInformation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ClientMessage_GameData_MovementInformation_descriptor,
               new java.lang.String[] { });
           internal_static_ClientMessage_GameData_ActionInformation_descriptor =
-            internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(1);
+            internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(2);
           internal_static_ClientMessage_GameData_ActionInformation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ClientMessage_GameData_ActionInformation_descriptor,
               new java.lang.String[] { "Action", "Source", "Target", });
           internal_static_ClientMessage_GameData_CombatInformation_descriptor =
-            internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(2);
+            internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(3);
           internal_static_ClientMessage_GameData_CombatInformation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ClientMessage_GameData_CombatInformation_descriptor,
@@ -15465,7 +16337,7 @@ public final class Messages {
           internal_static_ServerMessage_GameData_CharacterInformation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ServerMessage_GameData_CharacterInformation_descriptor,
-              new java.lang.String[] { "Name", "Race", "Graphics", });
+              new java.lang.String[] { "Name", "Race", "Location", "Graphics", });
           internal_static_ServerMessage_ChatData_descriptor =
             internal_static_ServerMessage_descriptor.getNestedTypes().get(3);
           internal_static_ServerMessage_ChatData_fieldAccessorTable = new

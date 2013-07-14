@@ -5,11 +5,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.whiuk.philip.mmorpg.client.GameClient.State;
+import com.whiuk.philip.mmorpg.client.PlayerCharacter.Race;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
-import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage
-    .GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
@@ -17,6 +16,7 @@ import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
 import de.lessvoid.nifty.controls.dropdown.DropDownControl;
 import de.lessvoid.nifty.controls.tabs.TabControl;
+import de.lessvoid.nifty.controls.textfield.TextFieldControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -48,7 +48,7 @@ public class LobbyScreen implements ScreenController {
     /**
      * List of characters.
      */
-    private List<CharacterInformation> characters;
+    private List<ServerMessage.GameData.CharacterInformation> characters;
     /**
      * Chat box element
      */
@@ -73,6 +73,14 @@ public class LobbyScreen implements ScreenController {
      * Tab 2
      */
     private Element tab2;
+    /**
+     * Race Drop Down List
+     */
+    private Element raceListElement;
+    /**
+     * 
+     */
+    private Element nameInputElement;
 
     /**
      * @param g
@@ -92,7 +100,13 @@ public class LobbyScreen implements ScreenController {
         tab2 = screen.findElementByName("tab_2");
         chatElement = screen.findElementByName("chatId");
         characterListElement = screen.findElementByName("character_drop_down");
+        raceListElement = screen.findElementByName("race-drop_down");
+        nameInputElement = screen.findElementByName("name-input");
         playButton = screen.findElementByName("play_button");
+        for (PlayerCharacter.Race r: PlayerCharacter.Race.values()) {
+            raceListElement
+                .getControl(DropDownControl.class).addItem(r);
+        }
         gameClient.setState(State.LOBBY);
     }
 
@@ -154,7 +168,7 @@ public class LobbyScreen implements ScreenController {
             case CHARACTER_SELECTION:
                 LOGGER.info("Recieved character selection message");
                 characters = gameData.getCharacterInformationList();
-                for (CharacterInformation c: characters) {
+                for (ServerMessage.GameData.CharacterInformation c: characters) {
                     characterListElement
                         .getControl(DropDownControl.class).addItem(c);
                 }
@@ -171,11 +185,32 @@ public class LobbyScreen implements ScreenController {
         Object selection = characterListElement
                 .getControl(DropDownControl.class).getSelection();
         if (selection != null) {
-            String name = ((CharacterInformation) selection).getName();
+            String name = ((ServerMessage
+                    .GameData.CharacterInformation) selection).getName();
             gameClient.sendGameData(ClientMessage.GameData.newBuilder()
-                    .setType(ClientMessage.GameData.Type.CHARACTER_SELECTION)
-                    .setCharacter(name)
+                    .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
+                    .setCharacterInformation(
+                            ClientMessage.GameData.CharacterInformation
+                            .newBuilder().setName(name).build())
                     .build());
         }
     }
+    /**
+     * Play with the selected character.
+     */
+    public final void createCharacter() {
+        Object selection = raceListElement
+                .getControl(DropDownControl.class).getSelection();
+        String race = ((Race) selection).name();
+        String name = nameInputElement.getControl(TextFieldControl.class)
+                .getRealText();
+        gameClient.sendGameData(ClientMessage.GameData.newBuilder()
+                .setType(ClientMessage.GameData.Type.CHARACTER_CREATION)
+                .setCharacterInformation(
+                        ClientMessage.GameData.CharacterInformation.newBuilder()
+                .setName(name)
+                .setRace(race).build())
+                .build());
+    }
+    
 }
