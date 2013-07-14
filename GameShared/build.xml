@@ -5,6 +5,7 @@
     </description>
   <!-- set global properties for this build -->
   <property name="src" location="src"/>
+  <property name="src-gen" location="src-gen"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
 
@@ -16,9 +17,10 @@
   </target>
 
   <target name="compile" depends="init"
-        description="compile the source " >
+        description="compile the source " >       
     <!-- Compile the java code from ${src} into ${build} -->
     <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
+    <javac srcdir="${src-gen}" destdir="${build}" includeantruntime="false"/>
   </target>
 
   <target name="dist" depends="compile"
