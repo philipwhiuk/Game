@@ -270,10 +270,10 @@ public class AuthServiceImpl implements AuthService {
                 processFailedLogin(con, attempt, account);
             } else {
                 //Handle account already logged in
-                logger.log(Level.INFO, ALREADY_LOGGED_IN_MESSAGE);
                 Set<Account> currentAccounts = accounts.keySet();
                 for (Account a: currentAccounts) {
                     if (a.getUsername().equals(username)) {
+                        logger.log(Level.INFO, ALREADY_LOGGED_IN_MESSAGE);
                         processFailedLogin(con, attempt, account);
                         return;
                     }
