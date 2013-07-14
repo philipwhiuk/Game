@@ -6,21 +6,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/lwjgl_util.jar"/>
-	<classpathentry kind="lib" path="lib/lwjgl.jar" sourcepath="C:/Users/Philip/.m2/repository/org/lwjgl/lwjgl/lwjgl/2.8.5/lwjgl-2.8.5-sources.jar">
-		<attributes>
-			<attribute name="org.eclipse.jdt.launching.CLASSPATH_ATTR_LIBRARY_PATH_ENTRY" value="GameClient/native/windows"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/nifty-1.3.2.jar" sourcepath="lib/nifty-1.3.2-sources.jar">
-		<attributes>
-			<attribute name="javadoc_location" value="jar:platform:/resource/GameClient/lib/nifty-1.3.2-javadoc.jar!/"/>
-		</attributes>
-	</classpathentry>
-	<classpathentry kind="lib" path="lib/nifty-lwjgl-renderer-1.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/nifty-openal-soundsystem-1.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/nifty-style-black-1.3.2.jar"/>
-	<classpathentry kind="lib" path="lib/nifty-default-controls-1.3.2.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
 		<attributes>
 			<attribute name="maven.pomderived" value="true"/>

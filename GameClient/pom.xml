@@ -4,6 +4,12 @@
   <artifactId>GameClient</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>GameClient</name>
+  <repositories>
+	  <repository>
+	    <id>nifty-maven-repo.sourceforge.net</id>
+	    <url>http://nifty-gui.sourceforge.net/nifty-maven-repo</url>
+	  </repository>
+  </repositories>
   <build>
     <sourceDirectory>src</sourceDirectory>
     <resources>
@@ -15,6 +21,20 @@
       </resource>
     </resources>
     <plugins>
+	   <plugin>
+        <groupId>com.googlecode.mavennatives</groupId>
+        <artifactId>maven-nativedependencies-plugin</artifactId>
+        <version>0.0.5</version>
+        <executions>
+          <execution>
+           <id>unpacknatives</id>
+           <phase>generate-resources</phase>
+           <goals>
+                   <goal>copy</goal>
+           </goals>
+          </execution>
+        </executions>
+	  </plugin>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.0</version>
@@ -24,8 +44,48 @@
         </configuration>
       </plugin>
     </plugins>
+    <pluginManagement>
+    	<plugins>
+    		<!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself.-->
+    		<plugin>
+    			<groupId>org.eclipse.m2e</groupId>
+    			<artifactId>lifecycle-mapping</artifactId>
+    			<version>1.0.0</version>
+    			<configuration>
+    				<lifecycleMappingMetadata>
+    					<pluginExecutions>
+    						<pluginExecution>
+    							<pluginExecutionFilter>
+    								<groupId>
+    									com.googlecode.mavennatives
+    								</groupId>
+    								<artifactId>
+    									maven-nativedependencies-plugin
+    								</artifactId>
+    								<versionRange>
+    									[0.0.5,)
+    								</versionRange>
+    								<goals>
+    									<goal>copy</goal>
+    								</goals>
+    							</pluginExecutionFilter>
+    							<action>
+    								<ignore></ignore>
+    							</action>
+    						</pluginExecution>
+    					</pluginExecutions>
+    				</lifecycleMappingMetadata>
+    			</configuration>
+    		</plugin>
+    	</plugins>
+    </pluginManagement>
   </build>
   <dependencies>
+    <dependency>
+	    <groupId>org.lwjgl.lwjgl</groupId>
+	    <artifactId>lwjgl</artifactId>
+	    <version>2.8.4</version>
+	</dependency>
   	<dependency>
   		<groupId>com.whiuk.philip</groupId>
   		<artifactId>GameShared</artifactId>
@@ -55,6 +115,31 @@
 		<groupId>log4j</groupId>
 		<artifactId>log4j</artifactId>
 		<version>1.2.17</version>
+	</dependency>
+	<dependency>
+	  <groupId>lessvoid</groupId>
+	  <artifactId>nifty</artifactId>
+	  <version>1.3.3</version>
+	</dependency>
+	<dependency>
+	  <groupId>lessvoid</groupId>
+	  <artifactId>nifty-default-controls</artifactId>
+	  <version>1.3.3</version>
+	</dependency>
+	<dependency>
+	  <groupId>lessvoid</groupId>
+	  <artifactId>nifty-lwjgl-renderer</artifactId>
+	  <version>1.3.3</version>
+	</dependency>
+	<dependency>
+	  <groupId>lessvoid</groupId>
+	  <artifactId>nifty-openal-soundsystem</artifactId>
+	  <version>1.3.3</version>
+	</dependency>
+	<dependency>
+	  <groupId>lessvoid</groupId>
+	  <artifactId>nifty-style-black</artifactId>
+	  <version>1.3.3</version>
 	</dependency>
   </dependencies>
 </project>
