@@ -116,6 +116,8 @@ public class GameServiceImpl implements GameService {
         }
         ServerMessage message = ServerMessage
                 .newBuilder()
+                .setClientInfo(authService.getConnection(account)
+                        .getClientInfo())
                 .setType(ServerMessage.Type.GAME)
                 .setGameData(gdb)
                     .build();
@@ -154,6 +156,8 @@ public class GameServiceImpl implements GameService {
         if (characters.get(account) != null) {
             ServerMessage message = ServerMessage
                 .newBuilder()
+                .setClientInfo(authService.getConnection(account)
+                        .getClientInfo())
                 .setType(ServerMessage.Type.GAME)
                 .setGameData(
                 ServerMessage.GameData
