@@ -23,6 +23,6 @@ Server
 * Java Mail - http://www.oracle.com/technetwork/java/javamail/index.html - (Compile & runtime)
 
 Build notes:
-* To build, run ./build.sh This will perform a series of `mvn clean install` commands
+* To build, run `./build.sh` This will perform a series of `mvn clean install` commands
 * Alternatively, open the projects in Eclipse using the committed project files.
-* The server relies on a local MySQL database. The 'install.sql' file provides the schema. In the long term a more formalised install process will be established.
+* The server relies on a local MySQL database. The `install.sql` file provides the schema. In the long term a more formalised install process will be established.
