@@ -1,5 +1,6 @@
 package com.whiuk.philip.mmorpg.serverShared;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -40,6 +41,10 @@ public class Account {
      */
     private boolean emailInvalid;
 
+    public Account() {
+        loginAttempts = new HashSet<LoginAttempt>();
+    }
+    
     /**
      * @param nanoTime
      */
@@ -97,5 +102,9 @@ public class Account {
      */
     public void setEmailInvalid(boolean b) {
         this.emailInvalid = b;
+    }
+
+    public Set<LoginAttempt> getLoginAttempts() {
+        return loginAttempts;
     }
 }
