@@ -2,6 +2,7 @@ package com.whiuk.philip.mmorpg.server.game.domain;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
@@ -25,7 +26,8 @@ public class PlayerCharacter implements GameCharacter {
     /**
      * 
      */
-    @ManyToOne
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "account")
     private Account account;
 
     /**
