@@ -28,4 +28,16 @@ public interface GameCharacter extends RelatableEntity {
      */
     void doAction(Action a);
 
+    /**
+     * 
+     * @return
+     */
+    String getName();
+
+    /**
+     * 
+     * @return
+     */
+    Race getRace();
+
 }

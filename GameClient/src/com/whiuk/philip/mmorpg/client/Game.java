@@ -8,13 +8,21 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  *
  */
 public class Game {
-    
     /**
      * 
      * @param message
      */
     public void handleChatMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
+    }
+
+    /**
+     * 
+     * @param message
+     */
+    public void handleGameMessage(final ServerMessage message) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

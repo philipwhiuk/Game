@@ -48,4 +48,14 @@ public class NPC extends Agent implements GameCharacter {
         // TODO Auto-generated method stub
         
     }
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public Race getRace() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

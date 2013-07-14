@@ -7,6 +7,8 @@ import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -443,8 +445,6 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processFailedLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
-        account.addLoginAttempt(attempt);
-        con.addLoginAttempt(attempt);
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
