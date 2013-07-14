@@ -18,6 +18,8 @@ CREATE TABLE IF NOT EXISTS `Account` (
 CREATE TABLE IF NOT EXISTS `PlayerCharacter` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account` int(11) NOT NULL,
+  `name` VARCHAR(255) NOT NULL,
+  `race` int(11) NOT NULL,  
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8
 

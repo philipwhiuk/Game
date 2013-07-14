@@ -10358,12 +10358,28 @@ public final class Messages {
          * <code>CHARACTER_ALREADY_SELECTED = 0;</code>
          */
         CHARACTER_ALREADY_SELECTED(0, 0),
+        /**
+         * <code>MISSING_DATA = 1;</code>
+         */
+        MISSING_DATA(1, 1),
+        /**
+         * <code>INVALID_DATA = 2;</code>
+         */
+        INVALID_DATA(2, 2),
         ;
 
         /**
          * <code>CHARACTER_ALREADY_SELECTED = 0;</code>
          */
         public static final int CHARACTER_ALREADY_SELECTED_VALUE = 0;
+        /**
+         * <code>MISSING_DATA = 1;</code>
+         */
+        public static final int MISSING_DATA_VALUE = 1;
+        /**
+         * <code>INVALID_DATA = 2;</code>
+         */
+        public static final int INVALID_DATA_VALUE = 2;
 
 
         public final int getNumber() { return value; }
@@ -10371,6 +10387,8 @@ public final class Messages {
         public static Error valueOf(int value) {
           switch (value) {
             case 0: return CHARACTER_ALREADY_SELECTED;
+            case 1: return MISSING_DATA;
+            case 2: return INVALID_DATA;
             default: return null;
           }
         }
@@ -16181,7 +16199,7 @@ public final class Messages {
       "ACTER_CREATION\020\000\022\026\n\022CHARACTER_SELECTED\020\001" +
       "\022\010\n\004EXIT\020\002\022\014\n\010MOVEMENT\020\003\022\n\n\006ACTION\020\004\022\n\n\006" +
       "COMBAT\020\005\"0\n\004Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010",
-      "\n\004CHAT\020\002\022\010\n\004GAME\020\003\"\363\014\n\rServerMessage\022!\n\004" +
+      "\n\004CHAT\020\002\022\010\n\004GAME\020\003\"\227\r\n\rServerMessage\022!\n\004" +
       "type\030\001 \002(\0162\023.ServerMessage.Type\022\037\n\nclien" +
       "tInfo\030\002 \002(\0132\013.ClientInfo\022-\n\nsystemData\030\003" +
       " \001(\0132\031.ServerMessage.SystemData\022)\n\010authD" +
@@ -16198,7 +16216,7 @@ public final class Messages {
       "\004Type\022\020\n\014LOGIN_FAILED\020\000\022\025\n\021EXTRA_AUTH_FA" +
       "ILED\020\001\022\024\n\020LOGIN_SUCCESSFUL\020\002\022\025\n\021LOGOUT_S" +
       "UCCESSFUL\020\003\022\027\n\023REGISTRATION_FAILED\020\004\022\033\n\027" +
-      "REGISTRATION_SUCCESSFUL\020\005\032\315\005\n\010GameData\022*" +
+      "REGISTRATION_SUCCESSFUL\020\005\032\361\005\n\010GameData\022*" +
       "\n\004type\030\001 \001(\0162\034.ServerMessage.GameData.Ty" +
       "pe\022H\n\023movementInformation\030\002 \001(\0132+.Server",
       "Message.GameData.MovementInformation\022D\n\021" +
@@ -16215,15 +16233,16 @@ public final class Messages {
       "phics\030\004 \001(\0132\033.ServerMessage.GraphicsData" +
       "\"f\n\004Type\022\027\n\023CHARACTER_SELECTION\020\000\022\025\n\021CHA" +
       "RACTER_CREATED\020\001\022\010\n\004EXIT\020\002\022\014\n\010MOVEMENT\020\003" +
-      "\022\n\n\006ACTION\020\004\022\n\n\006COMBAT\020\005\"\'\n\005Error\022\036\n\032CHA" +
-      "RACTER_ALREADY_SELECTED\020\000\032\262\001\n\010ChatData\022*" +
-      "\n\004type\030\001 \002(\0162\034.ServerMessage.ChatData.Ty" +
-      "pe\022\017\n\007private\030\002 \002(\010\022\017\n\007channel\030\003 \001(\005\022\016\n\006" +
-      "source\030\004 \002(\t\022\017\n\007message\030\005 \001(\t\"7\n\004Type\022\013\n" +
-      "\007MESSAGE\020\000\022\021\n\rPLAYER_JOINED\020\001\022\017\n\013PLAYER_",
-      "LEFT\020\002\032\016\n\014GraphicsData\"0\n\004Type\022\n\n\006SYSTEM" +
-      "\020\000\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003B*\n\036com." +
-      "whiuk.philip.mmorpg.sharedB\010Messages"
+      "\022\n\n\006ACTION\020\004\022\n\n\006COMBAT\020\005\"K\n\005Error\022\036\n\032CHA" +
+      "RACTER_ALREADY_SELECTED\020\000\022\020\n\014MISSING_DAT" +
+      "A\020\001\022\020\n\014INVALID_DATA\020\002\032\262\001\n\010ChatData\022*\n\004ty" +
+      "pe\030\001 \002(\0162\034.ServerMessage.ChatData.Type\022\017" +
+      "\n\007private\030\002 \002(\010\022\017\n\007channel\030\003 \001(\005\022\016\n\006sour" +
+      "ce\030\004 \002(\t\022\017\n\007message\030\005 \001(\t\"7\n\004Type\022\013\n\007MES",
+      "SAGE\020\000\022\021\n\rPLAYER_JOINED\020\001\022\017\n\013PLAYER_LEFT" +
+      "\020\002\032\016\n\014GraphicsData\"0\n\004Type\022\n\n\006SYSTEM\020\000\022\010" +
+      "\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003B*\n\036com.whiu" +
+      "k.philip.mmorpg.sharedB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

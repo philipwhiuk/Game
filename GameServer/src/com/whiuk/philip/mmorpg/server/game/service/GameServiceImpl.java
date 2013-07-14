@@ -12,14 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.server.game.controller.GameCharacterController;
 import com.whiuk.philip.mmorpg.server.game.controller.ZoneController;
 import com.whiuk.philip.mmorpg.server.game.domain.GameWorld;
 import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
+import com.whiuk.philip.mmorpg.server.game.domain.Race;
 import com.whiuk.philip.mmorpg.server.game.repository.PlayerCharacterDAO;
+import com.whiuk.philip.mmorpg.server.game.repository.RaceDAO;
+import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.server.system.InvalidMappingException;
 import com.whiuk.philip.mmorpg.server.watchdog.WatchdogService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
@@ -80,6 +85,11 @@ public class GameServiceImpl implements GameService {
      */
     @Autowired
     private PlayerCharacterDAO playerCharacterDAO;
+    /**
+     * 
+     */
+    @Autowired
+    private RaceDAO raceDAO;
 
     /**
      * Initialize the service.
@@ -112,6 +122,7 @@ public class GameServiceImpl implements GameService {
                 gdb.addCharacterInformation(
                         ServerMessage.GameData.CharacterInformation.newBuilder()
                         .setName(pc.getName())
+                        .setLocation("Home") //TODO: Get Location
                         .setRace(pc.getRace().getName()).build());
         }
         ServerMessage message = ServerMessage
@@ -128,6 +139,9 @@ public class GameServiceImpl implements GameService {
     public final void processMessage(
             final Account account, final ClientMessage.GameData data) {
         switch(data.getType()) {
+            case CHARACTER_CREATION:
+                characterCreation(account, data);
+                break;
             case CHARACTER_SELECTED:
                 characterSelected(account, data);
                 break;
@@ -144,6 +158,99 @@ public class GameServiceImpl implements GameService {
                 }
                 break;
         }
+    }
+    
+    /**
+     * Handle character creation messages.
+     * @param account Account
+     * @param data
+     */
+    private void characterCreation(Account account, GameData data) {
+        LOGGER.info("Character creation");
+        if (characters.get(account) != null) {
+            ServerMessage message = ServerMessage
+                .newBuilder()
+                .setClientInfo(authService.getConnection(account)
+                        .getClientInfo())
+                .setType(ServerMessage.Type.GAME)
+                .setGameData(
+                ServerMessage.GameData
+                        .newBuilder()
+                        .setError(
+                        ServerMessage.
+                GameData.Error.CHARACTER_ALREADY_SELECTED))
+                    .build();
+            messageHandlerService.queueOutboundMessage(message);
+        } else if (!data.hasCharacterInformation()
+                || !data.getCharacterInformation().hasName()
+                || !data.getCharacterInformation().hasRace()) {
+            LOGGER.info("Client sent character creation request"
+                    + " with missing data.");
+            ServerMessage message = ServerMessage
+                    .newBuilder()
+                    .setClientInfo(authService.getConnection(account)
+                            .getClientInfo())
+                    .setType(ServerMessage.Type.GAME)
+                    .setGameData(
+                    ServerMessage.GameData
+                            .newBuilder()
+                            .setError(
+                            ServerMessage.
+                    GameData.Error.MISSING_DATA))
+                        .build();
+                messageHandlerService.queueOutboundMessage(message);
+        } else {
+            Race r = raceDAO.findByName(data.getCharacterInformation().getRace());
+            if (r == null || !r.isPlayable()) {
+                ServerMessage message = ServerMessage
+                        .newBuilder()
+                        .setClientInfo(authService.getConnection(account)
+                                .getClientInfo())
+                        .setType(ServerMessage.Type.GAME)
+                        .setGameData(
+                        ServerMessage.GameData
+                                .newBuilder()
+                                .setError(
+                                ServerMessage.
+                        GameData.Error.INVALID_DATA))
+                            .build();
+                messageHandlerService.queueOutboundMessage(message);
+            } else {
+                createCharacter(account, 
+                        data.getCharacterInformation().getName(), r);
+            }
+
+        }
+    }
+    /**
+     * @param account
+     * @param name
+     * @param race
+     */
+    private void createCharacter(
+            final Account account, final String name, final Race race) {
+        LOGGER.info("Creating character");
+        HibernateUtils.beginTransaction();
+        PlayerCharacter c = new PlayerCharacter(account, name, race);
+        playerCharacterDAO.save(c);
+        HibernateUtils.commitTransaction();
+        ServerMessage message = ServerMessage
+        .newBuilder()
+        .setClientInfo(authService.getConnection(account)
+                .getClientInfo())
+        .setType(ServerMessage.Type.GAME)
+        .setGameData(
+        ServerMessage.GameData
+            .newBuilder()
+            .setType(ServerMessage.GameData.Type.CHARACTER_CREATED)
+            .addCharacterInformation(
+                    CharacterInformation.newBuilder()
+                    .setName(name)
+                    .setLocation("Home") //TODO: Get location
+                    .setRace(race.getName()))
+                    .build())
+        .build();
+        messageHandlerService.queueOutboundMessage(message);
     }
 
     /**

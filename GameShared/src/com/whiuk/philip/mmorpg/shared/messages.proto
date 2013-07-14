@@ -157,6 +157,8 @@ message ServerMessage {
 		}
 		enum Error {
 			CHARACTER_ALREADY_SELECTED = 0;
+			MISSING_DATA = 1;
+			INVALID_DATA = 2;
 		}
 		message MovementInformation {
 

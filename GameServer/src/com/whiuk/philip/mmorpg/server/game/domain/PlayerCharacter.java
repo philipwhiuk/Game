@@ -1,6 +1,7 @@
 package com.whiuk.philip.mmorpg.server.game.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -21,6 +22,7 @@ public class PlayerCharacter implements GameCharacter {
      * 
      */
     @Id
+    @GeneratedValue
     private Long id;
     
     /**
@@ -36,6 +38,35 @@ public class PlayerCharacter implements GameCharacter {
      */
     @Transient
     private boolean loggedOut;
+    /**
+     * 
+     */
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "race")
+    private Race race;
+    /**
+     * Name
+     */
+    private String name;
+
+    /**
+     * Default constructor
+     */
+    public PlayerCharacter() {
+    }
+
+    /**
+     * Creation constructor
+     * @param account 
+     * @param name
+     * @param race
+     */
+    public PlayerCharacter(final Account account,
+            final String name, final Race race) {
+        this.account = account;
+        this.name = name;
+        this.race = race;
+    }
 
     /**
      * Indicates the player in control of the character has logged out and the
@@ -60,19 +91,16 @@ public class PlayerCharacter implements GameCharacter {
     @Override
     public void doAction(final Action a) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
-    public String getName() {
-        // TODO Auto-generated method stub
-        return null;
+    public final String getName() {
+         return name;
     }
-    
+
     @Override
-    public Race getRace() {
-        // TODO Auto-generated method stub
-        return null;
+    public final Race getRace() {
+        return race;
     }
 
 }
