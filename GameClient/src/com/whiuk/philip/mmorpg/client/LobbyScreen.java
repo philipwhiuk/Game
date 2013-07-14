@@ -1,5 +1,6 @@
 package com.whiuk.philip.mmorpg.client;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -47,8 +48,12 @@ public class LobbyScreen implements ScreenController {
     private Account account;
     /**
      * List of characters.
+     * <p>NB: Use of {@link PlayerCharacter} here requires we override
+     * {@link PlayerCharacter#toString()} method to provide the name in the
+     * drop-down box. Maybe we should use a reduced object more accurately
+     * matching the details available in the lobby.</p>
      */
-    private List<ServerMessage.GameData.CharacterInformation> characters;
+    private List<PlayerCharacter> characters;
     /**
      * Chat box element
      */
@@ -91,6 +96,7 @@ public class LobbyScreen implements ScreenController {
     public LobbyScreen(final GameClient g, final Account a) {
         this.gameClient = g;
         this.account = a;
+        characters = new ArrayList<PlayerCharacter>();
     }
 
     @Override
@@ -164,17 +170,36 @@ public class LobbyScreen implements ScreenController {
      * @param gameData Game Data
      */
     public final void handleGameMessage(final ServerMessage.GameData gameData) {
-        switch (gameData.getType()) {
-            case CHARACTER_SELECTION:
-                LOGGER.info("Recieved character selection message");
-                characters = gameData.getCharacterInformationList();
-                for (ServerMessage.GameData.CharacterInformation c: characters) {
-                    characterListElement
-                        .getControl(DropDownControl.class).addItem(c);
-                }
-                break;
-            default:
-                throw new IllegalStateException();
+        if (gameData.hasError()) {
+           LOGGER.info("Game Error: " + gameData.getError());
+        } else {
+            switch (gameData.getType()) {
+                case CHARACTER_CREATED:
+                    LOGGER.info("Recieved character created message");
+                    for (ServerMessage.GameData.CharacterInformation c :
+                            gameData.getCharacterInformationList()) {
+                        PlayerCharacter pc = new PlayerCharacter(c.getName(),
+                                Race.valueOf(c.getRace()),
+                                c.getLocation());
+                        characters.add(pc);
+                        characterListElement.getControl(DropDownControl.class)
+                            .addItem(pc);
+                    }
+                    break;
+                case CHARACTER_SELECTION:
+                    LOGGER.info("Recieved character selection message");
+                    ServerMessage.GameData.CharacterInformation c =
+                            gameData.getCharacterInformationList().get(0);
+                    PlayerCharacter pc = new PlayerCharacter(c.getName(),
+                            Race.valueOf(c.getRace()),
+                            c.getLocation());
+                    characters.add(pc);
+                    characterListElement.getControl(DropDownControl.class)
+                        .addItem(pc);
+                    break;
+                default:
+                    throw new IllegalStateException();
+            }
         }
     }
 
@@ -185,8 +210,7 @@ public class LobbyScreen implements ScreenController {
         Object selection = characterListElement
                 .getControl(DropDownControl.class).getSelection();
         if (selection != null) {
-            String name = ((ServerMessage
-                    .GameData.CharacterInformation) selection).getName();
+            String name = ((PlayerCharacter) selection).getName();
             gameClient.sendGameData(ClientMessage.GameData.newBuilder()
                     .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
                     .setCharacterInformation(
@@ -196,7 +220,7 @@ public class LobbyScreen implements ScreenController {
         }
     }
     /**
-     * Play with the selected character.
+     * Create a character.
      */
     public final void createCharacter() {
         Object selection = raceListElement
@@ -212,5 +236,4 @@ public class LobbyScreen implements ScreenController {
                 .setRace(race).build())
                 .build());
     }
-    
 }
