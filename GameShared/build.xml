@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="GameShared" default="dist" basedir=".">
+<project name="GameShared" default="dist" basedir="."
+    xmlns:ivy="antlib:org.apache.ivy.ant"/>
     <description>
         Game Shared Library
     </description>
@@ -8,6 +9,18 @@
   <property name="src-gen" location="src-gen"/>
   <property name="build" location="build"/>
   <property name="dist"  location="dist"/>
+
+<property environment="env"/>
+<property name="ivy.home" value="${env_IVY_HOME}"/>
+
+<taskdef resource="org/apache/ivy/ant/antlib.xml"
+    uri="antlib:org.apache.ivy.ant">
+    <classpath>
+        <fileset dir="${ivy.home}">
+            <include name="*.jar"/>
+        </fileset>
+    </classpath>
+</taskdef>
 
   <target name="init">
     <!-- Create the time stamp -->
@@ -19,6 +32,8 @@
   <target name="compile" depends="init"
         description="compile the source " >       
     <!-- Compile the java code from ${src} into ${build} -->
+    <ivy:cachepath pathid="main.classpath" conf="compile"/>
+    <ivy:resolve/>
     <javac srcdir="${src}" destdir="${build}" includeantruntime="false"/>
     <javac srcdir="${src-gen}" destdir="${build}" includeantruntime="false"/>
   </target>
