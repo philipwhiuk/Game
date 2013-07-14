@@ -44,6 +44,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
+import com.whiuk.philip.mmorpg.client.GameClient.State;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
@@ -148,7 +149,7 @@ public class GameClient {
     /**
      *
      */
-    private State state = State.LOGIN;
+    private volatile State state = State.LOGIN;
 
     /**
      *
@@ -182,10 +183,16 @@ public class GameClient {
     /**
      * 
      */
-    private BlockingQueue<Runnable> queuedNiftyEvents;
+    private BlockingQueue<NiftyQueuedEvent> queuedNiftyEvents;
 
+    /**
+     * 
+     */
     private boolean unprocessedLoginResponse;
 
+    /**
+     * 
+     */
     private boolean finished;
 
     /**
@@ -257,7 +264,7 @@ public class GameClient {
      * Bean constructor.
      */
     public GameClient() {
-        queuedNiftyEvents = new LinkedBlockingQueue<Runnable>();
+        queuedNiftyEvents = new LinkedBlockingQueue<NiftyQueuedEvent>();
         try {
             sha256digest = MessageDigest.getInstance("SHA-256");
         } catch (GeneralSecurityException e) {
@@ -289,7 +296,7 @@ public class GameClient {
             // render OpenGL here
             Display.update();
             runQueuedNiftyEvents();
-            
+
             if (nifty.update()) {
                 finished = true;
             }
@@ -310,9 +317,23 @@ public class GameClient {
      * Run any queued events on the Nifty thread.
      */
     private void runQueuedNiftyEvents() {
-        while (!queuedNiftyEvents.isEmpty()) {
-            Runnable runnable = queuedNiftyEvents.poll();
-            runnable.run();
+        LinkedBlockingQueue<NiftyQueuedEvent> newQueue =
+                new LinkedBlockingQueue<NiftyQueuedEvent>();
+        synchronized (queuedNiftyEvents) {
+            while (!queuedNiftyEvents.isEmpty()) {
+                NiftyQueuedEvent runnable = queuedNiftyEvents.poll();
+                if (runnable.canRun()) {
+                    runnable.run();
+                } else {
+                    try {
+                        LOGGER.info("Re-queuing event.");
+                        newQueue.put(runnable);
+                    } catch (InterruptedException e) {
+                        LOGGER.info("Interrupted while re-queuing event.");
+                    }
+                }
+            }
+            queuedNiftyEvents = newQueue;
         }
     }
 
@@ -660,17 +681,29 @@ public class GameClient {
      */
     public final void handleGameMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            queuedNiftyEvents.add(new Runnable() {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
                 public void run() {
                     lobbyScreen.handleGameMessage(message.getGameData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
                 }
             });
         } else if (state.equals(State.GAME)) {
             game.handleGameMessage(message);
         } else if (unprocessedLoginResponse) {
-            queuedNiftyEvents.add(new Runnable() {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
                 public void run() {
                     lobbyScreen.handleGameMessage(message.getGameData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
                 }
             });
         } else {
@@ -684,17 +717,29 @@ public class GameClient {
      */
     public final void handleChatMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            queuedNiftyEvents.add(new Runnable() {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
                 public void run() {
                     lobbyScreen.handleChatMessage(message.getChatData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
                 }
             });
         } else if (state.equals(State.GAME)) {
             game.handleChatMessage(message);
         } else if (unprocessedLoginResponse) {
-            queuedNiftyEvents.add(new Runnable() {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
                 public void run() {
                     lobbyScreen.handleChatMessage(message.getChatData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
                 }
             });
         } else {
@@ -772,12 +817,17 @@ public class GameClient {
         } else {
             account = new Account(data.getUsername());
             unprocessedLoginResponse = true;
-            Runnable switchToLobby = new Runnable() {
+            NiftyQueuedEvent switchToLobby = new NiftyQueuedEvent() {
                 @Override
                 public void run() {
                     switchToLobbyScreen();
-                    state = State.LOBBY;
                     unprocessedLoginResponse = false;
+                }
+
+                @Override
+                public boolean canRun() {
+                    return (state.equals(State.LOGIN)
+                            || state.equals(State.REGISTER));
                 }
             };
             try {
@@ -816,7 +866,6 @@ public class GameClient {
                 break;
             case LOGIN_SUCCESSFUL:
                 switchToLobbyScreen();
-                state = State.LOBBY;
                 break;
             default:
                 LOGGER.info("Auth message type " + type
@@ -889,7 +938,6 @@ public class GameClient {
         lobbyScreen = new LobbyScreen(this, account);
         nifty.registerScreenController(lobbyScreen);
         nifty.fromXml("lobbyScreen.xml", "lobby");
-        state = State.LOBBY;
     }
 
     /**
@@ -959,5 +1007,9 @@ public class GameClient {
 
     public final void quit() {
         finished = true;
+    }
+
+    public void setState(final State newState) {
+        state = newState;
     }
 }
