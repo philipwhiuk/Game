@@ -45,6 +45,7 @@ import com.google.protobuf.ByteString;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
@@ -146,6 +147,10 @@ public class GameClient {
      * Lobby screen.
      */
     private LobbyScreen lobbyScreen;
+    /**
+     * Game screen.
+     */
+    private GameScreen gameScreen;
     /**
      * Account.
      */
@@ -679,9 +684,15 @@ public class GameClient {
      * Process an Enter Game message.
      * @param gameData Game Data
      */
-    protected void enterGame(
+    private void enterGame(
             final ServerMessage.GameData gameData) {
-        // TODO Auto-generated method stub
+        CharacterInformation characterInfo =
+                gameData.getCharacterInformation(0);
+        this.character = new PlayerCharacter(
+                characterInfo.getId(), characterInfo.getName(),
+                characterInfo.getRace(), characterInfo.getLocation());
+        this.game = new Game(character);
+        switchToGameScreen();
     }
     /**
      * Handle a chat message from the server.
@@ -907,6 +918,15 @@ public class GameClient {
         loginScreen = new LoginScreen(this);
         nifty.registerScreenController(loginScreen);
         nifty.fromXml("loginScreen.xml", "start");
+    }
+    /**
+     * Switch from the previous screen to the game.
+     * Must be run on the OpenGL context thread.
+     */
+    private void switchToGameScreen() {
+        gameScreen = new GameScreen(this, game);
+        nifty.registerScreenController(gameScreen);
+        nifty.fromXml("gameScreen.xml", "start");
     }
     /**
      * Attempt to register an account.

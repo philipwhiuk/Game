@@ -8,8 +8,17 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  *
  */
 public class Game {
+    private PlayerCharacter player;
+
     /**
-     * 
+     * @param character
+     */
+    public Game(final PlayerCharacter character) {
+        this.player = character;
+        // TODO Auto-generated constructor stub
+    }
+
+    /**
      * @param message
      */
     public void handleChatMessage(final ServerMessage message) {
