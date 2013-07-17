@@ -91,10 +91,10 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
                     .setRemoteIPAddress(address).build();
             clients.put(ctx.getChannel(), clientInfo);
             channels.put(clientInfo, ctx.getChannel());
-            LOGGER.info("Added client " + clientInfo + " on channel "
+            LOGGER.trace("Added client " + clientInfo + " on channel "
                     + ctx.getChannel());
         }
-        LOGGER.info("Message recieved from " + ctx.getChannel());
+        LOGGER.trace("Message recieved from " + ctx.getChannel());
         ClientMessage processedMessage = message.toBuilder()
                 .setClientInfo(clients.get(ctx.getChannel())).build();
         messageHandler.queueInboundMessage(processedMessage);

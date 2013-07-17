@@ -1,5 +1,7 @@
 package com.whiuk.philip.mmorpg.server.chat;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -7,6 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Transient;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 import com.whiuk.philip.mmorpg.serverShared.Account;
 
@@ -18,6 +22,13 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
 @Entity
 public class ChatChannel {
     /**
+     * Default privileges for new accounts.
+     */
+    private static final ChannelPrivileges DEFAULT_NEW_ACCOUNT_PRIVILEGES =
+            new ChannelPrivileges(new boolean[]{true, true, true, false,
+                    false, false, false});
+
+    /**
      * ID.
      */
     @Id @GeneratedValue
@@ -28,7 +39,7 @@ public class ChatChannel {
      */
     @Transient
     //TODO: Un-transient this field.
-    private Map<Account, ChannelPriveleges> members;
+    private Map<Account, ChannelPrivileges> members;
 
     /**
      * Members currently online.
@@ -42,14 +53,26 @@ public class ChatChannel {
     private boolean systemChannel;
 
     /**
-     *
+     * Privileges for new accounts.
      */
-    public ChatChannel() {
+    @Transient
+    //TODO: Un-transient this field.
+    private ChannelPrivileges newAccountPrivileges =
+            DEFAULT_NEW_ACCOUNT_PRIVILEGES;
 
-    }
+    @Transient
+    private ChatService chatService;
 
     /**
      *
+     */
+    public ChatChannel() {
+        members = new HashMap<Account, ChannelPrivileges>();
+        online = new HashSet<Account>();
+    }
+
+    /**
+     * @return whether offline messages are allowed
      */
     public final boolean allowOfflineMessages() {
         return false;
@@ -62,8 +85,7 @@ public class ChatChannel {
      */
     public final boolean hasAccountSendPrivilege(
             final Account account) {
-        // TODO Auto-generated method stub
-        return false;
+        return members.get(account).getWritePrivilege();
     }
 
     /**
@@ -78,12 +100,14 @@ public class ChatChannel {
 
     /**
      * 
-     * @param account Source
+     * @param src Source
      * @param message Message
      */
-    public final void sendMessage(final Account account,
+    public final void processMessage(final Account src,
             final String message) {
-        // TODO Auto-generated method stub
+        for (Account a : online) {
+            chatService.sendMessageFromChannel(this.id, src , a, message);
+        }
     }
 
     /**
@@ -99,6 +123,38 @@ public class ChatChannel {
     public final void setSystemChannel(
             final boolean sc) {
         this.systemChannel = sc;
+    }
+
+    /**
+     * @param account Account to register
+     */
+    public final void registerAccount(final Account account) {
+        //TODO: Bans.
+        members.put(account, new ChannelPrivileges(newAccountPrivileges));
+    }
+
+    /**
+     * @param account Account to join
+     */
+    public final void join(final Account account) {
+        online.add(account);
+        for (Account a : online) {
+            chatService.sendPlayerJoinedChannel(this.id, account, a);
+        }
+    }
+
+    /**
+     * @return id
+     */
+    public final int getId() {
+        return id;
+    }
+
+    /**
+     * @param service Service
+     */
+    public final void setChatService(final ChatService service) {
+        this.chatService = service;
     }
 
 }

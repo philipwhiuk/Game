@@ -2,13 +2,14 @@ package com.whiuk.philip.mmorpg.server.game.service;
 
 import java.util.Random;
 
+import com.whiuk.philip.mmorpg.server.auth.AuthEventListener;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 
 /**
  * @author Philip
  */
-public interface GameService {
+public interface GameService extends AuthEventListener {
     /**
      * Process game message from an account.
      * 
@@ -16,11 +17,6 @@ public interface GameService {
      * @param data
      */
     void processMessage(final Account account, final GameData data);
-
-    /**
-     * @param account Account
-     */
-    void notifyLogout(Account account);
 
     /**
      * 

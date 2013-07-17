@@ -137,7 +137,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     @Override
     public final void messageReceived(final ChannelHandlerContext ctx,
             final MessageEvent e) {
-        LOGGER.info("Recieved message");
+        LOGGER.trace("Recieved message");
         ServerMessage message = (ServerMessage) e.getMessage();
         GameClient.getGameClient().processInboundMessage(message);
     }
@@ -183,9 +183,9 @@ public class ClientChannelHandler extends SimpleChannelHandler {
      */
     final String format(final String msg) {
         if (startTime < 0) {
-            return String.format("[SERVER IS DOWN] %s%n", msg);
+            return String.format("[SERVER IS DOWN] %s", msg);
         } else {
-            return String.format("[UPTIME: %5ds] %s%n",
+            return String.format("[UPTIME: %5ds] %s",
                     (System.currentTimeMillis() - startTime) / ONE_SECOND, msg);
         }
     }
