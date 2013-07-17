@@ -40,4 +40,10 @@ public interface GameCharacter extends RelatableEntity {
      */
     Race getRace();
 
+    /**
+     * 
+     * @return ID of the zone
+     */
+    Long getZone();
+
 }
