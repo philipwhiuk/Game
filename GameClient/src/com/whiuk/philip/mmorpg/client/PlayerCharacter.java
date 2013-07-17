@@ -8,25 +8,25 @@ package com.whiuk.philip.mmorpg.client;
 public class PlayerCharacter {
 
     /**
-     * 
+     * Race.
      * @author Philip
      *
      */
     public static enum Race {
         /**
-         * 
+         * Human.
          */
         HUMAN("Human"),
         /**
-         * 
+         * Dwarf.
          */
         DWARF("Dwarf"),
         /**
-         * 
+         * Elf.
          */
         ELF("Elf");
         /**
-         * 
+         * Name.
          */
         private final String name;
         /**
@@ -41,16 +41,35 @@ public class PlayerCharacter {
             return name;
         }
     }
+    /**
+     * ID.
+     */
     private int id;
+    /**
+     * Name.
+     */
     private String name;
+    /**
+     * Race.
+     */
     private Race race;
+    /**
+     * Location.
+     */
     private String location;
-    
-    public PlayerCharacter(int id, String name, Race race, String location) {
-        this.id = id;
-        this.name = name;
-        this.race = race;
-        this.location = location;
+    /**
+     * Constructor.
+     * @param i ID
+     * @param n Name
+     * @param r Race
+     * @param l Location
+     */
+    public PlayerCharacter(final int i, final String n,
+            final Race r, final String l) {
+        this.id = i;
+        this.name = n;
+        this.race = r;
+        this.location = l;
     }
 
     @Override
