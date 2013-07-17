@@ -211,12 +211,15 @@ public class LobbyScreen implements ScreenController {
                 .getControl(DropDownControl.class).getSelection();
         if (selection != null) {
             String name = ((PlayerCharacter) selection).getName();
+            LOGGER.info("Player character selected: " + name);
             gameClient.sendGameData(ClientMessage.GameData.newBuilder()
                     .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
                     .setCharacterInformation(
                             ClientMessage.GameData.CharacterInformation
                             .newBuilder().setName(name).build())
                     .build());
+        } else {
+            LOGGER.info("Null character selected: ");
         }
     }
     /**
