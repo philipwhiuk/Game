@@ -71,8 +71,9 @@ message ClientMessage {
 				COMBAT = 5;
 		}
 		message CharacterInformation {
-			required string name = 1;
-			optional string race = 2;
+			optional int32 id = 1;
+			required string name = 2;
+			optional string race = 3;
 		}
 		message MovementInformation {
 
@@ -142,23 +143,43 @@ message ServerMessage {
 
 	message GameData {
 		optional Type type = 1;
-		optional MovementInformation movementInformation = 2;
-		optional ActionInformation actionInformation = 3;
-		optional CombatInformation combatInformation = 4;
-		repeated CharacterInformation characterInformation = 5;
-		optional Error error = 6;
+		repeated CharacterInformation characterInformation = 2;
+		optional ZoneInformation zoneInformation = 3;
+		optional MovementInformation movementInformation = 4;
+		optional ActionInformation actionInformation = 5;
+		optional CombatInformation combatInformation = 6;
+		optional Error error = 7;
 		enum Type {
 				CHARACTER_SELECTION = 0;
 				CHARACTER_CREATED = 1;
-				EXIT = 2;
-				MOVEMENT = 3;
-				ACTION = 4;
-				COMBAT = 5;
+				ENTER_GAME = 2;
+				EXIT = 3;
+				MOVEMENT = 4;
+				ACTION = 5;
+				COMBAT = 6;
 		}
 		enum Error {
 			CHARACTER_ALREADY_SELECTED = 0;
 			MISSING_DATA = 1;
 			INVALID_DATA = 2;
+		}
+		message ZoneInformation {
+			optional TileData tileData = 1;
+			message TileData {
+				repeated TileRow tileRow = 1;
+				message TileRow {
+					repeated Tile tile = 1;
+					message Tile {
+						required int32 height = 1;
+						required TerrainType type = 2;
+					}
+				}
+			}
+			enum TerrainType {
+				GRASS = 0;
+				DIRT = 1;
+				ROCK = 2;
+			}
 		}
 		message MovementInformation {
 
