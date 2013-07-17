@@ -286,7 +286,23 @@ public class GameServiceImpl implements GameService {
     private void loadCharacter(final Account account, ClientMessage.GameData data) {
         HibernateUtils.beginTransaction();
         PlayerCharacter pc = playerCharacterDAO.findByID((long) data.getCharacterInformation().getId());
-        if (pc == null || !pc.getAccount().equals(account)) {
+        if (pc == null) {
+            LOGGER.info("Client sent character selection for non-existent character.");
+            ServerMessage message = ServerMessage
+                    .newBuilder()
+                    .setClientInfo(authService.getConnection(account)
+                            .getClientInfo())
+                    .setType(ServerMessage.Type.GAME)
+                    .setGameData(
+                    ServerMessage.GameData
+                            .newBuilder()
+                            .setError(
+                            ServerMessage.
+                    GameData.Error.INVALID_DATA))
+                        .build();
+            messageHandlerService.queueOutboundMessage(message);
+            return;
+        } else if (!pc.getAccount().equals(account)) {
             LOGGER.info("Client sent character selection for character not belonging to them.");
             ServerMessage message = ServerMessage
                     .newBuilder()
