@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import com.whiuk.philip.mmorpg.client.GameClient.State;
-import com.whiuk.philip.mmorpg.client.PlayerCharacter.Race;
+import com.whiuk.philip.mmorpg.client.LobbyCharacterData.Race;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
@@ -48,12 +48,12 @@ public class LobbyScreen implements ScreenController {
     private Account account;
     /**
      * List of characters.
-     * <p>NB: Use of {@link PlayerCharacter} here requires we override
-     * {@link PlayerCharacter#toString()} method to provide the name in the
-     * drop-down box. Maybe we should use a reduced object more accurately
-     * matching the details available in the lobby.</p>
+     * <p>NB: Use of {@link LobbyCharacterData} here requires we override
+     * {@link LobbyCharacterData#toString()} method to provide the name in the
+     * drop-down box. Hence we use a simplified object rather than the full
+     * player character data object (also saving on memory).</p>
      */
-    private List<PlayerCharacter> characters;
+    private List<LobbyCharacterData> characters;
     /**
      * Chat box element
      */
@@ -96,7 +96,7 @@ public class LobbyScreen implements ScreenController {
     public LobbyScreen(final GameClient g, final Account a) {
         this.gameClient = g;
         this.account = a;
-        characters = new ArrayList<PlayerCharacter>();
+        characters = new ArrayList<LobbyCharacterData>();
     }
 
     @Override
@@ -109,7 +109,7 @@ public class LobbyScreen implements ScreenController {
         raceListElement = screen.findElementByName("race-drop_down");
         nameInputElement = screen.findElementByName("name-input");
         playButton = screen.findElementByName("play_button");
-        for (PlayerCharacter.Race r: PlayerCharacter.Race.values()) {
+        for (LobbyCharacterData.Race r: LobbyCharacterData.Race.values()) {
             raceListElement
                 .getControl(DropDownControl.class).addItem(r);
         }
@@ -178,7 +178,7 @@ public class LobbyScreen implements ScreenController {
                     LOGGER.info("Recieved character created message");
                     for (ServerMessage.GameData.CharacterInformation c :
                             gameData.getCharacterInformationList()) {
-                        PlayerCharacter pc = new PlayerCharacter(
+                        LobbyCharacterData pc = new LobbyCharacterData(
                                 c.getId(), c.getName(),
                                 Race.valueOf(c.getRace()),
                                 c.getLocation());
@@ -191,7 +191,7 @@ public class LobbyScreen implements ScreenController {
                     LOGGER.info("Recieved character selection message");
                     ServerMessage.GameData.CharacterInformation c =
                             gameData.getCharacterInformationList().get(0);
-                    PlayerCharacter pc = new PlayerCharacter(
+                    LobbyCharacterData pc = new LobbyCharacterData(
                             c.getId(), c.getName(),
                             Race.valueOf(c.getRace()),
                             c.getLocation());
@@ -212,8 +212,8 @@ public class LobbyScreen implements ScreenController {
         Object selection = characterListElement
                 .getControl(DropDownControl.class).getSelection();
         if (selection != null) {
-            String name = ((PlayerCharacter) selection).getName();
-            int id = ((PlayerCharacter) selection).getId();
+            String name = ((LobbyCharacterData) selection).getName();
+            int id = ((LobbyCharacterData) selection).getId();
             LOGGER.info("Player character selected: " + name);
             gameClient.sendGameData(ClientMessage.GameData.newBuilder()
                     .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
