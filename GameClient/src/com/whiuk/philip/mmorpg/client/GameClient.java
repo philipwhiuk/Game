@@ -10,7 +10,11 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.swing.SwingUtilities;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
@@ -40,6 +44,7 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
+import com.whiuk.philip.mmorpg.client.GameClient.State;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
@@ -144,7 +149,7 @@ public class GameClient {
     /**
      *
      */
-    private State state = State.LOGIN;
+    private volatile State state = State.LOGIN;
 
     /**
      *
@@ -169,12 +174,26 @@ public class GameClient {
     /**
      * Character.
      */
-    private GameCharacter character;
+    private PlayerCharacter character;
 
     /**
      * Game.
      */
     private Game game;
+    /**
+     * 
+     */
+    private BlockingQueue<NiftyQueuedEvent> queuedNiftyEvents;
+
+    /**
+     * 
+     */
+    private boolean unprocessedLoginResponse;
+
+    /**
+     * 
+     */
+    private boolean finished;
 
     /**
      * Class logger.
@@ -245,6 +264,7 @@ public class GameClient {
      * Bean constructor.
      */
     public GameClient() {
+        queuedNiftyEvents = new LinkedBlockingQueue<NiftyQueuedEvent>();
         try {
             sha256digest = MessageDigest.getInstance("SHA-256");
         } catch (GeneralSecurityException e) {
@@ -257,6 +277,7 @@ public class GameClient {
      * Run game client.
      */
     public final void run() {
+        finished = false;
         try {
             buildDisplay();
 
@@ -267,16 +288,16 @@ public class GameClient {
         setupOpenGL();
         setupInputSystem();
         setupNifty();
-
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
-        boolean done = false;
-        while (!Display.isCloseRequested() && !done) {
+        while (!Display.isCloseRequested() && !finished) {
 
             // render OpenGL here
             Display.update();
+            runQueuedNiftyEvents();
+
             if (nifty.update()) {
-                done = true;
+                finished = true;
             }
             nifty.render(true);
             int error = GL11.glGetError();
@@ -289,6 +310,30 @@ public class GameClient {
         inputSystem.shutdown();
         Display.destroy();
         System.exit(0);
+    }
+
+    /**
+     * Run any queued events on the Nifty thread.
+     */
+    private void runQueuedNiftyEvents() {
+        LinkedBlockingQueue<NiftyQueuedEvent> newQueue =
+                new LinkedBlockingQueue<NiftyQueuedEvent>();
+        synchronized (queuedNiftyEvents) {
+            while (!queuedNiftyEvents.isEmpty()) {
+                NiftyQueuedEvent runnable = queuedNiftyEvents.poll();
+                if (runnable.canRun()) {
+                    runnable.run();
+                } else {
+                    try {
+                        LOGGER.trace("Re-queuing event.");
+                        newQueue.put(runnable);
+                    } catch (InterruptedException e) {
+                        LOGGER.info("Interrupted while re-queuing event.");
+                    }
+                }
+            }
+            queuedNiftyEvents = newQueue;
+        }
     }
 
     /**
@@ -308,21 +353,21 @@ public class GameClient {
         Display.setFullscreen(FULLSCREEN);
         Display.setVSyncEnabled(false);
         Display.setTitle(GAME_CLIENT_TITLE);
-        LOGGER.info("Width: " + Display.getDisplayMode().getWidth()
+        LOGGER.trace("Width: " + Display.getDisplayMode().getWidth()
                 + ", Height: " + Display.getDisplayMode().getHeight()
                 + ", Bits per pixel: "
                 + Display.getDisplayMode().getBitsPerPixel() + ", Frequency: "
                 + Display.getDisplayMode().getFrequency() + ", Title: "
                 + Display.getTitle());
-        LOGGER.info("plattform: " + LWJGLUtil.getPlatformName());
-        LOGGER.info("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
-        LOGGER.info("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
-        LOGGER.info("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
+        LOGGER.trace("plattform: " + LWJGLUtil.getPlatformName());
+        LOGGER.trace("opengl version: " + GL11.glGetString(GL11.GL_VERSION));
+        LOGGER.trace("opengl vendor: " + GL11.glGetString(GL11.GL_VENDOR));
+        LOGGER.trace("opengl renderer: " + GL11.glGetString(GL11.GL_RENDERER));
         String extensions = GL11.glGetString(GL11.GL_EXTENSIONS);
         if (extensions != null) {
             String[] ext = extensions.split(" ");
             for (int i = 0; i < ext.length; i++) {
-                LOGGER.info("opengl extensions: " + ext[i]);
+                LOGGER.trace("opengl extensions: " + ext[i]);
             }
         }
 
@@ -340,7 +385,7 @@ public class GameClient {
             DisplayMode mode = modes[i];
             if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT
                     && mode.getBitsPerPixel() == BITS_PER_PIXEL) {
-                LOGGER.info(mode.getWidth() + ", " + mode.getHeight() + ", "
+                LOGGER.trace(mode.getWidth() + ", " + mode.getHeight() + ", "
                         + mode.getBitsPerPixel() + ", " + mode.getFrequency());
                 matching.add(mode);
             }
@@ -352,7 +397,7 @@ public class GameClient {
         boolean found = false;
         for (int i = 0; i < matchingModes.length; i++) {
             if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-                LOGGER.info("using mode: " + matchingModes[i].getWidth() + ", "
+                LOGGER.trace("using mode: " + matchingModes[i].getWidth() + ", "
                         + matchingModes[i].getHeight() + ", "
                         + matchingModes[i].getBitsPerPixel() + ", "
                         + matchingModes[i].getFrequency());
@@ -552,29 +597,10 @@ public class GameClient {
                 handleSystemMessage(message);
                 break;
             case GAME:
-                switch (state) {
-                    case GAME:
-                        handleGameMessage(message);
-                        break;
-                    default:
-                        LOGGER.info("Game message recieved in invalid state: "
-                                + state);
-                        break;
-                }
+                handleGameMessage(message);
                 break;
             case CHAT:
-                switch (state) {
-                    case LOBBY:
-                        lobbyScreen.handleChatMessage(message);
-                        break;
-                    case GAME:
-                        handleChatMessage(message);
-                        break;
-                    default:
-                        LOGGER.info("Chat message recieved in invalid state: "
-                                + state);
-                        break;
-                }
+                handleChatMessage(message);
                 break;
             default:
                 LOGGER.info("Unhandled message type");
@@ -653,7 +679,35 @@ public class GameClient {
      * @param message Message
      */
     public final void handleGameMessage(final ServerMessage message) {
-        // TODO Auto-generated method stub
+        if (state.equals(State.LOBBY)) {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
+                public void run() {
+                    lobbyScreen.handleGameMessage(message.getGameData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
+                }
+            });
+        } else if (state.equals(State.GAME)) {
+            game.handleGameMessage(message);
+        } else if (unprocessedLoginResponse) {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
+                public void run() {
+                    lobbyScreen.handleGameMessage(message.getGameData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
+                }
+            });
+        } else {
+            LOGGER.info("Game message recieved in invalid state: " + state);
+        }
     }
 
     /**
@@ -662,9 +716,31 @@ public class GameClient {
      */
     public final void handleChatMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            lobbyScreen.handleChatMessage(message);
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
+                public void run() {
+                    lobbyScreen.handleChatMessage(message.getChatData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
+                }
+            });
         } else if (state.equals(State.GAME)) {
             game.handleChatMessage(message);
+        } else if (unprocessedLoginResponse) {
+            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                @Override
+                public void run() {
+                    lobbyScreen.handleChatMessage(message.getChatData());
+                }
+
+                @Override
+                public boolean canRun() {
+                    return state.equals(State.LOBBY);
+                }
+            });
         } else {
             LOGGER.info("Chat message recieved in invalid state: " + state);
         }
@@ -686,15 +762,7 @@ public class GameClient {
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        if (!data.hasUsername()) {
-                            LOGGER.error("Username not provided, failed login");
-                            loginScreen.loginFailed("Server error occurred");
-                        } else {
-                            account = new Account(
-                                    data.getUsername());
-                            switchToLobbyScreen();
-                            state = State.LOBBY;
-                        }
+                        handleSuccessfuLogin(data);
                         break;
                     case EXTRA_AUTH_FAILED:
                         loginScreen.handleExtraAuthFailed();
@@ -739,6 +807,38 @@ public class GameClient {
     }
 
     /**
+     * @param data Authentication data
+     */
+    private void handleSuccessfuLogin(final ServerMessage.AuthData data) {
+        if (!data.hasUsername()) {
+            LOGGER.error("Username not provided, failed login");
+            loginScreen.loginFailed("Server error occurred");
+        } else {
+            account = new Account(data.getUsername());
+            unprocessedLoginResponse = true;
+            NiftyQueuedEvent switchToLobby = new NiftyQueuedEvent() {
+                @Override
+                public void run() {
+                    switchToLobbyScreen();
+                    unprocessedLoginResponse = false;
+                }
+
+                @Override
+                public boolean canRun() {
+                    return (state.equals(State.LOGIN)
+                            || state.equals(State.REGISTER));
+                }
+            };
+            try {
+                queuedNiftyEvents.put(switchToLobby);
+            } catch (InterruptedException e) {
+                LOGGER.error(
+                        "Interrupted while waiting to queue switch to lobby");
+            }
+        }
+    }
+
+    /**
      * 
      * @param message
      * @param data
@@ -765,7 +865,6 @@ public class GameClient {
                 break;
             case LOGIN_SUCCESSFUL:
                 switchToLobbyScreen();
-                state = State.LOBBY;
                 break;
             default:
                 LOGGER.info("Auth message type " + type
@@ -820,6 +919,7 @@ public class GameClient {
 
     /**
      * Switch from the previous screen to the account registration screen.
+     * Must be run on the OpenGL context thread.
      */
     public final void switchToRegisterScreen() {
         registerScreen = new RegisterScreen(this);
@@ -831,16 +931,17 @@ public class GameClient {
 
     /**
      * Switch from the previous screen to the lobby screen.
+     * Must be run on the OpenGL context thread.
      */
     private void switchToLobbyScreen() {
         lobbyScreen = new LobbyScreen(this, account);
         nifty.registerScreenController(lobbyScreen);
         nifty.fromXml("lobbyScreen.xml", "lobby");
-        state = State.LOBBY;
     }
 
     /**
      * Switch from the previous screen to the login screen.
+     * Must be run on the OpenGL context thread.
      */
     private void switchToLoginScreen() {
         loginScreen = new LoginScreen(this);
@@ -895,11 +996,20 @@ public class GameClient {
      * @param data Game data to send to server
      */
     public final void sendGameData(final GameData data) {
+        LOGGER.trace("Sending game data.");
         sendOutboundMessage(ClientMessage
                 .newBuilder()
                 .setType(ClientMessage.Type.GAME)
                 .setClientInfo(gameClient.getClientInfo())
                 .setGameData(data)
                 .build());
+    }
+
+    public final void quit() {
+        finished = true;
+    }
+
+    public void setState(final State newState) {
+        state = newState;
     }
 }

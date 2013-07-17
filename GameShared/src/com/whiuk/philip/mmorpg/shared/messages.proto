@@ -58,16 +58,22 @@ message ClientMessage {
 	}
 	message GameData {
 		required Type type = 1;
-		optional MovementInformation movementInformation = 2;
-		optional ActionInformation actionInformation = 3;
-		optional CombatInformation combatInformation = 4;
-		optional string character = 5;
+		optional CharacterInformation characterInformation = 2;
+		optional MovementInformation movementInformation = 3;
+		optional ActionInformation actionInformation = 4;
+		optional CombatInformation combatInformation = 5;
 		enum Type {
-				CHARACTER_SELECTION = 0;
-				EXIT = 1;
-				MOVEMENT = 2;
-				ACTION = 3;
-				COMBAT = 4;
+				CHARACTER_CREATION = 0;
+				CHARACTER_SELECTED = 1;
+				EXIT = 2;
+				MOVEMENT = 3;
+				ACTION = 4;
+				COMBAT = 5;
+		}
+		message CharacterInformation {
+			optional int32 id = 1;
+			required string name = 2;
+			optional string race = 3;
 		}
 		message MovementInformation {
 
@@ -92,6 +98,8 @@ message ClientMessage {
 		message CombatInformation {
 
 		}
+
+
 	}
 }
 message ServerMessage {
@@ -100,6 +108,7 @@ message ServerMessage {
 	optional SystemData systemData = 3;
 	optional AuthData authData = 4;
 	optional GameData gameData = 5;
+	optional ChatData chatData = 6;
 
 	enum Type {
 		SYSTEM = 0;
@@ -134,20 +143,43 @@ message ServerMessage {
 
 	message GameData {
 		optional Type type = 1;
-		optional MovementInformation movementInformation = 2;
-		optional ActionInformation actionInformation = 3;
-		optional CombatInformation combatInformation = 4;
-		repeated CharacterInformation characterInformation = 5;
-		optional Error error = 6;
+		repeated CharacterInformation characterInformation = 2;
+		optional ZoneInformation zoneInformation = 3;
+		optional MovementInformation movementInformation = 4;
+		optional ActionInformation actionInformation = 5;
+		optional CombatInformation combatInformation = 6;
+		optional Error error = 7;
 		enum Type {
 				CHARACTER_SELECTION = 0;
-				EXIT = 1;
-				MOVEMENT = 2;
-				ACTION = 3;
-				COMBAT = 4;
+				CHARACTER_CREATED = 1;
+				ENTER_GAME = 2;
+				EXIT = 3;
+				MOVEMENT = 4;
+				ACTION = 5;
+				COMBAT = 6;
 		}
 		enum Error {
 			CHARACTER_ALREADY_SELECTED = 0;
+			MISSING_DATA = 1;
+			INVALID_DATA = 2;
+		}
+		message ZoneInformation {
+			optional TileData tileData = 1;
+			message TileData {
+				repeated TileRow tileRow = 1;
+				message TileRow {
+					repeated Tile tile = 1;
+					message Tile {
+						required int32 height = 1;
+						required TerrainType type = 2;
+					}
+				}
+			}
+			enum TerrainType {
+				GRASS = 0;
+				DIRT = 1;
+				ROCK = 2;
+			}
 		}
 		message MovementInformation {
 
@@ -159,8 +191,22 @@ message ServerMessage {
 		message CharacterInformation {
 			required string name = 1;
 			required string race = 2;
-			required GraphicsData graphics = 3;
+			required string location = 3;
+			optional GraphicsData graphics = 4;
 		}
+	}
+
+	message ChatData {
+		enum Type {
+			MESSAGE = 0;
+			PLAYER_JOINED = 1;
+			PLAYER_LEFT = 2;
+		}
+		required Type type = 1;
+		required bool private = 2;
+		optional int32 channel = 3;
+		required string source = 4;
+		optional string message = 5;
 	}
 
 	message GraphicsData {

@@ -49,5 +49,13 @@ public interface AuthService {
      * @param connection connection
      */
     void notifyDisconnection(Connection connection);
+    /**
+     * @param listener Authentication event listener to add
+     */
+    void registerAuthEventListener(AuthEventListener listener);
+    /**
+     * @param listener Authentication event listener to remove
+     */
+    void deregisterAuthEventListener(AuthEventListener listener);
 
 }
