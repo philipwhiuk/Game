@@ -14,8 +14,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -44,14 +42,9 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
-import com.whiuk.philip.mmorpg.client.GameClient.State;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
-import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.AuthData.Type;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
@@ -680,17 +673,30 @@ public class GameClient {
      */
     public final void handleGameMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            queuedNiftyEvents.add(new NiftyQueuedEvent() {
-                @Override
-                public void run() {
-                    lobbyScreen.handleGameMessage(message.getGameData());
-                }
-
-                @Override
-                public boolean canRun() {
-                    return state.equals(State.LOBBY);
-                }
-            });
+            if (message.getGameData().getType().equals(ServerMessage.GameData.Type.ENTER_GAME)) {
+               queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                   @Override
+                   public void run() {
+                       enterGame(message.getGameData());
+                   }
+                   @Override
+                   public boolean canRun() {
+                       return (state.equals(State.LOBBY) || state.equals(State.GAME));
+                   }
+               });
+            } else {
+                queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                    @Override
+                    public void run() {
+                        lobbyScreen.handleGameMessage(message.getGameData());
+                    }
+    
+                    @Override
+                    public boolean canRun() {
+                        return state.equals(State.LOBBY);
+                    }
+                });
+            }
         } else if (state.equals(State.GAME)) {
             game.handleGameMessage(message);
         } else if (unprocessedLoginResponse) {
@@ -708,6 +714,12 @@ public class GameClient {
         } else {
             LOGGER.info("Game message recieved in invalid state: " + state);
         }
+    }
+
+    protected void enterGame(
+            final com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData gameData) {
+        // TODO Auto-generated method stub
+        
     }
 
     /**
@@ -752,7 +764,7 @@ public class GameClient {
      */
     public final void handleAuthMessage(final ServerMessage message) {
         ServerMessage.AuthData data = message.getAuthData();
-        Type type = message.getAuthData().getType();
+        ServerMessage.AuthData.Type type = message.getAuthData().getType();
 
         switch (state) {
             case LOGIN:
@@ -845,7 +857,8 @@ public class GameClient {
      * @param type
      */
     private void handleAuthMessageInRegisterState(final ServerMessage message,
-            final ServerMessage.AuthData data, final Type type) {
+            final ServerMessage.AuthData data,
+            final ServerMessage.AuthData.Type type) {
         switch (data.getType()) {
             case REGISTRATION_FAILED:
                 registerScreen.registrationFailed(message.getAuthData()
@@ -910,8 +923,9 @@ public class GameClient {
                 .setType(ClientMessage.Type.AUTH)
                 .setClientInfo(getClientInfo())
                 .setAuthData(
-                        AuthData.newBuilder()
-                                .setType(AuthData.AccountDataType.LOGIN)
+                        ClientMessage.AuthData.newBuilder()
+                                .setType(ClientMessage.
+                                        AuthData.AccountDataType.LOGIN)
                                 .setUsername(username)
                                 .setPassword(ByteString.copyFrom(hash)).build())
                 .build());
@@ -968,8 +982,9 @@ public class GameClient {
                 .setType(ClientMessage.Type.AUTH)
                 .setClientInfo(gameClient.getClientInfo())
                 .setAuthData(
-                        AuthData.newBuilder()
-                                .setType(AuthData.AccountDataType.REGISTER)
+                        ClientMessage.AuthData.newBuilder()
+                                .setType(ClientMessage.
+                                        AuthData.AccountDataType.REGISTER)
                                 .setUsername(username)
                                 .setPassword(ByteString.copyFrom(hash))
                                 .setEmail(email).build()).build());
@@ -981,7 +996,7 @@ public class GameClient {
      * keep server message handling code from core classes.
      * @param data Chat data to send to server
      */
-    public final void sendChatData(final ChatData data) {
+    public final void sendChatData(final ClientMessage.ChatData data) {
         sendOutboundMessage(ClientMessage
                 .newBuilder()
                 .setType(ClientMessage.Type.CHAT)
@@ -995,7 +1010,7 @@ public class GameClient {
      * keep server message handling code from core classes.
      * @param data Game data to send to server
      */
-    public final void sendGameData(final GameData data) {
+    public final void sendGameData(final ClientMessage.GameData data) {
         LOGGER.trace("Sending game data.");
         sendOutboundMessage(ClientMessage
                 .newBuilder()
