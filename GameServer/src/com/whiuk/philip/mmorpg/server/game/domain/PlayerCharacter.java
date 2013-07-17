@@ -7,6 +7,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import org.apache.log4j.Category;
+
 import com.whiuk.philip.mmorpg.serverShared.Account;
 
 
@@ -48,6 +50,11 @@ public class PlayerCharacter implements GameCharacter {
      * Name
      */
     private String name;
+    
+    /**
+     * Location
+     */
+    private Location location;
 
     /**
      * Default constructor
@@ -101,6 +108,14 @@ public class PlayerCharacter implements GameCharacter {
     @Override
     public final Race getRace() {
         return race;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+    
+    public Location getLocation() {
+        return location;
     }
 
 }

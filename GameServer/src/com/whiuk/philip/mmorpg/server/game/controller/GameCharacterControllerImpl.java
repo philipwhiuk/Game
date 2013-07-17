@@ -1,11 +1,17 @@
 package com.whiuk.philip.mmorpg.server.game.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.mmorpg.server.game.domain.Action;
 import com.whiuk.philip.mmorpg.server.game.domain.GameCharacter;
 import com.whiuk.philip.mmorpg.server.game.domain.Item;
 import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
+import com.whiuk.philip.mmorpg.server.game.domain.Tile;
+import com.whiuk.philip.mmorpg.server.game.service.GameService;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.ZoneInformation.TileData;
 
 /**
  * 
@@ -14,6 +20,9 @@ import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
  */
 @Service
 public class GameCharacterControllerImpl implements GameCharacterController {
+
+    @Autowired
+    private GameService gameService;
 
     /**
      * 
@@ -91,5 +100,28 @@ public class GameCharacterControllerImpl implements GameCharacterController {
     public void cast(GameCharacter character, int source, int target) {
         // TODO Auto-generated method stub
         
+    }
+
+    @Override
+    public void sendZoneData(final GameCharacter character,
+            final Tile[][] data) {
+        TileData.Builder td = TileData.newBuilder();
+        for (Tile[] trow : data) {
+            TileData.TileRow.Builder tr = TileData.TileRow.newBuilder();
+            for (Tile t : trow) {
+                tr.addTile(TileData.TileRow.Tile.newBuilder().build());
+            }
+            td.addTileRow(tr.build());
+        }
+        if (character instanceof PlayerCharacter) {
+            GameData message = ServerMessage.GameData.newBuilder()
+                    .setZoneInformation(
+                            ServerMessage.GameData
+                            .ZoneInformation.newBuilder()
+                            .setTileData(td.build())
+                            .build())
+                    .build();
+            gameService.sendGameData(character, message);
+        }
     }
 }

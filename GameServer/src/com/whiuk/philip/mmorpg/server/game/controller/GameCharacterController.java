@@ -2,6 +2,7 @@ package com.whiuk.philip.mmorpg.server.game.controller;
 
 import com.whiuk.philip.mmorpg.server.game.domain.GameCharacter;
 import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
+import com.whiuk.philip.mmorpg.server.game.domain.Tile;
 
 /**
  * 
@@ -87,4 +88,9 @@ public interface GameCharacterController {
      */
     public void use(final GameCharacter character,
             final int i1ID, final int i2ID);
+
+    /**
+     * @param data
+     */
+    public void sendZoneData(GameCharacter character, Tile[][] data);
 }

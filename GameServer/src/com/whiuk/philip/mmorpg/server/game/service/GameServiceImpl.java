@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 
@@ -19,9 +20,11 @@ import com.whiuk.philip.mmorpg.server.MessageHandlerService;
 import com.whiuk.philip.mmorpg.server.auth.AuthService;
 import com.whiuk.philip.mmorpg.server.game.controller.GameCharacterController;
 import com.whiuk.philip.mmorpg.server.game.controller.ZoneController;
+import com.whiuk.philip.mmorpg.server.game.domain.GameCharacter;
 import com.whiuk.philip.mmorpg.server.game.domain.GameWorld;
 import com.whiuk.philip.mmorpg.server.game.domain.PlayerCharacter;
 import com.whiuk.philip.mmorpg.server.game.domain.Race;
+import com.whiuk.philip.mmorpg.server.game.domain.Zone;
 import com.whiuk.philip.mmorpg.server.game.repository.PlayerCharacterDAO;
 import com.whiuk.philip.mmorpg.server.game.repository.RaceDAO;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
@@ -90,6 +93,10 @@ public class GameServiceImpl implements GameService {
      */
     @Autowired
     private RaceDAO raceDAO;
+    /**
+     * Zones.
+     */
+    private Set<Zone> zones;
 
     /**
      * Initialize the service.
@@ -284,7 +291,48 @@ public class GameServiceImpl implements GameService {
      * @param account Account
      */
     private void loadCharacter(final Account account, ClientMessage.GameData data) {
-        // TODO Auto-generated method stub
+        HibernateUtils.beginTransaction();
+        PlayerCharacter pc = playerCharacterDAO.findByID((long) data.getCharacterInformation().getId());
+        if (pc == null || !pc.getAccount().equals(account)) {
+            LOGGER.info("Client sent character selection for character not belonging to them.");
+            ServerMessage message = ServerMessage
+                    .newBuilder()
+                    .setClientInfo(authService.getConnection(account)
+                            .getClientInfo())
+                    .setType(ServerMessage.Type.GAME)
+                    .setGameData(
+                    ServerMessage.GameData
+                            .newBuilder()
+                            .setError(
+                            ServerMessage.
+                    GameData.Error.INVALID_DATA))
+                        .build();
+            messageHandlerService.queueOutboundMessage(message);
+            return;
+        } else {
+            accounts.put(pc, account);
+            characters.put(account, pc);
+            ServerMessage message = ServerMessage
+                .newBuilder()
+                .setClientInfo(authService.getConnection(account)
+                    .getClientInfo())
+                .setType(ServerMessage.Type.GAME)
+                .setGameData(
+                ServerMessage.GameData
+                    .newBuilder()
+                    .setType(ServerMessage.GameData.Type.ENTER_GAME)
+                    .addCharacterInformation(
+                        ServerMessage.GameData.CharacterInformation
+                        .newBuilder().setName(pc.getName())
+                        .setRace(pc.getRace().getName())
+                        .setLocation(pc.getLocation().getName()) //TODO Set Location
+                        .build())
+                    .build())
+                .build();
+            messageHandlerService.queueOutboundMessage(message);
+            zoneController.characterEntered(pc.getLocation().getZone(), pc);
+            return;
+        }
     }
 
     /**
@@ -419,6 +467,13 @@ public class GameServiceImpl implements GameService {
     @Override
     public final Random getRandom() {
         return random;
+    }
+
+    @Override
+    public void sendGameData(
+            GameCharacter character,
+            com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData message) {
+        // TODO Auto-generated method stub
     }
 
 }

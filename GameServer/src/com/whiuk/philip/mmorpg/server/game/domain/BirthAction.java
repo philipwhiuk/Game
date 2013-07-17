@@ -1,5 +1,7 @@
 package com.whiuk.philip.mmorpg.server.game.domain;
 
+import com.whiuk.philip.mmorpg.server.game.controller.ZoneController;
+
 
 /**
  *
@@ -18,11 +20,15 @@ public class BirthAction extends MultiTurnEndAction {
     /**
      *
      */
+    private ZoneController zoneController;
+    /**
+     * 
+     */
     private Zone zone;
 
     @Override
     final boolean executeAction() {
-        zone.spawnCharacterByParent(p1, p2);
+        zoneController.spawnNPCByParent(zone, p1, p2);
         return true;
     }
 }
