@@ -128,7 +128,7 @@ public class LobbyScreen implements ScreenController {
     @NiftyEventSubscriber(id = "chatId")
     public final void onChatTextSendEvent(
             final String id, final ChatTextSendEvent event) {
-        gameClient.sendChatData(
+        GameClientUtils.sendChatData(
                 ChatData.newBuilder()
                 .setPrivate(false)
                 .setChannel(0)
@@ -215,7 +215,7 @@ public class LobbyScreen implements ScreenController {
             String name = ((LobbyCharacterData) selection).getName();
             int id = ((LobbyCharacterData) selection).getId();
             LOGGER.info("Player character selected: " + name);
-            gameClient.sendGameData(ClientMessage.GameData.newBuilder()
+            GameClientUtils.sendGameData(ClientMessage.GameData.newBuilder()
                     .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
                     .setCharacterInformation(
                             ClientMessage.GameData.CharacterInformation
@@ -234,7 +234,7 @@ public class LobbyScreen implements ScreenController {
         String race = ((Race) selection).name();
         String name = nameInputElement.getControl(TextFieldControl.class)
                 .getRealText();
-        gameClient.sendGameData(ClientMessage.GameData.newBuilder()
+        GameClientUtils.sendGameData(ClientMessage.GameData.newBuilder()
                 .setType(ClientMessage.GameData.Type.CHARACTER_CREATION)
                 .setCharacterInformation(
                         ClientMessage.GameData.CharacterInformation.newBuilder()
