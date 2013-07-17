@@ -41,12 +41,13 @@ public class PlayerCharacter {
             return name;
         }
     }
-    
+    private int id;
     private String name;
     private Race race;
     private String location;
     
-    public PlayerCharacter(String name, Race race, String location) {
+    public PlayerCharacter(int id, String name, Race race, String location) {
+        this.id = id;
         this.name = name;
         this.race = race;
         this.location = location;
@@ -55,6 +56,12 @@ public class PlayerCharacter {
     @Override
     public final String toString() {
         return name;
+    }
+    /**
+     * @return id
+     */
+    public final int getId() {
+        return id;
     }
 
     /**

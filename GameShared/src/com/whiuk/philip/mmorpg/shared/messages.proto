@@ -189,10 +189,11 @@ message ServerMessage {
 		message CombatInformation {
 		}
 		message CharacterInformation {
-			required string name = 1;
-			required string race = 2;
-			required string location = 3;
-			optional GraphicsData graphics = 4;
+			required int32 id = 1;
+			required string name = 2;
+			required string race = 3;
+			required string location = 4;
+			optional GraphicsData graphics = 5;
 		}
 	}
 

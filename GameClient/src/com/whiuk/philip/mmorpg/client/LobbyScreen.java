@@ -178,7 +178,8 @@ public class LobbyScreen implements ScreenController {
                     LOGGER.info("Recieved character created message");
                     for (ServerMessage.GameData.CharacterInformation c :
                             gameData.getCharacterInformationList()) {
-                        PlayerCharacter pc = new PlayerCharacter(c.getName(),
+                        PlayerCharacter pc = new PlayerCharacter(
+                                c.getId(), c.getName(),
                                 Race.valueOf(c.getRace()),
                                 c.getLocation());
                         characters.add(pc);
@@ -190,7 +191,8 @@ public class LobbyScreen implements ScreenController {
                     LOGGER.info("Recieved character selection message");
                     ServerMessage.GameData.CharacterInformation c =
                             gameData.getCharacterInformationList().get(0);
-                    PlayerCharacter pc = new PlayerCharacter(c.getName(),
+                    PlayerCharacter pc = new PlayerCharacter(
+                            c.getId(), c.getName(),
                             Race.valueOf(c.getRace()),
                             c.getLocation());
                     characters.add(pc);
@@ -211,12 +213,13 @@ public class LobbyScreen implements ScreenController {
                 .getControl(DropDownControl.class).getSelection();
         if (selection != null) {
             String name = ((PlayerCharacter) selection).getName();
+            int id = ((PlayerCharacter) selection).getId();
             LOGGER.info("Player character selected: " + name);
             gameClient.sendGameData(ClientMessage.GameData.newBuilder()
                     .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
                     .setCharacterInformation(
                             ClientMessage.GameData.CharacterInformation
-                            .newBuilder().setName(name).build())
+                            .newBuilder().setId(id).setName(name).build())
                     .build());
         } else {
             LOGGER.info("Null character selected: ");

@@ -13971,62 +13971,72 @@ public final class Messages {
       public interface CharacterInformationOrBuilder
           extends com.google.protobuf.MessageOrBuilder {
 
-        // required string name = 1;
+        // required int32 id = 1;
         /**
-         * <code>required string name = 1;</code>
+         * <code>required int32 id = 1;</code>
+         */
+        boolean hasId();
+        /**
+         * <code>required int32 id = 1;</code>
+         */
+        int getId();
+
+        // required string name = 2;
+        /**
+         * <code>required string name = 2;</code>
          */
         boolean hasName();
         /**
-         * <code>required string name = 1;</code>
+         * <code>required string name = 2;</code>
          */
         java.lang.String getName();
         /**
-         * <code>required string name = 1;</code>
+         * <code>required string name = 2;</code>
          */
         com.google.protobuf.ByteString
             getNameBytes();
 
-        // required string race = 2;
+        // required string race = 3;
         /**
-         * <code>required string race = 2;</code>
+         * <code>required string race = 3;</code>
          */
         boolean hasRace();
         /**
-         * <code>required string race = 2;</code>
+         * <code>required string race = 3;</code>
          */
         java.lang.String getRace();
         /**
-         * <code>required string race = 2;</code>
+         * <code>required string race = 3;</code>
          */
         com.google.protobuf.ByteString
             getRaceBytes();
 
-        // required string location = 3;
+        // required string location = 4;
         /**
-         * <code>required string location = 3;</code>
+         * <code>required string location = 4;</code>
          */
         boolean hasLocation();
         /**
-         * <code>required string location = 3;</code>
+         * <code>required string location = 4;</code>
          */
         java.lang.String getLocation();
         /**
-         * <code>required string location = 3;</code>
+         * <code>required string location = 4;</code>
          */
         com.google.protobuf.ByteString
             getLocationBytes();
 
-        // optional .ServerMessage.GraphicsData graphics = 4;
+        // optional .ServerMessage.GraphicsData graphics = 5;
         /**
-         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
          */
         boolean hasGraphics();
         /**
-         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
          */
         com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData getGraphics();
         /**
-         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
          */
         com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder getGraphicsOrBuilder();
       }
@@ -14081,24 +14091,29 @@ public final class Messages {
                   }
                   break;
                 }
-                case 10: {
+                case 8: {
                   bitField0_ |= 0x00000001;
-                  name_ = input.readBytes();
+                  id_ = input.readInt32();
                   break;
                 }
                 case 18: {
                   bitField0_ |= 0x00000002;
-                  race_ = input.readBytes();
+                  name_ = input.readBytes();
                   break;
                 }
                 case 26: {
                   bitField0_ |= 0x00000004;
-                  location_ = input.readBytes();
+                  race_ = input.readBytes();
                   break;
                 }
                 case 34: {
+                  bitField0_ |= 0x00000008;
+                  location_ = input.readBytes();
+                  break;
+                }
+                case 42: {
                   com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder subBuilder = null;
-                  if (((bitField0_ & 0x00000008) == 0x00000008)) {
+                  if (((bitField0_ & 0x00000010) == 0x00000010)) {
                     subBuilder = graphics_.toBuilder();
                   }
                   graphics_ = input.readMessage(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.PARSER, extensionRegistry);
@@ -14106,7 +14121,7 @@ public final class Messages {
                     subBuilder.mergeFrom(graphics_);
                     graphics_ = subBuilder.buildPartial();
                   }
-                  bitField0_ |= 0x00000008;
+                  bitField0_ |= 0x00000010;
                   break;
                 }
               }
@@ -14149,17 +14164,33 @@ public final class Messages {
         }
 
         private int bitField0_;
-        // required string name = 1;
-        public static final int NAME_FIELD_NUMBER = 1;
-        private java.lang.Object name_;
+        // required int32 id = 1;
+        public static final int ID_FIELD_NUMBER = 1;
+        private int id_;
         /**
-         * <code>required string name = 1;</code>
+         * <code>required int32 id = 1;</code>
          */
-        public boolean hasName() {
+        public boolean hasId() {
           return ((bitField0_ & 0x00000001) == 0x00000001);
         }
         /**
-         * <code>required string name = 1;</code>
+         * <code>required int32 id = 1;</code>
+         */
+        public int getId() {
+          return id_;
+        }
+
+        // required string name = 2;
+        public static final int NAME_FIELD_NUMBER = 2;
+        private java.lang.Object name_;
+        /**
+         * <code>required string name = 2;</code>
+         */
+        public boolean hasName() {
+          return ((bitField0_ & 0x00000002) == 0x00000002);
+        }
+        /**
+         * <code>required string name = 2;</code>
          */
         public java.lang.String getName() {
           java.lang.Object ref = name_;
@@ -14176,7 +14207,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>required string name = 1;</code>
+         * <code>required string name = 2;</code>
          */
         public com.google.protobuf.ByteString
             getNameBytes() {
@@ -14192,17 +14223,17 @@ public final class Messages {
           }
         }
 
-        // required string race = 2;
-        public static final int RACE_FIELD_NUMBER = 2;
+        // required string race = 3;
+        public static final int RACE_FIELD_NUMBER = 3;
         private java.lang.Object race_;
         /**
-         * <code>required string race = 2;</code>
+         * <code>required string race = 3;</code>
          */
         public boolean hasRace() {
-          return ((bitField0_ & 0x00000002) == 0x00000002);
+          return ((bitField0_ & 0x00000004) == 0x00000004);
         }
         /**
-         * <code>required string race = 2;</code>
+         * <code>required string race = 3;</code>
          */
         public java.lang.String getRace() {
           java.lang.Object ref = race_;
@@ -14219,7 +14250,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>required string race = 2;</code>
+         * <code>required string race = 3;</code>
          */
         public com.google.protobuf.ByteString
             getRaceBytes() {
@@ -14235,17 +14266,17 @@ public final class Messages {
           }
         }
 
-        // required string location = 3;
-        public static final int LOCATION_FIELD_NUMBER = 3;
+        // required string location = 4;
+        public static final int LOCATION_FIELD_NUMBER = 4;
         private java.lang.Object location_;
         /**
-         * <code>required string location = 3;</code>
+         * <code>required string location = 4;</code>
          */
         public boolean hasLocation() {
-          return ((bitField0_ & 0x00000004) == 0x00000004);
+          return ((bitField0_ & 0x00000008) == 0x00000008);
         }
         /**
-         * <code>required string location = 3;</code>
+         * <code>required string location = 4;</code>
          */
         public java.lang.String getLocation() {
           java.lang.Object ref = location_;
@@ -14262,7 +14293,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>required string location = 3;</code>
+         * <code>required string location = 4;</code>
          */
         public com.google.protobuf.ByteString
             getLocationBytes() {
@@ -14278,29 +14309,30 @@ public final class Messages {
           }
         }
 
-        // optional .ServerMessage.GraphicsData graphics = 4;
-        public static final int GRAPHICS_FIELD_NUMBER = 4;
+        // optional .ServerMessage.GraphicsData graphics = 5;
+        public static final int GRAPHICS_FIELD_NUMBER = 5;
         private com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData graphics_;
         /**
-         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
          */
         public boolean hasGraphics() {
-          return ((bitField0_ & 0x00000008) == 0x00000008);
+          return ((bitField0_ & 0x00000010) == 0x00000010);
         }
         /**
-         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData getGraphics() {
           return graphics_;
         }
         /**
-         * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+         * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
          */
         public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder getGraphicsOrBuilder() {
           return graphics_;
         }
 
         private void initFields() {
+          id_ = 0;
           name_ = "";
           race_ = "";
           location_ = "";
@@ -14311,6 +14343,10 @@ public final class Messages {
           byte isInitialized = memoizedIsInitialized;
           if (isInitialized != -1) return isInitialized == 1;
 
+          if (!hasId()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
           if (!hasName()) {
             memoizedIsInitialized = 0;
             return false;
@@ -14331,16 +14367,19 @@ public final class Messages {
                             throws java.io.IOException {
           getSerializedSize();
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
-            output.writeBytes(1, getNameBytes());
+            output.writeInt32(1, id_);
           }
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
-            output.writeBytes(2, getRaceBytes());
+            output.writeBytes(2, getNameBytes());
           }
           if (((bitField0_ & 0x00000004) == 0x00000004)) {
-            output.writeBytes(3, getLocationBytes());
+            output.writeBytes(3, getRaceBytes());
           }
           if (((bitField0_ & 0x00000008) == 0x00000008)) {
-            output.writeMessage(4, graphics_);
+            output.writeBytes(4, getLocationBytes());
+          }
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            output.writeMessage(5, graphics_);
           }
           getUnknownFields().writeTo(output);
         }
@@ -14353,19 +14392,23 @@ public final class Messages {
           size = 0;
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeBytesSize(1, getNameBytes());
+              .computeInt32Size(1, id_);
           }
           if (((bitField0_ & 0x00000002) == 0x00000002)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeBytesSize(2, getRaceBytes());
+              .computeBytesSize(2, getNameBytes());
           }
           if (((bitField0_ & 0x00000004) == 0x00000004)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeBytesSize(3, getLocationBytes());
+              .computeBytesSize(3, getRaceBytes());
           }
           if (((bitField0_ & 0x00000008) == 0x00000008)) {
             size += com.google.protobuf.CodedOutputStream
-              .computeMessageSize(4, graphics_);
+              .computeBytesSize(4, getLocationBytes());
+          }
+          if (((bitField0_ & 0x00000010) == 0x00000010)) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeMessageSize(5, graphics_);
           }
           size += getUnknownFields().getSerializedSize();
           memoizedSerializedSize = size;
@@ -14484,18 +14527,20 @@ public final class Messages {
 
           public Builder clear() {
             super.clear();
-            name_ = "";
+            id_ = 0;
             bitField0_ = (bitField0_ & ~0x00000001);
-            race_ = "";
+            name_ = "";
             bitField0_ = (bitField0_ & ~0x00000002);
-            location_ = "";
+            race_ = "";
             bitField0_ = (bitField0_ & ~0x00000004);
+            location_ = "";
+            bitField0_ = (bitField0_ & ~0x00000008);
             if (graphicsBuilder_ == null) {
               graphics_ = com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance();
             } else {
               graphicsBuilder_.clear();
             }
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000010);
             return this;
           }
 
@@ -14527,17 +14572,21 @@ public final class Messages {
             if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
               to_bitField0_ |= 0x00000001;
             }
-            result.name_ = name_;
+            result.id_ = id_;
             if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
               to_bitField0_ |= 0x00000002;
             }
-            result.race_ = race_;
+            result.name_ = name_;
             if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
               to_bitField0_ |= 0x00000004;
             }
-            result.location_ = location_;
+            result.race_ = race_;
             if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
               to_bitField0_ |= 0x00000008;
+            }
+            result.location_ = location_;
+            if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+              to_bitField0_ |= 0x00000010;
             }
             if (graphicsBuilder_ == null) {
               result.graphics_ = graphics_;
@@ -14560,18 +14609,21 @@ public final class Messages {
 
           public Builder mergeFrom(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation other) {
             if (other == com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation.getDefaultInstance()) return this;
+            if (other.hasId()) {
+              setId(other.getId());
+            }
             if (other.hasName()) {
-              bitField0_ |= 0x00000001;
+              bitField0_ |= 0x00000002;
               name_ = other.name_;
               onChanged();
             }
             if (other.hasRace()) {
-              bitField0_ |= 0x00000002;
+              bitField0_ |= 0x00000004;
               race_ = other.race_;
               onChanged();
             }
             if (other.hasLocation()) {
-              bitField0_ |= 0x00000004;
+              bitField0_ |= 0x00000008;
               location_ = other.location_;
               onChanged();
             }
@@ -14583,6 +14635,10 @@ public final class Messages {
           }
 
           public final boolean isInitialized() {
+            if (!hasId()) {
+              
+              return false;
+            }
             if (!hasName()) {
               
               return false;
@@ -14617,16 +14673,49 @@ public final class Messages {
           }
           private int bitField0_;
 
-          // required string name = 1;
-          private java.lang.Object name_ = "";
+          // required int32 id = 1;
+          private int id_ ;
           /**
-           * <code>required string name = 1;</code>
+           * <code>required int32 id = 1;</code>
            */
-          public boolean hasName() {
+          public boolean hasId() {
             return ((bitField0_ & 0x00000001) == 0x00000001);
           }
           /**
-           * <code>required string name = 1;</code>
+           * <code>required int32 id = 1;</code>
+           */
+          public int getId() {
+            return id_;
+          }
+          /**
+           * <code>required int32 id = 1;</code>
+           */
+          public Builder setId(int value) {
+            bitField0_ |= 0x00000001;
+            id_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>required int32 id = 1;</code>
+           */
+          public Builder clearId() {
+            bitField0_ = (bitField0_ & ~0x00000001);
+            id_ = 0;
+            onChanged();
+            return this;
+          }
+
+          // required string name = 2;
+          private java.lang.Object name_ = "";
+          /**
+           * <code>required string name = 2;</code>
+           */
+          public boolean hasName() {
+            return ((bitField0_ & 0x00000002) == 0x00000002);
+          }
+          /**
+           * <code>required string name = 2;</code>
            */
           public java.lang.String getName() {
             java.lang.Object ref = name_;
@@ -14640,7 +14729,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>required string name = 1;</code>
+           * <code>required string name = 2;</code>
            */
           public com.google.protobuf.ByteString
               getNameBytes() {
@@ -14656,51 +14745,51 @@ public final class Messages {
             }
           }
           /**
-           * <code>required string name = 1;</code>
+           * <code>required string name = 2;</code>
            */
           public Builder setName(
               java.lang.String value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  bitField0_ |= 0x00000002;
             name_ = value;
             onChanged();
             return this;
           }
           /**
-           * <code>required string name = 1;</code>
+           * <code>required string name = 2;</code>
            */
           public Builder clearName() {
-            bitField0_ = (bitField0_ & ~0x00000001);
+            bitField0_ = (bitField0_ & ~0x00000002);
             name_ = getDefaultInstance().getName();
             onChanged();
             return this;
           }
           /**
-           * <code>required string name = 1;</code>
+           * <code>required string name = 2;</code>
            */
           public Builder setNameBytes(
               com.google.protobuf.ByteString value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  bitField0_ |= 0x00000002;
             name_ = value;
             onChanged();
             return this;
           }
 
-          // required string race = 2;
+          // required string race = 3;
           private java.lang.Object race_ = "";
           /**
-           * <code>required string race = 2;</code>
+           * <code>required string race = 3;</code>
            */
           public boolean hasRace() {
-            return ((bitField0_ & 0x00000002) == 0x00000002);
+            return ((bitField0_ & 0x00000004) == 0x00000004);
           }
           /**
-           * <code>required string race = 2;</code>
+           * <code>required string race = 3;</code>
            */
           public java.lang.String getRace() {
             java.lang.Object ref = race_;
@@ -14714,7 +14803,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>required string race = 2;</code>
+           * <code>required string race = 3;</code>
            */
           public com.google.protobuf.ByteString
               getRaceBytes() {
@@ -14730,51 +14819,51 @@ public final class Messages {
             }
           }
           /**
-           * <code>required string race = 2;</code>
+           * <code>required string race = 3;</code>
            */
           public Builder setRace(
               java.lang.String value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
             race_ = value;
             onChanged();
             return this;
           }
           /**
-           * <code>required string race = 2;</code>
+           * <code>required string race = 3;</code>
            */
           public Builder clearRace() {
-            bitField0_ = (bitField0_ & ~0x00000002);
+            bitField0_ = (bitField0_ & ~0x00000004);
             race_ = getDefaultInstance().getRace();
             onChanged();
             return this;
           }
           /**
-           * <code>required string race = 2;</code>
+           * <code>required string race = 3;</code>
            */
           public Builder setRaceBytes(
               com.google.protobuf.ByteString value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
             race_ = value;
             onChanged();
             return this;
           }
 
-          // required string location = 3;
+          // required string location = 4;
           private java.lang.Object location_ = "";
           /**
-           * <code>required string location = 3;</code>
+           * <code>required string location = 4;</code>
            */
           public boolean hasLocation() {
-            return ((bitField0_ & 0x00000004) == 0x00000004);
+            return ((bitField0_ & 0x00000008) == 0x00000008);
           }
           /**
-           * <code>required string location = 3;</code>
+           * <code>required string location = 4;</code>
            */
           public java.lang.String getLocation() {
             java.lang.Object ref = location_;
@@ -14788,7 +14877,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>required string location = 3;</code>
+           * <code>required string location = 4;</code>
            */
           public com.google.protobuf.ByteString
               getLocationBytes() {
@@ -14804,53 +14893,53 @@ public final class Messages {
             }
           }
           /**
-           * <code>required string location = 3;</code>
+           * <code>required string location = 4;</code>
            */
           public Builder setLocation(
               java.lang.String value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
             location_ = value;
             onChanged();
             return this;
           }
           /**
-           * <code>required string location = 3;</code>
+           * <code>required string location = 4;</code>
            */
           public Builder clearLocation() {
-            bitField0_ = (bitField0_ & ~0x00000004);
+            bitField0_ = (bitField0_ & ~0x00000008);
             location_ = getDefaultInstance().getLocation();
             onChanged();
             return this;
           }
           /**
-           * <code>required string location = 3;</code>
+           * <code>required string location = 4;</code>
            */
           public Builder setLocationBytes(
               com.google.protobuf.ByteString value) {
             if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000004;
+  bitField0_ |= 0x00000008;
             location_ = value;
             onChanged();
             return this;
           }
 
-          // optional .ServerMessage.GraphicsData graphics = 4;
+          // optional .ServerMessage.GraphicsData graphics = 5;
           private com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData graphics_ = com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance();
           private com.google.protobuf.SingleFieldBuilder<
               com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder> graphicsBuilder_;
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public boolean hasGraphics() {
-            return ((bitField0_ & 0x00000008) == 0x00000008);
+            return ((bitField0_ & 0x00000010) == 0x00000010);
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData getGraphics() {
             if (graphicsBuilder_ == null) {
@@ -14860,7 +14949,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public Builder setGraphics(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData value) {
             if (graphicsBuilder_ == null) {
@@ -14872,11 +14961,11 @@ public final class Messages {
             } else {
               graphicsBuilder_.setMessage(value);
             }
-            bitField0_ |= 0x00000008;
+            bitField0_ |= 0x00000010;
             return this;
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public Builder setGraphics(
               com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder builderForValue) {
@@ -14886,15 +14975,15 @@ public final class Messages {
             } else {
               graphicsBuilder_.setMessage(builderForValue.build());
             }
-            bitField0_ |= 0x00000008;
+            bitField0_ |= 0x00000010;
             return this;
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public Builder mergeGraphics(com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData value) {
             if (graphicsBuilder_ == null) {
-              if (((bitField0_ & 0x00000008) == 0x00000008) &&
+              if (((bitField0_ & 0x00000010) == 0x00000010) &&
                   graphics_ != com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.getDefaultInstance()) {
                 graphics_ =
                   com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.newBuilder(graphics_).mergeFrom(value).buildPartial();
@@ -14905,11 +14994,11 @@ public final class Messages {
             } else {
               graphicsBuilder_.mergeFrom(value);
             }
-            bitField0_ |= 0x00000008;
+            bitField0_ |= 0x00000010;
             return this;
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public Builder clearGraphics() {
             if (graphicsBuilder_ == null) {
@@ -14918,19 +15007,19 @@ public final class Messages {
             } else {
               graphicsBuilder_.clear();
             }
-            bitField0_ = (bitField0_ & ~0x00000008);
+            bitField0_ = (bitField0_ & ~0x00000010);
             return this;
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder getGraphicsBuilder() {
-            bitField0_ |= 0x00000008;
+            bitField0_ |= 0x00000010;
             onChanged();
             return getGraphicsFieldBuilder().getBuilder();
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           public com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder getGraphicsOrBuilder() {
             if (graphicsBuilder_ != null) {
@@ -14940,7 +15029,7 @@ public final class Messages {
             }
           }
           /**
-           * <code>optional .ServerMessage.GraphicsData graphics = 4;</code>
+           * <code>optional .ServerMessage.GraphicsData graphics = 5;</code>
            */
           private com.google.protobuf.SingleFieldBuilder<
               com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsData.Builder, com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GraphicsDataOrBuilder> 
@@ -18997,7 +19086,7 @@ public final class Messages {
       "Type\022\026\n\022CHARACTER_CREATION\020\000\022\026\n\022CHARACTE" +
       "R_SELECTED\020\001\022\010\n\004EXIT\020\002\022\014\n\010MOVEMENT\020\003\022\n\n\006" +
       "ACTION\020\004\022\n\n\006COMBAT\020\005\"0\n\004Type\022\n\n\006SYSTEM\020\000",
-      "\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003\"\373\020\n\rServe" +
+      "\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003\"\207\021\n\rServe" +
       "rMessage\022!\n\004type\030\001 \002(\0162\023.ServerMessage.T" +
       "ype\022\037\n\nclientInfo\030\002 \002(\0132\013.ClientInfo\022-\n\n" +
       "systemData\030\003 \001(\0132\031.ServerMessage.SystemD" +
@@ -19014,7 +19103,7 @@ public final class Messages {
       "ge\030\003 \001(\t\"\222\001\n\004Type\022\020\n\014LOGIN_FAILED\020\000\022\025\n\021E" +
       "XTRA_AUTH_FAILED\020\001\022\024\n\020LOGIN_SUCCESSFUL\020\002" +
       "\022\025\n\021LOGOUT_SUCCESSFUL\020\003\022\027\n\023REGISTRATION_" +
-      "FAILED\020\004\022\033\n\027REGISTRATION_SUCCESSFUL\020\005\032\325\t" +
+      "FAILED\020\004\022\033\n\027REGISTRATION_SUCCESSFUL\020\005\032\341\t" +
       "\n\010GameData\022*\n\004type\030\001 \001(\0162\034.ServerMessage" +
       ".GameData.Type\022J\n\024characterInformation\030\002",
       " \003(\0132,.ServerMessage.GameData.CharacterI" +
@@ -19038,22 +19127,22 @@ public final class Messages {
       ".TerrainType\",\n\013TerrainType\022\t\n\005GRASS\020\000\022\010" +
       "\n\004DIRT\020\001\022\010\n\004ROCK\020\002\032\025\n\023MovementInformatio",
       "n\032\023\n\021ActionInformation\032\023\n\021CombatInformat" +
-      "ion\032s\n\024CharacterInformation\022\014\n\004name\030\001 \002(" +
-      "\t\022\014\n\004race\030\002 \002(\t\022\020\n\010location\030\003 \002(\t\022-\n\010gra" +
-      "phics\030\004 \001(\0132\033.ServerMessage.GraphicsData" +
-      "\"v\n\004Type\022\027\n\023CHARACTER_SELECTION\020\000\022\025\n\021CHA" +
-      "RACTER_CREATED\020\001\022\016\n\nENTER_GAME\020\002\022\010\n\004EXIT" +
-      "\020\003\022\014\n\010MOVEMENT\020\004\022\n\n\006ACTION\020\005\022\n\n\006COMBAT\020\006" +
-      "\"K\n\005Error\022\036\n\032CHARACTER_ALREADY_SELECTED\020" +
-      "\000\022\020\n\014MISSING_DATA\020\001\022\020\n\014INVALID_DATA\020\002\032\262\001" +
-      "\n\010ChatData\022*\n\004type\030\001 \002(\0162\034.ServerMessage",
-      ".ChatData.Type\022\017\n\007private\030\002 \002(\010\022\017\n\007chann" +
-      "el\030\003 \001(\005\022\016\n\006source\030\004 \002(\t\022\017\n\007message\030\005 \001(" +
-      "\t\"7\n\004Type\022\013\n\007MESSAGE\020\000\022\021\n\rPLAYER_JOINED\020" +
-      "\001\022\017\n\013PLAYER_LEFT\020\002\032\016\n\014GraphicsData\"0\n\004Ty" +
-      "pe\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GA" +
-      "ME\020\003B*\n\036com.whiuk.philip.mmorpg.sharedB\010" +
-      "Messages"
+      "ion\032\177\n\024CharacterInformation\022\n\n\002id\030\001 \002(\005\022" +
+      "\014\n\004name\030\002 \002(\t\022\014\n\004race\030\003 \002(\t\022\020\n\010location\030" +
+      "\004 \002(\t\022-\n\010graphics\030\005 \001(\0132\033.ServerMessage." +
+      "GraphicsData\"v\n\004Type\022\027\n\023CHARACTER_SELECT" +
+      "ION\020\000\022\025\n\021CHARACTER_CREATED\020\001\022\016\n\nENTER_GA" +
+      "ME\020\002\022\010\n\004EXIT\020\003\022\014\n\010MOVEMENT\020\004\022\n\n\006ACTION\020\005" +
+      "\022\n\n\006COMBAT\020\006\"K\n\005Error\022\036\n\032CHARACTER_ALREA" +
+      "DY_SELECTED\020\000\022\020\n\014MISSING_DATA\020\001\022\020\n\014INVAL" +
+      "ID_DATA\020\002\032\262\001\n\010ChatData\022*\n\004type\030\001 \002(\0162\034.S",
+      "erverMessage.ChatData.Type\022\017\n\007private\030\002 " +
+      "\002(\010\022\017\n\007channel\030\003 \001(\005\022\016\n\006source\030\004 \002(\t\022\017\n\007" +
+      "message\030\005 \001(\t\"7\n\004Type\022\013\n\007MESSAGE\020\000\022\021\n\rPL" +
+      "AYER_JOINED\020\001\022\017\n\013PLAYER_LEFT\020\002\032\016\n\014Graphi" +
+      "csData\"0\n\004Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010\n\004" +
+      "CHAT\020\002\022\010\n\004GAME\020\003B*\n\036com.whiuk.philip.mmo" +
+      "rpg.sharedB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -19191,7 +19280,7 @@ public final class Messages {
           internal_static_ServerMessage_GameData_CharacterInformation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ServerMessage_GameData_CharacterInformation_descriptor,
-              new java.lang.String[] { "Name", "Race", "Location", "Graphics", });
+              new java.lang.String[] { "Id", "Name", "Race", "Location", "Graphics", });
           internal_static_ServerMessage_ChatData_descriptor =
             internal_static_ServerMessage_descriptor.getNestedTypes().get(3);
           internal_static_ServerMessage_ChatData_fieldAccessorTable = new

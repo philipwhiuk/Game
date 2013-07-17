@@ -116,4 +116,8 @@ public class PlayerCharacter implements GameCharacter {
         return account;
     }
 
+    public Long getId() {
+        return id;
+    }
+
 }

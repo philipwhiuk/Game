@@ -121,6 +121,7 @@ public class GameServiceImpl implements GameService {
         for (PlayerCharacter pc : pcs) {
                 gdb.addCharacterInformation(
                         ServerMessage.GameData.CharacterInformation.newBuilder()
+                        .setId(pc.getId().intValue())
                         .setName(pc.getName())
                         .setLocation("Home") //TODO: Get Location
                         .setRace(pc.getRace().getName()).build());
@@ -245,7 +246,8 @@ public class GameServiceImpl implements GameService {
             .setType(ServerMessage.GameData.Type.CHARACTER_CREATED)
             .addCharacterInformation(
                     CharacterInformation.newBuilder()
-                    .setName(name)
+                    .setId(c.getId().intValue())
+                    .setName(c.getName())
                     .setLocation("Home") //TODO: Get location
                     .setRace(race.getName()))
                     .build())
@@ -333,6 +335,7 @@ public class GameServiceImpl implements GameService {
                     .addCharacterInformation(
                         ServerMessage.GameData.CharacterInformation
                         .newBuilder().setName(pc.getName())
+                        .setId(pc.getId().intValue())
                         .setRace(pc.getRace().getName())
                         .setLocation("") //TODO Set Location
                         .build())
