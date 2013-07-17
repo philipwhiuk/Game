@@ -270,10 +270,10 @@ public class GameClient {
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
+            // render OpenGL
             if (state == State.GAME) {
                    game.render();
             }
-            // render OpenGL here
             Display.update();
             runQueuedNiftyEvents();
 
@@ -665,7 +665,7 @@ public class GameClient {
                 });
             }
         } else if (state.equals(State.GAME)) {
-            game.handleGameMessage(message);
+            game.handleGameMessage(message.getGameData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override
@@ -715,7 +715,7 @@ public class GameClient {
                 }
             });
         } else if (state.equals(State.GAME)) {
-            game.handleChatMessage(message);
+            game.handleChatMessage(message.getChatData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override

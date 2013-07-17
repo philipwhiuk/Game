@@ -4683,6 +4683,16 @@ public final class Messages {
 
       public interface MovementInformationOrBuilder
           extends com.google.protobuf.MessageOrBuilder {
+
+        // required float direction = 1;
+        /**
+         * <code>required float direction = 1;</code>
+         */
+        boolean hasDirection();
+        /**
+         * <code>required float direction = 1;</code>
+         */
+        float getDirection();
       }
       /**
        * Protobuf type {@code ClientMessage.GameData.MovementInformation}
@@ -4717,6 +4727,7 @@ public final class Messages {
             com.google.protobuf.ExtensionRegistryLite extensionRegistry)
             throws com.google.protobuf.InvalidProtocolBufferException {
           initFields();
+          int mutable_bitField0_ = 0;
           com.google.protobuf.UnknownFieldSet.Builder unknownFields =
               com.google.protobuf.UnknownFieldSet.newBuilder();
           try {
@@ -4732,6 +4743,11 @@ public final class Messages {
                                          extensionRegistry, tag)) {
                     done = true;
                   }
+                  break;
+                }
+                case 13: {
+                  bitField0_ |= 0x00000001;
+                  direction_ = input.readFloat();
                   break;
                 }
               }
@@ -4773,13 +4789,35 @@ public final class Messages {
           return PARSER;
         }
 
+        private int bitField0_;
+        // required float direction = 1;
+        public static final int DIRECTION_FIELD_NUMBER = 1;
+        private float direction_;
+        /**
+         * <code>required float direction = 1;</code>
+         */
+        public boolean hasDirection() {
+          return ((bitField0_ & 0x00000001) == 0x00000001);
+        }
+        /**
+         * <code>required float direction = 1;</code>
+         */
+        public float getDirection() {
+          return direction_;
+        }
+
         private void initFields() {
+          direction_ = 0F;
         }
         private byte memoizedIsInitialized = -1;
         public final boolean isInitialized() {
           byte isInitialized = memoizedIsInitialized;
           if (isInitialized != -1) return isInitialized == 1;
 
+          if (!hasDirection()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
           memoizedIsInitialized = 1;
           return true;
         }
@@ -4787,6 +4825,9 @@ public final class Messages {
         public void writeTo(com.google.protobuf.CodedOutputStream output)
                             throws java.io.IOException {
           getSerializedSize();
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            output.writeFloat(1, direction_);
+          }
           getUnknownFields().writeTo(output);
         }
 
@@ -4796,6 +4837,10 @@ public final class Messages {
           if (size != -1) return size;
 
           size = 0;
+          if (((bitField0_ & 0x00000001) == 0x00000001)) {
+            size += com.google.protobuf.CodedOutputStream
+              .computeFloatSize(1, direction_);
+          }
           size += getUnknownFields().getSerializedSize();
           memoizedSerializedSize = size;
           return size;
@@ -4912,6 +4957,8 @@ public final class Messages {
 
           public Builder clear() {
             super.clear();
+            direction_ = 0F;
+            bitField0_ = (bitField0_ & ~0x00000001);
             return this;
           }
 
@@ -4938,6 +4985,13 @@ public final class Messages {
 
           public com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation buildPartial() {
             com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation result = new com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation(this);
+            int from_bitField0_ = bitField0_;
+            int to_bitField0_ = 0;
+            if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
+              to_bitField0_ |= 0x00000001;
+            }
+            result.direction_ = direction_;
+            result.bitField0_ = to_bitField0_;
             onBuilt();
             return result;
           }
@@ -4953,11 +5007,18 @@ public final class Messages {
 
           public Builder mergeFrom(com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation other) {
             if (other == com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData.MovementInformation.getDefaultInstance()) return this;
+            if (other.hasDirection()) {
+              setDirection(other.getDirection());
+            }
             this.mergeUnknownFields(other.getUnknownFields());
             return this;
           }
 
           public final boolean isInitialized() {
+            if (!hasDirection()) {
+              
+              return false;
+            }
             return true;
           }
 
@@ -4976,6 +5037,40 @@ public final class Messages {
                 mergeFrom(parsedMessage);
               }
             }
+            return this;
+          }
+          private int bitField0_;
+
+          // required float direction = 1;
+          private float direction_ ;
+          /**
+           * <code>required float direction = 1;</code>
+           */
+          public boolean hasDirection() {
+            return ((bitField0_ & 0x00000001) == 0x00000001);
+          }
+          /**
+           * <code>required float direction = 1;</code>
+           */
+          public float getDirection() {
+            return direction_;
+          }
+          /**
+           * <code>required float direction = 1;</code>
+           */
+          public Builder setDirection(float value) {
+            bitField0_ |= 0x00000001;
+            direction_ = value;
+            onChanged();
+            return this;
+          }
+          /**
+           * <code>required float direction = 1;</code>
+           */
+          public Builder clearDirection() {
+            bitField0_ = (bitField0_ & ~0x00000001);
+            direction_ = 0F;
+            onChanged();
             return this;
           }
 
@@ -6155,6 +6250,12 @@ public final class Messages {
             return false;
           }
         }
+        if (hasMovementInformation()) {
+          if (!getMovementInformation().isInitialized()) {
+            memoizedIsInitialized = 0;
+            return false;
+          }
+        }
         if (hasActionInformation()) {
           if (!getActionInformation().isInitialized()) {
             memoizedIsInitialized = 0;
@@ -6464,6 +6565,12 @@ public final class Messages {
           }
           if (hasCharacterInformation()) {
             if (!getCharacterInformation().isInitialized()) {
+              
+              return false;
+            }
+          }
+          if (hasMovementInformation()) {
+            if (!getMovementInformation().isInitialized()) {
               
               return false;
             }
@@ -19050,7 +19157,7 @@ public final class Messages {
       "s.proto\"t\n\nClientInfo\022\020\n\010clientID\030\001 \002(\005\022" +
       "\017\n\007version\030\002 \002(\t\022\022\n\nmacAddress\030\003 \002(\014\022\026\n\016" +
       "localIPAddress\030\004 \002(\t\022\027\n\017remoteIPAddress\030" +
-      "\005 \001(\t\"\266\013\n\rClientMessage\022!\n\004type\030\001 \002(\0162\023." +
+      "\005 \001(\t\"\311\013\n\rClientMessage\022!\n\004type\030\001 \002(\0162\023." +
       "ClientMessage.Type\022\037\n\nclientInfo\030\002 \002(\0132\013" +
       ".ClientInfo\022-\n\nsystemData\030\003 \001(\0132\031.Client" +
       "Message.SystemData\022)\n\010authData\030\004 \001(\0132\027.C" +
@@ -19065,7 +19172,7 @@ public final class Messages {
       "essage.SystemData.Type\"(\n\004Type\022\r\n\tCONNEC" +
       "TED\020\000\022\021\n\rDISCONNECTING\020\001\032M\n\010ChatData\022\017\n\007" +
       "private\030\001 \002(\010\022\017\n\007channel\030\002 \002(\005\022\017\n\007messag" +
-      "e\030\003 \002(\t\022\016\n\006target\030\004 \001(\t\032\232\006\n\010GameData\022*\n\004",
+      "e\030\003 \002(\t\022\016\n\006target\030\004 \001(\t\032\255\006\n\010GameData\022*\n\004",
       "type\030\001 \002(\0162\034.ClientMessage.GameData.Type" +
       "\022J\n\024characterInformation\030\002 \001(\0132,.ClientM" +
       "essage.GameData.CharacterInformation\022H\n\023" +
@@ -19075,74 +19182,74 @@ public final class Messages {
       "ta.ActionInformation\022D\n\021combatInformatio" +
       "n\030\005 \001(\0132).ClientMessage.GameData.CombatI" +
       "nformation\032>\n\024CharacterInformation\022\n\n\002id" +
-      "\030\001 \001(\005\022\014\n\004name\030\002 \002(\t\022\014\n\004race\030\003 \001(\t\032\025\n\023Mo",
-      "vementInformation\032\353\001\n\021ActionInformation\022" +
-      "@\n\006action\030\001 \002(\01620.ClientMessage.GameData" +
-      ".ActionInformation.Action\022\016\n\006source\030\002 \001(" +
-      "\005\022\016\n\006target\030\003 \001(\005\"t\n\006Action\022\007\n\003USE\020\000\022\013\n\007" +
-      "EXAMINE\020\001\022\t\n\005EQUIP\020\002\022\013\n\007UNEQUIP\020\003\022\010\n\004TAK" +
-      "E\020\004\022\010\n\004DROP\020\005\022\t\n\005CRAFT\020\006\022\010\n\004MINE\020\007\022\t\n\005SM" +
-      "ITH\020\010\022\010\n\004CAST\020\t\032\023\n\021CombatInformation\"f\n\004" +
-      "Type\022\026\n\022CHARACTER_CREATION\020\000\022\026\n\022CHARACTE" +
-      "R_SELECTED\020\001\022\010\n\004EXIT\020\002\022\014\n\010MOVEMENT\020\003\022\n\n\006" +
-      "ACTION\020\004\022\n\n\006COMBAT\020\005\"0\n\004Type\022\n\n\006SYSTEM\020\000",
-      "\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003\"\207\021\n\rServe" +
-      "rMessage\022!\n\004type\030\001 \002(\0162\023.ServerMessage.T" +
-      "ype\022\037\n\nclientInfo\030\002 \002(\0132\013.ClientInfo\022-\n\n" +
-      "systemData\030\003 \001(\0132\031.ServerMessage.SystemD" +
-      "ata\022)\n\010authData\030\004 \001(\0132\027.ServerMessage.Au" +
-      "thData\022)\n\010gameData\030\005 \001(\0132\027.ServerMessage" +
-      ".GameData\022)\n\010chatData\030\006 \001(\0132\027.ServerMess" +
-      "age.ChatData\032\260\001\n\nSystemData\022,\n\004type\030\001 \002(" +
-      "\0162\036.ServerMessage.SystemData.Type\022\017\n\007det" +
-      "ails\030\002 \001(\t\"c\n\004Type\022\030\n\024UNKNOWN_MESSAGE_TY",
-      "PE\020\000\022\022\n\016INVALID_FORMAT\020\001\022\032\n\026CONNECTED_SU" +
-      "CCESSFULLY\020\002\022\021\n\rDISCONNECTING\020\003\032\363\001\n\010Auth" +
-      "Data\022*\n\004type\030\001 \002(\0162\034.ServerMessage.AuthD" +
-      "ata.Type\022\020\n\010username\030\002 \001(\t\022\024\n\014errorMessa" +
-      "ge\030\003 \001(\t\"\222\001\n\004Type\022\020\n\014LOGIN_FAILED\020\000\022\025\n\021E" +
-      "XTRA_AUTH_FAILED\020\001\022\024\n\020LOGIN_SUCCESSFUL\020\002" +
-      "\022\025\n\021LOGOUT_SUCCESSFUL\020\003\022\027\n\023REGISTRATION_" +
-      "FAILED\020\004\022\033\n\027REGISTRATION_SUCCESSFUL\020\005\032\341\t" +
-      "\n\010GameData\022*\n\004type\030\001 \001(\0162\034.ServerMessage" +
-      ".GameData.Type\022J\n\024characterInformation\030\002",
-      " \003(\0132,.ServerMessage.GameData.CharacterI" +
-      "nformation\022@\n\017zoneInformation\030\003 \001(\0132\'.Se" +
-      "rverMessage.GameData.ZoneInformation\022H\n\023" +
-      "movementInformation\030\004 \001(\0132+.ServerMessag" +
-      "e.GameData.MovementInformation\022D\n\021action" +
-      "Information\030\005 \001(\0132).ServerMessage.GameDa" +
-      "ta.ActionInformation\022D\n\021combatInformatio" +
-      "n\030\006 \001(\0132).ServerMessage.GameData.CombatI" +
-      "nformation\022,\n\005error\030\007 \001(\0162\035.ServerMessag" +
-      "e.GameData.Error\032\217\003\n\017ZoneInformation\022B\n\010",
-      "tileData\030\001 \001(\01320.ServerMessage.GameData." +
-      "ZoneInformation.TileData\032\211\002\n\010TileData\022I\n" +
-      "\007tileRow\030\001 \003(\01328.ServerMessage.GameData." +
-      "ZoneInformation.TileData.TileRow\032\261\001\n\007Til" +
-      "eRow\022K\n\004tile\030\001 \003(\0132=.ServerMessage.GameD" +
-      "ata.ZoneInformation.TileData.TileRow.Til" +
-      "e\032Y\n\004Tile\022\016\n\006height\030\001 \002(\005\022A\n\004type\030\002 \002(\0162" +
-      "3.ServerMessage.GameData.ZoneInformation" +
-      ".TerrainType\",\n\013TerrainType\022\t\n\005GRASS\020\000\022\010" +
-      "\n\004DIRT\020\001\022\010\n\004ROCK\020\002\032\025\n\023MovementInformatio",
-      "n\032\023\n\021ActionInformation\032\023\n\021CombatInformat" +
-      "ion\032\177\n\024CharacterInformation\022\n\n\002id\030\001 \002(\005\022" +
-      "\014\n\004name\030\002 \002(\t\022\014\n\004race\030\003 \002(\t\022\020\n\010location\030" +
-      "\004 \002(\t\022-\n\010graphics\030\005 \001(\0132\033.ServerMessage." +
-      "GraphicsData\"v\n\004Type\022\027\n\023CHARACTER_SELECT" +
-      "ION\020\000\022\025\n\021CHARACTER_CREATED\020\001\022\016\n\nENTER_GA" +
-      "ME\020\002\022\010\n\004EXIT\020\003\022\014\n\010MOVEMENT\020\004\022\n\n\006ACTION\020\005" +
-      "\022\n\n\006COMBAT\020\006\"K\n\005Error\022\036\n\032CHARACTER_ALREA" +
-      "DY_SELECTED\020\000\022\020\n\014MISSING_DATA\020\001\022\020\n\014INVAL" +
-      "ID_DATA\020\002\032\262\001\n\010ChatData\022*\n\004type\030\001 \002(\0162\034.S",
-      "erverMessage.ChatData.Type\022\017\n\007private\030\002 " +
-      "\002(\010\022\017\n\007channel\030\003 \001(\005\022\016\n\006source\030\004 \002(\t\022\017\n\007" +
-      "message\030\005 \001(\t\"7\n\004Type\022\013\n\007MESSAGE\020\000\022\021\n\rPL" +
-      "AYER_JOINED\020\001\022\017\n\013PLAYER_LEFT\020\002\032\016\n\014Graphi" +
-      "csData\"0\n\004Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010\n\004" +
-      "CHAT\020\002\022\010\n\004GAME\020\003B*\n\036com.whiuk.philip.mmo" +
-      "rpg.sharedB\010Messages"
+      "\030\001 \001(\005\022\014\n\004name\030\002 \002(\t\022\014\n\004race\030\003 \001(\t\032(\n\023Mo",
+      "vementInformation\022\021\n\tdirection\030\001 \002(\002\032\353\001\n" +
+      "\021ActionInformation\022@\n\006action\030\001 \002(\01620.Cli" +
+      "entMessage.GameData.ActionInformation.Ac" +
+      "tion\022\016\n\006source\030\002 \001(\005\022\016\n\006target\030\003 \001(\005\"t\n\006" +
+      "Action\022\007\n\003USE\020\000\022\013\n\007EXAMINE\020\001\022\t\n\005EQUIP\020\002\022" +
+      "\013\n\007UNEQUIP\020\003\022\010\n\004TAKE\020\004\022\010\n\004DROP\020\005\022\t\n\005CRAF" +
+      "T\020\006\022\010\n\004MINE\020\007\022\t\n\005SMITH\020\010\022\010\n\004CAST\020\t\032\023\n\021Co" +
+      "mbatInformation\"f\n\004Type\022\026\n\022CHARACTER_CRE" +
+      "ATION\020\000\022\026\n\022CHARACTER_SELECTED\020\001\022\010\n\004EXIT\020" +
+      "\002\022\014\n\010MOVEMENT\020\003\022\n\n\006ACTION\020\004\022\n\n\006COMBAT\020\005\"",
+      "0\n\004Type\022\n\n\006SYSTEM\020\000\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022" +
+      "\010\n\004GAME\020\003\"\207\021\n\rServerMessage\022!\n\004type\030\001 \002(" +
+      "\0162\023.ServerMessage.Type\022\037\n\nclientInfo\030\002 \002" +
+      "(\0132\013.ClientInfo\022-\n\nsystemData\030\003 \001(\0132\031.Se" +
+      "rverMessage.SystemData\022)\n\010authData\030\004 \001(\013" +
+      "2\027.ServerMessage.AuthData\022)\n\010gameData\030\005 " +
+      "\001(\0132\027.ServerMessage.GameData\022)\n\010chatData" +
+      "\030\006 \001(\0132\027.ServerMessage.ChatData\032\260\001\n\nSyst" +
+      "emData\022,\n\004type\030\001 \002(\0162\036.ServerMessage.Sys" +
+      "temData.Type\022\017\n\007details\030\002 \001(\t\"c\n\004Type\022\030\n",
+      "\024UNKNOWN_MESSAGE_TYPE\020\000\022\022\n\016INVALID_FORMA" +
+      "T\020\001\022\032\n\026CONNECTED_SUCCESSFULLY\020\002\022\021\n\rDISCO" +
+      "NNECTING\020\003\032\363\001\n\010AuthData\022*\n\004type\030\001 \002(\0162\034." +
+      "ServerMessage.AuthData.Type\022\020\n\010username\030" +
+      "\002 \001(\t\022\024\n\014errorMessage\030\003 \001(\t\"\222\001\n\004Type\022\020\n\014" +
+      "LOGIN_FAILED\020\000\022\025\n\021EXTRA_AUTH_FAILED\020\001\022\024\n" +
+      "\020LOGIN_SUCCESSFUL\020\002\022\025\n\021LOGOUT_SUCCESSFUL" +
+      "\020\003\022\027\n\023REGISTRATION_FAILED\020\004\022\033\n\027REGISTRAT" +
+      "ION_SUCCESSFUL\020\005\032\341\t\n\010GameData\022*\n\004type\030\001 " +
+      "\001(\0162\034.ServerMessage.GameData.Type\022J\n\024cha",
+      "racterInformation\030\002 \003(\0132,.ServerMessage." +
+      "GameData.CharacterInformation\022@\n\017zoneInf" +
+      "ormation\030\003 \001(\0132\'.ServerMessage.GameData." +
+      "ZoneInformation\022H\n\023movementInformation\030\004" +
+      " \001(\0132+.ServerMessage.GameData.MovementIn" +
+      "formation\022D\n\021actionInformation\030\005 \001(\0132).S" +
+      "erverMessage.GameData.ActionInformation\022" +
+      "D\n\021combatInformation\030\006 \001(\0132).ServerMessa" +
+      "ge.GameData.CombatInformation\022,\n\005error\030\007" +
+      " \001(\0162\035.ServerMessage.GameData.Error\032\217\003\n\017",
+      "ZoneInformation\022B\n\010tileData\030\001 \001(\01320.Serv" +
+      "erMessage.GameData.ZoneInformation.TileD" +
+      "ata\032\211\002\n\010TileData\022I\n\007tileRow\030\001 \003(\01328.Serv" +
+      "erMessage.GameData.ZoneInformation.TileD" +
+      "ata.TileRow\032\261\001\n\007TileRow\022K\n\004tile\030\001 \003(\0132=." +
+      "ServerMessage.GameData.ZoneInformation.T" +
+      "ileData.TileRow.Tile\032Y\n\004Tile\022\016\n\006height\030\001" +
+      " \002(\005\022A\n\004type\030\002 \002(\01623.ServerMessage.GameD" +
+      "ata.ZoneInformation.TerrainType\",\n\013Terra" +
+      "inType\022\t\n\005GRASS\020\000\022\010\n\004DIRT\020\001\022\010\n\004ROCK\020\002\032\025\n",
+      "\023MovementInformation\032\023\n\021ActionInformatio" +
+      "n\032\023\n\021CombatInformation\032\177\n\024CharacterInfor" +
+      "mation\022\n\n\002id\030\001 \002(\005\022\014\n\004name\030\002 \002(\t\022\014\n\004race" +
+      "\030\003 \002(\t\022\020\n\010location\030\004 \002(\t\022-\n\010graphics\030\005 \001" +
+      "(\0132\033.ServerMessage.GraphicsData\"v\n\004Type\022" +
+      "\027\n\023CHARACTER_SELECTION\020\000\022\025\n\021CHARACTER_CR" +
+      "EATED\020\001\022\016\n\nENTER_GAME\020\002\022\010\n\004EXIT\020\003\022\014\n\010MOV" +
+      "EMENT\020\004\022\n\n\006ACTION\020\005\022\n\n\006COMBAT\020\006\"K\n\005Error" +
+      "\022\036\n\032CHARACTER_ALREADY_SELECTED\020\000\022\020\n\014MISS" +
+      "ING_DATA\020\001\022\020\n\014INVALID_DATA\020\002\032\262\001\n\010ChatDat",
+      "a\022*\n\004type\030\001 \002(\0162\034.ServerMessage.ChatData" +
+      ".Type\022\017\n\007private\030\002 \002(\010\022\017\n\007channel\030\003 \001(\005\022" +
+      "\016\n\006source\030\004 \002(\t\022\017\n\007message\030\005 \001(\t\"7\n\004Type" +
+      "\022\013\n\007MESSAGE\020\000\022\021\n\rPLAYER_JOINED\020\001\022\017\n\013PLAY" +
+      "ER_LEFT\020\002\032\016\n\014GraphicsData\"0\n\004Type\022\n\n\006SYS" +
+      "TEM\020\000\022\010\n\004AUTH\020\001\022\010\n\004CHAT\020\002\022\010\n\004GAME\020\003B*\n\036c" +
+      "om.whiuk.philip.mmorpg.sharedB\010Messages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -19196,7 +19303,7 @@ public final class Messages {
           internal_static_ClientMessage_GameData_MovementInformation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ClientMessage_GameData_MovementInformation_descriptor,
-              new java.lang.String[] { });
+              new java.lang.String[] { "Direction", });
           internal_static_ClientMessage_GameData_ActionInformation_descriptor =
             internal_static_ClientMessage_GameData_descriptor.getNestedTypes().get(2);
           internal_static_ClientMessage_GameData_ActionInformation_fieldAccessorTable = new

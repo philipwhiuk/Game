@@ -76,7 +76,7 @@ message ClientMessage {
 			optional string race = 3;
 		}
 		message MovementInformation {
-
+			required float direction = 1;
 		}
 		message ActionInformation {
 			enum Action {

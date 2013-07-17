@@ -1,19 +1,29 @@
 package com.whiuk.philip.mmorpg.client;
 
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
-
 /**
  * Controls the actual game, itself, while in progress.
  * @author Philip
  *
  */
 public class Game {
+
     /**
      * Player.
      */
     private PlayerCharacter player;
+    /**
+     * Camera.
+     */
+    private Camera camera;
+    /**
+     * Whether the player is moving.
+     */
+    private boolean moving;
 
     /**
      * @param character
@@ -26,15 +36,37 @@ public class Game {
     /**
      * @param message
      */
-    public void handleChatMessage(final ServerMessage message) {
+    public void handleChatMessage(final ServerMessage.ChatData data) {
         // TODO Auto-generated method stub
     }
 
     /**
      * @param message
      */
-    public void handleGameMessage(final ServerMessage message) {
+    public void handleGameMessage(final ServerMessage.GameData data) {
         // TODO Auto-generated method stub
+    }
+    /**
+     * Perform the game update.
+     */
+    public final void update() {
+        boolean serverUpdateRequired = false;
+        boolean movementChanged = player.handleMovement();
+        if (movementChanged) {
+            serverUpdateRequired = true;
+        }
+        //TODO: Other updates.
+
+        if (serverUpdateRequired) {
+            ClientMessage.GameData.Builder data =
+                    ClientMessage.GameData.newBuilder();
+            if (moving) {
+                data.setMovementInformation(
+                        ClientMessage.GameData.MovementInformation.newBuilder()
+                        .setDirection(player.direction).build());
+            }
+            GameClientUtils.sendGameData(data.build());
+        }
     }
     /**
      * Render the game.
@@ -52,6 +84,8 @@ public class Game {
         GL11.glVertex2f(100+200, 100+200);
         GL11.glVertex2f(100, 100+200);
         GL11.glEnd();
+        //Camera
+        camera.render(player);
     }
 
 }
