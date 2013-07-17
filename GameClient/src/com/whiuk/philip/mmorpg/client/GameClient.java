@@ -270,7 +270,9 @@ public class GameClient {
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
-
+            if (state == State.GAME) {
+                   game.render();
+            }
             // render OpenGL here
             Display.update();
             runQueuedNiftyEvents();
@@ -693,6 +695,7 @@ public class GameClient {
                 characterInfo.getRace(), characterInfo.getLocation());
         this.game = new Game(character);
         switchToGameScreen();
+        state = State.GAME;
     }
     /**
      * Handle a chat message from the server.
@@ -926,7 +929,7 @@ public class GameClient {
     private void switchToGameScreen() {
         gameScreen = new GameScreen(this, game);
         nifty.registerScreenController(gameScreen);
-        nifty.fromXml("gameScreen.xml", "start");
+        nifty.fromXml("gameScreen.xml", "main");
     }
     /**
      * Attempt to register an account.
