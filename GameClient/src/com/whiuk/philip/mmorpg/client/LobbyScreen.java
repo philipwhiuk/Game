@@ -29,7 +29,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author Philip Whitehouse
  */
 // TODO: Work out how Nifty 1.3.2 uses controls.
-public class LobbyScreen implements ScreenController {
+public class LobbyScreen implements ScreenController, ChatInterface {
     /**
      * Class logger.
      */
@@ -137,13 +137,10 @@ public class LobbyScreen implements ScreenController {
     }
 
     @Override
-    public void onEndScreen() {
+    public final void onEndScreen() {
     }
 
-    /**
-     * Handle chat message.
-     * @param chatData Chat Data
-     */
+    @Override
     public final void handleChatMessage(final ServerMessage.ChatData chatData) {
         switch(chatData.getType()) {
             case PLAYER_JOINED:

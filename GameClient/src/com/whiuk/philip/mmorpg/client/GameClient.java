@@ -715,7 +715,7 @@ public class GameClient {
                 }
             });
         } else if (state.equals(State.GAME)) {
-            game.handleChatMessage(message.getChatData());
+            gameScreen.handleChatMessage(message.getChatData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override

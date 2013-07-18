@@ -4,8 +4,8 @@ import java.util.Properties;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.ScrollPanel;
 import de.lessvoid.nifty.controls.ScrollPanel.AutoScroll;
-import de.lessvoid.nifty.controls.scrollpanel.ScrollPanelControl;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -21,7 +21,7 @@ public class ChatAreaController implements Controller {
     /**
      *
      */
-    private ScrollPanelControl scrollPanel;
+    private ScrollPanel scrollPanel;
     /**
      *
      */
@@ -37,8 +37,8 @@ public class ChatAreaController implements Controller {
             final Properties parameter,
             final Attributes controlDefinitionAttributes) {
         this.screen = s;
-        scrollPanel = element.findControl("scroll_panel",
-                ScrollPanelControl.class);
+        scrollPanel = element.findNiftyControl("scroll_panel",
+                ScrollPanel.class);
         textArea = element.findElementByName("text_area");
     }
 

@@ -36,13 +36,6 @@ public class Game {
     /**
      * @param message
      */
-    public void handleChatMessage(final ServerMessage.ChatData data) {
-        // TODO Auto-generated method stub
-    }
-
-    /**
-     * @param message
-     */
     public void handleGameMessage(final ServerMessage.GameData data) {
         // TODO Auto-generated method stub
     }

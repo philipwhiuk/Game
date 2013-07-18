@@ -7,6 +7,7 @@
    <!-- Control definition of chat area -->
    <screen id="main" controller="com.whiuk.philip.mmorpg.client.GameScreen">
       <layer id="main" backgroundColor="#0000" childLayout="center">
+         <control id="console" name="nifty-console" lines="25" align="center" valign="center"/>
       </layer>
    </screen>
 </nifty>
