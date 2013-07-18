@@ -9,27 +9,27 @@ import org.lwjgl.input.Keyboard;
 public class PlayerCharacter {
     //TODO: Key customisation
     /**
-     * 
+     * Key to move forward.
      */
     private static final int MOVE_FORWARD = Keyboard.KEY_W;
     /**
-     * 
+     * Key to move backwards.
      */
     private static final int MOVE_BACKWARD = Keyboard.KEY_S;
     /**
-     * 
+     * Key to turn left.
      */
     private static final int TURN_LEFT = Keyboard.KEY_A;
     /**
-     * 
+     * Key to turn right.
      */
     private static final int TURN_RIGHT = Keyboard.KEY_D;
     /**
-     * 
+     * Current direction.
      */
     public float direction;
     /**
-     * 
+     * Whether or not the player is moving.
      */
     private boolean moving = false;
 
@@ -44,12 +44,17 @@ public class PlayerCharacter {
             final String race, final String location) {
         // TODO Auto-generated constructor stub
     }
-
+    /**
+     * Render player character.
+     */
     public void render() {
         // TODO Auto-generated method stub
-        
     }
-    public boolean handleMovement() {
+    /**
+     * Handle movement.
+     * @return <code>true</code> if the player's movement has changed.
+     */
+    public final boolean handleMovement() {
         boolean movementChanged = false;
         if (Keyboard.isKeyDown(MOVE_FORWARD)) {
             if (!moving) {

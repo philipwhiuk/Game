@@ -15,12 +15,9 @@ import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.NiftyEventSubscriber;
 import de.lessvoid.nifty.controls.ChatTextSendEvent;
 import de.lessvoid.nifty.controls.chatcontrol.ChatControl;
-import de.lessvoid.nifty.controls.dropdown.DropDownControl;
-import de.lessvoid.nifty.controls.tabs.TabControl;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.controls.DropDown;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
-import de.lessvoid.nifty.input.NiftyInputEvent;
-import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
 
@@ -28,22 +25,21 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Lobby screen.
  * @author Philip Whitehouse
  */
-// TODO: Work out how Nifty 1.3.2 uses controls.
 public class LobbyScreen implements ScreenController, ChatInterface {
     /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger.getLogger(LobbyScreen.class);
     /**
-     * Nifty GUI
+     * Nifty GUI.
      */
     private Nifty nifty;
     /**
-     * Game client
+     * Game client.
      */
     private GameClient gameClient;
     /**
-     * Account data
+     * Account data.
      */
     private Account account;
     /**
@@ -79,13 +75,21 @@ public class LobbyScreen implements ScreenController, ChatInterface {
      */
     private Element tab2;
     /**
-     * Race Drop Down List
+     * Race Drop Down List Element
      */
     private Element raceListElement;
     /**
      * 
      */
     private Element nameInputElement;
+    /**
+     * Character Drop Down
+     */
+    private DropDown<LobbyCharacterData> characterListDropDown;
+    /**
+     * Race Drop Down
+     */
+    private DropDown<LobbyCharacterData.Race> raceListDropDown;
 
     /**
      * @param g
@@ -99,6 +103,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
         characters = new ArrayList<LobbyCharacterData>();
     }
 
+    @SuppressWarnings("unchecked")
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
         this.nifty = newNifty;
@@ -106,12 +111,15 @@ public class LobbyScreen implements ScreenController, ChatInterface {
         tab2 = screen.findElementByName("tab_2");
         chatElement = screen.findElementByName("chatId");
         characterListElement = screen.findElementByName("character_drop_down");
+        characterListDropDown = characterListElement
+                .getNiftyControl(DropDown.class);
         raceListElement = screen.findElementByName("race-drop_down");
         nameInputElement = screen.findElementByName("name-input");
         playButton = screen.findElementByName("play_button");
+        raceListDropDown = raceListElement
+                .getNiftyControl(DropDown.class);
         for (LobbyCharacterData.Race r: LobbyCharacterData.Race.values()) {
-            raceListElement
-                .getControl(DropDownControl.class).addItem(r);
+            raceListDropDown.addItem(r);
         }
         gameClient.setState(State.LOBBY);
     }
@@ -180,8 +188,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
                                 Race.valueOf(c.getRace()),
                                 c.getLocation());
                         characters.add(pc);
-                        characterListElement.getControl(DropDownControl.class)
-                            .addItem(pc);
+                        characterListDropDown.addItem(pc);
                     }
                     break;
                 case CHARACTER_SELECTION:
@@ -193,8 +200,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
                             Race.valueOf(c.getRace()),
                             c.getLocation());
                     characters.add(pc);
-                    characterListElement.getControl(DropDownControl.class)
-                        .addItem(pc);
+                    characterListDropDown.addItem(pc);
                     break;
                 default:
                     throw new IllegalStateException();
@@ -207,7 +213,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
      */
     public final void play() {
         Object selection = characterListElement
-                .getControl(DropDownControl.class).getSelection();
+                .getNiftyControl(DropDown.class).getSelection();
         if (selection != null) {
             String name = ((LobbyCharacterData) selection).getName();
             int id = ((LobbyCharacterData) selection).getId();
@@ -227,9 +233,9 @@ public class LobbyScreen implements ScreenController, ChatInterface {
      */
     public final void createCharacter() {
         Object selection = raceListElement
-                .getControl(DropDownControl.class).getSelection();
+                .getNiftyControl(DropDown.class).getSelection();
         String race = ((Race) selection).name();
-        String name = nameInputElement.getControl(TextFieldControl.class)
+        String name = nameInputElement.getNiftyControl(TextField.class)
                 .getRealText();
         GameClientUtils.sendGameData(ClientMessage.GameData.newBuilder()
                 .setType(ClientMessage.GameData.Type.CHARACTER_CREATION)

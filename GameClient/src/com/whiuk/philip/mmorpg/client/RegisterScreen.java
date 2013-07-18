@@ -16,11 +16,11 @@ import de.lessvoid.nifty.screen.ScreenController;
  * @author Philip Whitehouse
  */
 @SuppressWarnings("deprecation")
-// TODO: Work out how Nifty 1.3.2 uses controls.
 public class RegisterScreen implements ScreenController {
     /**
      *
      */
+    @SuppressWarnings("unused")
     private Nifty nifty;
     /**
      *
@@ -45,6 +45,7 @@ public class RegisterScreen implements ScreenController {
     /**
      *
      */
+    @SuppressWarnings("unused")
     private int ordering;
     /**
      * 
@@ -194,7 +195,6 @@ public class RegisterScreen implements ScreenController {
      */
     private void setMessage(final String m) {
         // TODO Auto-generated method stub
-        
     }
 
     /**
