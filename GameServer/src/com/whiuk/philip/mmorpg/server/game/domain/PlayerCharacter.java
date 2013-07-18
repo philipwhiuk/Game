@@ -48,6 +48,10 @@ public class PlayerCharacter implements GameCharacter {
      * Name
      */
     private String name;
+    /**
+     * Zone ID.
+     */
+    private Long zone;
 
     /**
      * Default constructor
@@ -101,6 +105,19 @@ public class PlayerCharacter implements GameCharacter {
     @Override
     public final Race getRace() {
         return race;
+    }
+
+    @Override
+    public Long getZone() {
+        return zone;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public Long getId() {
+        return id;
     }
 
 }

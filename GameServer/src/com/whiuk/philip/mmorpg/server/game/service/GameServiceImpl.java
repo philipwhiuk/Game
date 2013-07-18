@@ -121,6 +121,7 @@ public class GameServiceImpl implements GameService {
         for (PlayerCharacter pc : pcs) {
                 gdb.addCharacterInformation(
                         ServerMessage.GameData.CharacterInformation.newBuilder()
+                        .setId(pc.getId().intValue())
                         .setName(pc.getName())
                         .setLocation("Home") //TODO: Get Location
                         .setRace(pc.getRace().getName()).build());
@@ -245,7 +246,8 @@ public class GameServiceImpl implements GameService {
             .setType(ServerMessage.GameData.Type.CHARACTER_CREATED)
             .addCharacterInformation(
                     CharacterInformation.newBuilder()
-                    .setName(name)
+                    .setId(c.getId().intValue())
+                    .setName(c.getName())
                     .setLocation("Home") //TODO: Get location
                     .setRace(race.getName()))
                     .build())
@@ -284,14 +286,75 @@ public class GameServiceImpl implements GameService {
      * @param account Account
      */
     private void loadCharacter(final Account account, ClientMessage.GameData data) {
-        // TODO Auto-generated method stub
+        HibernateUtils.beginTransaction();
+        PlayerCharacter pc = playerCharacterDAO.findByID((long) data.getCharacterInformation().getId());
+        if (pc == null) {
+            LOGGER.info("Client sent character selection for non-existent character.");
+            ServerMessage message = ServerMessage
+                    .newBuilder()
+                    .setClientInfo(authService.getConnection(account)
+                            .getClientInfo())
+                    .setType(ServerMessage.Type.GAME)
+                    .setGameData(
+                    ServerMessage.GameData
+                            .newBuilder()
+                            .setError(
+                            ServerMessage.
+                    GameData.Error.INVALID_DATA))
+                        .build();
+            messageHandlerService.queueOutboundMessage(message);
+            return;
+        } else if (!pc.getAccount().equals(account)) {
+            LOGGER.info("Client sent character selection for character not belonging to them.");
+            ServerMessage message = ServerMessage
+                    .newBuilder()
+                    .setClientInfo(authService.getConnection(account)
+                            .getClientInfo())
+                    .setType(ServerMessage.Type.GAME)
+                    .setGameData(
+                    ServerMessage.GameData
+                            .newBuilder()
+                            .setError(
+                            ServerMessage.
+                    GameData.Error.INVALID_DATA))
+                        .build();
+            messageHandlerService.queueOutboundMessage(message);
+            return;
+        } else {
+            accounts.put(pc, account);
+            characters.put(account, pc);
+            ServerMessage message = ServerMessage
+                .newBuilder()
+                .setClientInfo(authService.getConnection(account)
+                    .getClientInfo())
+                .setType(ServerMessage.Type.GAME)
+                .setGameData(
+                ServerMessage.GameData
+                    .newBuilder()
+                    .setType(ServerMessage.GameData.Type.ENTER_GAME)
+                    .addCharacterInformation(
+                        ServerMessage.GameData.CharacterInformation
+                        .newBuilder().setName(pc.getName())
+                        .setId(pc.getId().intValue())
+                        .setRace(pc.getRace().getName())
+                        .setLocation("") //TODO Set Location
+                        .build())
+                    .build())
+                .build();
+            messageHandlerService.queueOutboundMessage(message);
+            zoneController.characterEntered(pc.getZone(), pc);
+            return;
+        }
     }
 
     /**
      * @param account
      */
     private void handleExit(final Account account) {
-        // TODO Auto-generated method stub
+        if (characters.containsKey(account)) {
+            charController.handleExit(characters.get(account));
+            accounts.remove(characters.remove(account));
+        }
     }
 
     /**

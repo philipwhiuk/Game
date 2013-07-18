@@ -87,4 +87,9 @@ public interface GameCharacterController {
      */
     public void use(final GameCharacter character,
             final int i1ID, final int i2ID);
+
+    /**
+     * @param playerCharacter
+     */
+    public void handleExit(PlayerCharacter playerCharacter);
 }
