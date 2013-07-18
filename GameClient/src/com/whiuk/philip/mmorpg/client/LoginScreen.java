@@ -3,7 +3,7 @@ package com.whiuk.philip.mmorpg.client;
 import org.apache.log4j.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -12,11 +12,8 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  * Login screen.
- * 
  * @author Philip Whitehouse
  */
-@SuppressWarnings("deprecation")
-// TODO: Work out how Nifty 1.3.2 uses controls.
 public class LoginScreen implements ScreenController {
     /**
      * Nifty.
@@ -107,19 +104,19 @@ public class LoginScreen implements ScreenController {
      * Sends a login request.
      */
     public final void sendLoginRequest() {
-        if (textInputUsername.getControl(TextFieldControl.class).getRealText()
+        if (textInputUsername.getNiftyControl(TextField.class).getRealText()
                 .isEmpty()) {
             setMessage("Please enter your username");
-        } else if (textInputPassword.getControl(TextFieldControl.class)
+        } else if (textInputPassword.getNiftyControl(TextField.class)
                 .getRealText().isEmpty()) {
             setMessage("Please enter your password");
         } else if (loginFailures > MAX_LOGIN_FAILURES) {
             setMessage("Exceeded maximum login attempts");
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
             gameClient.attemptLogin(
-                    textInputUsername.getControl(TextFieldControl.class)
+                    textInputUsername.getNiftyControl(TextField.class)
                             .getRealText(),
-                    textInputPassword.getControl(TextFieldControl.class)
+                    textInputPassword.getNiftyControl(TextField.class)
                             .getRealText());
         } else if (!gameClient.isConnected()) {
             setMessage("Not connected to game server");
