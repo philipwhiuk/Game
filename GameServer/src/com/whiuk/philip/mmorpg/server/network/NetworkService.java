@@ -15,4 +15,9 @@ public interface NetworkService {
      */
     void sendMessage(ServerMessage message);
 
+    /**
+     * @return current number of connections
+     */
+    long getConnectionCount();
+
 }

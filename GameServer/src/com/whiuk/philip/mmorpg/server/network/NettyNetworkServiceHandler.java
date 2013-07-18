@@ -3,6 +3,7 @@ package com.whiuk.philip.mmorpg.server.network;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 import org.jboss.netty.channel.Channel;
@@ -46,6 +47,10 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
      * Maps channels to clients.
      */
     private Map<Channel, ClientInfo> clients;
+    /**
+     * Current number of connections.
+     */
+    private AtomicLong connectionCount;
 
     /**
      * Class logger.
@@ -59,6 +64,7 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
     public NettyNetworkServiceHandler() {
         channels = new HashMap<ClientInfo, Channel>();
         clients = new HashMap<Channel, ClientInfo>();
+        connectionCount = new AtomicLong();
     }
 
     /**
@@ -100,6 +106,7 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
         Channel ch = e.getChannel();
         LOGGER.info("Exception caught on: " + ch, e.getCause());
         ch.close();
+        
     }
 
     @Override
@@ -109,14 +116,31 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
             systemService
                     .handleClientDisconnected(clients.get(ctx.getChannel()));
             channels.remove(clients.remove(ctx.getChannel()));
+        } else {
+            LOGGER.info("Unknown client disconnected");
         }
+        connectionCount.decrementAndGet();
+    }
+    
+    @Override
+    public final void channelConnected(final ChannelHandlerContext ctx,
+            final ChannelStateEvent e) throws Exception {
+        super.channelConnected(ctx, e);
+        long count = connectionCount.incrementAndGet();
+        LOGGER.info("Channel connected - " + count + " total connections");
     }
     
     /**
-     * 
      * @param m
      */
     public final void writeMessage(final ServerMessage m) {
         channels.get(m.getClientInfo()).write(m);
+    }
+
+    /**
+     * @return current number of connections
+     */
+    public final long getConnectionCount() {
+        return connectionCount.get();
     }
 }
