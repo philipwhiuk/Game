@@ -92,4 +92,9 @@ public class GameCharacterControllerImpl implements GameCharacterController {
         // TODO Auto-generated method stub
         
     }
+
+    @Override
+    public void handleExit(PlayerCharacter playerCharacter) {
+        // TODO Auto-generated method stub
+    }
 }

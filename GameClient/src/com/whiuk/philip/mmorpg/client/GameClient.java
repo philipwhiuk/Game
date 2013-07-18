@@ -14,8 +14,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
-import javax.swing.SwingUtilities;
-
 import org.apache.log4j.Logger;
 import org.jboss.netty.bootstrap.ClientBootstrap;
 import org.jboss.netty.channel.Channel;
@@ -44,14 +42,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
-import com.whiuk.philip.mmorpg.client.GameClient.State;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
-import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.ChatData;
-import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.AuthData.Type;
+import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
@@ -93,12 +87,10 @@ public class GameClient {
          */
         EXIT
     }
-
     /**
      * Game client singleton.
      */
     private static GameClient gameClient;
-
     /**
      * Network host.
      */
@@ -115,86 +107,82 @@ public class GameClient {
      * Channel Handler.
      */
     private ClientChannelHandler channelHandler;
-
     /**
      * Client ID.
      */
     private int clientID;
-
     /**
      * MAC Address.
      */
     private byte[] macAddress;
-
     /**
      * Client Info object.
      */
     private volatile ClientInfo clientInfo;
-
     /**
      * LWJGL input system.
      */
     private LwjglInputSystem inputSystem;
-
     /**
      * Nifty GUI.
      */
     private Nifty nifty;
-
     /**
      * SHA-256 encoder
      */
     private MessageDigest sha256digest;
-
     /**
-     *
+     * Client state.
      */
     private volatile State state = State.LOGIN;
-
     /**
-     *
+     * Login screen.
      */
     private LoginScreen loginScreen;
-
     /**
-     *
+     * Register screen.
      */
     private RegisterScreen registerScreen;
-
     /**
-     *
+     * Lobby screen.
      */
     private LobbyScreen lobbyScreen;
-
+    /**
+     * Game screen.
+     */
+    private GameScreen gameScreen;
     /**
      * Account.
      */
     private Account account;
-
     /**
      * Character.
      */
     private PlayerCharacter character;
-
     /**
      * Game.
      */
     private Game game;
     /**
-     * 
+     * The GUI Event Queue.
+     * <p>Due to the single threaded nature of OpenGL
+     * (and hence LWJGL and hence Nifty) all GUI events must be
+     * processed on the thread on which the OpenGL context is established.</p>
+     * <p>In order to enable this and gain the benefits of the non-blocking I/O,
+     * tasks which involve GUI manipulation must be handed to be processed
+     * by the OpenGL context thread. Hence the need for a concurrent queue to
+     * hand off events.</p>
      */
     private BlockingQueue<NiftyQueuedEvent> queuedNiftyEvents;
-
     /**
-     * 
+     * Indicates there is an outstanding unprocessed login event.
+     * Used to resolve server timing issues and queue event handling.
      */
     private boolean unprocessedLoginResponse;
-
     /**
-     * 
+     * Indicates the game client has finished and should close.
      */
     private boolean finished;
-
     /**
      * Class logger.
      */
@@ -224,42 +212,34 @@ public class GameClient {
      * Title.
      */
     private static final String GAME_CLIENT_TITLE = "The Game";
-
     /**
      * Client version.
      */
     protected static final String VERSION = "1.0";
-
     /**
      * Orthographic near/far clipping distance.
      */
     private static final int ORTHO_DISTANCE_MAX = 9999;
-
     /**
-     *
+     * Indicates whether the client should run in fullscreen or not.
      */
     private static final boolean FULLSCREEN = false;
-
     /**
      * Bits per pixel.
      */
     private static final int BITS_PER_PIXEL = 32;
-
     /**
      * Viewport buffer size.
      */
     private static final int VIEWPORT_BUFFERSIZE = 4 * 4;
-
     /**
      * Viewport buffer - width index.
      */
     private static final int VIEWPORT_WIDTH_INDEX = 2;
-
     /**
      * Viewport buffer - height index.
      */
     private static final int VIEWPORT_HEIGHT_INDEX = 3;
-
     /**
      * Bean constructor.
      */
@@ -272,7 +252,6 @@ public class GameClient {
         }
         clientID = new Random().nextInt();
     }
-
     /**
      * Run game client.
      */
@@ -291,8 +270,10 @@ public class GameClient {
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
-
-            // render OpenGL here
+            // render OpenGL
+            if (state == State.GAME) {
+                   game.render();
+            }
             Display.update();
             runQueuedNiftyEvents();
 
@@ -311,7 +292,6 @@ public class GameClient {
         Display.destroy();
         System.exit(0);
     }
-
     /**
      * Run any queued events on the Nifty thread.
      */
@@ -335,17 +315,14 @@ public class GameClient {
             queuedNiftyEvents = newQueue;
         }
     }
-
     /**
      * Build LWJGL display.
-     * 
      * @throws LWJGLException Exception
      */
     private void buildDisplay() throws LWJGLException {
         int width = WIDTH;
         int height = HEIGHT;
         selectDisplayMode();
-
         int x = (width - Display.getDisplayMode().getWidth()) / 2;
         int y = (height - Display.getDisplayMode().getHeight()) / 2;
         Display.setLocation(x, y);
@@ -372,7 +349,6 @@ public class GameClient {
         }
 
     }
-
     /**
      * Select LWJGL display mode.
      * @throws LWJGLException Exception
@@ -406,7 +382,6 @@ public class GameClient {
                 break;
             }
         }
-
         if (!found) {
             Arrays.sort(matchingModes, new Comparator<DisplayMode>() {
                 public int compare(final DisplayMode o1, final DisplayMode o2) {
@@ -427,7 +402,6 @@ public class GameClient {
             Display.setDisplayMode(matchingModes[0]);
         }
     }
-
     /**
      * Setup Nifty.
      */
@@ -437,7 +411,6 @@ public class GameClient {
         loginScreen = new LoginScreen(this);
         nifty.registerScreenController(loginScreen);
     }
-
     /**
      * Setup input system.
      */
@@ -449,7 +422,6 @@ public class GameClient {
             handleInputException(e);
         }
     }
-
     /**
      * Setup OpenGL.
      */
@@ -485,10 +457,8 @@ public class GameClient {
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
-
     /**
      * Handles a fatal LWJGL exception.
-     * 
      * @param e
      *            Exception
      */
@@ -497,7 +467,6 @@ public class GameClient {
         closeNetworkConnection();
         System.exit(1);
     }
-
     /**
      * @param e Exception
      */
@@ -506,13 +475,34 @@ public class GameClient {
         closeNetworkConnection();
         System.exit(1);
     }
-
     /**
      * Open a network connection.
      */
     private void openNetworkConnection() {
+        final ClientBootstrap bootstrap = buildClientBootstrap();
+        final ChannelFuture f = bootstrap.connect();
+        f.addListener(new ChannelFutureListener() {
+            @Override
+            public void operationComplete(final ChannelFuture future)
+                    throws Exception {
+                if (future.isCancelled()) {
+                    LOGGER.info("Connection attempt cancelled");
+                } else if (!future.isSuccess()) {
+                    channelHandler.logException(
+                            "Connection attempt unsuccesful",
+                            future.getCause());
+                } else {
+                    channel = future.getChannel();
+                }
+            }
+        });
+    }
+    /**
+     * Build the client bootstrap.
+     * @return client boostrap
+     */
+    private ClientBootstrap buildClientBootstrap() {
         final Timer timer = new HashedWheelTimer();
-
         final ClientBootstrap bootstrap = new ClientBootstrap(
                 new NioClientSocketChannelFactory(
                         Executors.newCachedThreadPool(),
@@ -540,22 +530,7 @@ public class GameClient {
         bootstrap.setOption("connectTimeoutMillis", CONNECTION_TIMEOUT);
         InetSocketAddress remoteAddress = new InetSocketAddress(HOST, PORT);
         bootstrap.setOption("remoteAddress", remoteAddress);
-        final ChannelFuture f = bootstrap.connect();
-        f.addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(final ChannelFuture future)
-                    throws Exception {
-                if (future.isCancelled()) {
-                    LOGGER.info("Connection attempt cancelled");
-                } else if (!future.isSuccess()) {
-                    channelHandler.logException(
-                            "Connection attempt unsuccesful",
-                            future.getCause());
-                } else {
-                    channel = future.getChannel();
-                }
-            }
-        });
+        return bootstrap;
     }
 
     /**
@@ -566,25 +541,19 @@ public class GameClient {
         if (channel != null) {
             synchronized (channel) {
                 if (channel.isConnected()) {
-                    sendOutboundMessage(ClientMessage
-                        .newBuilder()
-                        .setClientInfo(clientInfo)
-                        .setType(ClientMessage.Type.SYSTEM)
-                        .setSystemData(
-                            ClientMessage.SystemData
-                                .newBuilder()
-                                .setType(
-                                    ClientMessage.SystemData.Type.DISCONNECTING)
-                                .build()).build());
+                    GameClientUtils.sendSystemData(
+                        ClientMessage.SystemData
+                            .newBuilder()
+                            .setType(
+                                ClientMessage.SystemData.Type.DISCONNECTING)
+                            .build());
                     channel.close();
                 }
             }
         }
     }
-
     /**
-     * Process message.
-     * 
+     * Process a message from the server.
      * @param message
      *            Server message
      */
@@ -606,28 +575,22 @@ public class GameClient {
                 LOGGER.info("Unhandled message type");
                 break;
         }
-
     }
-
     /**
      * Singleton access.
-     * 
      * @return client
      */
     public static GameClient getGameClient() {
         return gameClient;
     }
-
     /**
      * Singleton setter.
-     * 
      * @param client
      *            Client
      */
     public static void setGameClient(final GameClient client) {
         gameClient = client;
     }
-
     /**
      * @param message Message
      */
@@ -636,7 +599,6 @@ public class GameClient {
             channel.write(message);
         }
     }
-
     /**
      * @return <code>true</code> if connected to the server
      */
@@ -647,7 +609,6 @@ public class GameClient {
             return false;
         }
     }
-
     /**
      * @return <code>true</code> if client info is set
      */
@@ -657,14 +618,12 @@ public class GameClient {
         }
         return false;
     }
-
     /**
      * @return Client Information
      */
     public final ClientInfo getClientInfo() {
         return clientInfo;
     }
-
     /**
      * Handle a System message from the server.
      * @param message Message
@@ -673,26 +632,40 @@ public class GameClient {
         // TODO Auto-generated method stub
 
     }
-
     /**
      * Handle a Game message from the server.
      * @param message Message
      */
     public final void handleGameMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            queuedNiftyEvents.add(new NiftyQueuedEvent() {
-                @Override
-                public void run() {
-                    lobbyScreen.handleGameMessage(message.getGameData());
-                }
+            if (message.getGameData().getType().equals(
+                    ServerMessage.GameData.Type.ENTER_GAME)) {
+               queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                   @Override
+                   public void run() {
+                       enterGame(message.getGameData());
+                   }
+                   @Override
+                   public boolean canRun() {
+                       return (state.equals(State.LOBBY)
+                               || state.equals(State.GAME));
+                   }
+               });
+            } else {
+                queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                    @Override
+                    public void run() {
+                        lobbyScreen.handleGameMessage(message.getGameData());
+                    }
 
-                @Override
-                public boolean canRun() {
-                    return state.equals(State.LOBBY);
-                }
-            });
+                    @Override
+                    public boolean canRun() {
+                        return state.equals(State.LOBBY);
+                    }
+                });
+            }
         } else if (state.equals(State.GAME)) {
-            game.handleGameMessage(message);
+            game.handleGameMessage(message.getGameData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override
@@ -709,7 +682,21 @@ public class GameClient {
             LOGGER.info("Game message recieved in invalid state: " + state);
         }
     }
-
+    /**
+     * Process an Enter Game message.
+     * @param gameData Game Data
+     */
+    private void enterGame(
+            final ServerMessage.GameData gameData) {
+        CharacterInformation characterInfo =
+                gameData.getCharacterInformation(0);
+        this.character = new PlayerCharacter(
+                characterInfo.getId(), characterInfo.getName(),
+                characterInfo.getRace(), characterInfo.getLocation());
+        this.game = new Game(character);
+        switchToGameScreen();
+        state = State.GAME;
+    }
     /**
      * Handle a chat message from the server.
      * @param message Message
@@ -728,7 +715,7 @@ public class GameClient {
                 }
             });
         } else if (state.equals(State.GAME)) {
-            game.handleChatMessage(message);
+            gameScreen.handleChatMessage(message.getChatData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override
@@ -745,18 +732,16 @@ public class GameClient {
             LOGGER.info("Chat message recieved in invalid state: " + state);
         }
     }
-
     /**
      * Handle an authentication message from the server.
      * @param message Message
      */
     public final void handleAuthMessage(final ServerMessage message) {
         ServerMessage.AuthData data = message.getAuthData();
-        Type type = message.getAuthData().getType();
 
         switch (state) {
             case LOGIN:
-                switch (type) {
+                switch (data.getType()) {
                     case LOGIN_FAILED:
                         loginScreen.loginFailed(data
                                 .getErrorMessage());
@@ -768,27 +753,27 @@ public class GameClient {
                         loginScreen.handleExtraAuthFailed();
                         break;
                     default:
-                        LOGGER.info("Auth message type " + type
+                        LOGGER.info("Auth message type " + data.getType()
                                 + " recieved in invalid state: " + state);
                 }
                 break;
             case REGISTER: // Register Screen
-                handleAuthMessageInRegisterState(message, data, type);
+                handleAuthMessageInRegisterState(data);
                 break;
             case LOBBY:
-                switch (type) {
+                switch (data.getType()) {
                     case LOGOUT_SUCCESSFUL:
                         account = null;
                         switchToLoginScreen();
                         state = State.LOGIN;
                         break;
                     default:
-                        LOGGER.info("Auth message type " + type
+                        LOGGER.info("Auth message type " + data.getType()
                                 + " recieved in invalid state: " + state);
                 }
                 break;
             case GAME: // Game
-                switch (type) {
+                switch (data.getType()) {
                     case LOGOUT_SUCCESSFUL:
                         account = null;
                         character = null;
@@ -796,7 +781,7 @@ public class GameClient {
                         state = State.LOGIN;
                         break;
                     default:
-                        LOGGER.info("Auth message type " + type
+                        LOGGER.info("Auth message type " + data.getType()
                                 + " recieved in invalid state: " + state);
                 }
                 break;
@@ -805,8 +790,8 @@ public class GameClient {
                 break;
         }
     }
-
     /**
+     * Handle a succesful login.
      * @param data Authentication data
      */
     private void handleSuccessfuLogin(final ServerMessage.AuthData data) {
@@ -837,18 +822,15 @@ public class GameClient {
             }
         }
     }
-
     /**
-     * 
-     * @param message
-     * @param data
-     * @param type
+     * Handle authentication messages when in the Register state.
+     * @param data Authentication Data
      */
-    private void handleAuthMessageInRegisterState(final ServerMessage message,
-            final ServerMessage.AuthData data, final Type type) {
+    private void handleAuthMessageInRegisterState(
+            final ServerMessage.AuthData data) {
         switch (data.getType()) {
             case REGISTRATION_FAILED:
-                registerScreen.registrationFailed(message.getAuthData()
+                registerScreen.registrationFailed(data
                         .getErrorMessage());
                 break;
             case REGISTRATION_SUCCESSFUL:
@@ -867,31 +849,31 @@ public class GameClient {
                 switchToLobbyScreen();
                 break;
             default:
-                LOGGER.info("Auth message type " + type
+                LOGGER.info("Auth message type " + data.getType()
                         + " recieved in invalid state: " + state);
         }
     }
     /**
+     * Retrieve the client ID.
      * @return client id
      */
     public final int getClientID() {
         return clientID;
     }
-
     /**
-     * @param cI
+     * Set the client info.
+     * @param cI Client info.
      */
     public final void setClientInfo(final ClientInfo cI) {
         this.clientInfo = cI;
     }
-
     /**
-     * @param c
+     * Set the channel.
+     * @param c Channel
      */
     public final void setChannel(final Channel c) {
         this.channel = c;
     }
-
     /**
      * Attempts a login.
      * @param username Username
@@ -905,18 +887,12 @@ public class GameClient {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        sendOutboundMessage(ClientMessage
-                .newBuilder()
-                .setType(ClientMessage.Type.AUTH)
-                .setClientInfo(getClientInfo())
-                .setAuthData(
-                        AuthData.newBuilder()
-                                .setType(AuthData.AccountDataType.LOGIN)
-                                .setUsername(username)
-                                .setPassword(ByteString.copyFrom(hash)).build())
-                .build());
+        GameClientUtils.sendAuthData(ClientMessage.AuthData.newBuilder()
+            .setType(ClientMessage.
+                    AuthData.AccountDataType.LOGIN)
+            .setUsername(username)
+            .setPassword(ByteString.copyFrom(hash)).build());
     }
-
     /**
      * Switch from the previous screen to the account registration screen.
      * Must be run on the OpenGL context thread.
@@ -928,7 +904,6 @@ public class GameClient {
         state = State.REGISTER;
 
     }
-
     /**
      * Switch from the previous screen to the lobby screen.
      * Must be run on the OpenGL context thread.
@@ -938,7 +913,6 @@ public class GameClient {
         nifty.registerScreenController(lobbyScreen);
         nifty.fromXml("lobbyScreen.xml", "lobby");
     }
-
     /**
      * Switch from the previous screen to the login screen.
      * Must be run on the OpenGL context thread.
@@ -948,7 +922,15 @@ public class GameClient {
         nifty.registerScreenController(loginScreen);
         nifty.fromXml("loginScreen.xml", "start");
     }
-
+    /**
+     * Switch from the previous screen to the game.
+     * Must be run on the OpenGL context thread.
+     */
+    private void switchToGameScreen() {
+        gameScreen = new GameScreen(this, game);
+        nifty.registerScreenController(gameScreen);
+        nifty.fromXml("gameScreen.xml", "main");
+    }
     /**
      * Attempt to register an account.
      * @param username Username
@@ -963,53 +945,24 @@ public class GameClient {
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }
-        sendOutboundMessage(ClientMessage
-                .newBuilder()
-                .setType(ClientMessage.Type.AUTH)
-                .setClientInfo(gameClient.getClientInfo())
-                .setAuthData(
-                        AuthData.newBuilder()
-                                .setType(AuthData.AccountDataType.REGISTER)
-                                .setUsername(username)
-                                .setPassword(ByteString.copyFrom(hash))
-                                .setEmail(email).build()).build());
+        GameClientUtils.sendAuthData(ClientMessage.AuthData.newBuilder()
+            .setType(ClientMessage.
+                    AuthData.AccountDataType.REGISTER)
+            .setUsername(username)
+            .setPassword(ByteString.copyFrom(hash))
+            .setEmail(email).build());
     }
-
-
     /**
-     * Helper method to send chat data to server and
-     * keep server message handling code from core classes.
-     * @param data Chat data to send to server
+     * Indicates the client should quit.
      */
-    public final void sendChatData(final ChatData data) {
-        sendOutboundMessage(ClientMessage
-                .newBuilder()
-                .setType(ClientMessage.Type.CHAT)
-                .setClientInfo(gameClient.getClientInfo())
-                .setChatData(data)
-                .build());
-    }
-
-    /**
-     * Helper method to send game data to server and
-     * keep server message handling code from core classes.
-     * @param data Game data to send to server
-     */
-    public final void sendGameData(final GameData data) {
-        LOGGER.trace("Sending game data.");
-        sendOutboundMessage(ClientMessage
-                .newBuilder()
-                .setType(ClientMessage.Type.GAME)
-                .setClientInfo(gameClient.getClientInfo())
-                .setGameData(data)
-                .build());
-    }
-
     public final void quit() {
         finished = true;
     }
-
-    public void setState(final State newState) {
+    /**
+     * Change the state of the client.
+     * @param newState The new state to move to.
+     */
+    public final void setState(final State newState) {
         state = newState;
     }
 }

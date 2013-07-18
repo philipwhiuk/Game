@@ -18,4 +18,10 @@ public class Account {
     Account(final String u) {
         this.username = u;
     }
+    /**
+     * @return username;
+     */
+    public final String getUsername() {
+        return username;
+    }
 }
