@@ -30,6 +30,7 @@ public class Game {
      */
     public Game(final PlayerCharacter character) {
         this.player = character;
+        this.camera = new Camera();
         // TODO Auto-generated constructor stub
     }
 

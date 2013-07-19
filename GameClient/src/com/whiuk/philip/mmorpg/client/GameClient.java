@@ -11,28 +11,30 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import org.apache.log4j.Logger;
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFuture;
-import org.jboss.netty.channel.ChannelFutureListener;
-import org.jboss.netty.channel.ChannelPipeline;
-import org.jboss.netty.channel.ChannelPipelineFactory;
-import org.jboss.netty.channel.Channels;
-import org.jboss.netty.channel.socket.nio.NioClientSocketChannelFactory;
-import org.jboss.netty.handler.codec.protobuf.
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import io.netty.handler.codec.protobuf.
     ProtobufDecoder;
-import org.jboss.netty.handler.codec.protobuf.
+import io.netty.handler.codec.protobuf.
     ProtobufEncoder;
-import org.jboss.netty.handler.codec.protobuf.
+import io.netty.handler.codec.protobuf.
     ProtobufVarint32FrameDecoder;
-import org.jboss.netty.handler.codec.protobuf.
+import io.netty.handler.codec.protobuf.
     ProtobufVarint32LengthFieldPrepender;
-import org.jboss.netty.util.HashedWheelTimer;
-import org.jboss.netty.util.Timer;
+import io.netty.util.HashedWheelTimer;
+import io.netty.util.Timer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
@@ -112,10 +114,6 @@ public class GameClient {
      */
     private int clientID;
     /**
-     * MAC Address.
-     */
-    private byte[] macAddress;
-    /**
      * Client Info object.
      */
     private volatile ClientInfo clientInfo;
@@ -162,7 +160,7 @@ public class GameClient {
     /**
      * Game.
      */
-    private Game game;
+    private volatile Game game;
     /**
      * The GUI Event Queue.
      * <p>Due to the single threaded nature of OpenGL
@@ -184,6 +182,10 @@ public class GameClient {
      */
     private boolean finished;
     /**
+     * Remote InetSocketAddress
+     */
+    private static final InetSocketAddress REMOTE_ADDRESS = new InetSocketAddress(HOST, PORT);
+    /**
      * Class logger.
      */
     private static final transient Logger LOGGER = Logger
@@ -204,10 +206,6 @@ public class GameClient {
      * Delay before reconnecting.
      */
     static final int RECONNECT_DELAY = 5;
-    /**
-     * Read timeout.
-     */
-    private static final int READ_TIMEOUT = 10;
     /**
      * Title.
      */
@@ -479,7 +477,7 @@ public class GameClient {
      * Open a network connection.
      */
     private void openNetworkConnection() {
-        final ClientBootstrap bootstrap = buildClientBootstrap();
+        final Bootstrap bootstrap = buildClientBootstrap();
         final ChannelFuture f = bootstrap.connect();
         f.addListener(new ChannelFutureListener() {
             @Override
@@ -490,9 +488,9 @@ public class GameClient {
                 } else if (!future.isSuccess()) {
                     channelHandler.logException(
                             "Connection attempt unsuccesful",
-                            future.getCause());
+                            future.cause());
                 } else {
-                    channel = future.getChannel();
+                    channel = future.channel();
                 }
             }
         });
@@ -501,19 +499,19 @@ public class GameClient {
      * Build the client bootstrap.
      * @return client boostrap
      */
-    private ClientBootstrap buildClientBootstrap() {
+    private Bootstrap buildClientBootstrap() {
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
         final Timer timer = new HashedWheelTimer();
-        final ClientBootstrap bootstrap = new ClientBootstrap(
-                new NioClientSocketChannelFactory(
-                        Executors.newCachedThreadPool(),
-                        Executors.newCachedThreadPool()));
+        final Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(workerGroup);
+        bootstrap.channel(NioSocketChannel.class);
         channelHandler = new ClientChannelHandler(GameClient.this, bootstrap,
-                timer);
+                timer, REMOTE_ADDRESS);
 
-        bootstrap.setPipelineFactory(new ChannelPipelineFactory() {
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
-            public ChannelPipeline getPipeline() throws Exception {
-                ChannelPipeline p = Channels.pipeline();
+            public void initChannel(SocketChannel ch) throws Exception {
+                ChannelPipeline p = ch.pipeline();
                 p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
                 p.addLast("protobufDecoder",
                         new ProtobufDecoder(
@@ -522,14 +520,12 @@ public class GameClient {
                         new ProtobufVarint32LengthFieldPrepender());
                 p.addLast("protobufEncoder", new ProtobufEncoder());
                 p.addLast("handler", channelHandler);
-                return p;
             }
         });
-        bootstrap.setOption("child.tcpNoDelay", true);
-        bootstrap.setOption("child.keepAlive", true);
-        bootstrap.setOption("connectTimeoutMillis", CONNECTION_TIMEOUT);
-        InetSocketAddress remoteAddress = new InetSocketAddress(HOST, PORT);
-        bootstrap.setOption("remoteAddress", remoteAddress);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECTION_TIMEOUT);
+        bootstrap.remoteAddress(REMOTE_ADDRESS);
         return bootstrap;
     }
 
@@ -540,7 +536,7 @@ public class GameClient {
         channelHandler.stopReconnecting();
         if (channel != null) {
             synchronized (channel) {
-                if (channel.isConnected()) {
+                if (channel.isActive()) {
                     GameClientUtils.sendSystemData(
                         ClientMessage.SystemData
                             .newBuilder()
@@ -596,7 +592,7 @@ public class GameClient {
      */
     public final void sendOutboundMessage(final ClientMessage message) {
         if (channel != null) {
-            channel.write(message);
+            channel.writeAndFlush(message);
         }
     }
     /**
@@ -604,7 +600,7 @@ public class GameClient {
      */
     public final boolean isConnected() {
         if (channel != null) {
-            return channel.isConnected();
+            return channel.isActive();
         } else {
             return false;
         }
