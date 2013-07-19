@@ -1,17 +1,15 @@
 package com.whiuk.philip.mmorpg.server.network;
 
+import io.netty.channel.SimpleChannelInboundHandler;
+
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +25,8 @@ import com.whiuk.philip.mmorpg.server.system.SystemService;
  * @author Philip Whitehouse
  */
 @Service
-public class NettyNetworkServiceHandler extends SimpleChannelHandler {
+public class NettyNetworkServiceHandler 
+    extends SimpleChannelInboundHandler<ClientMessage> {
 
     /**
      * Handles network messages.
@@ -79,59 +78,57 @@ public class NettyNetworkServiceHandler extends SimpleChannelHandler {
     }
 
     @Override
-    public final void messageReceived(final ChannelHandlerContext ctx,
-            final MessageEvent e) {
-        ClientMessage message = (ClientMessage) e.getMessage();
-        if (!clients.containsKey(ctx.getChannel())) {
-            String address = ((InetSocketAddress) ctx.getChannel()
-                    .getRemoteAddress()).getAddress().toString();
+    public final void channelRead0(final ChannelHandlerContext ctx,
+            final ClientMessage message) {
+        if (!clients.containsKey(ctx.channel())) {
+            String address = ((InetSocketAddress) ctx.channel()
+                    .remoteAddress()).getAddress().toString();
             LOGGER.info("Address recieved from: " + address);
 
             ClientInfo clientInfo = message.getClientInfo().toBuilder()
                     .setRemoteIPAddress(address).build();
-            clients.put(ctx.getChannel(), clientInfo);
-            channels.put(clientInfo, ctx.getChannel());
+            clients.put(ctx.channel(), clientInfo);
+            channels.put(clientInfo, ctx.channel());
             LOGGER.trace("Added client " + clientInfo + " on channel "
-                    + ctx.getChannel());
+                    + ctx.channel());
         }
-        LOGGER.trace("Message recieved from " + ctx.getChannel());
+        LOGGER.trace("Message recieved from " + ctx.channel());
         ClientMessage processedMessage = message.toBuilder()
-                .setClientInfo(clients.get(ctx.getChannel())).build();
+                .setClientInfo(clients.get(ctx.channel())).build();
         messageHandler.queueInboundMessage(processedMessage);
     }
 
     @Override
     public final void exceptionCaught(final ChannelHandlerContext ctx,
-            final ExceptionEvent e) {
-        Channel ch = e.getChannel();
-        LOGGER.info("Exception caught on: " + ch, e.getCause());
+            final Throwable t) {
+        Channel ch = ctx.channel();
+        LOGGER.info("Exception caught on: " + ch, t);
         ch.close();
         
     }
 
     @Override
-    public final void channelDisconnected(final ChannelHandlerContext ctx,
-            final ChannelStateEvent e) {
-        if (clients.containsKey(ctx.getChannel())) {
+    public final void channelInactive(final ChannelHandlerContext ctx) {
+        if (clients.containsKey(ctx.channel())) {
             systemService
-                    .handleClientDisconnected(clients.get(ctx.getChannel()));
-            channels.remove(clients.remove(ctx.getChannel()));
+                    .handleClientDisconnected(clients.get(ctx.channel()));
+            channels.remove(clients.remove(ctx.channel()));
         } else {
             LOGGER.info("Unknown client disconnected");
         }
         connectionCount.decrementAndGet();
     }
-    
+
     @Override
-    public final void channelConnected(final ChannelHandlerContext ctx,
-            final ChannelStateEvent e) throws Exception {
-        super.channelConnected(ctx, e);
+    public final void channelActive(final ChannelHandlerContext ctx)
+            throws Exception {
+        super.channelActive(ctx);
         long count = connectionCount.incrementAndGet();
         LOGGER.info("Channel connected - " + count + " total connections");
     }
-    
+
     /**
-     * @param m
+     * @param m message
      */
     public final void writeMessage(final ServerMessage m) {
         channels.get(m.getClientInfo()).write(m);

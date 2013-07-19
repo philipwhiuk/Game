@@ -96,9 +96,9 @@
 	  		<version>[2.5.0]</version>
   		</dependency>
 		<dependency>
-	  		<groupId>org.jboss.netty</groupId>
-	  		<artifactId>netty</artifactId>
-	  		<version>3.2.5.Final</version>
+	  		<groupId>io.netty</groupId>
+	  		<artifactId>netty-all</artifactId>
+	  		<version>4.0.3.Final</version>
   		</dependency>
   		<dependency>
 			<groupId>javax.mail</groupId>
