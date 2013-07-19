@@ -510,7 +510,7 @@ public class GameClient {
 
         bootstrap.handler(new ChannelInitializer<SocketChannel>() {
             @Override
-            public void initChannel(SocketChannel ch) throws Exception {
+            public void initChannel(final SocketChannel ch) throws Exception {
                 ChannelPipeline p = ch.pipeline();
                 p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
                 p.addLast("protobufDecoder",
@@ -524,7 +524,8 @@ public class GameClient {
         });
         bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
         bootstrap.option(ChannelOption.TCP_NODELAY, true);
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS, CONNECTION_TIMEOUT);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+                CONNECTION_TIMEOUT);
         bootstrap.remoteAddress(REMOTE_ADDRESS);
         return bootstrap;
     }
