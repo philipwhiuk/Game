@@ -13,8 +13,8 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
  */
 public interface PlayerCharacterDAO extends GenericDAO<PlayerCharacter, Long> {
     /**
-     * @param id
-     * @return
+     * @param id ID
+     * @return character with the given ID or <code>null</code>.
      */
     PlayerCharacter findByID(Long id);
     /**
