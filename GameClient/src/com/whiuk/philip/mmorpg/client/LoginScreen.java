@@ -3,7 +3,7 @@ package com.whiuk.philip.mmorpg.client;
 import org.apache.log4j.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -12,26 +12,24 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  * Login screen.
- * 
  * @author Philip Whitehouse
  */
-@SuppressWarnings("deprecation")
-// TODO: Work out how Nifty 1.3.2 uses controls.
-public class LoginScreen implements ScreenController {
+class LoginScreen implements ScreenController {
     /**
      * Nifty.
      */
+    @SuppressWarnings("unused")
     private Nifty nifty;
     /**
-     *
+     * Username input field.
      */
     private Element textInputUsername;
     /**
-     *
+     * Password input field.
      */
     private Element textInputPassword;
     /**
-     *
+     * Game client.
      */
     private GameClient gameClient;
     /**
@@ -51,7 +49,7 @@ public class LoginScreen implements ScreenController {
      * @param g
      *            Game client
      */
-    public LoginScreen(final GameClient g) {
+    LoginScreen(final GameClient g) {
         this.gameClient = g;
     }
 
@@ -106,20 +104,20 @@ public class LoginScreen implements ScreenController {
     /**
      * Sends a login request.
      */
-    public final void sendLoginRequest() {
-        if (textInputUsername.getControl(TextFieldControl.class).getRealText()
+    final void sendLoginRequest() {
+        if (textInputUsername.getNiftyControl(TextField.class).getRealText()
                 .isEmpty()) {
             setMessage("Please enter your username");
-        } else if (textInputPassword.getControl(TextFieldControl.class)
+        } else if (textInputPassword.getNiftyControl(TextField.class)
                 .getRealText().isEmpty()) {
             setMessage("Please enter your password");
         } else if (loginFailures > MAX_LOGIN_FAILURES) {
             setMessage("Exceeded maximum login attempts");
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
             gameClient.attemptLogin(
-                    textInputUsername.getControl(TextFieldControl.class)
+                    textInputUsername.getNiftyControl(TextField.class)
                             .getRealText(),
-                    textInputPassword.getControl(TextFieldControl.class)
+                    textInputPassword.getNiftyControl(TextField.class)
                             .getRealText());
         } else if (!gameClient.isConnected()) {
             setMessage("Not connected to game server");
@@ -144,14 +142,14 @@ public class LoginScreen implements ScreenController {
     /**
      *
      */
-    public final void register() {
+    final void register() {
         gameClient.switchToRegisterScreen();
     }
 
     /**
-     * @param errorMessage
+     * @param errorMessage Error message
      */
-    public final void loginFailed(final String errorMessage) {
+    final void loginFailed(final String errorMessage) {
         loginFailures++;
         setMessage(errorMessage);
     }

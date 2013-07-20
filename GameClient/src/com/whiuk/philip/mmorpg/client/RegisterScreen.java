@@ -3,7 +3,7 @@ package com.whiuk.philip.mmorpg.client;
 import org.apache.log4j.Logger;
 
 import de.lessvoid.nifty.Nifty;
-import de.lessvoid.nifty.controls.textfield.TextFieldControl;
+import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
@@ -12,15 +12,13 @@ import de.lessvoid.nifty.screen.ScreenController;
 
 /**
  * Start screen.
- * 
  * @author Philip Whitehouse
  */
-@SuppressWarnings("deprecation")
-// TODO: Work out how Nifty 1.3.2 uses controls.
-public class RegisterScreen implements ScreenController {
+class RegisterScreen implements ScreenController {
     /**
      *
      */
+    @SuppressWarnings("unused")
     private Nifty nifty;
     /**
      *
@@ -45,9 +43,10 @@ public class RegisterScreen implements ScreenController {
     /**
      *
      */
+    @SuppressWarnings("unused")
     private int ordering;
     /**
-     * 
+     * Number of registration failures.
      */
     private int registrationFailures;
     /**
@@ -55,9 +54,9 @@ public class RegisterScreen implements ScreenController {
      */
     private static final Logger LOGGER = Logger.getLogger(RegisterScreen.class);
     /**
-     * 
+     * The maximum allowed registration failures.
      */
-    private static final int MAX_REGISTRATION_FAILURES = 0;
+    private static final int MAX_REGISTRATION_FAILURES = 1;
 
     /**
      * @param g
@@ -153,32 +152,29 @@ public class RegisterScreen implements ScreenController {
     /**
      * Sends a login request.
      */
-    public final void sendRegistrationRequest() {
-        if (textInputUsername.getControl(TextFieldControl.class).getRealText()
-                .isEmpty()
-                || textInputPassword.getControl(TextFieldControl.class)
-                        .getRealText().isEmpty()
-                || textInputPasswordConfirm.getControl(TextFieldControl.class)
-                        .getRealText().isEmpty()
-                || textInputEmail.getControl(TextFieldControl.class)
-                        .getRealText().isEmpty()) {
+    final void sendRegistrationRequest() {
+        String username = textInputUsername
+                .getNiftyControl(TextField.class).getRealText();
+        String password = textInputPassword
+                .getNiftyControl(TextField.class).getRealText();
+        String passwordConfirm = textInputPasswordConfirm
+                .getNiftyControl(TextField.class).getRealText();
+        String email = textInputPassword
+                .getNiftyControl(TextField.class).getRealText();
+        if (username.isEmpty()
+                || password.isEmpty()
+                || passwordConfirm.isEmpty()
+                || email.isEmpty()) {
             setMessage("Please complete all required fields");
-        } else if (!textInputPassword
-                .getControl(TextFieldControl.class)
-                .getRealText()
-                .equals(textInputPasswordConfirm.getControl(
-                        TextFieldControl.class).getRealText())) {
+        } else if (!password.equals(passwordConfirm)) {
             setMessage("Please ensure the passwords match");
-        } else if (registrationFailures > MAX_REGISTRATION_FAILURES) {
+        } else if (registrationFailures >= MAX_REGISTRATION_FAILURES) {
             setMessage("Exceeded maximum registration attempts");
         } else if (gameClient.isConnected() && gameClient.hasClientInfo()) {
             gameClient.attemptRegister(
-                    textInputUsername.getControl(TextFieldControl.class)
-                            .getRealText(),
-                    textInputPassword.getControl(TextFieldControl.class)
-                            .getRealText(),
-                    textInputEmail.getControl(TextFieldControl.class)
-                            .getRealText());
+                    username,
+                    password,
+                    email);
         } else if (!gameClient.isConnected()) {
             LOGGER.info("Client not connected");
         } else if (!gameClient.hasClientInfo()) {
@@ -189,20 +185,19 @@ public class RegisterScreen implements ScreenController {
     }
 
     /**
-     * 
+     * Set a message in the UI.
      * @param m message
      */
     private void setMessage(final String m) {
         // TODO Auto-generated method stub
-        
     }
 
     /**
-     * 
-     * @param errorMessage
+     * Update the UI to show a registration failed.
+     * @param reason The reason it failed.
      */
-    public final void registrationFailed(final String errorMessage) {
+    final void registrationFailed(final String reason) {
         registrationFailures++;
-        setMessage(errorMessage);
+        setMessage(reason);
     }
 }

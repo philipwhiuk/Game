@@ -6,16 +6,13 @@ import java.net.SocketException;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
-import org.jboss.netty.bootstrap.ClientBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelHandlerContext;
-import org.jboss.netty.channel.ChannelStateEvent;
-import org.jboss.netty.channel.ExceptionEvent;
-import org.jboss.netty.channel.MessageEvent;
-import org.jboss.netty.channel.SimpleChannelHandler;
-import org.jboss.netty.util.Timeout;
-import org.jboss.netty.util.Timer;
-import org.jboss.netty.util.TimerTask;
+import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.util.Timeout;
+import io.netty.util.Timer;
+import io.netty.util.TimerTask;
 
 import com.google.protobuf.ByteString;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
@@ -24,10 +21,10 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 /**
  * Client channel handler.
- * 
  * @author Philip Whitehouse
  */
-public class ClientChannelHandler extends SimpleChannelHandler {
+class ClientChannelHandler
+    extends SimpleChannelInboundHandler<ServerMessage> {
 
     /**
      * Class logger.
@@ -43,7 +40,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     /**
      *
      */
-    private final ClientBootstrap bootstrap;
+    private final Bootstrap bootstrap;
     /**
 	 *
 	 */
@@ -72,43 +69,48 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     private ClientInfo clientInfo;
 
     /**
-     *
+     * MAC address
      */
     private byte[] macAddress;
+    /**
+     * Remote address
+     */
+    private InetSocketAddress remoteAddress;
 
     /**
      * @param gameClient
      * @param b
      * @param t
+     * @param a 
      */
-    public ClientChannelHandler(final GameClient gameClient,
-            final ClientBootstrap b, final Timer t) {
+    ClientChannelHandler(final GameClient gameClient,
+            final Bootstrap b, final Timer t, final InetSocketAddress a) {
         this.client = gameClient;
         this.bootstrap = b;
         this.timer = t;
+        this.remoteAddress = a;
     }
 
     /**
      * @return remote address
      */
     final InetSocketAddress getRemoteAddress() {
-        return (InetSocketAddress) bootstrap.getOption("remoteAddress");
+        return (InetSocketAddress) remoteAddress;
     }
 
     @Override
-    public final void channelConnected(final ChannelHandlerContext ctx,
-            final ChannelStateEvent e) {
+    public final void channelActive(final ChannelHandlerContext ctx) {
         if (startTime < 0) {
             startTime = System.currentTimeMillis();
         }
         LOGGER.info(format("Connected to: " + getRemoteAddress()));
 
         LOGGER.info("Sending connected message");
-        address = ((InetSocketAddress) ctx.getChannel().getLocalAddress())
+        address = ((InetSocketAddress) ctx.channel().localAddress())
                 .getAddress().toString();
         try {
             macAddress = NetworkInterface.getByInetAddress(
-                    ((InetSocketAddress) ctx.getChannel().getLocalAddress())
+                    ((InetSocketAddress) ctx.channel().localAddress())
                             .getAddress()).getHardwareAddress();
         } catch (SocketException se) {
             // Set the
@@ -119,8 +121,8 @@ public class ClientChannelHandler extends SimpleChannelHandler {
                 .setVersion(GameClient.VERSION).setLocalIPAddress(address)
                 .setMacAddress(ByteString.copyFrom(macAddress)).build();
 
-        ctx.getChannel()
-        .write(ClientMessage
+        ctx.channel()
+        .writeAndFlush(ClientMessage
                 .newBuilder()
                 .setClientInfo(clientInfo)
                 .setType(ClientMessage.Type.SYSTEM)
@@ -131,30 +133,28 @@ public class ClientChannelHandler extends SimpleChannelHandler {
                                 ClientMessage.SystemData.Type.CONNECTED)
                         .build()).build());
         client.setClientInfo(clientInfo);
-        client.setChannel(ctx.getChannel());
+        client.setChannel(ctx.channel());
     }
 
     @Override
-    public final void messageReceived(final ChannelHandlerContext ctx,
-            final MessageEvent e) {
-        LOGGER.info("Recieved message");
-        ServerMessage message = (ServerMessage) e.getMessage();
+    public final void channelRead0(final ChannelHandlerContext ctx,
+            final ServerMessage message) {
+        LOGGER.trace("Recieved message");
         GameClient.getGameClient().processInboundMessage(message);
     }
 
     @Override
     public final void exceptionCaught(final ChannelHandlerContext ctx,
-            final ExceptionEvent e) {
-        logException("Exception caught", e.getCause());
-        Channel ch = e.getChannel();
+            final Throwable cause) {
+        logException("Exception caught", cause);
+        Channel ch = ctx.channel();
         ch.close();
     }
 
     @Override
-    public final void channelClosed(final ChannelHandlerContext ctx,
-            final ChannelStateEvent e) {
+    public final void channelInactive(final ChannelHandlerContext ctx) {
         if (reconnect) {
-            LOGGER.info(format("Channel closed, sleeping for: "
+            LOGGER.info(format("Channel inactive, sleeping for: "
                     + GameClient.RECONNECT_DELAY + 's'));
             timer.newTimeout(new TimerTask() {
                 public void run(final Timeout timeout) throws Exception {
@@ -164,14 +164,8 @@ public class ClientChannelHandler extends SimpleChannelHandler {
                 }
             }, GameClient.RECONNECT_DELAY, TimeUnit.SECONDS);
         } else {
-            LOGGER.info(format("Channel closed"));
+            LOGGER.info(format("Channel inactive"));
         }
-    }
-
-    @Override
-    public final void channelDisconnected(final ChannelHandlerContext ctx,
-            final ChannelStateEvent e) {
-        LOGGER.info(format("Disconnected from: " + getRemoteAddress()));
     }
 
     /**
@@ -183,9 +177,9 @@ public class ClientChannelHandler extends SimpleChannelHandler {
      */
     final String format(final String msg) {
         if (startTime < 0) {
-            return String.format("[SERVER IS DOWN] %s%n", msg);
+            return String.format("[SERVER IS DOWN] %s", msg);
         } else {
-            return String.format("[UPTIME: %5ds] %s%n",
+            return String.format("[UPTIME: %5ds] %s",
                     (System.currentTimeMillis() - startTime) / ONE_SECOND, msg);
         }
     }
@@ -193,7 +187,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
     /**
      * Prevent the channel reconnecting again.
      */
-    public final void stopReconnecting() {
+    final void stopReconnecting() {
         reconnect = false;
         timer.stop();
     }
@@ -202,7 +196,7 @@ public class ClientChannelHandler extends SimpleChannelHandler {
      * @param message Message
      * @param t Thrown exception
      */
-    public final void logException(final String message, final Throwable t) {
+    final void logException(final String message, final Throwable t) {
         if (t instanceof java.io.IOException) {
             LOGGER.info(format(message + " - " + t.getClass().getSimpleName()
                     + ": " + t.getMessage()));

@@ -5,10 +5,18 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
-import org.jboss.netty.bootstrap.ServerBootstrap;
-import org.jboss.netty.channel.Channel;
-import org.jboss.netty.channel.ChannelFactory;
-import org.jboss.netty.channel.socket.nio.NioServerSocketChannelFactory;
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,25 +57,40 @@ public class NettyNetworkService implements NetworkService {
      */
     @PostConstruct()
     public final void init() {
-        ChannelFactory factory = new NioServerSocketChannelFactory(
-                Executors.newCachedThreadPool(),
-                Executors.newCachedThreadPool());
-
-        ServerBootstrap bootstrap = new ServerBootstrap(factory);
-        bootstrap.setPipelineFactory(new NettyNetworkServicePipelineFactory(
-                handler));
-        bootstrap.setOption("child.tcpNoDelay", true);
-        bootstrap.setOption("child.keepAlive", true);
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(workerGroup);
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            public void initChannel(final SocketChannel ch) throws Exception {
+                ChannelPipeline p = ch.pipeline();
+                p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
+                p.addLast("protobufDecoder",
+                        new ProtobufDecoder(
+                                ServerMessage.getDefaultInstance()));
+                p.addLast("frameEncoder",
+                        new ProtobufVarint32LengthFieldPrepender());
+                p.addLast("protobufEncoder", new ProtobufEncoder());
+                p.addLast("handler", handler);
+            }
+        });
+        bootstrap.option(ChannelOption.TCP_NODELAY,true);
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
         channel = bootstrap.bind(
                 new InetSocketAddress(
                     Integer.parseInt(
                             gameServer.getProperties().getProperty("port"))
-                ));
+                )).awaitUninterruptibly().channel();
     }
 
     @Override
     public final void sendMessage(final ServerMessage message) {
         handler.writeMessage(message);
+    }
+
+    @Override
+    public final long getConnectionCount() {
+        return handler.getConnectionCount();
     }
 
 }

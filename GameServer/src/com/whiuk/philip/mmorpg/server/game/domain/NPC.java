@@ -32,6 +32,10 @@ public class NPC extends Agent implements GameCharacter {
      * 
      */
     private Map<Skill, Integer> skills;
+    /**
+     * 
+     */
+    private Long zone;
     
     @Override
     public Item getItemById(int i1id) {
@@ -47,5 +51,19 @@ public class NPC extends Agent implements GameCharacter {
     public void doAction(Action a) {
         // TODO Auto-generated method stub
         
+    }
+    @Override
+    public String getName() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public Race getRace() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+    @Override
+    public Long getZone() {
+        return zone;
     }
 }

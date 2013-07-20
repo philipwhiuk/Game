@@ -1,10 +1,14 @@
 package com.whiuk.philip.mmorpg.server.auth;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
+import org.hibernate.Hibernate;
+import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -62,7 +66,19 @@ public class AuthServiceImpl implements AuthService {
      */
     private static final Logger LOGGER = Logger
             .getLogger(AuthServiceImpl.class);
-    private static final Object MISSING_LOGIN_DATA_MESSAGE = null;
+    /**
+     * Error message when login received without both username and password
+     * (should be impossible on a valid client).
+     */
+    private static final String MISSING_LOGIN_DATA_MESSAGE =
+            "Attempting to login without providing both a username and "
+            + "password";
+    /**
+     * Error message when login received for account already logged in.
+     */
+    private static final String ALREADY_LOGGED_IN_MESSAGE =
+            "Attempting to login (using valid credentials to an account that's"
+            + " already logged in. Ignoring request.";
     /**
      *
      */
@@ -71,11 +87,11 @@ public class AuthServiceImpl implements AuthService {
     /**
      *
      */
-    private Map<Account, Connection> accounts;
+    private volatile Map<Account, Connection> accounts;
     /**
      *
      */
-    private Map<Connection, Account> connections;
+    private volatile Map<Connection, Account> connections;
     /**
      *
      */
@@ -116,11 +132,16 @@ public class AuthServiceImpl implements AuthService {
      */
     private EmailService emailService;
     /**
+     * Authentication event listeners
+     */
+    private ArrayList<AuthEventListener> authEventListeners;
+    /**
      *
      */
     public AuthServiceImpl() {
         accounts = new HashMap<Account, Connection>();
         connections = new HashMap<Connection, Account>();
+        authEventListeners = new ArrayList<AuthEventListener>();
     }
 
     @Override
@@ -143,7 +164,7 @@ public class AuthServiceImpl implements AuthService {
     public final void processMessage(
             final ClientInfo src, final AuthData data) {
         Connection con;
-        LOGGER.info("Processing authentication message");
+        LOGGER.trace("Processing authentication message");
         switch (data.getType()) {
             case LOGIN:
                 processLoginMessage(src, data);
@@ -199,6 +220,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processLoginMessage(
             final ClientInfo src, final AuthData data) {
+        LOGGER.trace("Processing login message");
         Connection con;
 
         con = systemService.getConnection(src);
@@ -207,7 +229,7 @@ public class AuthServiceImpl implements AuthService {
             logger.log(Level.INFO, BAD_CONNECTION_LOGIN_MESSAGE);
             systemService.processLostConnection(src);
         } else {
-            //Handle already logged in
+            //Handle client already logged in
             if (connections.containsKey(con)) {
                 logger.log(Level.INFO, MULTIPLE_LOGINS_ATTEMPT_MESSAGE);
                 performLogout(connections.get(con));
@@ -232,6 +254,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processLoginAttempt(final Connection con,
             final String username, final String password) {
+        LOGGER.trace("Processing login attempt");
         // TODO Exceeded maximum login attempts
         HibernateUtils.beginTransaction();
         Account account = accountDAO.findByUsername(username);
@@ -248,6 +271,15 @@ public class AuthServiceImpl implements AuthService {
             if (!account.getPassword().equals(password)) {
                 processFailedLogin(con, attempt, account);
             } else {
+                //Handle account already logged in
+                Set<Account> currentAccounts = accounts.keySet();
+                for (Account a: currentAccounts) {
+                    if (a.getUsername().equals(username)) {
+                        logger.log(Level.INFO, ALREADY_LOGGED_IN_MESSAGE);
+                        processFailedLogin(con, attempt, account);
+                        return;
+                    }
+                }
                 processSuccesfulLogin(con, attempt, account);
             }
         } else {
@@ -397,6 +429,9 @@ public class AuthServiceImpl implements AuthService {
                         .setUsername(account.getUsername()).build())
                 .build();
         messageHandler.queueOutboundMessage(message);
+        for(AuthEventListener l : authEventListeners) {
+            l.notifyLogin(account);
+        }
     }
 
     /**
@@ -410,8 +445,6 @@ public class AuthServiceImpl implements AuthService {
      */
     private void processFailedLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
-        account.addLoginAttempt(attempt);
-        con.addLoginAttempt(attempt);
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
@@ -433,14 +466,25 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * 
      * @param account
      */
     private void performLogout(final Account account) {
         connections.remove(accounts.remove(account));
-        //TODO: Consider event listener model
-        chatService.notifyLogout(account);
-        gameService.notifyLogout(account);
+        for (AuthEventListener l : authEventListeners) {
+            l.notifyLogout(account);
+        }
+    }
+
+    @Override
+    public final void registerAuthEventListener(
+            final AuthEventListener listener) {
+        authEventListeners.add(listener);
+    }
+
+    @Override
+    public final void deregisterAuthEventListener(
+            final AuthEventListener listener) {
+        authEventListeners.remove(listener);
     }
 
 }

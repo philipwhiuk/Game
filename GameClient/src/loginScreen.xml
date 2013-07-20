@@ -7,7 +7,6 @@
    <screen id="start" controller="com.whiuk.philip.mmorpg.client.LoginScreen">
 	    <layer id="layer" backgroundColor="#000f" childLayout="center">
 	      <panel id="panel" height="290" width="35%" align="center" valign="center" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
-	        <interact onClick="quit()"/>
 	        <panel id="panel-centre" height="220" width="100%" align="center" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
 				<panel id="panel-header" height="40" width="100%" align="left" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
 		        	<text id="header" font="aurulent-sans-16.fnt" color="#ffff" text="Login!" align="center" valign="center" />

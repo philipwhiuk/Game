@@ -5,7 +5,7 @@ package com.whiuk.philip.mmorpg.client;
  * @author Philip
  *
  */
-public class Account {
+class Account {
     /**
      *
      */
@@ -17,5 +17,11 @@ public class Account {
      */
     Account(final String u) {
         this.username = u;
+    }
+    /**
+     * @return username;
+     */
+    final String getUsername() {
+        return username;
     }
 }
