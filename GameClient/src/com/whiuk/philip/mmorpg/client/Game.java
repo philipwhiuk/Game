@@ -1,6 +1,5 @@
 package com.whiuk.philip.mmorpg.client;
 
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
@@ -10,8 +9,27 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  * @author Philip
  *
  */
-public class Game {
-
+class Game implements GameInterface {
+    /**
+     * Position.
+     */
+    private static final float QUAD_POS = 100;
+    /**
+     * Size.
+     */
+    private static final float QUAD_SIZE = 200;
+    /**
+     * Colour (R).
+     */
+    private static final float QUAD_R = 0.5f;
+    /**
+     * Colour (G).
+     */
+    private static final float QUAD_G = 0.5f;
+    /**
+     * Colour (B).
+     */
+    private static final float QUAD_B = 1.0f;
     /**
      * Player.
      */
@@ -26,26 +44,26 @@ public class Game {
     private boolean moving;
 
     /**
-     * @param character
+     * @param character Player character
      */
-    public Game(final PlayerCharacter character) {
+    Game(final PlayerCharacter character) {
         this.player = character;
         this.camera = new Camera();
         // TODO Auto-generated constructor stub
     }
 
-    /**
-     * @param message
-     */
-    public void handleGameMessage(final ServerMessage.GameData data) {
-        // TODO Auto-generated method stub
+    @Override
+    public final void handleGameData(final ServerMessage.GameData data) {
+        if (data.hasMovementInformation()) {
+            player.handleMovement(data.getMovementInformation());
+        }
     }
     /**
      * Perform the game update.
      */
-    public final void update() {
+    final void update() {
         boolean serverUpdateRequired = false;
-        boolean movementChanged = player.handleMovement();
+        boolean movementChanged = player.updateMovement();
         if (movementChanged) {
             serverUpdateRequired = true;
         }
@@ -57,7 +75,7 @@ public class Game {
             if (moving) {
                 data.setMovementInformation(
                         ClientMessage.GameData.MovementInformation.newBuilder()
-                        .setDirection(player.direction).build());
+                        .setDirection(player.getDirection()).build());
             }
             GameClientUtils.sendGameData(data.build());
         }
@@ -65,18 +83,17 @@ public class Game {
     /**
      * Render the game.
      */
-    public final void render() {
+    final void render() {
         // Clear the screen and depth buffer
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         // set the color of the quad (R,G,B,A)
-        GL11.glColor3f(0.5f, 0.5f, 1.0f);
-
+        GL11.glColor3f(QUAD_R, QUAD_G, QUAD_B);
         // draw quad
         GL11.glBegin(GL11.GL_QUADS);
-            GL11.glVertex2f(100, 100);
-        GL11.glVertex2f(100+200, 100);
-        GL11.glVertex2f(100+200, 100+200);
-        GL11.glVertex2f(100, 100+200);
+            GL11.glVertex2f(QUAD_POS, QUAD_POS);
+        GL11.glVertex2f(QUAD_POS + QUAD_SIZE, QUAD_POS);
+        GL11.glVertex2f(QUAD_POS + QUAD_SIZE, QUAD_POS + QUAD_SIZE);
+        GL11.glVertex2f(QUAD_POS, QUAD_POS + QUAD_SIZE);
         GL11.glEnd();
         //Camera
         camera.render(player);

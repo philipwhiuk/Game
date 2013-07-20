@@ -10,7 +10,7 @@ package com.whiuk.philip.mmorpg.client;
  * @author Philip
  *
  */
-public class Camera {
+class Camera {
 
     /**
      * Rotate <code>d</code> degrees around the Y (vertical) axis.
@@ -51,8 +51,9 @@ public class Camera {
     }
     /**
      * Apply the rendering transformations.
+     * @param p The player character to transform based on.
      */
-    public void render(final PlayerCharacter p) {
+    void render(final PlayerCharacter p) {
         // TODO Auto-generated method stub
     }
 }

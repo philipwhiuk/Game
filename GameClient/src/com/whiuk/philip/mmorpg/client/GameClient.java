@@ -58,7 +58,7 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 /**
  * @author Philip Whitehouse
  */
-public class GameClient {
+class GameClient implements Runnable {
     /**
      * Game states.
      * @author Philip Whitehouse
@@ -241,7 +241,7 @@ public class GameClient {
     /**
      * Bean constructor.
      */
-    public GameClient() {
+    GameClient() {
         queuedNiftyEvents = new LinkedBlockingQueue<NiftyQueuedEvent>();
         try {
             sha256digest = MessageDigest.getInstance("SHA-256");
@@ -252,7 +252,9 @@ public class GameClient {
     }
     /**
      * Run game client.
+     * @see Runnable#run()
      */
+    @Override
     public final void run() {
         finished = false;
         try {
@@ -554,7 +556,7 @@ public class GameClient {
      * @param message
      *            Server message
      */
-    public final void processInboundMessage(final ServerMessage message) {
+    final void processInboundMessage(final ServerMessage message) {
         switch (message.getType()) {
             case AUTH:
                 handleAuthMessage(message);
@@ -577,7 +579,7 @@ public class GameClient {
      * Singleton access.
      * @return client
      */
-    public static GameClient getGameClient() {
+    static GameClient getGameClient() {
         return gameClient;
     }
     /**
@@ -585,13 +587,13 @@ public class GameClient {
      * @param client
      *            Client
      */
-    public static void setGameClient(final GameClient client) {
+    static void setGameClient(final GameClient client) {
         gameClient = client;
     }
     /**
      * @param message Message
      */
-    public final void sendOutboundMessage(final ClientMessage message) {
+    final void sendOutboundMessage(final ClientMessage message) {
         if (channel != null) {
             channel.writeAndFlush(message);
         }
@@ -599,7 +601,7 @@ public class GameClient {
     /**
      * @return <code>true</code> if connected to the server
      */
-    public final boolean isConnected() {
+    final boolean isConnected() {
         if (channel != null) {
             return channel.isActive();
         } else {
@@ -609,7 +611,7 @@ public class GameClient {
     /**
      * @return <code>true</code> if client info is set
      */
-    public final boolean hasClientInfo() {
+    final boolean hasClientInfo() {
         if (clientInfo != null) {
             return true;
         }
@@ -618,14 +620,14 @@ public class GameClient {
     /**
      * @return Client Information
      */
-    public final ClientInfo getClientInfo() {
+    final ClientInfo getClientInfo() {
         return clientInfo;
     }
     /**
      * Handle a System message from the server.
      * @param message Message
      */
-    public final void handleSystemMessage(final ServerMessage message) {
+    final void handleSystemMessage(final ServerMessage message) {
         // TODO Auto-generated method stub
 
     }
@@ -633,7 +635,7 @@ public class GameClient {
      * Handle a Game message from the server.
      * @param message Message
      */
-    public final void handleGameMessage(final ServerMessage message) {
+    final void handleGameMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
             if (message.getGameData().getType().equals(
                     ServerMessage.GameData.Type.ENTER_GAME)) {
@@ -652,7 +654,7 @@ public class GameClient {
                 queuedNiftyEvents.add(new NiftyQueuedEvent() {
                     @Override
                     public void run() {
-                        lobbyScreen.handleGameMessage(message.getGameData());
+                        lobbyScreen.handleGameData(message.getGameData());
                     }
 
                     @Override
@@ -662,12 +664,12 @@ public class GameClient {
                 });
             }
         } else if (state.equals(State.GAME)) {
-            game.handleGameMessage(message.getGameData());
+            game.handleGameData(message.getGameData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override
                 public void run() {
-                    lobbyScreen.handleGameMessage(message.getGameData());
+                    lobbyScreen.handleGameData(message.getGameData());
                 }
 
                 @Override
@@ -698,12 +700,12 @@ public class GameClient {
      * Handle a chat message from the server.
      * @param message Message
      */
-    public final void handleChatMessage(final ServerMessage message) {
+    final void handleChatMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override
                 public void run() {
-                    lobbyScreen.handleChatMessage(message.getChatData());
+                    lobbyScreen.handleChatData(message.getChatData());
                 }
 
                 @Override
@@ -712,12 +714,12 @@ public class GameClient {
                 }
             });
         } else if (state.equals(State.GAME)) {
-            gameScreen.handleChatMessage(message.getChatData());
+            gameScreen.handleChatData(message.getChatData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new NiftyQueuedEvent() {
                 @Override
                 public void run() {
-                    lobbyScreen.handleChatMessage(message.getChatData());
+                    lobbyScreen.handleChatData(message.getChatData());
                 }
 
                 @Override
@@ -733,7 +735,7 @@ public class GameClient {
      * Handle an authentication message from the server.
      * @param message Message
      */
-    public final void handleAuthMessage(final ServerMessage message) {
+    final void handleAuthMessage(final ServerMessage message) {
         ServerMessage.AuthData data = message.getAuthData();
 
         switch (state) {
@@ -854,21 +856,21 @@ public class GameClient {
      * Retrieve the client ID.
      * @return client id
      */
-    public final int getClientID() {
+    final int getClientID() {
         return clientID;
     }
     /**
      * Set the client info.
      * @param cI Client info.
      */
-    public final void setClientInfo(final ClientInfo cI) {
+    final void setClientInfo(final ClientInfo cI) {
         this.clientInfo = cI;
     }
     /**
      * Set the channel.
      * @param c Channel
      */
-    public final void setChannel(final Channel c) {
+    final void setChannel(final Channel c) {
         this.channel = c;
     }
     /**
@@ -876,7 +878,7 @@ public class GameClient {
      * @param username Username
      * @param password Password (plain)
      */
-    public final void attemptLogin(
+    final void attemptLogin(
             final String username, final String password) {
         byte[] hash;
         try {
@@ -894,7 +896,7 @@ public class GameClient {
      * Switch from the previous screen to the account registration screen.
      * Must be run on the OpenGL context thread.
      */
-    public final void switchToRegisterScreen() {
+    final void switchToRegisterScreen() {
         registerScreen = new RegisterScreen(this);
         nifty.registerScreenController(registerScreen);
         nifty.fromXml("registerScreen.xml", "register");
@@ -934,7 +936,7 @@ public class GameClient {
      * @param password Password (plain)
      * @param email Email
      */
-    public final void attemptRegister(final String username,
+    final void attemptRegister(final String username,
             final String password, final String email) {
         byte[] hash;
         try {
@@ -952,14 +954,14 @@ public class GameClient {
     /**
      * Indicates the client should quit.
      */
-    public final void quit() {
+    final void quit() {
         finished = true;
     }
     /**
      * Change the state of the client.
      * @param newState The new state to move to.
      */
-    public final void setState(final State newState) {
+    final void setState(final State newState) {
         state = newState;
     }
 }

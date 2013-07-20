@@ -8,7 +8,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
  * Common game client functions.
  * @author Philip
  */
-public final class GameClientUtils {
+final class GameClientUtils {
     /**
      * Class logger.
      */
@@ -26,7 +26,7 @@ public final class GameClientUtils {
      * keep server message handling code from core classes.
      * @param data Chat data to send to server
      */
-    public static void sendAuthData(final ClientMessage.AuthData data) {
+    static void sendAuthData(final ClientMessage.AuthData data) {
         LOGGER.trace("Sending auth data.");
         GameClient.getGameClient().sendOutboundMessage(ClientMessage
                 .newBuilder()
@@ -41,7 +41,7 @@ public final class GameClientUtils {
      * keep server message handling code from core classes.
      * @param data Chat data to send to server
      */
-    public static void sendChatData(final ClientMessage.ChatData data) {
+    static void sendChatData(final ClientMessage.ChatData data) {
         LOGGER.trace("Sending chat data.");
         GameClient.getGameClient().sendOutboundMessage(ClientMessage
                 .newBuilder()
@@ -56,7 +56,7 @@ public final class GameClientUtils {
      * keep server message handling code from core classes.
      * @param data Game data to send to server
      */
-    public static void sendGameData(final ClientMessage.GameData data) {
+    static void sendGameData(final ClientMessage.GameData data) {
         LOGGER.trace("Sending game data.");
         GameClient.getGameClient().sendOutboundMessage(ClientMessage
                 .newBuilder()
@@ -71,7 +71,7 @@ public final class GameClientUtils {
      * keep server message handling code from core classes.
      * @param data Chat data to send to server
      */
-    public static void sendSystemData(final ClientMessage.SystemData data) {
+    static void sendSystemData(final ClientMessage.SystemData data) {
         LOGGER.trace("Sending system data.");
         GameClient.getGameClient().sendOutboundMessage(ClientMessage
                 .newBuilder()

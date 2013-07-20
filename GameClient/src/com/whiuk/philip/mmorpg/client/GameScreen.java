@@ -13,17 +13,19 @@ import de.lessvoid.nifty.screen.ScreenController;
  * In-Game UI.
  * @author Philip
  */
-public class GameScreen implements ScreenController, ChatInterface {
+class GameScreen implements ScreenController, ChatInterface {
     /**
-     * Game Client
+     * Game Client.
      */
+    @SuppressWarnings("unused")
     private GameClient client;
     /**
-     * Game
+     * Game.
      */
+    @SuppressWarnings("unused")
     private Game game;
     /**
-     * Nifty
+     * Nifty.
      */
     private Nifty nifty;
     /**
@@ -35,7 +37,7 @@ public class GameScreen implements ScreenController, ChatInterface {
      * @param c client
      * @param g game
      */
-    public GameScreen(final GameClient c, final Game g) {
+    GameScreen(final GameClient c, final Game g) {
         this.client = c;
         this.game = g;
     }
@@ -74,7 +76,7 @@ public class GameScreen implements ScreenController, ChatInterface {
         // TODO Auto-generated method stub
     }
     @Override
-    public void handleChatMessage(final ChatData chatData) {
+    public void handleChatData(final ChatData chatData) {
         // TODO Auto-generated method stub
     }
     /**

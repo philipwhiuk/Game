@@ -2,32 +2,19 @@ package com.whiuk.philip.mmorpg.client;
 
 import org.lwjgl.input.Keyboard;
 
+import com.whiuk.philip.mmorpg.client.GameSettings.Control;
+import com.whiuk.philip.mmorpg.shared.Messages
+    .ServerMessage.GameData.MovementInformation;
+
 /**
  * @author Philip
  *
  */
-public class PlayerCharacter {
-    //TODO: Key customisation
-    /**
-     * Key to move forward.
-     */
-    private static final int MOVE_FORWARD = Keyboard.KEY_W;
-    /**
-     * Key to move backwards.
-     */
-    private static final int MOVE_BACKWARD = Keyboard.KEY_S;
-    /**
-     * Key to turn left.
-     */
-    private static final int TURN_LEFT = Keyboard.KEY_A;
-    /**
-     * Key to turn right.
-     */
-    private static final int TURN_RIGHT = Keyboard.KEY_D;
+class PlayerCharacter {
     /**
      * Current direction.
      */
-    public float direction;
+    private float direction;
     /**
      * Whether or not the player is moving.
      */
@@ -40,50 +27,70 @@ public class PlayerCharacter {
      * @param race Race
      * @param location Location
      */
-    public PlayerCharacter(final int id, final String name,
+    PlayerCharacter(final int id, final String name,
             final String race, final String location) {
         // TODO Auto-generated constructor stub
     }
     /**
+     * @return the direction
+     */
+    final float getDirection() {
+        return direction;
+    }
+    /**
+     * @param d the direction to set
+     */
+    final void setDirection(final float d) {
+        this.direction = d;
+    }
+    /**
      * Render player character.
      */
-    public void render() {
+    void render() {
         // TODO Auto-generated method stub
     }
     /**
      * Handle movement.
      * @return <code>true</code> if the player's movement has changed.
      */
-    public final boolean handleMovement() {
+    final boolean updateMovement() {
         boolean movementChanged = false;
-        if (Keyboard.isKeyDown(MOVE_FORWARD)) {
+        if (Keyboard.isKeyDown(GameSettings.getSettings()
+                .getKeyMapping(Control.MOVE_FOREWARD))) {
             if (!moving) {
                 moving = true;
                 movementChanged = true;
-            } else {
-                //Do Move Forward
             }
-        } else if (Keyboard.isKeyDown(MOVE_BACKWARD)) {
+            //Do Move Forward
+        } else if (Keyboard.isKeyDown(GameSettings.getSettings()
+                .getKeyMapping(Control.MOVE_BACKWARD))) {
             if (!moving) {
                 moving = true;
                 movementChanged = true;
-            } else {
-                //Do Move Backward
             }
+            //Do Move Backward
         }
-        if (Keyboard.isKeyDown(TURN_LEFT)) {
-            if (!moving) {
-                moving = true;
-                movementChanged = true;
-            } else {
-                //Do Turn Left
-            }
-        } else if (Keyboard.isKeyDown(TURN_RIGHT)) {
+        if (Keyboard.isKeyDown(GameSettings.getSettings()
+                .getKeyMapping(Control.TURN_LEFT))) {
             if (!moving) {
                 moving = true;
                 movementChanged = true;
             }
+            //Do Turn Left
+        } else if (Keyboard.isKeyDown(GameSettings.getSettings()
+                .getKeyMapping(Control.TURN_RIGHT))) {
+            if (!moving) {
+                moving = true;
+                movementChanged = true;
+            }
+            //Do Turn Right
         }
         return movementChanged;
+    }
+    /**
+     * @param movementInformation Movement information.
+     */
+    void handleMovement(final MovementInformation movementInformation) {
+        // TODO Auto-generated method stub
     }
 }

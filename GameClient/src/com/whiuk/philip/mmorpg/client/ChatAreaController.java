@@ -17,7 +17,7 @@ import de.lessvoid.xml.xpp3.Attributes;
  * @author Philip
  *
  */
-public class ChatAreaController implements Controller {
+class ChatAreaController implements Controller {
     /**
      *
      */
@@ -61,34 +61,33 @@ public class ChatAreaController implements Controller {
     }
 
     /**
-     *
-     * @param auto
+     * @param auto The auto scroll
      */
-    public final void setAutoScroll(final AutoScroll auto) {
+    final void setAutoScroll(final AutoScroll auto) {
         scrollPanel.setAutoScroll(auto);
     }
 
     /**
-     *
-     * @return
+     * @return The auto scroll
      */
-    public final AutoScroll getAutoScroll() {
+    final AutoScroll getAutoScroll() {
         return scrollPanel.getAutoScroll();
     }
 
     /**
      *
-     * @param text
+     * @param text The text to append.
      */
-    public final void append(final String text) {
+    @SuppressWarnings("unused")
+    private void append(final String text) {
         setText(getText() + text);
     }
 
     /**
      *
-     * @param text
+     * @param text The test to the set the chat area to.
      */
-    public final void setText(final String text) {
+    private void setText(final String text) {
         textArea.getRenderer(TextRenderer.class).setText(text);
         screen.layoutLayers();
         textArea.setHeight(
@@ -96,10 +95,9 @@ public class ChatAreaController implements Controller {
     }
 
     /**
-     *
-     * @return
+     * @return The current text.
      */
-    public final String getText() {
+    final String getText() {
         return textArea.getRenderer(TextRenderer.class).getOriginalText();
     }
 }

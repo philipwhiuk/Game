@@ -25,7 +25,8 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Lobby screen.
  * @author Philip Whitehouse
  */
-public class LobbyScreen implements ScreenController, ChatInterface {
+class LobbyScreen 
+    implements ScreenController, ChatInterface, GameInterface {
     /**
      * Class logger.
      */
@@ -33,6 +34,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
     /**
      * Nifty GUI.
      */
+    @SuppressWarnings("unused")
     private Nifty nifty;
     /**
      * Game client.
@@ -41,6 +43,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
     /**
      * Account data.
      */
+    @SuppressWarnings("unused")
     private Account account;
     /**
      * List of characters.
@@ -51,43 +54,47 @@ public class LobbyScreen implements ScreenController, ChatInterface {
      */
     private List<LobbyCharacterData> characters;
     /**
-     * Chat box element
+     * Chat box element.
      */
     private Element chatElement;
     /**
-     * Drop down Character List element
+     * Drop down Character List element.
      */
     private Element characterListElement;
     /**
-     * Create Character Button
+     * Create Character Button.
      */
+    @SuppressWarnings("unused")
     private Element createCharacterButton;
     /**
-     * Play button
+     * Play button.
      */
+    @SuppressWarnings("unused")
     private Element playButton;
     /**
-     * Tab 1
+     * Tab 1.
      */
+    @SuppressWarnings("unused")
     private Element tab1;
     /**
-     * Tab 2
+     * Tab 2.
      */
+    @SuppressWarnings("unused")
     private Element tab2;
     /**
-     * Race Drop Down List Element
+     * Race Drop Down List Element.
      */
     private Element raceListElement;
     /**
-     * 
+     * Name Input Element.
      */
     private Element nameInputElement;
     /**
-     * Character Drop Down
+     * Character Drop Down.
      */
     private DropDown<LobbyCharacterData> characterListDropDown;
     /**
-     * Race Drop Down
+     * Race Drop Down.
      */
     private DropDown<LobbyCharacterData.Race> raceListDropDown;
 
@@ -97,7 +104,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
      * @param a
      *            Account
      */
-    public LobbyScreen(final GameClient g, final Account a) {
+    LobbyScreen(final GameClient g, final Account a) {
         this.gameClient = g;
         this.account = a;
         characters = new ArrayList<LobbyCharacterData>();
@@ -149,7 +156,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
     }
 
     @Override
-    public final void handleChatMessage(final ServerMessage.ChatData chatData) {
+    public final void handleChatData(final ServerMessage.ChatData chatData) {
         switch(chatData.getType()) {
             case PLAYER_JOINED:
                 chatElement.getControl(ChatControl.class)
@@ -174,15 +181,15 @@ public class LobbyScreen implements ScreenController, ChatInterface {
      * Handle game message.
      * @param gameData Game Data
      */
-    public final void handleGameMessage(final ServerMessage.GameData gameData) {
+    public final void handleGameData(final ServerMessage.GameData gameData) {
         if (gameData.hasError()) {
            LOGGER.info("Game Error: " + gameData.getError());
         } else {
             switch (gameData.getType()) {
                 case CHARACTER_CREATED:
                     LOGGER.info("Recieved character created message");
-                    for (ServerMessage.GameData.CharacterInformation c :
-                            gameData.getCharacterInformationList()) {
+                    for (ServerMessage.GameData.CharacterInformation c
+                            : gameData.getCharacterInformationList()) {
                         LobbyCharacterData pc = new LobbyCharacterData(
                                 c.getId(), c.getName(),
                                 Race.valueOf(c.getRace()),
@@ -211,7 +218,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
     /**
      * Play with the selected character.
      */
-    public final void play() {
+    final void play() {
         Object selection = characterListElement
                 .getNiftyControl(DropDown.class).getSelection();
         if (selection != null) {
@@ -231,7 +238,7 @@ public class LobbyScreen implements ScreenController, ChatInterface {
     /**
      * Create a character.
      */
-    public final void createCharacter() {
+    final void createCharacter() {
         Object selection = raceListElement
                 .getNiftyControl(DropDown.class).getSelection();
         String race = ((Race) selection).name();

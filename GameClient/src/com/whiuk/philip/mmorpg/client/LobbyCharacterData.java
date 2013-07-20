@@ -5,14 +5,14 @@ package com.whiuk.philip.mmorpg.client;
  * @author Philip
  *
  */
-public class LobbyCharacterData {
+class LobbyCharacterData {
 
     /**
      * Race.
      * @author Philip
      *
      */
-    public static enum Race {
+    static enum Race {
         /**
          * Human.
          */
@@ -64,29 +64,54 @@ public class LobbyCharacterData {
      * @param r Race
      * @param l Location
      */
-    public LobbyCharacterData(final int i, final String n,
+    LobbyCharacterData(final int i, final String n,
             final Race r, final String l) {
         this.id = i;
         this.name = n;
-        this.race = r;
-        this.location = l;
-    }
-
-    @Override
-    public final String toString() {
-        return name;
+        this.setRace(r);
+        this.setLocation(l);
     }
     /**
      * @return id
      */
-    public final int getId() {
+    final int getId() {
         return id;
     }
 
     /**
      * @return name
      */
-    public final String getName() {
+    final String getName() {
+        return name;
+    }
+
+    /**
+     * @return the race
+     */
+    final Race getRace() {
+        return race;
+    }
+
+    /**
+     * @param r the race to set
+     */
+    final void setRace(final Race r) {
+        this.race = r;
+    }
+    /**
+     * @return the location
+     */
+    final String getLocation() {
+        return location;
+    }
+    /**
+     * @param l the location to set
+     */
+    final void setLocation(final String l) {
+        this.location = l;
+    }
+    @Override
+    public final String toString() {
         return name;
     }
 }

@@ -14,21 +14,22 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Login screen.
  * @author Philip Whitehouse
  */
-public class LoginScreen implements ScreenController {
+class LoginScreen implements ScreenController {
     /**
      * Nifty.
      */
+    @SuppressWarnings("unused")
     private Nifty nifty;
     /**
-     *
+     * Username input field.
      */
     private Element textInputUsername;
     /**
-     *
+     * Password input field.
      */
     private Element textInputPassword;
     /**
-     *
+     * Game client.
      */
     private GameClient gameClient;
     /**
@@ -48,7 +49,7 @@ public class LoginScreen implements ScreenController {
      * @param g
      *            Game client
      */
-    public LoginScreen(final GameClient g) {
+    LoginScreen(final GameClient g) {
         this.gameClient = g;
     }
 
@@ -103,7 +104,7 @@ public class LoginScreen implements ScreenController {
     /**
      * Sends a login request.
      */
-    public final void sendLoginRequest() {
+    final void sendLoginRequest() {
         if (textInputUsername.getNiftyControl(TextField.class).getRealText()
                 .isEmpty()) {
             setMessage("Please enter your username");
@@ -141,14 +142,14 @@ public class LoginScreen implements ScreenController {
     /**
      *
      */
-    public final void register() {
+    final void register() {
         gameClient.switchToRegisterScreen();
     }
 
     /**
-     * @param errorMessage
+     * @param errorMessage Error message
      */
-    public final void loginFailed(final String errorMessage) {
+    final void loginFailed(final String errorMessage) {
         loginFailures++;
         setMessage(errorMessage);
     }

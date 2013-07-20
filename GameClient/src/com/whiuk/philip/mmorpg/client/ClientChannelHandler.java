@@ -23,7 +23,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  * Client channel handler.
  * @author Philip Whitehouse
  */
-public class ClientChannelHandler
+class ClientChannelHandler
     extends SimpleChannelInboundHandler<ServerMessage> {
 
     /**
@@ -83,7 +83,7 @@ public class ClientChannelHandler
      * @param t
      * @param a 
      */
-    public ClientChannelHandler(final GameClient gameClient,
+    ClientChannelHandler(final GameClient gameClient,
             final Bootstrap b, final Timer t, final InetSocketAddress a) {
         this.client = gameClient;
         this.bootstrap = b;
@@ -187,7 +187,7 @@ public class ClientChannelHandler
     /**
      * Prevent the channel reconnecting again.
      */
-    public final void stopReconnecting() {
+    final void stopReconnecting() {
         reconnect = false;
         timer.stop();
     }
@@ -196,7 +196,7 @@ public class ClientChannelHandler
      * @param message Message
      * @param t Thrown exception
      */
-    public final void logException(final String message, final Throwable t) {
+    final void logException(final String message, final Throwable t) {
         if (t instanceof java.io.IOException) {
             LOGGER.info(format(message + " - " + t.getClass().getSimpleName()
                     + ": " + t.getMessage()));
