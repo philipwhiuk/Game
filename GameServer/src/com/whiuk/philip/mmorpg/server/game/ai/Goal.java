@@ -11,8 +11,7 @@ import java.util.List;
 public interface Goal {
 
     /**
-     * 
-     * @return
+     * @return list of requirements needed to achieve this goal
      */
     List<Requirement> getRequirements();
 

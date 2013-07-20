@@ -17,8 +17,8 @@ public class Zone implements Environment {
 
     /**
      * Zone.
-     * @param p1
-     * @param p2
+     * @param p1 Parent 1
+     * @param p2 Parent 2
      */
     public final void spawnCharacterByParent(final NPC p1, final NPC p2) {
         // TODO Auto-generated method stub

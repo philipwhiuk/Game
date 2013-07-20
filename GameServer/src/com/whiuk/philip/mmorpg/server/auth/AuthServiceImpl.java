@@ -132,7 +132,7 @@ public class AuthServiceImpl implements AuthService {
      */
     private EmailService emailService;
     /**
-     * Authentication event listeners
+     * Authentication event listeners.
      */
     private ArrayList<AuthEventListener> authEventListeners;
     /**
@@ -188,9 +188,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     *
-     * @param src
-     * @param data
+     * @param src Source client information
+     * @param data Authentication data
      */
     private void processRegisterMessage(final ClientInfo src,
             final AuthData data) {
@@ -214,9 +213,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     *
-     * @param src
-     * @param data
+     * @param src Source
+     * @param data Authentication data
      */
     private void processLoginMessage(
             final ClientInfo src, final AuthData data) {
@@ -249,7 +247,7 @@ public class AuthServiceImpl implements AuthService {
      *            Connection
      * @param username
      *            Username
-     * @param byteString
+     * @param password
      *            Password
      */
     private void processLoginAttempt(final Connection con,
@@ -288,10 +286,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * @param con
-     * @param username
-     * @param password
-     * @param email
+     * @param con Connection
+     * @param username Username
+     * @param password MD5-hashed Password
+     * @param email Email
      */
     private void processRegistrationAttempt(final Connection con,
             final String username, final String password, final String email) {
@@ -429,7 +427,7 @@ public class AuthServiceImpl implements AuthService {
                         .setUsername(account.getUsername()).build())
                 .build();
         messageHandler.queueOutboundMessage(message);
-        for(AuthEventListener l : authEventListeners) {
+        for (AuthEventListener l : authEventListeners) {
             l.notifyLogin(account);
         }
     }
@@ -466,12 +464,12 @@ public class AuthServiceImpl implements AuthService {
     }
 
     /**
-     * @param account
+     * @param a account
      */
-    private void performLogout(final Account account) {
-        connections.remove(accounts.remove(account));
+    private void performLogout(final Account a) {
+        connections.remove(accounts.remove(a));
         for (AuthEventListener l : authEventListeners) {
-            l.notifyLogout(account);
+            l.notifyLogout(a);
         }
     }
 

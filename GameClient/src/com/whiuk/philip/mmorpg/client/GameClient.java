@@ -126,7 +126,7 @@ class GameClient implements Runnable {
      */
     private Nifty nifty;
     /**
-     * SHA-256 encoder
+     * SHA-256 encoder.
      */
     private MessageDigest sha256digest;
     /**
@@ -182,7 +182,7 @@ class GameClient implements Runnable {
      */
     private boolean finished;
     /**
-     * Remote InetSocketAddress
+     * Remote InetSocketAddress.
      */
     private static final InetSocketAddress REMOTE_ADDRESS = new InetSocketAddress(HOST, PORT);
     /**

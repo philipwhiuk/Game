@@ -15,11 +15,10 @@ public class InvalidEmailException extends Exception {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 
-     * @param e
+     * @param t Cause
      */
-    public InvalidEmailException(final AddressException e) {
-        super(e);
+    public InvalidEmailException(final Throwable t) {
+        super(t);
     }
 
 }

@@ -42,8 +42,8 @@ class ClientChannelHandler
      */
     private final Bootstrap bootstrap;
     /**
-	 *
-	 */
+     *
+     */
     private final Timer timer;
     /**
      *
@@ -62,26 +62,24 @@ class ClientChannelHandler
      *
      */
     private String address;
-
     /**
      *
      */
     private ClientInfo clientInfo;
-
     /**
-     * MAC address
+     * MAC address.
      */
     private byte[] macAddress;
     /**
-     * Remote address
+     * Remote address.
      */
     private InetSocketAddress remoteAddress;
 
     /**
-     * @param gameClient
-     * @param b
-     * @param t
-     * @param a 
+     * @param gameClient Game client
+     * @param b Channel connection bootstrap
+     * @param t Reconnection timer
+     * @param a Server network socket address
      */
     ClientChannelHandler(final GameClient gameClient,
             final Bootstrap b, final Timer t, final InetSocketAddress a) {

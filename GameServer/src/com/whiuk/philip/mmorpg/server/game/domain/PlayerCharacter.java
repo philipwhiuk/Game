@@ -45,7 +45,7 @@ public class PlayerCharacter implements GameCharacter {
     @JoinColumn(name = "race")
     private Race race;
     /**
-     * Name
+     * Name.
      */
     private String name;
     /**
@@ -54,22 +54,22 @@ public class PlayerCharacter implements GameCharacter {
     private Long zone;
 
     /**
-     * Default constructor
+     * Default constructor.
      */
     public PlayerCharacter() {
     }
 
     /**
-     * Creation constructor
-     * @param account 
-     * @param name
-     * @param race
+     * Creation constructor.
+     * @param a Account 
+     * @param n Name
+     * @param r Race
      */
-    public PlayerCharacter(final Account account,
-            final String name, final Race race) {
-        this.account = account;
-        this.name = name;
-        this.race = race;
+    public PlayerCharacter(final Account a,
+            final String n, final Race r) {
+        this.account = a;
+        this.name = n;
+        this.race = r;
     }
 
     /**

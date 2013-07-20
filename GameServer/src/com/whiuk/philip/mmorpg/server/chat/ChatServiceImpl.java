@@ -113,7 +113,7 @@ public class ChatServiceImpl implements ChatService {
             channels.get(0).registerAccount(account);
         }
         //TODO: User channel join settings
-        for(Entry<Integer, ChatChannel> e : channels.entrySet()) {
+        for (Entry<Integer, ChatChannel> e : channels.entrySet()) {
             if (e.getValue().hasAccountRegistered(account)) {
                 e.getValue().join(account);
             }

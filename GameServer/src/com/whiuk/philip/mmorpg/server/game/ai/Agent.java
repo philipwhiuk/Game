@@ -49,7 +49,7 @@ public abstract class Agent {
      */
     private static final Logger LOGGER = Logger.getLogger(Agent.class);
     /**
-     * Unique identifier
+     * Unique identifier.
      */
     private int id;
     /**
@@ -65,27 +65,27 @@ public abstract class Agent {
      */
     private Set<Goal> goals;
     /**
-     * 
+     * Beliefs.
      */
     private Set<Belief> beliefs;
     /**
-     * 
+     * Commitments.
      */
     private Set<Commitment> commitments;
     /**
-     * 
+     * Capabilities.
      */
     private Set<Capability> capabilities;
     /**
-     * 
+     * Choies.
      */
     private Set<Choice> choices;
     /**
-     * 
+     * Container.
      */
     private AgentContainer container;
     /**
-     * @param e new environment
+     * @param i ID
      */
     public final void setID(final int i) {
         id = i;
@@ -140,7 +140,7 @@ public abstract class Agent {
     }
     /**
      * Deal with an inbound message.
-     * @param m
+     * @param m message
      */
     private void process(final AgentMessage m) {
         //TODO
@@ -163,7 +163,7 @@ public abstract class Agent {
     }
     /**
      * Checks whether the action can be done.
-     * @param firstAction
+     * @param action Action
      * @return <code>true</code> if it can be done.
      */
     final boolean canPerform(final AgentAction action) {
@@ -200,7 +200,7 @@ public abstract class Agent {
     }
     /**
      * Generate actions that solve a particular goal.
-     * @param g
+     * @param g goal to satisfy
      * @return queue of actions
      */
     private Queue<AgentAction> solve(final Goal g) {
@@ -221,7 +221,7 @@ public abstract class Agent {
     }
     /**
      * Generate actions that achieve a set of requirements.
-     * @param g
+     * @param targets Target requirements
      * @return ordered list of actions to meet requirements
      */
     private Queue<AgentAction> determineActionsForRequirements(

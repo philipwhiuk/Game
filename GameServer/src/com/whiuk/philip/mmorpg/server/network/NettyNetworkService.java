@@ -35,8 +35,8 @@ public class NettyNetworkService implements NetworkService {
     @Autowired
     private NettyNetworkServiceHandler handler;
     /**
-    * Game Server
-    */
+     * Game Server.
+     */
    @Autowired
    private GameServer gameServer;
 
@@ -74,7 +74,7 @@ public class NettyNetworkService implements NetworkService {
                 p.addLast("handler", handler);
             }
         });
-        bootstrap.option(ChannelOption.TCP_NODELAY,true);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
         bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
         channel = bootstrap.bind(
                 new InetSocketAddress(

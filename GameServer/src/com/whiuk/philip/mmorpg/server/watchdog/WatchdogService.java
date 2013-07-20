@@ -7,7 +7,7 @@ import com.whiuk.philip.util.watchdog.Watchable;
  */
 public interface WatchdogService {
     /**
-     * @param watched
+     * @param watched The object to monitor
      */
     void monitor(Watchable watched);
 

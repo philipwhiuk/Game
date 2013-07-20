@@ -50,12 +50,11 @@ public final class Main {
     private static ClassPathXmlApplicationContext context;
 
     /**
-     * @param args
+     * @param args Command line arguments.
      * @throws IOException
      *             IO exception reading property file
      */
     public static void main(final String[] args) throws IOException {
-        // TODO: Initialize logging properly
         PropertyConfigurator.configure("log4j.properties");
         CommandLineParser parser = new BasicParser();
         Options options = new Options();
@@ -92,7 +91,7 @@ public final class Main {
 
     /**
      * 
-     * @param status
+     * @param status Status code (0 indicates success)
      */
     public static void exit(final int status) {
         context.close();

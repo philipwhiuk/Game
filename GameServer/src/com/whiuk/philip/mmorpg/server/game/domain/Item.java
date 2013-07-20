@@ -10,8 +10,8 @@ public class Item {
 
     /**
      * 
-     * @param i2
-     * @return
+     * @param i2 Item
+     * @return action
      */
     public final Action getAction(final Item i2) {
         // TODO Auto-generated method stub
@@ -19,11 +19,10 @@ public class Item {
     }
 
     /**
-     * 
-     * @param i2
-     * @return
+     * @param item Item
+     * @return <code>true</code> if this can be used on the given item.
      */
-    public final boolean canUseOn(final Item i2) {
+    public final boolean canUseOn(final Item item) {
         // TODO Auto-generated method stub
         return false;
     }

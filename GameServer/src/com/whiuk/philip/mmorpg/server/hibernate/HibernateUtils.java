@@ -49,7 +49,7 @@ public final class HibernateUtils {
     }
 
     /**
-     * @return
+     * @return Session
      */
     public static Session beginTransaction() {
         Session hibernateSession = HibernateUtils.getSession();
@@ -79,7 +79,7 @@ public final class HibernateUtils {
     }
 
     /**
-     * @return
+     * @return session
      */
     public static Session getSession() {
         Session hibernateSession = SESSION_FACTORY.getCurrentSession();

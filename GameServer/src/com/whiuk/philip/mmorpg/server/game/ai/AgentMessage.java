@@ -38,32 +38,31 @@ public interface AgentMessage {
     }
     /**
      * 
-     * @param a
+     * @param a Agent
      */
     void setSource(Agent a);
     /**
      * 
-     * @return
+     * @return Agent
      */
     Agent getSource();
     /**
      * 
-     * @param a
+     * @param a Agent
      */
     void setDestination(Agent a);
     /**
      * 
-     * @return
+     * @return Agent
      */
     Agent getDestination();
     /**
      * 
-     * @param m
+     * @param m message
      */
     void setMessage(byte[] m);
     /**
-     * 
-     * @return
+     * @return message
      */
     byte[] getMessage();
     /**

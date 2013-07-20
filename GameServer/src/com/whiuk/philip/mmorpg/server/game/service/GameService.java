@@ -14,7 +14,7 @@ public interface GameService extends AuthEventListener {
      * Process game message from an account.
      * 
      * @param account Account
-     * @param data
+     * @param data Game data
      */
     void processMessage(final Account account, final GameData data);
 

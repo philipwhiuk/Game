@@ -11,9 +11,9 @@ public interface EmailService {
 
     /**
      * 
-     * @param account
+     * @param a account
      * @throws InvalidEmailException 
      */
-    void sendRegistrationEmail(Account account) throws InvalidEmailException;
+    void sendRegistrationEmail(Account a) throws InvalidEmailException;
 
 }

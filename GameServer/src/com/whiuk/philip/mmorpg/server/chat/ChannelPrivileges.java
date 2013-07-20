@@ -6,6 +6,34 @@ package com.whiuk.philip.mmorpg.server.chat;
  */
 public class ChannelPrivileges {
     /**
+     * Read.
+     */
+    private static final int READ = 0;
+    /**
+     * Write.
+     */
+    private static final int WRITE = 1;
+    /**
+     * Talk.
+     */
+    private static final int TALK = 2;
+    /**
+     * Mute.
+     */
+    private static final int MUTE = 3;
+    /**
+     * Stop write.
+     */
+    private static final int STOP_WRITE = 4;
+    /**
+     * Kick.
+     */
+    private static final int KICK = 5;
+    /**
+     * Ban.
+     */
+    private static final int BAN = 6;
+    /**
      *
      */
     private boolean readPrivilege;
@@ -42,8 +70,8 @@ public class ChannelPrivileges {
     }
 
     /**
-     * Construct from mask
-     * @param privileges
+     * Construct from mask.
+     * @param mask Privileges mask - an array of length 7.
      */
     public ChannelPrivileges(final boolean[] mask) {
         this();
@@ -51,17 +79,17 @@ public class ChannelPrivileges {
     }
 
     /**
-     * Copy constructor
-     * @param privileges
+     * Copy constructor.
+     * @param p privileges
      */
-    public ChannelPrivileges(final ChannelPrivileges privileges) {
+    public ChannelPrivileges(final ChannelPrivileges p) {
         this();
-        this.setPrivilegeMask(privileges.getPrivilegeMask());
+        this.setPrivilegeMask(p.getPrivilegeMask());
     }
 
     /**
      * Get privilege mask.
-     * @return
+     * @return An array of length 7.
      */
     public final boolean[] getPrivilegeMask() {
         return new boolean[]{
@@ -74,29 +102,28 @@ public class ChannelPrivileges {
     
     /**
      * Set privileges using mask.
-     * @param newPrivileges
+     * @param newPrivileges New privileges - an array of length 7.
      */
     public final void setPrivilegeMask(final boolean[] newPrivileges) {
-        readPrivilege = newPrivileges[0];
-        writePrivilege = newPrivileges[1];
-        talkPrivilege = newPrivileges[2];
-        mutePrivelege = newPrivileges[3];
-        stopWritePrivelege = newPrivileges[4];
-        kickPrivilege = newPrivileges[5];
-        banPrivilege = newPrivileges[6];
+        readPrivilege = newPrivileges[READ];
+        writePrivilege = newPrivileges[WRITE];
+        talkPrivilege = newPrivileges[TALK];
+        mutePrivelege = newPrivileges[MUTE];
+        stopWritePrivelege = newPrivileges[STOP_WRITE];
+        kickPrivilege = newPrivileges[KICK];
+        banPrivilege = newPrivileges[BAN];
     }
 
     /**
      * 
-     * @return
+     * @return <code>true</code> if the user has this privilege
      */
     public boolean getReadPrivilege() {
         return readPrivilege;
     }
 
     /**
-     * 
-     * @return
+     * @return <code>true</code> if the user has this privilege
      */
     public boolean getWritePrivilege() {
         return readPrivilege;

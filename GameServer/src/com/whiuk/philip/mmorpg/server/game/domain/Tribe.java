@@ -29,8 +29,7 @@ public class Tribe extends Agent implements GameCharacterGroup {
     private Set<GameCharacter> members;
 
     /**
-     * 
-     * @param c
+     * @param c Character
      */
     final void assignPosition(final Character c) {
         gameService.getRandom().nextInt();

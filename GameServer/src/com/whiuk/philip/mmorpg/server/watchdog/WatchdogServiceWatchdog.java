@@ -46,7 +46,7 @@ public class WatchdogServiceWatchdog implements Watchdog {
     private Watchable watchedObject;
 
     /**
-     * @param watched
+     * @param watched The object to monitor
      */
     public WatchdogServiceWatchdog(final Watchable watched) {
         this.watchedObject = watched;

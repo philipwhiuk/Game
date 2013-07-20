@@ -9,10 +9,10 @@ public class Requirement {
 
     /**
      * 
-     * @param agent
-     * @return
+     * @param a agent
+     * @return <code>true</code> if satisified.
      */
-    public boolean satisifiedBy(Agent agent) {
+    public boolean satisifiedBy(Agent a) {
         // TODO Auto-generated method stub
         return false;
     }

@@ -17,26 +17,26 @@ public interface SystemService {
     void processMessage(ClientInfo client, SystemData data);
 
     /**
-     * @param src
+     * @param src Source
      */
     void processLostConnection(ClientInfo src);
 
     /**
-     * @param clientInfo
-     * @return
+     * @param clientInfo Client Info
+     * @return Connection
      */
     Connection getConnection(ClientInfo clientInfo);
 
     /**
-     * @param connection
-     * @return
+     * @param connection Connection
+     * @return Client Info
      * @throws InvalidMappingException Exception
      */
     ClientInfo getClientInfo(Connection connection)
             throws InvalidMappingException;
 
     /**
-     * @param clientInfo
+     * @param clientInfo Client Info
      */
     void handleClientDisconnected(ClientInfo clientInfo);
 

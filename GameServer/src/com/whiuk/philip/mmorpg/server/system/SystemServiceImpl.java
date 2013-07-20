@@ -70,7 +70,7 @@ public class SystemServiceImpl implements SystemService {
     }
 
     /**
-     * @param clientInfo
+     * @param clientInfo Client Info
      */
     private void handleConnectionMessage(final ClientInfo clientInfo) {
         // If the connection exists
@@ -116,7 +116,7 @@ public class SystemServiceImpl implements SystemService {
     }
 
     /**
-     *
+     * @param con Connection
      */
     public final void connect(final Connection con) {
         con.setActive(true);
@@ -124,7 +124,7 @@ public class SystemServiceImpl implements SystemService {
     }
 
     /**
-     *
+     * @param con Connection
      */
     public final void disconnect(final Connection con) {
         con.setActive(false);

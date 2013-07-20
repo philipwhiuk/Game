@@ -9,57 +9,57 @@ package com.whiuk.philip.mmorpg.server.game.events;
 public interface VisualEventListenerSensor extends EventListenerSensor {
     /**
      * 
-     * @param c
+     * @param c Character event
      */
     void characterArrived(GameCharacterEvent c);
     /**
      * 
-     * @param c
+     * @param c Character event
      */
     void characterLeft(GameCharacterEvent c);
     /**
      * 
-     * @param c
+     * @param c Character event
      */
     void characterMoved(GameCharacterEvent c);
     /**
      * 
-     * @param c
+     * @param i Event
      */
     void itemSpawned(ItemEvent i);
     /**
      * 
-     * @param c
+     * @param i Event
      */
     void itemConsumed(ItemEvent i);
     /**
      * 
-     * @param c
+     * @param r Event
      */
     void resourceSpawned(ResourceEvent r);
     /**
      * 
-     * @param c
+     * @param r Event
      */
     void resourceConsumed(ResourceEvent r);
     /**
      * 
-     * @param t
+     * @param t Event
      */
     void tileModified(TileEvent t);
     /**
      * 
-     * @param t
+     * @param t Event
      */
     void buildingCreated(BuildingEvent t);
     /**
      * 
-     * @param t
+     * @param t Event
      */
     void buildingModified(BuildingEvent t);
     /**
      * 
-     * @param t
+     * @param t Event
      */
     void buildingDestroyed(BuildingEvent t);
 }

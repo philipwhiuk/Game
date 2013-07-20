@@ -164,7 +164,7 @@ public class GameServiceImpl implements GameService {
     /**
      * Handle character creation messages.
      * @param account Account
-     * @param data
+     * @param data Game data
      */
     private void characterCreation(Account account, GameData data) {
         LOGGER.info("Character creation");
@@ -224,20 +224,20 @@ public class GameServiceImpl implements GameService {
         }
     }
     /**
-     * @param account
-     * @param name
-     * @param race
+     * @param a account
+     * @param n name
+     * @param r race
      */
     private void createCharacter(
-            final Account account, final String name, final Race race) {
+            final Account a, final String n, final Race r) {
         LOGGER.info("Creating character");
         HibernateUtils.beginTransaction();
-        PlayerCharacter c = new PlayerCharacter(account, name, race);
+        PlayerCharacter c = new PlayerCharacter(a, n, r);
         playerCharacterDAO.save(c);
         HibernateUtils.commitTransaction();
         ServerMessage message = ServerMessage
         .newBuilder()
-        .setClientInfo(authService.getConnection(account)
+        .setClientInfo(authService.getConnection(a)
                 .getClientInfo())
         .setType(ServerMessage.Type.GAME)
         .setGameData(
@@ -249,7 +249,7 @@ public class GameServiceImpl implements GameService {
                     .setId(c.getId().intValue())
                     .setName(c.getName())
                     .setLocation("Home") //TODO: Get location
-                    .setRace(race.getName()))
+                    .setRace(r.getName()))
                     .build())
         .build();
         messageHandlerService.queueOutboundMessage(message);
@@ -258,7 +258,7 @@ public class GameServiceImpl implements GameService {
     /**
      * Handle character selection messages.
      * @param account Account
-     * @param data
+     * @param data Game data
      */
     private void characterSelected(
             final Account account, final ClientMessage.GameData data) {
@@ -284,6 +284,7 @@ public class GameServiceImpl implements GameService {
     /**
      * Load selected character.
      * @param account Account
+     * @param data Game data
      */
     private void loadCharacter(final Account account, ClientMessage.GameData data) {
         HibernateUtils.beginTransaction();
@@ -348,12 +349,12 @@ public class GameServiceImpl implements GameService {
     }
 
     /**
-     * @param account
+     * @param a account
      */
-    private void handleExit(final Account account) {
-        if (characters.containsKey(account)) {
-            charController.handleExit(characters.get(account));
-            accounts.remove(characters.remove(account));
+    private void handleExit(final Account a) {
+        if (characters.containsKey(a)) {
+            charController.handleExit(characters.get(a));
+            accounts.remove(characters.remove(a));
         }
     }
 
@@ -370,7 +371,7 @@ public class GameServiceImpl implements GameService {
     /**
      * Handle client game update.
      * @param account Account
-     * @param data
+     * @param data Game data
      */
     private void update(final Account account, final ClientMessage.GameData data) {
         switch (data.getType()) {
@@ -397,8 +398,8 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Handles character combat messages.
-     * @param character
-     * @param combatInformation
+     * @param character Character
+     * @param combatInformation Combat Information
      */
     private void combat(final PlayerCharacter character,
             final ClientMessage.GameData.CombatInformation combatInformation) {
@@ -408,11 +409,12 @@ public class GameServiceImpl implements GameService {
 
     /**
      * Handles character movement messages.
-     * @param character
-     * @param movementInformation
+     * @param character Character
+     * @param movementInformation Movement Information
      */
     private void move(final PlayerCharacter character,
-            final ClientMessage.GameData.MovementInformation movementInformation) {
+            final ClientMessage.GameData.MovementInformation
+                movementInformation) {
         // TODO Auto-generated method stub
 
     }

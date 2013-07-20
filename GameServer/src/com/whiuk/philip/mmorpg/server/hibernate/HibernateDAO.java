@@ -15,7 +15,7 @@ public abstract class HibernateDAO<T, ID extends Serializable> implements
         GenericDAO<T, ID> {
 
     /**
-     * @return
+     * @return session
      */
     protected final Session getSession() {
         return HibernateUtils.getSession();

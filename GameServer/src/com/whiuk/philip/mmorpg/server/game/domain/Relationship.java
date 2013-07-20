@@ -19,11 +19,11 @@ public class Relationship {
      */
     private State state;
     /**
-     * Party 1
+     * Party 1.
      */
     private RelatableEntity p1;
     /**
-     * Party 2
+     * Party 2.
      */
     private RelatableEntity p2;
 }

@@ -11,17 +11,17 @@ public interface Watchdog extends Runnable {
     void restartThread();
 
     /**
-     * @return
+     * @return number of milliseconds since last pat.
      */
     long lastPat();
 
     /**
-     * @return
+     * @return thread
      */
     Thread getThread();
 
     /**
-     * @return
+     * @return warning time
      */
     long getWarningTime();
 
