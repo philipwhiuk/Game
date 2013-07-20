@@ -7,3 +7,4 @@
 bin/
 GameShared/src-gen/com/whiuk/philip/mmorpg/shared/Messages.java
 GameServer/src-gen/com/whiuk/philip/mmorpg/server/game/ai/Messages.java
+target/
