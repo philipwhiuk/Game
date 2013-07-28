@@ -1,11 +1,14 @@
 package com.whiuk.philip.mmorpg.client;
 
+import org.apache.log4j.Logger;
 import org.apache.log4j.PropertyConfigurator;
 
 /**
  * @author Philip
  */
 public final class Main {
+    private static final Logger LOGGER = Logger.getLogger(Main.class);
+
     /**
      * Utility class.
      */
@@ -17,12 +20,17 @@ public final class Main {
      *            Command line arguments
      */
     public static void main(final String[] args) {
+        try {
         fixJavaLogging();
         // Setup Log4J logging
         PropertyConfigurator.configure("log4j.properties");
         GameClient client = new GameClient();
         GameClient.setGameClient(client);
         client.run();
+        } catch (RuntimeException re) {
+            LOGGER.fatal("Fatal runtime error", re);
+            System.exit(1);
+        }
     }
 
     /**
