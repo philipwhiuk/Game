@@ -858,7 +858,7 @@ class GameClient implements Runnable {
                 }
                 break;
             case LOGIN_SUCCESSFUL:
-                switchToLobbyScreen();
+                handleSuccessfulLogin(data);
                 break;
             default:
                 LOGGER.info("Auth message type " + data.getType()
