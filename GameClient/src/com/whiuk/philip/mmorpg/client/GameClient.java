@@ -919,7 +919,7 @@ class GameClient implements Runnable {
      * Switch from the previous screen to the lobby screen.
      * Must be run on the OpenGL context thread.
      */
-    private void switchToLobbyScreen() {
+    final void switchToLobbyScreen() {
         lobbyScreen = new LobbyScreen(this, account);
         nifty.registerScreenController(lobbyScreen);
         nifty.fromXml("lobbyScreen.xml", "lobby");
@@ -928,7 +928,7 @@ class GameClient implements Runnable {
      * Switch from the previous screen to the login screen.
      * Must be run on the OpenGL context thread.
      */
-    private void switchToLoginScreen() {
+    final void switchToLoginScreen() {
         loginScreen = new LoginScreen(this);
         nifty.registerScreenController(loginScreen);
         nifty.fromXml("loginScreen.xml", "start");

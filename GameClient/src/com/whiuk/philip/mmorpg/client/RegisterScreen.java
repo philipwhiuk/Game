@@ -14,7 +14,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Start screen.
  * @author Philip Whitehouse
  */
-class RegisterScreen implements ScreenController {
+public class RegisterScreen implements ScreenController {
     /**
      *
      */
@@ -199,5 +199,12 @@ class RegisterScreen implements ScreenController {
     final void registrationFailed(final String reason) {
         registrationFailures++;
         setMessage(reason);
+    }
+
+    /**
+     *
+     */
+    public final void login() {
+        gameClient.switchToLoginScreen();
     }
 }
