@@ -2,6 +2,8 @@ package com.whiuk.philip.mmorpg.client;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.GameClient.State;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -58,6 +60,7 @@ public class LoginScreen implements ScreenController {
         this.nifty = newNifty;
         textInputUsername = screen.findElementByName("text_input_username");
         textInputPassword = screen.findElementByName("text_input_password");
+        gameClient.setState(State.LOGIN);
     }
 
     @Override

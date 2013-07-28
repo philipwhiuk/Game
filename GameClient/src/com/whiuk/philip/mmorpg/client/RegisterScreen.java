@@ -2,6 +2,8 @@ package com.whiuk.philip.mmorpg.client;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.GameClient.State;
+
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
@@ -74,6 +76,7 @@ public class RegisterScreen implements ScreenController {
         textInputPasswordConfirm = screen
                 .findElementByName("text_input_password_confirm");
         textInputEmail = screen.findElementByName("text_input_email");
+        gameClient.setState(State.REGISTER);
     }
 
     @Override
