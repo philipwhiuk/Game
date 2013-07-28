@@ -25,7 +25,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Lobby screen.
  * @author Philip Whitehouse
  */
-class LobbyScreen 
+public class LobbyScreen
     implements ScreenController, ChatInterface, GameInterface {
     /**
      * Class logger.
@@ -218,7 +218,7 @@ class LobbyScreen
     /**
      * Play with the selected character.
      */
-    final void play() {
+    public final void play() {
         Object selection = characterListElement
                 .getNiftyControl(DropDown.class).getSelection();
         if (selection != null) {
@@ -238,7 +238,7 @@ class LobbyScreen
     /**
      * Create a character.
      */
-    final void createCharacter() {
+    public final void createCharacter() {
         Object selection = raceListElement
                 .getNiftyControl(DropDown.class).getSelection();
         String race = ((Race) selection).name();

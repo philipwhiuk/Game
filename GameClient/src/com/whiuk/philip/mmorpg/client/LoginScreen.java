@@ -14,7 +14,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Login screen.
  * @author Philip Whitehouse
  */
-class LoginScreen implements ScreenController {
+public class LoginScreen implements ScreenController {
     /**
      * Nifty.
      */
@@ -104,7 +104,7 @@ class LoginScreen implements ScreenController {
     /**
      * Sends a login request.
      */
-    final void sendLoginRequest() {
+    public final void sendLoginRequest() {
         if (textInputUsername.getNiftyControl(TextField.class).getRealText()
                 .isEmpty()) {
             setMessage("Please enter your username");
@@ -142,7 +142,7 @@ class LoginScreen implements ScreenController {
     /**
      *
      */
-    final void register() {
+    public final void register() {
         gameClient.switchToRegisterScreen();
     }
 
