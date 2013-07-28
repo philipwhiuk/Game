@@ -46,6 +46,7 @@ import org.lwjgl.util.glu.GLU;
 import com.google.protobuf.ByteString;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation;
 
@@ -1012,6 +1013,46 @@ class GameClient implements Runnable {
             default:
                 throw new IllegalStateException(
                         "Unhandled disconnection in state: " + state);
+        }
+    }
+    /**
+     * Handle logout.
+     */
+    public void handleLogout() {
+        switch(state) {
+            case LOGIN:
+                 break;
+            case REGISTER:
+                break;
+            case LOBBY:
+                //Fallthrough:
+            case GAME:
+                GameClientUtils.sendAuthData(AuthData.newBuilder()
+                        .setType(AuthData.AccountDataType.LOGOUT).build());
+                NiftyQueuedEvent switchToLogin = new NiftyQueuedEvent() {
+                    @Override
+                    public void run() {
+                        switchToLoginScreen();
+                        GameClient.this.account = null;
+                        GameClient.this.character = null;
+                    }
+
+                    @Override
+                    public boolean canRun() {
+                        return (state.equals(State.LOBBY)
+                                || state.equals(State.GAME));
+                    }
+                };
+                try {
+                    queuedNiftyEvents.put(switchToLogin);
+                } catch (InterruptedException e) {
+                    LOGGER.error(
+                        "Interrupted while waiting to queue switch to login");
+                }
+                break;
+            default:
+                throw new IllegalStateException(
+                        "Unhandled logout in state: " + state);
         }
     }
 }
