@@ -45,9 +45,14 @@ public class AuthServiceImpl implements AuthService {
     private static final String BAD_CONNECTION_LOGIN_MESSAGE =
             "Attempting to login from a connection that doesn't exist";
     /**
-     * Error message when invalid logout occurs.
+     * Error message when logout from unknown connection occurs.
      */
     private static final String BAD_CONNECTION_LOGOUT_MESSAGE =
+            "Attempting to logout a connection that doesn't exist";
+    /**
+     * Error message when trying to logout without an existing login.
+     */
+    private static final String LOGOUT_WITHOUT_LOGIN_MESSAGE =
             "Attempting to logout a connection that doesn't exist";
     /**
      * Error message when invalid / unknown
@@ -173,9 +178,10 @@ public class AuthServiceImpl implements AuthService {
                 con = systemService.getConnection(src);
                 if (systemService.getConnection(src) == null) {
                     logger.log(Level.INFO, BAD_CONNECTION_LOGOUT_MESSAGE);
+                } else if (connections.containsKey(con)) {
+                    performLogout(connections.get(con));
                 } else {
-                    // Remove the c->a and a->c mapping
-                    accounts.remove(connections.remove(con));
+                    LOGGER.log(Level.INFO, LOGOUT_WITHOUT_LOGIN_MESSAGE);
                 }
                 break;
             case REGISTER:
@@ -467,6 +473,8 @@ public class AuthServiceImpl implements AuthService {
      * @param a account
      */
     private void performLogout(final Account a) {
+        LOGGER.trace("Logging out account");
+        // Remove the c->a and a->c mapping
         connections.remove(accounts.remove(a));
         for (AuthEventListener l : authEventListeners) {
             l.notifyLogout(a);
