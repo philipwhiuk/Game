@@ -1,5 +1,7 @@
 package com.whiuk.philip.mmorpg.client;
 
+import models.Model;
+
 import org.lwjgl.input.Keyboard;
 
 import com.whiuk.philip.mmorpg.client.GameSettings.Control;
@@ -19,6 +21,22 @@ class PlayerCharacter {
      * Whether or not the player is moving.
      */
     private boolean moving = false;
+    /**
+     * 
+     */
+    private Model model;
+    /**
+     * 
+     */
+    private float x;
+    /**
+     * 
+     */
+    private float y;
+    /**
+     * 
+     */
+    private float z;
 
     /**
      * Initial data constructor.
@@ -30,6 +48,7 @@ class PlayerCharacter {
     PlayerCharacter(final int id, final String name,
             final String race, final String location) {
         // TODO Auto-generated constructor stub
+        model = Model.fromFile("player.mdl");
     }
     /**
      * @return the direction
@@ -47,7 +66,11 @@ class PlayerCharacter {
      * Render player character.
      */
     void render() {
-        // TODO Auto-generated method stub
+        org.lwjgl.opengl.GL11.glPushMatrix();
+        org.lwjgl.opengl.GL11.glTranslatef(x, y, z);
+//TODO: org.lwjgl.opengl.GL11.glRotatef(direction);
+        model.render();
+        org.lwjgl.opengl.GL11.glPopMatrix();
     }
     /**
      * Handle movement.
