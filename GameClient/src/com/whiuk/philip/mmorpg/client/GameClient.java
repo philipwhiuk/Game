@@ -184,7 +184,8 @@ class GameClient implements Runnable {
     /**
      * Remote InetSocketAddress.
      */
-    private static final InetSocketAddress REMOTE_ADDRESS = new InetSocketAddress(HOST, PORT);
+    private static final InetSocketAddress REMOTE_ADDRESS =
+            new InetSocketAddress(HOST, PORT);
     /**
      * Class logger.
      */
@@ -594,6 +595,7 @@ class GameClient implements Runnable {
      * @param message Message
      */
     final void sendOutboundMessage(final ClientMessage message) {
+        LOGGER.trace("Sending message");
         if (channel != null) {
             channel.writeAndFlush(message);
         }

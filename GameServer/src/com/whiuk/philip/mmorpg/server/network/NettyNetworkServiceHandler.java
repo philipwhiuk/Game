@@ -25,7 +25,7 @@ import com.whiuk.philip.mmorpg.server.system.SystemService;
  * @author Philip Whitehouse
  */
 @Service
-public class NettyNetworkServiceHandler 
+public class NettyNetworkServiceHandler
     extends SimpleChannelInboundHandler<ClientMessage> {
 
     /**
@@ -83,8 +83,8 @@ public class NettyNetworkServiceHandler
         if (!clients.containsKey(ctx.channel())) {
             String address = ((InetSocketAddress) ctx.channel()
                     .remoteAddress()).getAddress().toString();
-            LOGGER.info("Address recieved from: " + address);
-
+            LOGGER.trace("Address recieved from: " + address);
+            LOGGER.trace("Message recieved from " + ctx.channel());
             ClientInfo clientInfo = message.getClientInfo().toBuilder()
                     .setRemoteIPAddress(address).build();
             clients.put(ctx.channel(), clientInfo);
@@ -92,7 +92,6 @@ public class NettyNetworkServiceHandler
             LOGGER.trace("Added client " + clientInfo + " on channel "
                     + ctx.channel());
         }
-        LOGGER.trace("Message recieved from " + ctx.channel());
         ClientMessage processedMessage = message.toBuilder()
                 .setClientInfo(clients.get(ctx.channel())).build();
         messageHandler.queueInboundMessage(processedMessage);
@@ -131,7 +130,8 @@ public class NettyNetworkServiceHandler
      * @param m message
      */
     public final void writeMessage(final ServerMessage m) {
-        channels.get(m.getClientInfo()).write(m);
+        LOGGER.trace("Writing message to client");
+        channels.get(m.getClientInfo()).writeAndFlush(m);
     }
 
     /**

@@ -129,9 +129,10 @@ class ClientChannelHandler
                         .newBuilder()
                         .setType(
                                 ClientMessage.SystemData.Type.CONNECTED)
-                        .build()).build());
+                        .build()).build()).awaitUninterruptibly();
         client.setClientInfo(clientInfo);
         client.setChannel(ctx.channel());
+        LOGGER.trace("Wrote connected message");
     }
 
     @Override

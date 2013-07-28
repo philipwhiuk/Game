@@ -5,14 +5,17 @@ import java.util.concurrent.Executors;
 
 import javax.annotation.PostConstruct;
 
+import io.netty.bootstrap.ChannelFactory;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOption;
 import io.netty.channel.ChannelPipeline;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.ServerChannel;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.protobuf.ProtobufDecoder;
 import io.netty.handler.codec.protobuf.ProtobufEncoder;
 import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
@@ -22,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.mmorpg.server.GameServer;
+import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
 /**
@@ -59,15 +63,16 @@ public class NettyNetworkService implements NetworkService {
     public final void init() {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.channel(NioServerSocketChannel.class);
         bootstrap.group(workerGroup);
-        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+        bootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
             @Override
             public void initChannel(final SocketChannel ch) throws Exception {
                 ChannelPipeline p = ch.pipeline();
                 p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
                 p.addLast("protobufDecoder",
                         new ProtobufDecoder(
-                                ServerMessage.getDefaultInstance()));
+                                ClientMessage.getDefaultInstance()));
                 p.addLast("frameEncoder",
                         new ProtobufVarint32LengthFieldPrepender());
                 p.addLast("protobufEncoder", new ProtobufEncoder());
