@@ -224,7 +224,7 @@ public class LobbyScreen
         if (selection != null) {
             String name = ((LobbyCharacterData) selection).getName();
             int id = ((LobbyCharacterData) selection).getId();
-            LOGGER.info("Player character selected: " + name);
+            LOGGER.trace("Player character selected: " + name);
             GameClientUtils.sendGameData(ClientMessage.GameData.newBuilder()
                     .setType(ClientMessage.GameData.Type.CHARACTER_SELECTED)
                     .setCharacterInformation(
