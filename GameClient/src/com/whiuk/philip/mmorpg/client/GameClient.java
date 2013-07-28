@@ -976,4 +976,42 @@ class GameClient implements Runnable {
     final void setState(final State newState) {
         state = newState;
     }
+    /**
+     * Handle disconnection from server.
+     */
+    void handleDisconnection() {
+        switch(state) {
+            case LOGIN:
+                 break;
+            case REGISTER:
+                break;
+            case LOBBY:
+                //Fallthrough:
+            case GAME:
+                NiftyQueuedEvent switchToLogin = new NiftyQueuedEvent() {
+                    @Override
+                    public void run() {
+                        switchToLoginScreen();
+                        GameClient.this.account = null;
+                        GameClient.this.character = null;
+                    }
+
+                    @Override
+                    public boolean canRun() {
+                        return (state.equals(State.LOBBY)
+                                || state.equals(State.GAME));
+                    }
+                };
+                try {
+                    queuedNiftyEvents.put(switchToLogin);
+                } catch (InterruptedException e) {
+                    LOGGER.error(
+                        "Interrupted while waiting to queue switch to login");
+                }
+                break;
+            default:
+                throw new IllegalStateException(
+                        "Unhandled disconnection in state: " + state);
+        }
+    }
 }

@@ -152,6 +152,7 @@ class ClientChannelHandler
 
     @Override
     public final void channelInactive(final ChannelHandlerContext ctx) {
+        client.handleDisconnection();
         if (reconnect) {
             LOGGER.info(format("Channel inactive, sleeping for: "
                     + GameClient.RECONNECT_DELAY + 's'));
