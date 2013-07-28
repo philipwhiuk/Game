@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.log4j.Logger;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ import com.whiuk.philip.mmorpg.server.system.SystemService;
  * 
  * @author Philip Whitehouse
  */
-@Service
+@Service @Sharable
 public class NettyNetworkServiceHandler
     extends SimpleChannelInboundHandler<ClientMessage> {
 
