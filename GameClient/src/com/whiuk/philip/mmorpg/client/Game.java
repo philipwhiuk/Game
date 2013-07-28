@@ -86,6 +86,13 @@ class Game implements GameInterface {
     final void render() {
         // Clear the screen and depth buffer
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+        GL11.glClearDepth(1.0f);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
+                GL11.GL_AMBIENT_AND_DIFFUSE);
         // set the color of the quad (R,G,B,A)
         GL11.glColor3f(QUAD_R, QUAD_G, QUAD_B);
         // draw quad
