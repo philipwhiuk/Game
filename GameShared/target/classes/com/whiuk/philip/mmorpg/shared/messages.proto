@@ -30,8 +30,8 @@ message ClientMessage {
 
 	message AuthData {
 		required AccountDataType type = 1;
-		required string username = 2;
-		required bytes password = 3;
+		optional string username = 2;
+		optional bytes password = 3;
 		optional string email = 4;
 		enum AccountDataType {
 			LOGIN = 1;

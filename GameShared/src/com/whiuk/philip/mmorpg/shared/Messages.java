@@ -1350,28 +1350,28 @@ public final class Messages {
        */
       com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData.AccountDataType getType();
 
-      // required string username = 2;
+      // optional string username = 2;
       /**
-       * <code>required string username = 2;</code>
+       * <code>optional string username = 2;</code>
        */
       boolean hasUsername();
       /**
-       * <code>required string username = 2;</code>
+       * <code>optional string username = 2;</code>
        */
       java.lang.String getUsername();
       /**
-       * <code>required string username = 2;</code>
+       * <code>optional string username = 2;</code>
        */
       com.google.protobuf.ByteString
           getUsernameBytes();
 
-      // required bytes password = 3;
+      // optional bytes password = 3;
       /**
-       * <code>required bytes password = 3;</code>
+       * <code>optional bytes password = 3;</code>
        */
       boolean hasPassword();
       /**
-       * <code>required bytes password = 3;</code>
+       * <code>optional bytes password = 3;</code>
        */
       com.google.protobuf.ByteString getPassword();
 
@@ -1614,17 +1614,17 @@ public final class Messages {
         return type_;
       }
 
-      // required string username = 2;
+      // optional string username = 2;
       public static final int USERNAME_FIELD_NUMBER = 2;
       private java.lang.Object username_;
       /**
-       * <code>required string username = 2;</code>
+       * <code>optional string username = 2;</code>
        */
       public boolean hasUsername() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required string username = 2;</code>
+       * <code>optional string username = 2;</code>
        */
       public java.lang.String getUsername() {
         java.lang.Object ref = username_;
@@ -1641,7 +1641,7 @@ public final class Messages {
         }
       }
       /**
-       * <code>required string username = 2;</code>
+       * <code>optional string username = 2;</code>
        */
       public com.google.protobuf.ByteString
           getUsernameBytes() {
@@ -1657,17 +1657,17 @@ public final class Messages {
         }
       }
 
-      // required bytes password = 3;
+      // optional bytes password = 3;
       public static final int PASSWORD_FIELD_NUMBER = 3;
       private com.google.protobuf.ByteString password_;
       /**
-       * <code>required bytes password = 3;</code>
+       * <code>optional bytes password = 3;</code>
        */
       public boolean hasPassword() {
         return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required bytes password = 3;</code>
+       * <code>optional bytes password = 3;</code>
        */
       public com.google.protobuf.ByteString getPassword() {
         return password_;
@@ -1728,14 +1728,6 @@ public final class Messages {
         if (isInitialized != -1) return isInitialized == 1;
 
         if (!hasType()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        if (!hasUsername()) {
-          memoizedIsInitialized = 0;
-          return false;
-        }
-        if (!hasPassword()) {
           memoizedIsInitialized = 0;
           return false;
         }
@@ -1992,14 +1984,6 @@ public final class Messages {
             
             return false;
           }
-          if (!hasUsername()) {
-            
-            return false;
-          }
-          if (!hasPassword()) {
-            
-            return false;
-          }
           return true;
         }
 
@@ -2058,16 +2042,16 @@ public final class Messages {
           return this;
         }
 
-        // required string username = 2;
+        // optional string username = 2;
         private java.lang.Object username_ = "";
         /**
-         * <code>required string username = 2;</code>
+         * <code>optional string username = 2;</code>
          */
         public boolean hasUsername() {
           return ((bitField0_ & 0x00000002) == 0x00000002);
         }
         /**
-         * <code>required string username = 2;</code>
+         * <code>optional string username = 2;</code>
          */
         public java.lang.String getUsername() {
           java.lang.Object ref = username_;
@@ -2081,7 +2065,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>required string username = 2;</code>
+         * <code>optional string username = 2;</code>
          */
         public com.google.protobuf.ByteString
             getUsernameBytes() {
@@ -2097,7 +2081,7 @@ public final class Messages {
           }
         }
         /**
-         * <code>required string username = 2;</code>
+         * <code>optional string username = 2;</code>
          */
         public Builder setUsername(
             java.lang.String value) {
@@ -2110,7 +2094,7 @@ public final class Messages {
           return this;
         }
         /**
-         * <code>required string username = 2;</code>
+         * <code>optional string username = 2;</code>
          */
         public Builder clearUsername() {
           bitField0_ = (bitField0_ & ~0x00000002);
@@ -2119,7 +2103,7 @@ public final class Messages {
           return this;
         }
         /**
-         * <code>required string username = 2;</code>
+         * <code>optional string username = 2;</code>
          */
         public Builder setUsernameBytes(
             com.google.protobuf.ByteString value) {
@@ -2132,22 +2116,22 @@ public final class Messages {
           return this;
         }
 
-        // required bytes password = 3;
+        // optional bytes password = 3;
         private com.google.protobuf.ByteString password_ = com.google.protobuf.ByteString.EMPTY;
         /**
-         * <code>required bytes password = 3;</code>
+         * <code>optional bytes password = 3;</code>
          */
         public boolean hasPassword() {
           return ((bitField0_ & 0x00000004) == 0x00000004);
         }
         /**
-         * <code>required bytes password = 3;</code>
+         * <code>optional bytes password = 3;</code>
          */
         public com.google.protobuf.ByteString getPassword() {
           return password_;
         }
         /**
-         * <code>required bytes password = 3;</code>
+         * <code>optional bytes password = 3;</code>
          */
         public Builder setPassword(com.google.protobuf.ByteString value) {
           if (value == null) {
@@ -2159,7 +2143,7 @@ public final class Messages {
           return this;
         }
         /**
-         * <code>required bytes password = 3;</code>
+         * <code>optional bytes password = 3;</code>
          */
         public Builder clearPassword() {
           bitField0_ = (bitField0_ & ~0x00000004);
@@ -19165,8 +19149,8 @@ public final class Messages {
       "\027.ClientMessage.ChatData\022)\n\010gameData\030\006 \001",
       "(\0132\027.ClientMessage.GameData\032\254\001\n\010AuthData" +
       "\0225\n\004type\030\001 \002(\0162\'.ClientMessage.AuthData." +
-      "AccountDataType\022\020\n\010username\030\002 \002(\t\022\020\n\010pas" +
-      "sword\030\003 \002(\014\022\r\n\005email\030\004 \001(\t\"6\n\017AccountDat" +
+      "AccountDataType\022\020\n\010username\030\002 \001(\t\022\020\n\010pas" +
+      "sword\030\003 \001(\014\022\r\n\005email\030\004 \001(\t\"6\n\017AccountDat" +
       "aType\022\t\n\005LOGIN\020\001\022\n\n\006LOGOUT\020\002\022\014\n\010REGISTER" +
       "\020\003\032d\n\nSystemData\022,\n\004type\030\001 \002(\0162\036.ClientM" +
       "essage.SystemData.Type\"(\n\004Type\022\r\n\tCONNEC" +
