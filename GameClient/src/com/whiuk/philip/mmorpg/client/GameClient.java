@@ -694,9 +694,19 @@ class GameClient implements Runnable {
         this.character = new PlayerCharacter(
                 characterInfo.getId(), characterInfo.getName(),
                 characterInfo.getRace(), characterInfo.getLocation());
-        this.game = new Game(character);
-        switchToGameScreen();
-        state = State.GAME;
+        queuedNiftyEvents.add(new NiftyQueuedEvent() {
+            @Override
+            public void run() {
+                game = new Game(character);
+                switchToGameScreen();
+                state = State.GAME;
+            }
+
+            @Override
+            public boolean canRun() {
+                return state.equals(State.LOBBY);
+            }
+        });
     }
     /**
      * Handle a chat message from the server.
@@ -748,7 +758,7 @@ class GameClient implements Runnable {
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
-                        handleSuccessfuLogin(data);
+                        handleSuccessfulLogin(data);
                         break;
                     case EXTRA_AUTH_FAILED:
                         loginScreen.handleExtraAuthFailed();
@@ -795,7 +805,7 @@ class GameClient implements Runnable {
      * Handle a succesful login.
      * @param data Authentication data
      */
-    private void handleSuccessfuLogin(final ServerMessage.AuthData data) {
+    private void handleSuccessfulLogin(final ServerMessage.AuthData data) {
         if (!data.hasUsername()) {
             LOGGER.error("Username not provided, failed login");
             loginScreen.loginFailed("Server error occurred");
@@ -836,7 +846,7 @@ class GameClient implements Runnable {
                 break;
             case REGISTRATION_SUCCESSFUL:
                 if (!data.hasUsername()) {
-                    LOGGER.error("Username not provided, failed login");
+                    LOGGER.error("Username not provided, failed registration");
                     registerScreen.registrationFailed("Server error occurred");
                 } else {
                     switchToLoginScreen();
