@@ -252,4 +252,10 @@ public class LobbyScreen
                 .setRace(race).build())
                 .build());
     }
+    /**
+    *
+    */
+   public final void logout() {
+       gameClient.handleLogout();
+   }    
 }
