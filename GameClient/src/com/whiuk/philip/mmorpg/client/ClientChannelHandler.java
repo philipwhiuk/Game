@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.util.Timeout;
@@ -23,6 +24,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  * Client channel handler.
  * @author Philip Whitehouse
  */
+@Sharable
 class ClientChannelHandler
     extends SimpleChannelInboundHandler<ServerMessage> {
 
