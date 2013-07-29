@@ -44,6 +44,10 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
+import com.whiuk.philip.mmorpg.client.screens.GameScreen;
+import com.whiuk.philip.mmorpg.client.screens.LobbyScreen;
+import com.whiuk.philip.mmorpg.client.screens.LoginScreen;
+import com.whiuk.philip.mmorpg.client.screens.RegisterScreen;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
@@ -59,7 +63,7 @@ import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 /**
  * @author Philip Whitehouse
  */
-class GameClient implements Runnable {
+public class GameClient implements Runnable {
     /**
      * Game states.
      * @author Philip Whitehouse
@@ -604,7 +608,7 @@ class GameClient implements Runnable {
     /**
      * @return <code>true</code> if connected to the server
      */
-    final boolean isConnected() {
+    public final boolean isConnected() {
         if (channel != null) {
             return channel.isActive();
         } else {
@@ -614,7 +618,7 @@ class GameClient implements Runnable {
     /**
      * @return <code>true</code> if client info is set
      */
-    final boolean hasClientInfo() {
+    public final boolean hasClientInfo() {
         if (clientInfo != null) {
             return true;
         }
@@ -891,7 +895,7 @@ class GameClient implements Runnable {
      * @param username Username
      * @param password Password (plain)
      */
-    final void attemptLogin(
+    public final void attemptLogin(
             final String username, final String password) {
         byte[] hash;
         try {
@@ -909,7 +913,7 @@ class GameClient implements Runnable {
      * Switch from the previous screen to the account registration screen.
      * Must be run on the OpenGL context thread.
      */
-    final void switchToRegisterScreen() {
+    public final void switchToRegisterScreen() {
         registerScreen = new RegisterScreen(this);
         nifty.registerScreenController(registerScreen);
         nifty.fromXml("registerScreen.xml", "register");
@@ -929,7 +933,7 @@ class GameClient implements Runnable {
      * Switch from the previous screen to the login screen.
      * Must be run on the OpenGL context thread.
      */
-    final void switchToLoginScreen() {
+    public final void switchToLoginScreen() {
         loginScreen = new LoginScreen(this);
         nifty.registerScreenController(loginScreen);
         nifty.fromXml("loginScreen.xml", "start");
@@ -949,7 +953,7 @@ class GameClient implements Runnable {
      * @param password Password (plain)
      * @param email Email
      */
-    final void attemptRegister(final String username,
+    public final void attemptRegister(final String username,
             final String password, final String email) {
         byte[] hash;
         try {
@@ -974,7 +978,7 @@ class GameClient implements Runnable {
      * Change the state of the client.
      * @param newState The new state to move to.
      */
-    final void setState(final State newState) {
+    public final void setState(final State newState) {
         state = newState;
     }
     /**

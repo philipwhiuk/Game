@@ -8,7 +8,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
  * Common game client functions.
  * @author Philip
  */
-final class GameClientUtils {
+public final class GameClientUtils {
     /**
      * Class logger.
      */
@@ -41,7 +41,7 @@ final class GameClientUtils {
      * keep server message handling code from core classes.
      * @param data Chat data to send to server
      */
-    static void sendChatData(final ClientMessage.ChatData data) {
+    public static void sendChatData(final ClientMessage.ChatData data) {
         LOGGER.trace("Sending chat data.");
         GameClient.getGameClient().sendOutboundMessage(ClientMessage
                 .newBuilder()
@@ -56,7 +56,7 @@ final class GameClientUtils {
      * keep server message handling code from core classes.
      * @param data Game data to send to server
      */
-    static void sendGameData(final ClientMessage.GameData data) {
+    public static void sendGameData(final ClientMessage.GameData data) {
         LOGGER.trace("Sending game data.");
         GameClient.getGameClient().sendOutboundMessage(ClientMessage
                 .newBuilder()

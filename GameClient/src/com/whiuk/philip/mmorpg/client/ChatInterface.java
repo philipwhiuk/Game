@@ -7,7 +7,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.ChatData;
  * @author Philip
  *
  */
-interface ChatInterface {
+public interface ChatInterface {
     /**
      * Handle a chat message.
      * @param chatData Chat data

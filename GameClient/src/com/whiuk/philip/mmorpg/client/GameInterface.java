@@ -7,7 +7,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  * @author Philip
  *
  */
-interface GameInterface {
+public interface GameInterface {
     /**
      * Handle a game message.
      * @param gameData Game data

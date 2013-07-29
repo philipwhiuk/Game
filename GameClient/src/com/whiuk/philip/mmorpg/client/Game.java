@@ -9,7 +9,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  * @author Philip
  *
  */
-class Game implements GameInterface {
+public class Game implements GameInterface {
     /**
      * Position.
      */

@@ -1,5 +1,8 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.screens;
 
+import com.whiuk.philip.mmorpg.client.ChatInterface;
+import com.whiuk.philip.mmorpg.client.Game;
+import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.ChatData;
 
 import de.lessvoid.nifty.Nifty;
@@ -13,7 +16,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * In-Game UI.
  * @author Philip
  */
-class GameScreen implements ScreenController, ChatInterface {
+public class GameScreen implements ScreenController, ChatInterface {
     /**
      * Game Client.
      */
@@ -37,7 +40,7 @@ class GameScreen implements ScreenController, ChatInterface {
      * @param c client
      * @param g game
      */
-    GameScreen(final GameClient c, final Game g) {
+    public GameScreen(final GameClient c, final Game g) {
         this.client = c;
         this.game = g;
     }

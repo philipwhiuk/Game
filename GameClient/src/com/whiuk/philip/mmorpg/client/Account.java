@@ -5,7 +5,7 @@ package com.whiuk.philip.mmorpg.client;
  * @author Philip
  *
  */
-class Account {
+public class Account {
     /**
      *
      */

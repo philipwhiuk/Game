@@ -5,7 +5,7 @@
    <useStyles filename="nifty-default-styles.xml" />
    <useControls filename="nifty-default-controls.xml" />
    <!-- Control definition of chat area -->
-   <screen id="lobby" controller="com.whiuk.philip.mmorpg.client.LobbyScreen">
+   <screen id="lobby" controller="com.whiuk.philip.mmorpg.client.screens.LobbyScreen">
       <layer id="layer" backgroundColor="#000f" childLayout="vertical">
        	<panel id="panel-header" height="40" width="100%"
 				align="left" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">

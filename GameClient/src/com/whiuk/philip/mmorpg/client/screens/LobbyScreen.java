@@ -1,10 +1,16 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.screens;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.Account;
+import com.whiuk.philip.mmorpg.client.ChatInterface;
+import com.whiuk.philip.mmorpg.client.GameClient;
+import com.whiuk.philip.mmorpg.client.GameClientUtils;
+import com.whiuk.philip.mmorpg.client.GameInterface;
+import com.whiuk.philip.mmorpg.client.LobbyCharacterData;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 import com.whiuk.philip.mmorpg.client.LobbyCharacterData.Race;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
@@ -104,7 +110,7 @@ public class LobbyScreen
      * @param a
      *            Account
      */
-    LobbyScreen(final GameClient g, final Account a) {
+    public LobbyScreen(final GameClient g, final Account a) {
         this.gameClient = g;
         this.account = a;
         characters = new ArrayList<LobbyCharacterData>();

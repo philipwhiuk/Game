@@ -5,7 +5,7 @@
    <useStyles filename="nifty-default-styles.xml" />
    <useControls filename="nifty-default-controls.xml" />
    <!-- Control definition of chat area -->
-   <screen id="main" controller="com.whiuk.philip.mmorpg.client.GameScreen">
+   <screen id="main" controller="com.whiuk.philip.mmorpg.client.screens.GameScreen">
       <layer id="main" backgroundColor="#0000" childLayout="center">
          <control id="console" name="nifty-console" lines="25" align="center" valign="center"/>
       </layer>

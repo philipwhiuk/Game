@@ -1,7 +1,8 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.screens;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 
 import de.lessvoid.nifty.Nifty;
@@ -51,7 +52,7 @@ public class LoginScreen implements ScreenController {
      * @param g
      *            Game client
      */
-    LoginScreen(final GameClient g) {
+    public LoginScreen(final GameClient g) {
         this.gameClient = g;
     }
 
@@ -137,7 +138,7 @@ public class LoginScreen implements ScreenController {
      * Set a message for the user.
      * @param m Message
      */
-    final void setMessage(final String m) {
+    public final void setMessage(final String m) {
         LOGGER.info("Setting message: " + m);
         // TODO Auto-generated method stub
     }
@@ -152,7 +153,7 @@ public class LoginScreen implements ScreenController {
     /**
      * @param errorMessage Error message
      */
-    final void loginFailed(final String errorMessage) {
+    public final void loginFailed(final String errorMessage) {
         loginFailures++;
         setMessage(errorMessage);
     }

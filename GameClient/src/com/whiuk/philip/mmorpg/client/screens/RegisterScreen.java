@@ -1,7 +1,8 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.screens;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 
 import de.lessvoid.nifty.Nifty;
@@ -199,7 +200,7 @@ public class RegisterScreen implements ScreenController {
      * Update the UI to show a registration failed.
      * @param reason The reason it failed.
      */
-    final void registrationFailed(final String reason) {
+    public final void registrationFailed(final String reason) {
         registrationFailures++;
         setMessage(reason);
     }

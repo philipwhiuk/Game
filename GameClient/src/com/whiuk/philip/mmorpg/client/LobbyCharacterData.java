@@ -5,14 +5,14 @@ package com.whiuk.philip.mmorpg.client;
  * @author Philip
  *
  */
-class LobbyCharacterData {
+public class LobbyCharacterData {
 
     /**
      * Race.
      * @author Philip
      *
      */
-    static enum Race {
+    public static enum Race {
         /**
          * Human.
          */
@@ -64,7 +64,7 @@ class LobbyCharacterData {
      * @param r Race
      * @param l Location
      */
-    LobbyCharacterData(final int i, final String n,
+    public LobbyCharacterData(final int i, final String n,
             final Race r, final String l) {
         this.id = i;
         this.name = n;
@@ -74,14 +74,14 @@ class LobbyCharacterData {
     /**
      * @return id
      */
-    final int getId() {
+    public final int getId() {
         return id;
     }
 
     /**
      * @return name
      */
-    final String getName() {
+    public final String getName() {
         return name;
     }
 
