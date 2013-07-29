@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.client.game;
+package com.whiuk.philip.mmorpg.client;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +10,7 @@ import org.lwjgl.input.Keyboard;
  * @author Philip
  *
  */
-final class GameSettings {
+public final class GameSettings {
     /**
      * Singleton.
      */
@@ -18,7 +18,7 @@ final class GameSettings {
     /**
      * @return settings
      */
-    static GameSettings getSettings() {
+    public static GameSettings getSettings() {
         return SETTINGS;
     }
     /**
@@ -26,7 +26,7 @@ final class GameSettings {
      * @author Philip
      *
      */
-    static enum Control {
+    public static enum Control {
         /**
          * Move forwards.
          */
@@ -49,6 +49,10 @@ final class GameSettings {
      */
     private Map<Control, Integer> controls;
     /**
+     * 
+     */
+    private boolean fullscreen;
+    /**
      * Singleton constructor.
      */
     private GameSettings() {
@@ -57,13 +61,20 @@ final class GameSettings {
         controls.put(Control.MOVE_BACKWARD, Keyboard.KEY_S);
         controls.put(Control.TURN_LEFT, Keyboard.KEY_A);
         controls.put(Control.TURN_RIGHT, Keyboard.KEY_D);
+        fullscreen = true;
     }
     /**
      * Return the mapping for a control.
      * @param c Control.
      * @return Key mapping
      */
-    int getKeyMapping(final Control c) {
+    public int getKeyMapping(final Control c) {
         return controls.get(c);
+    }
+    /**
+     * @return fullscreen
+     */
+    public boolean isFullscreen() {
+        return fullscreen;
     }
 }

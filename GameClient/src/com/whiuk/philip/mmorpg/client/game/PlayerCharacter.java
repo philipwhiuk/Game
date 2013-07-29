@@ -3,7 +3,8 @@ package com.whiuk.philip.mmorpg.client.game;
 
 import org.lwjgl.input.Keyboard;
 
-import com.whiuk.philip.mmorpg.client.game.GameSettings.Control;
+import com.whiuk.philip.mmorpg.client.GameSettings;
+import com.whiuk.philip.mmorpg.client.GameSettings.Control;
 import com.whiuk.philip.mmorpg.client.game.models.Model;
 import com.whiuk.philip.mmorpg.shared.Messages
     .ServerMessage.GameData.MovementInformation;
