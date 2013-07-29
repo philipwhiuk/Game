@@ -18,21 +18,21 @@ class Camera {
      * @param d degrees
      */
     void rotateY(final float d) {
-        //TODO:
+        //TODO: Rotate around y-axis.
     }
     /**
      * Rotate <code>d</code> degrees around the X axis.
      * @param d degrees
      */
     void rotateX(final float d) {
-        //TODO:
+        //TODO: Rotate around x-axis.
     }
     /**
      * Rotate <code>d</code> degrees around the Z axis.
      * @param d degrees
      */
     void rotateZ(final float d) {
-        //TODO:
+        //TODO: Rotate around z-axis.
     }
     /**
      * Translate <code>x,y,z</code>.
@@ -41,14 +41,14 @@ class Camera {
      * @param z Units in the z-axis
      */
     void translate(final float x, final float y, final float z) {
-        //TODO:
+        //TODO: Translate.
     }
     /**
      * Zoom in by the given factor.
      * @param zoom multiplication factor (relative to current)
      */
     void zoom(final float zoom) {
-        //TODO:
+        //TODO: Zoom.
     }
     /**
      * Apply the rendering transformations.
