@@ -1,5 +1,9 @@
 package com.whiuk.philip.mmorpg.client.game;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 
 import com.whiuk.philip.mmorpg.client.GameClientUtils;
@@ -33,6 +37,10 @@ public class Game implements GameInterface {
      */
     private static final float QUAD_B = 1.0f;
     /**
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger.getLogger(Game.class);
+    /**
      * Player.
      */
     private PlayerCharacter player;
@@ -50,12 +58,32 @@ public class Game implements GameInterface {
     private Light ambientLight;
 
     /**
+     * Other player characters.
+     */
+    private Map<Integer, OtherPlayerCharacter> otherPCs;
+    /**
+     * Non player characters.
+     */
+    private Map<Integer, NPC> npcs;
+    /**
+     * Structures.
+     */
+    private Map<Integer, Structure> structures;
+    /**
+     * Terrain.
+     */
+    private Terrain terrain;
+    /**
      * @param character Player character
      */
     public Game(final PlayerCharacter character) {
         this.player = character;
         this.camera = new Camera();
-        // TODO Auto-generated constructor stub
+        this.ambientLight = new Light();
+        this.terrain = new Terrain();
+        this.otherPCs = new HashMap<Integer, OtherPlayerCharacter>();
+        this.npcs = new HashMap<Integer, NPC>();
+        this.structures = new HashMap<Integer, Structure>();
     }
 
     @Override
@@ -91,6 +119,7 @@ public class Game implements GameInterface {
      */
     public final void render() {
         // Clear the screen and depth buffer
+        LOGGER.trace("Rendering game");
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearDepth(1.0f);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -100,9 +129,18 @@ public class Game implements GameInterface {
         GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
                 GL11.GL_AMBIENT_AND_DIFFUSE);
         ambientLight.render();
+        terrain.render();
+        for (Map.Entry<Integer, Structure> e : structures.entrySet()) {
+            e.getValue().render();
+        }
+        for (Map.Entry<Integer, NPC> e : npcs.entrySet()) {
+            e.getValue().render();
+        }
+        for (Map.Entry<Integer, OtherPlayerCharacter> e : otherPCs.entrySet()) {
+            e.getValue().render();
+        }
         player.render();
         //Camera
         camera.render(player);
     }
-
 }
