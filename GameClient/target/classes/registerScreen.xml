@@ -29,6 +29,9 @@
 					<text id="email" font="aurulent-sans-16.fnt" color="#ffff" text="Email" align="left" valign="center" />
 		       		<control name="textfield" id="text_input_email" width="40%" align="right" />
 		       	</panel>
+	           	<panel id="form-message" height="40" width="100%" align="left" valign="top" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+	           		<control name="label" id="message" font="console.fnt" color="#ffff" text="" width="100%" align="center" valign="center" />
+	        	</panel>
 	       		<control name="button" id="submit_button" label="Register" align="center" valign="center">
 					<interact onClick="sendRegistrationRequest()" />
 				</control>

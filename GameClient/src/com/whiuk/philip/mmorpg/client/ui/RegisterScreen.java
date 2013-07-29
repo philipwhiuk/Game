@@ -7,6 +7,7 @@ import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -53,6 +54,7 @@ public class RegisterScreen implements ScreenController, AuthInterface {
      * Number of registration failures.
      */
     private int registrationFailures;
+    private Element messageLabel;
     /**
      * Class logger.
      */
@@ -78,6 +80,7 @@ public class RegisterScreen implements ScreenController, AuthInterface {
         textInputPasswordConfirm = screen
                 .findElementByName("text_input_password_confirm");
         textInputEmail = screen.findElementByName("text_input_email");
+        messageLabel = screen.findElementByName("message");
         gameClient.setState(State.LOGIN);
     }
 
@@ -157,7 +160,7 @@ public class RegisterScreen implements ScreenController, AuthInterface {
     /**
      * Sends a login request.
      */
-    final void sendRegistrationRequest() {
+    public final void sendRegistrationRequest() {
         String username = textInputUsername
                 .getNiftyControl(TextField.class).getRealText();
         String password = textInputPassword
@@ -191,7 +194,8 @@ public class RegisterScreen implements ScreenController, AuthInterface {
 
     @Override
     public void setMessage(final String m) {
-        // TODO Auto-generated method stub
+        LOGGER.info("Setting message: " + m);
+        messageLabel.getNiftyControl(Label.class).setText(m);
     }
 
     @Override
