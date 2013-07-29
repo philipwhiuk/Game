@@ -3,6 +3,7 @@ package com.whiuk.philip.mmorpg.server.game.repository;
 import java.util.List;
 
 import org.hibernate.Query;
+import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.springframework.stereotype.Repository;
 
@@ -21,11 +22,13 @@ public class PlayerCharacterHibernateDAO
 
     @Override
     public final PlayerCharacter findByID(final Long id) {
+        Session s = HibernateUtils.beginTransaction();
         PlayerCharacter character = null;
         String sql = "SELECT c FROM PlayerCharacter c WHERE c.id = :id";
         Query query = HibernateUtils.getSession().createQuery(sql)
                 .setParameter("id", id);
         character = findOne(query);
+        s.getTransaction().commit();
         return character;
     }
 

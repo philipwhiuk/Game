@@ -287,7 +287,6 @@ public class GameServiceImpl implements GameService {
      * @param data Game data
      */
     private void loadCharacter(final Account account, ClientMessage.GameData data) {
-        HibernateUtils.beginTransaction();
         PlayerCharacter pc = playerCharacterDAO.findByID((long) data.getCharacterInformation().getId());
         if (pc == null) {
             LOGGER.info("Client sent character selection for non-existent character.");
