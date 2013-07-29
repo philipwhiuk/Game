@@ -618,6 +618,7 @@ public class GameClient implements Runnable {
      */
     private void enterGame(
             final ServerMessage.GameData gameData) {
+        LOGGER.trace("Entering game");
         CharacterInformation characterInfo =
                 gameData.getCharacterInformation(0);
         this.character = new PlayerCharacter(
