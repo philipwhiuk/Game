@@ -193,7 +193,7 @@ public class LobbyScreen
         } else {
             switch (gameData.getType()) {
                 case CHARACTER_CREATED:
-                    LOGGER.info("Recieved character created message");
+                    LOGGER.trace("Recieved character created message");
                     for (ServerMessage.GameData.CharacterInformation c
                             : gameData.getCharacterInformationList()) {
                         LobbyCharacterData pc = new LobbyCharacterData(
@@ -205,7 +205,7 @@ public class LobbyScreen
                     }
                     break;
                 case CHARACTER_SELECTION:
-                    LOGGER.info("Recieved character selection message");
+                    LOGGER.trace("Recieved character selection message");
                     ServerMessage.GameData.CharacterInformation c =
                             gameData.getCharacterInformationList().get(0);
                     LobbyCharacterData pc = new LobbyCharacterData(
