@@ -22,17 +22,9 @@
 						<text id="resolution" font="aurulent-sans-16.fnt" color="#ffff" text="Resolution" align="left" valign="center" />
 						<control id="resolution_drop_down" name="dropDown" valign="center" align="center" width="200" />
 		        	</panel>
-		        	<panel id="form-bits-per-pixel" height="60" width="100%" align="left" valign="bottom" backgroundColor="#555f" childLayout="horizontal" visibleToMouse="false">
-						<text id="bpp" font="aurulent-sans-16.fnt" color="#ffff" text="Bits/Pixel" align="left" valign="center" />
-						<control id="bpp_drop_down" name="dropDown" valign="center" align="center" width="200" />
-		        	</panel>
-		        	<panel id="form-vsync" height="60" width="100%" align="left" valign="bottom" backgroundColor="#555f" childLayout="horizontal" visibleToMouse="false">
+		        	<panel id="form-vsync" height="60" width="100%" align="left" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
 						<text id="vsync" font="aurulent-sans-16.fnt" color="#ffff" text="VSync" align="left" valign="center" />
 						<control id="vsync_drop_down" name="dropDown" valign="center" align="center" width="200" />
-		        	</panel>
-		        	<panel id="form-frequency" height="60" width="100%" align="left" valign="bottom" backgroundColor="#555f" childLayout="horizontal" visibleToMouse="false">
-						<text id="frequency" font="aurulent-sans-16.fnt" color="#ffff" text="Frequency" align="left" valign="center" />
-						<control id="frequency_drop_down" name="dropDown" valign="center" align="center" width="200" />
 		        	</panel>
 		        	<panel id="form-bottom" height="60" width="100%" align="left" valign="bottom" backgroundColor="#555f" childLayout="horizontal" visibleToMouse="false">
 		        		<control name="button" id="apply_button" label="Apply" valign="center">
@@ -40,6 +32,9 @@
 						</control>
 		        		<control name="button" id="reset_button" label="Reset" valign="center">
 							<interact onClick="reset()" />
+						</control>
+		        		<control name="button" id="cancel_button" label="Cancel" valign="center">
+							<interact onClick="cancel()" />
 						</control>
 		        	</panel>
 				</control>
