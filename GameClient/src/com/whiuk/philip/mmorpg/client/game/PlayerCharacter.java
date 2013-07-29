@@ -38,6 +38,10 @@ public class PlayerCharacter {
      * 
      */
     private float z;
+    private int id;
+    private String name;
+    private String race;
+    private String location;
 
     /**
      * Initial data constructor.
@@ -46,9 +50,12 @@ public class PlayerCharacter {
      * @param race Race
      * @param location Location
      */
-    public PlayerCharacter(final int id, final String name,
-            final String race, final String location) {
-        // TODO Auto-generated constructor stub
+    public PlayerCharacter(final int i, final String n,
+            final String r, final String l) {
+        this.id = i;
+        this.name = n;
+        this.race = r;
+        this.location = l;
         model = Model.fromFile("player.mdl");
     }
     /**
