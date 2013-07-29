@@ -19,6 +19,7 @@ public final class GameSettings {
      * @return settings
      */
     public static GameSettings getSettings() {
+        //TODO Load from file.
         return SETTINGS;
     }
     /**
@@ -49,7 +50,7 @@ public final class GameSettings {
      */
     private Map<Control, Integer> controls;
     /**
-     * 
+     * Whether the client should be in fullscreen mode or not.
      */
     private boolean fullscreen;
     /**

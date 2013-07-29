@@ -163,10 +163,10 @@ public class SettingsScreen implements ScreenController {
         exit();
     }
     /**
-     * Reset
+     * Reset.
      */
     public final void reset() {
-        //TODO: Reset settings
+        //TODO Reset settings
     }
 
     /**

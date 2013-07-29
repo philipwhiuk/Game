@@ -173,7 +173,7 @@ public class LoginScreen implements ScreenController, AuthInterface {
     public final void registrationFailed(final String errorMessage) {
         setMessage(errorMessage);
     }
-    
+
     /**
      * Quit.
      */

@@ -7,6 +7,9 @@ import org.apache.log4j.PropertyConfigurator;
  * @author Philip
  */
 public final class Main {
+    /**
+     * Class logger.
+     */
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     /**

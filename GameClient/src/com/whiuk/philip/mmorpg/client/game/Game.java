@@ -53,7 +53,7 @@ public class Game implements GameInterface {
      */
     private boolean moving;
     /**
-     * Ambient light
+     * Ambient light source.
      */
     private Light ambientLight;
 

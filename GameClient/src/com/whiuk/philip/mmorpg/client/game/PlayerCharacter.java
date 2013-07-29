@@ -38,17 +38,29 @@ public class PlayerCharacter {
      * 
      */
     private float z;
+    /**
+     * ID.
+     */
     private int id;
+    /**
+     * Name.
+     */
     private String name;
+    /**
+     * Race.
+     */
     private String race;
+    /**
+     * Location.
+     */
     private String location;
 
     /**
      * Initial data constructor.
-     * @param id ID
-     * @param name Name
-     * @param race Race
-     * @param location Location
+     * @param i ID
+     * @param n Name
+     * @param r Race
+     * @param l Location
      */
     public PlayerCharacter(final int i, final String n,
             final String r, final String l) {
@@ -73,10 +85,10 @@ public class PlayerCharacter {
     /**
      * Render player character.
      */
-    void render() {
+    final void render() {
         org.lwjgl.opengl.GL11.glPushMatrix();
         org.lwjgl.opengl.GL11.glTranslatef(x, y, z);
-//TODO: org.lwjgl.opengl.GL11.glRotatef(direction);
+//TODO org.lwjgl.opengl.GL11.glRotatef(direction);
         model.render();
         org.lwjgl.opengl.GL11.glPopMatrix();
     }

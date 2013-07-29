@@ -56,8 +56,8 @@ class ClientChannelHandler
      */
     private GameClient client;
     /**
-	 *
-	 */
+     * Whether the handler should try and reconnect if the connection is closed.
+     */
     private volatile boolean reconnect = true;
 
     /**
@@ -172,7 +172,6 @@ class ClientChannelHandler
 
     /**
      * Formats network logging messages to add status information.
-     * 
      * @param msg
      *            Input message
      * @return Formatted message

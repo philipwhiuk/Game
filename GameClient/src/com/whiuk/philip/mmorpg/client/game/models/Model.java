@@ -24,7 +24,7 @@ public final class Model {
      */
     private static Map<String, Model> models = new HashMap<String, Model>();
     /**
-     * Colour
+     * Colour.
      * @author Philip
      */
     private static final class RGB {
@@ -59,28 +59,28 @@ public final class Model {
         }
     }
     /**
-     * 
+     * Vertex.
      * @author Philip
      *
      */
     private static final class Vertex {
         /**
-         * 
+         * X co-ordinate.
          */
         private float x;
         /**
-         * 
+         * Y co-ordinate.
          */
         private float y;
         /**
-         * 
+         * Z co-ordinate.
          */
         private float z;
         /**
-         * 
-         * @param x
-         * @param y
-         * @param z
+         * Constructor.
+         * @param x x
+         * @param y y
+         * @param z z
          */
         private Vertex(final float x, final float y, float z) {
             this.x = x;
@@ -96,7 +96,7 @@ public final class Model {
     }
 
     /**
-     * 
+     * Quad.
      * @author Philip
      *
      */

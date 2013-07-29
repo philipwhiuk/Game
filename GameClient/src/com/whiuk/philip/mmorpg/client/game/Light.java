@@ -11,8 +11,17 @@ import org.lwjgl.opengl.GL11;
  *
  */
 public class Light {
+    /**
+     * Position of light source.
+     */
     private FloatBuffer position;
+    /**
+     * Model of light source.
+     */
     private FloatBuffer model;
+    /**
+     * Colour.
+     */
     private FloatBuffer colour;
 
     /**

@@ -6,7 +6,9 @@ package com.whiuk.philip.mmorpg.client.game;
  *
  */
 public class NPC {
-
+    /**
+     * Render.
+     */
     void render() {
         // TODO Auto-generated method stub
     }

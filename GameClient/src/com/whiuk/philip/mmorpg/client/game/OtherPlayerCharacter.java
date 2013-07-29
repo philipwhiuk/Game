@@ -6,10 +6,11 @@ package com.whiuk.philip.mmorpg.client.game;
  *
  */
 public class OtherPlayerCharacter {
-
+    /**
+     * Render.
+     */
     void render() {
         // TODO Auto-generated method stub
-        
     }
 
 }

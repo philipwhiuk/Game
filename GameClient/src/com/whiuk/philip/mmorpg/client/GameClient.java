@@ -51,7 +51,6 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
-import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation;
 
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
@@ -135,7 +134,7 @@ public class GameClient implements Runnable {
      */
     private volatile State state = State.LOGIN;
     /**
-     * GUI Screen
+     * GUI Screen.
      */
     private ScreenController screen;
     /**
@@ -216,6 +215,11 @@ public class GameClient implements Runnable {
      * Viewport buffer - height index.
      */
     private static final int VIEWPORT_HEIGHT_INDEX = 3;
+    /**
+     * Logging error message output if the server doesn't provide the username.
+     */
+    private static final String USERNAME_NOT_PROVIDED_ERROR =
+            "Username not provided, failed registration";
     /**
      * Bean constructor.
      */
@@ -585,7 +589,8 @@ public class GameClient implements Runnable {
                 queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
-                        ((GameInterface) screen).handleGameData(message.getGameData());
+                        ((GameInterface) screen)
+                            .handleGameData(message.getGameData());
                     }
 
                     @Override
@@ -600,7 +605,8 @@ public class GameClient implements Runnable {
             queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
-                    ((GameInterface) screen).handleGameData(message.getGameData());
+                    ((GameInterface) screen)
+                        .handleGameData(message.getGameData());
                 }
 
                 @Override
@@ -619,7 +625,7 @@ public class GameClient implements Runnable {
     private void enterGame(
             final ServerMessage.GameData gameData) {
         LOGGER.trace("Entering game");
-        CharacterInformation characterInfo =
+        ServerMessage.GameData.CharacterInformation characterInfo =
                 gameData.getCharacterInformation(0);
         this.character = new PlayerCharacter(
                 characterInfo.getId(), characterInfo.getName(),
@@ -647,7 +653,8 @@ public class GameClient implements Runnable {
             queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
-                    ((ChatInterface) screen).handleChatData(message.getChatData());
+                    ((ChatInterface) screen)
+                        .handleChatData(message.getChatData());
                 }
 
                 @Override
@@ -661,7 +668,8 @@ public class GameClient implements Runnable {
             queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
-                    ((ChatInterface) screen).handleChatData(message.getChatData());
+                    ((ChatInterface) screen)
+                        .handleChatData(message.getChatData());
                 }
 
                 @Override
@@ -689,8 +697,9 @@ public class GameClient implements Runnable {
                         break;
                     case REGISTRATION_SUCCESSFUL:
                         if (!data.hasUsername()) {
-                            LOGGER.error("Username not provided, failed registration");
-                            ((AuthInterface) screen).registrationFailed("Server error occurred");
+                            LOGGER.error(USERNAME_NOT_PROVIDED_ERROR);
+                            ((AuthInterface) screen)
+                                .registrationFailed("Server error occurred");
                         } else {
                             switchToLoginScreen();
                             ((AuthInterface) screen).setMessage("Account '"
@@ -961,7 +970,8 @@ public class GameClient implements Runnable {
         }
     }
     /**
-     * 
+     * Switch from the previous screen to the lobby screen.
+     * Must be run on the OpenGL context thread.
      */
     public final void switchToSettingsScreen() {
         settingsScreen = new SettingsScreen(this);
