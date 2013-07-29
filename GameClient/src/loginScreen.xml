@@ -32,9 +32,14 @@
 	        	</panel>
 	        	</panel>
 			</panel>
-        	<panel id="register" height="60" width="100%" align="center" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+        	<panel id="settings" height="60" width="100%" align="center" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
         		<control name="button" id="settings_button" label="Settings" valign="center">
 					<interact onClick="settings()" />
+				</control>
+        	</panel>
+        	<panel id="quit" height="60" width="100%" align="center" valign="bottom" backgroundColor="#555f" childLayout="center" visibleToMouse="false">
+        		<control name="button" id="quit_button" label="Quit" valign="center">
+					<interact onClick="quit()" />
 				</control>
         	</panel>
 	        <panel id="panel-bottom-margin" height="10" width="100%" align="center" valign="bottom" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
