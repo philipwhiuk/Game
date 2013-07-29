@@ -5,10 +5,6 @@ import java.net.InetSocketAddress;
 import java.nio.IntBuffer;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Random;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -189,14 +185,6 @@ public class GameClient implements Runnable {
     private static final transient Logger LOGGER = Logger
             .getLogger(GameClient.class);
     /**
-     * Max width.
-     */
-    private static final int WIDTH = 1024;
-    /**
-     * Max height.
-     */
-    private static final int HEIGHT = 768;
-    /**
      * Connection timeout.
      */
     private static final int CONNECTION_TIMEOUT = 10000;
@@ -216,14 +204,6 @@ public class GameClient implements Runnable {
      * Orthographic near/far clipping distance.
      */
     private static final int ORTHO_DISTANCE_MAX = 9999;
-    /**
-     * Indicates whether the client should run in fullscreen or not.
-     */
-    private static final boolean FULLSCREEN = false;
-    /**
-     * Bits per pixel.
-     */
-    private static final int BITS_PER_PIXEL = 32;
     /**
      * Viewport buffer size.
      */
@@ -318,14 +298,9 @@ public class GameClient implements Runnable {
      * @throws LWJGLException Exception
      */
     private void buildDisplay() throws LWJGLException {
-        int width = WIDTH;
-        int height = HEIGHT;
         selectDisplayMode();
-        int x = (width - Display.getDisplayMode().getWidth()) / 2;
-        int y = (height - Display.getDisplayMode().getHeight()) / 2;
-        Display.setLocation(x, y);
         Display.create();
-        Display.setFullscreen(FULLSCREEN);
+        Display.setFullscreen(GameSettings.getSettings().isFullscreen());
         Display.setVSyncEnabled(false);
         Display.setTitle(GAME_CLIENT_TITLE);
         LOGGER.trace("Width: " + Display.getDisplayMode().getWidth()
@@ -352,52 +327,9 @@ public class GameClient implements Runnable {
      * @throws LWJGLException Exception
      */
     private void selectDisplayMode() throws LWJGLException {
-        DisplayMode currentMode = Display.getDisplayMode();
         DisplayMode[] modes = Display.getAvailableDisplayModes();
-        List<DisplayMode> matching = new ArrayList<DisplayMode>();
-        for (int i = 0; i < modes.length; i++) {
-            DisplayMode mode = modes[i];
-            if (mode.getWidth() == WIDTH && mode.getHeight() == HEIGHT
-                    && mode.getBitsPerPixel() == BITS_PER_PIXEL) {
-                LOGGER.trace(mode.getWidth() + ", " + mode.getHeight() + ", "
-                        + mode.getBitsPerPixel() + ", " + mode.getFrequency());
-                matching.add(mode);
-            }
-        }
-
-        DisplayMode[] matchingModes = matching.toArray(new DisplayMode[0]);
-
-        // find mode with matching frequency.
-        boolean found = false;
-        for (int i = 0; i < matchingModes.length; i++) {
-            if (matchingModes[i].getFrequency() == currentMode.getFrequency()) {
-                LOGGER.trace("using mode: " + matchingModes[i].getWidth() + ", "
-                        + matchingModes[i].getHeight() + ", "
-                        + matchingModes[i].getBitsPerPixel() + ", "
-                        + matchingModes[i].getFrequency());
-                Display.setDisplayMode(matchingModes[i]);
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
-            Arrays.sort(matchingModes, new Comparator<DisplayMode>() {
-                public int compare(final DisplayMode o1, final DisplayMode o2) {
-                    if (o1.getFrequency() > o2.getFrequency()) {
-                        return 1;
-                    } else if (o1.getFrequency() < o2.getFrequency()) {
-                        return -1;
-                    } else {
-                        return 0;
-                    }
-                }
-            });
-            LOGGER.info("using fallback mode: "
-                    + matchingModes[0].getWidth() + ", "
-                    + matchingModes[0].getHeight() + ", "
-                    + matchingModes[0].getBitsPerPixel() + ", "
-                    + matchingModes[0].getFrequency());
-            Display.setDisplayMode(matchingModes[0]);
+        if (modes.length > 0) {
+            Display.setDisplayMode(modes[0]);
         }
     }
     /**
