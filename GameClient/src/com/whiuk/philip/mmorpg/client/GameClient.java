@@ -178,7 +178,7 @@ public class GameClient implements Runnable {
      * by the OpenGL context thread. Hence the need for a concurrent queue to
      * hand off events.</p>
      */
-    private BlockingQueue<NiftyQueuedEvent> queuedNiftyEvents;
+    private BlockingQueue<QueuedLWJGLEvent> queuedNiftyEvents;
     /**
      * Indicates there is an outstanding unprocessed login event.
      * Used to resolve server timing issues and queue event handling.
@@ -250,7 +250,7 @@ public class GameClient implements Runnable {
      * Bean constructor.
      */
     GameClient() {
-        queuedNiftyEvents = new LinkedBlockingQueue<NiftyQueuedEvent>();
+        queuedNiftyEvents = new LinkedBlockingQueue<QueuedLWJGLEvent>();
         try {
             sha256digest = MessageDigest.getInstance("SHA-256");
         } catch (GeneralSecurityException e) {
@@ -304,11 +304,11 @@ public class GameClient implements Runnable {
      * Run any queued events on the Nifty thread.
      */
     private void runQueuedNiftyEvents() {
-        LinkedBlockingQueue<NiftyQueuedEvent> newQueue =
-                new LinkedBlockingQueue<NiftyQueuedEvent>();
+        LinkedBlockingQueue<QueuedLWJGLEvent> newQueue =
+                new LinkedBlockingQueue<QueuedLWJGLEvent>();
         synchronized (queuedNiftyEvents) {
             while (!queuedNiftyEvents.isEmpty()) {
-                NiftyQueuedEvent runnable = queuedNiftyEvents.poll();
+                QueuedLWJGLEvent runnable = queuedNiftyEvents.poll();
                 if (runnable.canRun()) {
                     runnable.run();
                 } else {
@@ -648,7 +648,7 @@ public class GameClient implements Runnable {
         if (state.equals(State.LOBBY)) {
             if (message.getGameData().getType().equals(
                     ServerMessage.GameData.Type.ENTER_GAME)) {
-               queuedNiftyEvents.add(new NiftyQueuedEvent() {
+               queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                    @Override
                    public void run() {
                        enterGame(message.getGameData());
@@ -660,7 +660,7 @@ public class GameClient implements Runnable {
                    }
                });
             } else {
-                queuedNiftyEvents.add(new NiftyQueuedEvent() {
+                queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
                         lobbyScreen.handleGameData(message.getGameData());
@@ -675,7 +675,7 @@ public class GameClient implements Runnable {
         } else if (state.equals(State.GAME)) {
             game.handleGameData(message.getGameData());
         } else if (unprocessedLoginResponse) {
-            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+            queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
                     lobbyScreen.handleGameData(message.getGameData());
@@ -701,7 +701,7 @@ public class GameClient implements Runnable {
         this.character = new PlayerCharacter(
                 characterInfo.getId(), characterInfo.getName(),
                 characterInfo.getRace(), characterInfo.getLocation());
-        queuedNiftyEvents.add(new NiftyQueuedEvent() {
+        queuedNiftyEvents.add(new QueuedLWJGLEvent() {
             @Override
             public void run() {
                 game = new Game(character);
@@ -721,7 +721,7 @@ public class GameClient implements Runnable {
      */
     final void handleChatMessage(final ServerMessage message) {
         if (state.equals(State.LOBBY)) {
-            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+            queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
                     lobbyScreen.handleChatData(message.getChatData());
@@ -735,7 +735,7 @@ public class GameClient implements Runnable {
         } else if (state.equals(State.GAME)) {
             gameScreen.handleChatData(message.getChatData());
         } else if (unprocessedLoginResponse) {
-            queuedNiftyEvents.add(new NiftyQueuedEvent() {
+            queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
                     lobbyScreen.handleChatData(message.getChatData());
@@ -819,7 +819,7 @@ public class GameClient implements Runnable {
         } else {
             account = new Account(data.getUsername());
             unprocessedLoginResponse = true;
-            NiftyQueuedEvent switchToLobby = new NiftyQueuedEvent() {
+            QueuedLWJGLEvent switchToLobby = new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
                     switchToLobbyScreen();
@@ -995,7 +995,7 @@ public class GameClient implements Runnable {
             case LOBBY:
                 //Fallthrough:
             case GAME:
-                NiftyQueuedEvent switchToLogin = new NiftyQueuedEvent() {
+                QueuedLWJGLEvent switchToLogin = new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
                         switchToLoginScreen();
@@ -1035,7 +1035,7 @@ public class GameClient implements Runnable {
             case GAME:
                 GameClientUtils.sendAuthData(AuthData.newBuilder()
                         .setType(AuthData.AccountDataType.LOGOUT).build());
-                NiftyQueuedEvent switchToLogin = new NiftyQueuedEvent() {
+                QueuedLWJGLEvent switchToLogin = new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
                         switchToLoginScreen();

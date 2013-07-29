@@ -5,7 +5,7 @@ package com.whiuk.philip.mmorpg.client;
  * @author Philip
  *
  */
-interface NiftyQueuedEvent extends Runnable {
+interface QueuedLWJGLEvent extends Runnable {
     /**
      * @return whether the event can be run.
      */
