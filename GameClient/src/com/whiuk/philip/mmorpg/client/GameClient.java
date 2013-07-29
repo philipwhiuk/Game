@@ -846,7 +846,7 @@ public class GameClient implements Runnable {
      * Switch from the previous screen to the game.
      * Must be run on the OpenGL context thread.
      */
-    public void switchToGameScreen() {
+    public final void switchToGameScreen() {
         screen = new GameScreen(this, game);
         nifty.registerScreenController(screen);
         nifty.fromXml("gameScreen.xml", "main");
