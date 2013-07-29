@@ -1,6 +1,7 @@
 package com.whiuk.philip.mmorpg.server.auth.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 
 import com.whiuk.philip.mmorpg.server.auth.repository.AccountDAO;
 import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
@@ -10,6 +11,7 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
  * @author Philip
  *
  */
+@Controller
 public class AccountEmailControllerImpl implements AccountEmailController {
    /**
     *

@@ -8,6 +8,8 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.springframework.stereotype.Service;
+
 import com.whiuk.philip.mmorpg.serverShared.Account;
 
 /**
@@ -15,8 +17,8 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
  * @author Philip
  *
  */
+@Service
 public class EmailServiceImpl implements EmailService {
-
     /**
      * 
      */
