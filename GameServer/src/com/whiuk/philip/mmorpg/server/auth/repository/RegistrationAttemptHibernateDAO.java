@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.server.auth;
+package com.whiuk.philip.mmorpg.server.auth.repository;
 
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;

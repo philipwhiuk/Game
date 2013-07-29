@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
-import com.whiuk.philip.mmorpg.server.auth.AuthService;
+import com.whiuk.philip.mmorpg.server.auth.service.AuthService;
 import com.whiuk.philip.mmorpg.server.chat.ChatService;
 import com.whiuk.philip.mmorpg.server.game.service.GameService;
 import com.whiuk.philip.mmorpg.server.network.NetworkService;

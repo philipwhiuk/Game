@@ -16,7 +16,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.GameData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterInformation;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
-import com.whiuk.philip.mmorpg.server.auth.AuthService;
+import com.whiuk.philip.mmorpg.server.auth.service.AuthService;
 import com.whiuk.philip.mmorpg.server.game.controller.GameCharacterController;
 import com.whiuk.philip.mmorpg.server.game.controller.ZoneController;
 import com.whiuk.philip.mmorpg.server.game.domain.GameWorld;

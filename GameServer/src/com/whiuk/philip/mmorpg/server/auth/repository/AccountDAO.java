@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.server.auth;
+package com.whiuk.philip.mmorpg.server.auth.repository;
 
 import com.whiuk.philip.mmorpg.server.hibernate.GenericDAO;
 import com.whiuk.philip.mmorpg.serverShared.Account;

@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.server.auth;
+package com.whiuk.philip.mmorpg.server.auth.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -7,8 +7,6 @@ import java.util.Set;
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
-import org.hibernate.Hibernate;
-import org.hibernate.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +15,14 @@ import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 import com.whiuk.philip.mmorpg.server.MessageHandlerService;
+import com.whiuk.philip.mmorpg.server.auth.AuthEventListener;
+import com.whiuk.philip.mmorpg.server.auth.controller.AccountEmailController;
+import com.whiuk.philip.mmorpg.server.auth.controller.LoginController;
+import com.whiuk.philip.mmorpg.server.auth.controller.RegistrationController;
 import com.whiuk.philip.mmorpg.server.chat.ChatService;
 import com.whiuk.philip.mmorpg.server.email.EmailService;
 import com.whiuk.philip.mmorpg.server.email.InvalidEmailException;
 import com.whiuk.philip.mmorpg.server.game.service.GameService;
-import com.whiuk.philip.mmorpg.server.hibernate.HibernateUtils;
 import com.whiuk.philip.mmorpg.server.system.SystemService;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.serverShared.Connection;
@@ -79,12 +80,6 @@ public class AuthServiceImpl implements AuthService {
             "Attempting to login without providing both a username and "
             + "password";
     /**
-     * Error message when login received for account already logged in.
-     */
-    private static final String ALREADY_LOGGED_IN_MESSAGE =
-            "Attempting to login (using valid credentials to an account that's"
-            + " already logged in. Ignoring request.";
-    /**
      *
      */
     @Autowired
@@ -116,30 +111,31 @@ public class AuthServiceImpl implements AuthService {
      */
     @Autowired
     private MessageHandlerService messageHandler;
-
     /**
-     *
+     * Login controller.
      */
     @Autowired
-    private AccountDAO accountDAO;
+    private LoginController loginController;
     /**
-    *
-    */
-    @Autowired
-    private LoginAttemptDAO loginAttemptDAO;
-    /**
-     *
+     * Registration controller.
      */
     @Autowired
-    private RegistrationAttemptDAO registrationAttemptDAO;
+    private RegistrationController registrationController;
     /**
-     *
+     * Email service.
      */
+    @Autowired
     private EmailService emailService;
+    /**
+     * Account email controller.
+     */
+    @Autowired
+    private AccountEmailController accountEmailController;
     /**
      * Authentication event listeners.
      */
     private ArrayList<AuthEventListener> authEventListeners;
+
     /**
      *
      */
@@ -208,9 +204,9 @@ public class AuthServiceImpl implements AuthService {
             if (connections.containsKey(con)) {
                 logger.log(Level.INFO,
                         REGISTER_FROM_EXISTING_LOGIN_ATTEMPT_MESSAGE);
-                accounts.remove(connections.remove(con));
+                performLogout(connections.get(con));
             }
-            processRegistrationAttempt(
+            registrationController.processRegistrationAttempt(
                     systemService.getConnection(src),
                     data.getUsername(),
                     data.getPassword().toStringUtf8(),
@@ -241,88 +237,11 @@ public class AuthServiceImpl implements AuthService {
             if (!data.hasUsername() || !data.hasPassword()) {
                 logger.log(Level.INFO, MISSING_LOGIN_DATA_MESSAGE);
             } else {
-                processLoginAttempt(systemService.getConnection(src),
+                loginController.processLoginAttempt(
+                        systemService.getConnection(src),
                         data.getUsername(),
                         data.getPassword().toStringUtf8());
             }
-        }
-    }
-
-    /**
-     * @param con
-     *            Connection
-     * @param username
-     *            Username
-     * @param password
-     *            Password
-     */
-    private void processLoginAttempt(final Connection con,
-            final String username, final String password) {
-        LOGGER.trace("Processing login attempt");
-        // TODO Exceeded maximum login attempts
-        HibernateUtils.beginTransaction();
-        Account account = accountDAO.findByUsername(username);
-        HibernateUtils.commitTransaction();
-        HibernateUtils.beginTransaction();
-        LoginAttempt attempt = new LoginAttempt();
-        attempt.setTime(System.currentTimeMillis());
-        attempt.setAccount(account);
-        attempt.setConnection(con.toString());
-        System.out.println(attempt.getTime());
-        loginAttemptDAO.save(attempt);
-        HibernateUtils.commitTransaction();
-        if (account != null) {
-            if (!account.getPassword().equals(password)) {
-                processFailedLogin(con, attempt, account);
-            } else {
-                //Handle account already logged in
-                Set<Account> currentAccounts = accounts.keySet();
-                for (Account a: currentAccounts) {
-                    if (a.getUsername().equals(username)) {
-                        logger.log(Level.INFO, ALREADY_LOGGED_IN_MESSAGE);
-                        processFailedLogin(con, attempt, account);
-                        return;
-                    }
-                }
-                processSuccesfulLogin(con, attempt, account);
-            }
-        } else {
-            processFailedLogin(con, attempt);
-        }
-    }
-
-    /**
-     * @param con Connection
-     * @param username Username
-     * @param password MD5-hashed Password
-     * @param email Email
-     */
-    private void processRegistrationAttempt(final Connection con,
-            final String username, final String password, final String email) {
-        // TODO Exceeded maximum registration attempts
-        HibernateUtils.beginTransaction();
-        Account account = accountDAO.findByUsername(username);
-        HibernateUtils.commitTransaction();
-        HibernateUtils.beginTransaction();
-        RegistrationAttempt attempt = new RegistrationAttempt();
-        attempt.setTime(System.currentTimeMillis());
-        attempt.setAccount(account);
-        attempt.setEmail(email);
-        attempt.setConnection(con.toString());
-        System.out.println(attempt.getTime());
-        registrationAttemptDAO.save(attempt);
-        HibernateUtils.commitTransaction();
-        if (account != null) {
-            processFailedRegistration(con, attempt);
-        } else {
-            HibernateUtils.beginTransaction();
-            account = new Account();
-            account.setUsername(username);
-            account.setPassword(password);
-            account.setEmail(email);
-            accountDAO.save(account);
-            HibernateUtils.commitTransaction();
-            processSuccesfulRegistration(con, attempt, account);
         }
     }
 
@@ -332,16 +251,13 @@ public class AuthServiceImpl implements AuthService {
      * @param attempt Attempt
      * @param account Account
      */
-    private void processSuccesfulRegistration(final Connection con,
+    public final void handleSuccesfulRegistration(final Connection con,
             final RegistrationAttempt attempt, final Account account) {
         // TODO Any other post-registration steps?
         try {
             emailService.sendRegistrationEmail(account);
         } catch (InvalidEmailException e) {
-            HibernateUtils.beginTransaction();
-            account.setEmailInvalid(true);
-            accountDAO.save(account);
-            HibernateUtils.commitTransaction();
+            accountEmailController.invalidateEmail(account);
         }
 
         accounts.put(account, con);
@@ -366,7 +282,7 @@ public class AuthServiceImpl implements AuthService {
      * @param attempt
      *            RegistrationAttempt
      */
-    private void processFailedRegistration(final Connection con,
+    public final void handleFailedRegistration(final Connection con,
             final RegistrationAttempt attempt) {
         con.addRegistrationAttempt(attempt);
         ServerMessage message = ServerMessage
@@ -390,7 +306,7 @@ public class AuthServiceImpl implements AuthService {
      * @param attempt
      *            LoginAttempt
      */
-    private void processFailedLogin(final Connection con,
+    public final void handleFailedLogin(final Connection con,
             final LoginAttempt attempt) {
         con.addLoginAttempt(attempt);
         ServerMessage message = ServerMessage
@@ -416,7 +332,7 @@ public class AuthServiceImpl implements AuthService {
      * @param attempt
      *            LoginAttempt
      */
-    private void processSuccesfulLogin(final Connection con,
+    public final void handleSuccesfulLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
         // TODO: Further authentication checks
         connections.put(con, account);
@@ -447,7 +363,7 @@ public class AuthServiceImpl implements AuthService {
      * @param attempt
      *            LoginAttempt
      */
-    private void processFailedLogin(final Connection con,
+    public final void handleFailedLogin(final Connection con,
             final LoginAttempt attempt, final Account account) {
         ServerMessage message = ServerMessage
                 .newBuilder()
@@ -491,6 +407,18 @@ public class AuthServiceImpl implements AuthService {
     public final void deregisterAuthEventListener(
             final AuthEventListener listener) {
         authEventListeners.remove(listener);
+    }
+
+    //TODO: Improve efficient [O(n) search]
+    @Override
+    public boolean hasLoggedInAccount(final String username) {
+        Set<Account> currentAccounts = accounts.keySet();
+        for (Account a: currentAccounts) {
+            if (a.getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

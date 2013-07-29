@@ -1,7 +1,10 @@
-package com.whiuk.philip.mmorpg.server.auth;
+package com.whiuk.philip.mmorpg.server.auth.service;
 
+import com.whiuk.philip.mmorpg.server.auth.AuthEventListener;
 import com.whiuk.philip.mmorpg.serverShared.Account;
 import com.whiuk.philip.mmorpg.serverShared.Connection;
+import com.whiuk.philip.mmorpg.serverShared.LoginAttempt;
+import com.whiuk.philip.mmorpg.serverShared.RegistrationAttempt;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
@@ -57,5 +60,45 @@ public interface AuthService {
      * @param listener Authentication event listener to remove
      */
     void deregisterAuthEventListener(AuthEventListener listener);
-
+    /**
+     * Handle a failed login request.
+     * @param con
+     * @param attempt
+     * @param account
+     */
+    void handleFailedLogin(Connection con, LoginAttempt attempt, Account account);
+    /**
+     * Handle a succesful login request
+     * @param con
+     * @param attempt
+     * @param account
+     */
+    void handleSuccesfulLogin(Connection con, LoginAttempt attempt,
+            Account account);
+    /**
+     * Check whether the an account with the given username is logged in.
+     * @param username Username
+     * @return <code>true</code> if logged in.
+     */
+    boolean hasLoggedInAccount(String username);
+    /**
+     * 
+     * @param con
+     * @param attempt
+     */
+    void handleFailedLogin(Connection con, LoginAttempt attempt);
+    /**
+     * 
+     * @param con
+     * @param attempt
+     */
+    void handleFailedRegistration(Connection con, RegistrationAttempt attempt);
+    /**
+     * 
+     * @param con
+     * @param attempt
+     * @param account
+     */
+    void handleSuccesfulRegistration(Connection con,
+            RegistrationAttempt attempt, Account account);
 }
