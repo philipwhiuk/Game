@@ -7,6 +7,7 @@ import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 
 import de.lessvoid.nifty.Nifty;
+import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
@@ -32,6 +33,10 @@ public class LoginScreen implements ScreenController, AuthInterface {
      * Password input field.
      */
     private Element textInputPassword;
+    /**
+     * Message label
+     */
+    private Element messageLabel;
     /**
      * Game client.
      */
@@ -62,6 +67,7 @@ public class LoginScreen implements ScreenController, AuthInterface {
         this.nifty = newNifty;
         textInputUsername = screen.findElementByName("text_input_username");
         textInputPassword = screen.findElementByName("text_input_password");
+        messageLabel = screen.findElementByName("message");
         gameClient.setState(State.LOGIN);
     }
 
@@ -141,7 +147,7 @@ public class LoginScreen implements ScreenController, AuthInterface {
      */
     public final void setMessage(final String m) {
         LOGGER.info("Setting message: " + m);
-        // TODO Auto-generated method stub
+        messageLabel.getNiftyControl(Label.class).setText(m);
     }
 
     /**
