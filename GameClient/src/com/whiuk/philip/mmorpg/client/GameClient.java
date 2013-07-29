@@ -44,6 +44,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
 import com.google.protobuf.ByteString;
+import com.whiuk.philip.mmorpg.client.game.Game;
+import com.whiuk.philip.mmorpg.client.game.PlayerCharacter;
 import com.whiuk.philip.mmorpg.client.screens.GameScreen;
 import com.whiuk.philip.mmorpg.client.screens.LobbyScreen;
 import com.whiuk.philip.mmorpg.client.screens.LoginScreen;

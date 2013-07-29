@@ -1,4 +1,5 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.game;
+
 
 /**
  * The game camera.

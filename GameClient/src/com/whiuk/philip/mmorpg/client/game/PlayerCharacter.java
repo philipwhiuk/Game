@@ -1,10 +1,10 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.game;
 
 
 import org.lwjgl.input.Keyboard;
 
-import com.whiuk.philip.mmorpg.client.GameSettings.Control;
-import com.whiuk.philip.mmorpg.client.models.Model;
+import com.whiuk.philip.mmorpg.client.game.GameSettings.Control;
+import com.whiuk.philip.mmorpg.client.game.models.Model;
 import com.whiuk.philip.mmorpg.shared.Messages
     .ServerMessage.GameData.MovementInformation;
 
@@ -12,7 +12,7 @@ import com.whiuk.philip.mmorpg.shared.Messages
  * @author Philip
  *
  */
-class PlayerCharacter {
+public class PlayerCharacter {
     /**
      * Current direction.
      */
@@ -45,7 +45,7 @@ class PlayerCharacter {
      * @param race Race
      * @param location Location
      */
-    PlayerCharacter(final int id, final String name,
+    public PlayerCharacter(final int id, final String name,
             final String race, final String location) {
         // TODO Auto-generated constructor stub
         model = Model.fromFile("player.mdl");

@@ -1,8 +1,8 @@
 package com.whiuk.philip.mmorpg.client.screens;
 
 import com.whiuk.philip.mmorpg.client.ChatInterface;
-import com.whiuk.philip.mmorpg.client.Game;
 import com.whiuk.philip.mmorpg.client.GameClient;
+import com.whiuk.philip.mmorpg.client.game.Game;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.ChatData;
 
 import de.lessvoid.nifty.Nifty;

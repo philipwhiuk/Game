@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.game;
 
 import java.util.HashMap;
 import java.util.Map;

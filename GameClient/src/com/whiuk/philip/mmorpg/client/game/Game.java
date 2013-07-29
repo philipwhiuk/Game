@@ -1,7 +1,9 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.game;
 
 import org.lwjgl.opengl.GL11;
 
+import com.whiuk.philip.mmorpg.client.GameClientUtils;
+import com.whiuk.philip.mmorpg.client.GameInterface;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 /**
@@ -42,11 +44,15 @@ public class Game implements GameInterface {
      * Whether the player is moving.
      */
     private boolean moving;
+    /**
+     * Ambient light
+     */
+    private Light ambientLight;
 
     /**
      * @param character Player character
      */
-    Game(final PlayerCharacter character) {
+    public Game(final PlayerCharacter character) {
         this.player = character;
         this.camera = new Camera();
         // TODO Auto-generated constructor stub
@@ -83,7 +89,7 @@ public class Game implements GameInterface {
     /**
      * Render the game.
      */
-    final void render() {
+    public final void render() {
         // Clear the screen and depth buffer
         GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearDepth(1.0f);
@@ -93,6 +99,7 @@ public class Game implements GameInterface {
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
                 GL11.GL_AMBIENT_AND_DIFFUSE);
+        ambientLight.render();
         player.render();
         //Camera
         camera.render(player);
