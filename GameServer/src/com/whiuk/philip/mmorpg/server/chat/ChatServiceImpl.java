@@ -101,8 +101,12 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void notifyLogout(final Account account) {
-        // TODO Auto-generated method stub
+    public final void notifyLogout(final Account account) {
+        for (Entry<Integer, ChatChannel> e : channels.entrySet()) {
+            if (e.getValue().hasAccountRegistered(account)) {
+                e.getValue().leave(account);
+            }
+        }
     }
 
     @Override
@@ -144,7 +148,7 @@ public class ChatServiceImpl implements ChatService {
     }
 
     @Override
-    public void sendPlayerJoinedChannel(
+    public final void sendPlayerJoinedChannel(
             final int id, final Account src, final Account target) {
         logger.trace("Sending joined channel");
         ServerMessage message = ServerMessage
@@ -156,6 +160,27 @@ public class ChatServiceImpl implements ChatService {
                         ServerMessage.ChatData
                         .newBuilder()
                         .setType(Type.PLAYER_JOINED)
+                        .setPrivate(false)
+                        .setSource(src.getUsername())
+                        .setChannel(id)
+                        .build())
+                .build();
+        messageHandler.queueOutboundMessage(message);
+    }
+
+    @Override
+    public final void sendPlayerLeftChannel(
+            final int id, final Account src, final Account target) {
+        logger.trace("Sending left channel");
+        ServerMessage message = ServerMessage
+                .newBuilder()
+                .setType(ServerMessage.Type.CHAT)
+                .setClientInfo(authService.getConnection(target)
+                        .getClientInfo())
+                .setChatData(
+                        ServerMessage.ChatData
+                        .newBuilder()
+                        .setType(Type.PLAYER_LEFT)
                         .setPrivate(false)
                         .setSource(src.getUsername())
                         .setChannel(id)

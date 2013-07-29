@@ -157,4 +157,17 @@ public class ChatChannel {
         this.chatService = service;
     }
 
+
+    /**
+     * @param account Account to leave
+     */
+    public final void leave(final Account account) {
+        online.remove(account);
+        for (Account a: online) {
+            chatService.sendPlayerLeftChannel(id, account, a);
+        }
+        //Tell the player they've left.
+        chatService.sendPlayerLeftChannel(id, account, account);
+    }
+
 }

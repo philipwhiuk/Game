@@ -35,4 +35,12 @@ public interface ChatService extends AuthEventListener {
      * @param target Target
      */
     void sendPlayerJoinedChannel(int id, Account src, Account target);
+    /**
+     * Inform the <code>target</code> account that
+     * the <code>src</code> account left the channel.
+     * @param id Channel ID
+     * @param src Source
+     * @param target Target
+     */
+    void sendPlayerLeftChannel(int id, Account src, Account target);
 }
