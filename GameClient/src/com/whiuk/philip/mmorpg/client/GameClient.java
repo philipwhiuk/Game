@@ -50,6 +50,7 @@ import com.whiuk.philip.mmorpg.client.ui.GameScreen;
 import com.whiuk.philip.mmorpg.client.ui.LobbyScreen;
 import com.whiuk.philip.mmorpg.client.ui.LoginScreen;
 import com.whiuk.philip.mmorpg.client.ui.RegisterScreen;
+import com.whiuk.philip.mmorpg.client.ui.SettingsScreen;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientInfo;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage.AuthData;
@@ -188,6 +189,10 @@ public class GameClient implements Runnable {
      * Indicates the game client has finished and should close.
      */
     private boolean finished;
+    /**
+     * Settings screen.
+     */
+    private SettingsScreen settingsScreen;
     /**
      * Remote InetSocketAddress.
      */
@@ -986,7 +991,7 @@ public class GameClient implements Runnable {
     /**
      * Handle disconnection from server.
      */
-    void handleDisconnection() {
+    final void handleDisconnection() {
         switch(state) {
             case LOGIN:
                  break;
@@ -1024,7 +1029,7 @@ public class GameClient implements Runnable {
     /**
      * Handle logout.
      */
-    public void handleLogout() {
+    public final void handleLogout() {
         switch(state) {
             case LOGIN:
                  break;
@@ -1060,5 +1065,13 @@ public class GameClient implements Runnable {
                 throw new IllegalStateException(
                         "Unhandled logout in state: " + state);
         }
+    }
+    /**
+     * 
+     */
+    public void switchToSettingsScreen() {
+        settingsScreen = new SettingsScreen(this);
+        nifty.registerScreenController(settingsScreen);
+        nifty.fromXml("settingsScreen.xml", "settings");
     }
 }

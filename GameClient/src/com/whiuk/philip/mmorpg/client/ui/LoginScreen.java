@@ -151,6 +151,13 @@ public class LoginScreen implements ScreenController {
     }
 
     /**
+     *
+     */
+    public final void settings() {
+        gameClient.switchToSettingsScreen();
+    }
+
+    /**
      * @param errorMessage Error message
      */
     public final void loginFailed(final String errorMessage) {
