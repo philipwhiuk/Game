@@ -263,5 +263,5 @@ public class LobbyScreen
     */
    public final void logout() {
        gameClient.handleLogout();
-   }    
+   }
 }
