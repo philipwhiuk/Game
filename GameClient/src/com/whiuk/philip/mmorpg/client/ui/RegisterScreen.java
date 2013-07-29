@@ -2,6 +2,7 @@ package com.whiuk.philip.mmorpg.client.ui;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.AuthInterface;
 import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 
@@ -17,7 +18,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Start screen.
  * @author Philip Whitehouse
  */
-public class RegisterScreen implements ScreenController {
+public class RegisterScreen implements ScreenController, AuthInterface {
     /**
      *
      */
@@ -77,7 +78,7 @@ public class RegisterScreen implements ScreenController {
         textInputPasswordConfirm = screen
                 .findElementByName("text_input_password_confirm");
         textInputEmail = screen.findElementByName("text_input_email");
-        gameClient.setState(State.REGISTER);
+        gameClient.setState(State.LOGIN);
     }
 
     @Override
@@ -188,18 +189,12 @@ public class RegisterScreen implements ScreenController {
         }
     }
 
-    /**
-     * Set a message in the UI.
-     * @param m message
-     */
-    private void setMessage(final String m) {
+    @Override
+    public void setMessage(final String m) {
         // TODO Auto-generated method stub
     }
 
-    /**
-     * Update the UI to show a registration failed.
-     * @param reason The reason it failed.
-     */
+    @Override
     public final void registrationFailed(final String reason) {
         registrationFailures++;
         setMessage(reason);
@@ -210,5 +205,15 @@ public class RegisterScreen implements ScreenController {
      */
     public final void login() {
         gameClient.switchToLoginScreen();
+    }
+
+    @Override
+    public final void loginFailed(final String errorMessage) {
+        setMessage(errorMessage);
+    }
+
+    @Override
+    public void handleExtraAuthFailed() {
+        // TODO Auto-generated method stub
     }
 }

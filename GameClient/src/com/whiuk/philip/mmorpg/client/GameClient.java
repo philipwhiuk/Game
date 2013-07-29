@@ -60,6 +60,7 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage.GameData.CharacterI
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.renderer.lwjgl.input.LwjglInputSystem;
 import de.lessvoid.nifty.renderer.lwjgl.render.LwjglRenderDevice;
+import de.lessvoid.nifty.screen.ScreenController;
 import de.lessvoid.nifty.sound.openal.OpenALSoundDevice;
 import de.lessvoid.nifty.spi.time.impl.AccurateTimeProvider;
 
@@ -80,10 +81,6 @@ public class GameClient implements Runnable {
          * Login.
          */
         LOGIN,
-        /**
-         * Registration.
-         */
-        REGISTER,
         /**
          * Lobby.
          */
@@ -142,21 +139,9 @@ public class GameClient implements Runnable {
      */
     private volatile State state = State.LOGIN;
     /**
-     * Login screen.
+     * GUI Screen
      */
-    private LoginScreen loginScreen;
-    /**
-     * Register screen.
-     */
-    private RegisterScreen registerScreen;
-    /**
-     * Lobby screen.
-     */
-    private LobbyScreen lobbyScreen;
-    /**
-     * Game screen.
-     */
-    private GameScreen gameScreen;
+    private ScreenController screen;
     /**
      * Account.
      */
@@ -421,8 +406,8 @@ public class GameClient implements Runnable {
     private void setupNifty() {
         nifty = new Nifty(new LwjglRenderDevice(), new OpenALSoundDevice(),
                 inputSystem, new AccurateTimeProvider());
-        loginScreen = new LoginScreen(this);
-        nifty.registerScreenController(loginScreen);
+        screen = new LoginScreen(this);
+        nifty.registerScreenController(screen);
     }
     /**
      * Setup input system.
@@ -668,7 +653,7 @@ public class GameClient implements Runnable {
                 queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
-                        lobbyScreen.handleGameData(message.getGameData());
+                        ((GameInterface) screen).handleGameData(message.getGameData());
                     }
 
                     @Override
@@ -683,7 +668,7 @@ public class GameClient implements Runnable {
             queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
-                    lobbyScreen.handleGameData(message.getGameData());
+                    ((GameInterface) screen).handleGameData(message.getGameData());
                 }
 
                 @Override
@@ -729,7 +714,7 @@ public class GameClient implements Runnable {
             queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
-                    lobbyScreen.handleChatData(message.getChatData());
+                    ((ChatInterface) screen).handleChatData(message.getChatData());
                 }
 
                 @Override
@@ -738,12 +723,12 @@ public class GameClient implements Runnable {
                 }
             });
         } else if (state.equals(State.GAME)) {
-            gameScreen.handleChatData(message.getChatData());
+            ((ChatInterface) screen).handleChatData(message.getChatData());
         } else if (unprocessedLoginResponse) {
             queuedNiftyEvents.add(new QueuedLWJGLEvent() {
                 @Override
                 public void run() {
-                    lobbyScreen.handleChatData(message.getChatData());
+                    ((ChatInterface) screen).handleChatData(message.getChatData());
                 }
 
                 @Override
@@ -765,23 +750,36 @@ public class GameClient implements Runnable {
         switch (state) {
             case LOGIN:
                 switch (data.getType()) {
+                    case REGISTRATION_FAILED:
+                        ((AuthInterface) screen).registrationFailed(data
+                                .getErrorMessage());
+                        break;
+                    case REGISTRATION_SUCCESSFUL:
+                        if (!data.hasUsername()) {
+                            LOGGER.error("Username not provided, failed registration");
+                            ((AuthInterface) screen).registrationFailed("Server error occurred");
+                        } else {
+                            switchToLoginScreen();
+                            ((AuthInterface) screen).setMessage("Account '"
+                                    + data.getUsername()
+                                    + "' succesfully registered.");
+                            state = State.LOGIN;
+                        }
+                        break;
                     case LOGIN_FAILED:
-                        loginScreen.loginFailed(data
+                        ((AuthInterface) screen).loginFailed(data
                                 .getErrorMessage());
                         break;
                     case LOGIN_SUCCESSFUL:
                         handleSuccessfulLogin(data);
                         break;
                     case EXTRA_AUTH_FAILED:
-                        loginScreen.handleExtraAuthFailed();
+                        ((AuthInterface) screen).handleExtraAuthFailed();
                         break;
                     default:
                         LOGGER.info("Auth message type " + data.getType()
                                 + " recieved in invalid state: " + state);
                 }
-                break;
-            case REGISTER: // Register Screen
-                handleAuthMessageInRegisterState(data);
                 break;
             case LOBBY:
                 switch (data.getType()) {
@@ -820,7 +818,7 @@ public class GameClient implements Runnable {
     private void handleSuccessfulLogin(final ServerMessage.AuthData data) {
         if (!data.hasUsername()) {
             LOGGER.error("Username not provided, failed login");
-            loginScreen.loginFailed("Server error occurred");
+            ((AuthInterface) screen).loginFailed("Server error occurred");
         } else {
             account = new Account(data.getUsername());
             unprocessedLoginResponse = true;
@@ -833,8 +831,7 @@ public class GameClient implements Runnable {
 
                 @Override
                 public boolean canRun() {
-                    return (state.equals(State.LOGIN)
-                            || state.equals(State.REGISTER));
+                    return state.equals(State.LOGIN);
                 }
             };
             try {
@@ -843,37 +840,6 @@ public class GameClient implements Runnable {
                 LOGGER.error(
                         "Interrupted while waiting to queue switch to lobby");
             }
-        }
-    }
-    /**
-     * Handle authentication messages when in the Register state.
-     * @param data Authentication Data
-     */
-    private void handleAuthMessageInRegisterState(
-            final ServerMessage.AuthData data) {
-        switch (data.getType()) {
-            case REGISTRATION_FAILED:
-                registerScreen.registrationFailed(data
-                        .getErrorMessage());
-                break;
-            case REGISTRATION_SUCCESSFUL:
-                if (!data.hasUsername()) {
-                    LOGGER.error("Username not provided, failed registration");
-                    registerScreen.registrationFailed("Server error occurred");
-                } else {
-                    switchToLoginScreen();
-                    loginScreen.setMessage("Account '"
-                            + data.getUsername()
-                            + "' succesfully registered.");
-                    state = State.LOGIN;
-                }
-                break;
-            case LOGIN_SUCCESSFUL:
-                handleSuccessfulLogin(data);
-                break;
-            default:
-                LOGGER.info("Auth message type " + data.getType()
-                        + " recieved in invalid state: " + state);
         }
     }
     /**
@@ -921,10 +887,9 @@ public class GameClient implements Runnable {
      * Must be run on the OpenGL context thread.
      */
     public final void switchToRegisterScreen() {
-        registerScreen = new RegisterScreen(this);
-        nifty.registerScreenController(registerScreen);
+        screen = new RegisterScreen(this);
+        nifty.registerScreenController(screen);
         nifty.fromXml("registerScreen.xml", "register");
-        state = State.REGISTER;
 
     }
     /**
@@ -932,8 +897,8 @@ public class GameClient implements Runnable {
      * Must be run on the OpenGL context thread.
      */
     final void switchToLobbyScreen() {
-        lobbyScreen = new LobbyScreen(this, account);
-        nifty.registerScreenController(lobbyScreen);
+        screen = new LobbyScreen(this, account);
+        nifty.registerScreenController(screen);
         nifty.fromXml("lobbyScreen.xml", "lobby");
     }
     /**
@@ -941,8 +906,8 @@ public class GameClient implements Runnable {
      * Must be run on the OpenGL context thread.
      */
     public final void switchToLoginScreen() {
-        loginScreen = new LoginScreen(this);
-        nifty.registerScreenController(loginScreen);
+        screen = new LoginScreen(this);
+        nifty.registerScreenController(screen);
         nifty.fromXml("loginScreen.xml", "start");
     }
     /**
@@ -950,8 +915,8 @@ public class GameClient implements Runnable {
      * Must be run on the OpenGL context thread.
      */
     private void switchToGameScreen() {
-        gameScreen = new GameScreen(this, game);
-        nifty.registerScreenController(gameScreen);
+        screen = new GameScreen(this, game);
+        nifty.registerScreenController(screen);
         nifty.fromXml("gameScreen.xml", "main");
     }
     /**
@@ -995,8 +960,6 @@ public class GameClient implements Runnable {
         switch(state) {
             case LOGIN:
                  break;
-            case REGISTER:
-                break;
             case LOBBY:
                 //Fallthrough:
             case GAME:
@@ -1033,8 +996,6 @@ public class GameClient implements Runnable {
         switch(state) {
             case LOGIN:
                  break;
-            case REGISTER:
-                break;
             case LOBBY:
                 //Fallthrough:
             case GAME:

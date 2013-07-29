@@ -2,6 +2,7 @@ package com.whiuk.philip.mmorpg.client.ui;
 
 import org.apache.log4j.Logger;
 
+import com.whiuk.philip.mmorpg.client.AuthInterface;
 import com.whiuk.philip.mmorpg.client.GameClient;
 import com.whiuk.philip.mmorpg.client.GameClient.State;
 
@@ -17,7 +18,7 @@ import de.lessvoid.nifty.screen.ScreenController;
  * Login screen.
  * @author Philip Whitehouse
  */
-public class LoginScreen implements ScreenController {
+public class LoginScreen implements ScreenController, AuthInterface {
     /**
      * Nifty.
      */
@@ -157,18 +158,19 @@ public class LoginScreen implements ScreenController {
         gameClient.switchToSettingsScreen();
     }
 
-    /**
-     * @param errorMessage Error message
-     */
+    @Override
     public final void loginFailed(final String errorMessage) {
         loginFailures++;
         setMessage(errorMessage);
     }
 
-    /**
-     * Handle extra authentication information failure.
-     */
+    @Override
     public final void handleExtraAuthFailed() {
         LOGGER.info("Extra authentication failed");
+    }
+
+    @Override
+    public final void registrationFailed(final String errorMessage) {
+        setMessage(errorMessage);
     }
 }
