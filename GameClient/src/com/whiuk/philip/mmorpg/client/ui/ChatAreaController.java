@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.client;
+package com.whiuk.philip.mmorpg.client.ui;
 
 import java.util.Properties;
 

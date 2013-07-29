@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.client.screens;
+package com.whiuk.philip.mmorpg.client.ui;
 
 import com.whiuk.philip.mmorpg.client.ChatInterface;
 import com.whiuk.philip.mmorpg.client.GameClient;

@@ -4,7 +4,7 @@
   xsi:schemaLocation="http://nifty-gui.sourceforge.net/nifty-1.3.xsd http://nifty-gui.sourceforge.net/nifty-1.3.xsd">
    <useStyles filename="nifty-default-styles.xml" />
    <useControls filename="nifty-default-controls.xml" />
-   <screen id="start" controller="com.whiuk.philip.mmorpg.client.screens.LoginScreen">
+   <screen id="start" controller="com.whiuk.philip.mmorpg.client.ui.LoginScreen">
 	    <layer id="layer" backgroundColor="#000f" childLayout="center">
 	      <panel id="panel" height="290" width="35%" align="center" valign="center" backgroundColor="#222f" childLayout="center" visibleToMouse="false">
 	        <panel id="panel-centre" height="220" width="100%" align="center" valign="top" backgroundColor="#222f" childLayout="center" visibleToMouse="false">

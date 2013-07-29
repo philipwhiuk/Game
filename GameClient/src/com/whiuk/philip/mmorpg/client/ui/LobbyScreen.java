@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.client.screens;
+package com.whiuk.philip.mmorpg.client.ui;
 
 import java.util.ArrayList;
 import java.util.List;

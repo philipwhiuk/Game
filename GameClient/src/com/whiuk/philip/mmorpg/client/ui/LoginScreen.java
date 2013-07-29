@@ -1,4 +1,4 @@
-package com.whiuk.philip.mmorpg.client.screens;
+package com.whiuk.philip.mmorpg.client.ui;
 
 import org.apache.log4j.Logger;
 
