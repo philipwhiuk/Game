@@ -896,7 +896,7 @@ public class GameClient implements Runnable {
      * Switch from the previous screen to the lobby screen.
      * Must be run on the OpenGL context thread.
      */
-    final void switchToLobbyScreen() {
+    public final void switchToLobbyScreen() {
         screen = new LobbyScreen(this, account);
         nifty.registerScreenController(screen);
         nifty.fromXml("lobbyScreen.xml", "lobby");
@@ -914,7 +914,7 @@ public class GameClient implements Runnable {
      * Switch from the previous screen to the game.
      * Must be run on the OpenGL context thread.
      */
-    private void switchToGameScreen() {
+    public void switchToGameScreen() {
         screen = new GameScreen(this, game);
         nifty.registerScreenController(screen);
         nifty.fromXml("gameScreen.xml", "main");
@@ -1030,9 +1030,15 @@ public class GameClient implements Runnable {
     /**
      * 
      */
-    public void switchToSettingsScreen() {
+    public final void switchToSettingsScreen() {
         settingsScreen = new SettingsScreen(this);
         nifty.registerScreenController(settingsScreen);
         nifty.fromXml("settingsScreen.xml", "settings");
+    }
+    /**
+     * @return state
+     */
+    public final State getState() {
+        return state;
     }
 }
