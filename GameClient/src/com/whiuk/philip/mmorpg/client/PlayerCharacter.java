@@ -1,10 +1,10 @@
 package com.whiuk.philip.mmorpg.client;
 
-import models.Model;
 
 import org.lwjgl.input.Keyboard;
 
 import com.whiuk.philip.mmorpg.client.GameSettings.Control;
+import com.whiuk.philip.mmorpg.client.models.Model;
 import com.whiuk.philip.mmorpg.shared.Messages
     .ServerMessage.GameData.MovementInformation;
 

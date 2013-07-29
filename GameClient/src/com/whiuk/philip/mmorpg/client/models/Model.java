@@ -1,4 +1,4 @@
-package models;
+package com.whiuk.philip.mmorpg.client.models;
 
 import java.io.BufferedReader;
 import java.io.IOException;
