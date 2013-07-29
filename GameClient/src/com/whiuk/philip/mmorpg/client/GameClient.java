@@ -875,7 +875,7 @@ public class GameClient implements Runnable {
     /**
      * Indicates the client should quit.
      */
-    final void quit() {
+    public final void quit() {
         finished = true;
     }
     /**
