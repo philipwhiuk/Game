@@ -103,9 +103,12 @@ public class NettyNetworkServiceHandler
     public final void exceptionCaught(final ChannelHandlerContext ctx,
             final Throwable t) {
         Channel ch = ctx.channel();
-        LOGGER.info("Exception caught on: " + ch, t);
+        if (t instanceof IOException) {
+            LOGGER.trace("I/O Exception caught from: " + ch, t);
+        } else {
+            LOGGER.info("Exception caught on: " + ch, t);
+        }
         ch.close();
-        
     }
 
     @Override
