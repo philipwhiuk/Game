@@ -60,6 +60,7 @@ public class LoginScreen implements ScreenController, AuthInterface {
      */
     public LoginScreen(final GameClient g) {
         this.gameClient = g;
+        gameClient.setState(State.LOGIN);
     }
 
     @Override
