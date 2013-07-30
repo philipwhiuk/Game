@@ -26,7 +26,7 @@ public class GameServerProperties extends Properties {
     *
     */
    private static final String DEFAULT_PROPERTIES_FILENAME =
-           "/etc/opt/philipwhiuk/gameServer.properties";
+           "gameServer.properties";
    /**
     *
     */
