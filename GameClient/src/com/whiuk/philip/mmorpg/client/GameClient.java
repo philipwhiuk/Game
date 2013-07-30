@@ -140,10 +140,6 @@ public class GameClient implements Runnable {
      */
     private boolean finished;
     /**
-     * Settings screen.
-     */
-    private SettingsScreen settingsScreen;
-    /**
      * Class logger.
      */
     private static final transient Logger LOGGER = Logger
@@ -393,7 +389,6 @@ public class GameClient implements Runnable {
             }
         });
     }
-
     /**
      * Close the network connection.
      */
@@ -902,8 +897,8 @@ public class GameClient implements Runnable {
      * Must be run on the OpenGL context thread.
      */
     public final void switchToSettingsScreen() {
-        settingsScreen = new SettingsScreen(this);
-        nifty.registerScreenController(settingsScreen);
+        screen = new SettingsScreen(this);
+        nifty.registerScreenController(screen);
         nifty.fromXml("settingsScreen.xml", "settings");
     }
     /**
