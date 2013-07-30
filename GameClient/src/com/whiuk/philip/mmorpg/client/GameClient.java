@@ -1,7 +1,6 @@
 package com.whiuk.philip.mmorpg.client;
 
 import java.io.UnsupportedEncodingException;
-import java.net.InetSocketAddress;
 import java.nio.IntBuffer;
 import java.security.GeneralSecurityException;
 import java.security.MessageDigest;
@@ -14,23 +13,6 @@ import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelFutureListener;
-import io.netty.channel.ChannelInitializer;
-import io.netty.channel.ChannelOption;
-import io.netty.channel.ChannelPipeline;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioSocketChannel;
-import io.netty.handler.codec.protobuf.
-    ProtobufDecoder;
-import io.netty.handler.codec.protobuf.
-    ProtobufEncoder;
-import io.netty.handler.codec.protobuf.
-    ProtobufVarint32FrameDecoder;
-import io.netty.handler.codec.protobuf.
-    ProtobufVarint32LengthFieldPrepender;
-import io.netty.util.HashedWheelTimer;
-import io.netty.util.Timer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.LWJGLUtil;
@@ -94,21 +76,9 @@ public class GameClient implements Runnable {
      */
     private static GameClient gameClient;
     /**
-     * Network host.
-     */
-    private static final String HOST = "localhost";
-    /**
-     * Network port.
-     */
-    private static final int PORT = 8443;
-    /**
      * Network channel.
      */
     private Channel channel;
-    /**
-     * Channel Handler.
-     */
-    private ClientChannelHandler channelHandler;
     /**
      * Client ID.
      */
@@ -174,19 +144,10 @@ public class GameClient implements Runnable {
      */
     private SettingsScreen settingsScreen;
     /**
-     * Remote InetSocketAddress.
-     */
-    private static final InetSocketAddress REMOTE_ADDRESS =
-            new InetSocketAddress(HOST, PORT);
-    /**
      * Class logger.
      */
     private static final transient Logger LOGGER = Logger
             .getLogger(GameClient.class);
-    /**
-     * Connection timeout.
-     */
-    private static final int CONNECTION_TIMEOUT = 10000;
     /**
      * Delay before reconnecting.
      */
@@ -413,7 +374,8 @@ public class GameClient implements Runnable {
      * Open a network connection.
      */
     private void openNetworkConnection() {
-        final Bootstrap bootstrap = buildClientBootstrap();
+        final Bootstrap bootstrap = ClientNetworkManager
+                .buildClientBootstrap(this);
         final ChannelFuture f = bootstrap.connect();
         f.addListener(new ChannelFutureListener() {
             @Override
@@ -422,7 +384,7 @@ public class GameClient implements Runnable {
                 if (future.isCancelled()) {
                     LOGGER.info("Connection attempt cancelled");
                 } else if (!future.isSuccess()) {
-                    channelHandler.logException(
+                    ClientNetworkManager.getNetworkManager().logException(
                             "Connection attempt unsuccesful",
                             future.cause());
                 } else {
@@ -431,46 +393,12 @@ public class GameClient implements Runnable {
             }
         });
     }
-    /**
-     * Build the client bootstrap.
-     * @return client boostrap
-     */
-    private Bootstrap buildClientBootstrap() {
-        EventLoopGroup workerGroup = new NioEventLoopGroup();
-        final Timer timer = new HashedWheelTimer();
-        final Bootstrap bootstrap = new Bootstrap();
-        bootstrap.group(workerGroup);
-        bootstrap.channel(NioSocketChannel.class);
-        channelHandler = new ClientChannelHandler(GameClient.this, bootstrap,
-                timer, REMOTE_ADDRESS);
-
-        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
-            @Override
-            public void initChannel(final SocketChannel ch) throws Exception {
-                ChannelPipeline p = ch.pipeline();
-                p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
-                p.addLast("protobufDecoder",
-                        new ProtobufDecoder(
-                                ServerMessage.getDefaultInstance()));
-                p.addLast("frameEncoder",
-                        new ProtobufVarint32LengthFieldPrepender());
-                p.addLast("protobufEncoder", new ProtobufEncoder());
-                p.addLast("handler", channelHandler);
-            }
-        });
-        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
-        bootstrap.option(ChannelOption.TCP_NODELAY, true);
-        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
-                CONNECTION_TIMEOUT);
-        bootstrap.remoteAddress(REMOTE_ADDRESS);
-        return bootstrap;
-    }
 
     /**
      * Close the network connection.
      */
     private void closeNetworkConnection() {
-        channelHandler.stopReconnecting();
+        ClientNetworkManager.getNetworkManager().stopReconnecting();
         if (channel != null) {
             synchronized (channel) {
                 if (channel.isActive()) {

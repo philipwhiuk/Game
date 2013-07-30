@@ -9,8 +9,20 @@ import org.apache.log4j.Logger;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandler.Sharable;
+import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioSocketChannel;
 import io.netty.channel.ChannelHandlerContext;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
+import io.netty.channel.ChannelPipeline;
+import io.netty.channel.EventLoopGroup;
 import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.handler.codec.protobuf.ProtobufDecoder;
+import io.netty.handler.codec.protobuf.ProtobufEncoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32FrameDecoder;
+import io.netty.handler.codec.protobuf.ProtobufVarint32LengthFieldPrepender;
+import io.netty.util.HashedWheelTimer;
 import io.netty.util.Timeout;
 import io.netty.util.Timer;
 import io.netty.util.TimerTask;
@@ -25,20 +37,83 @@ import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
  * @author Philip Whitehouse
  */
 @Sharable
-class ClientChannelHandler
+class ClientNetworkManager
     extends SimpleChannelInboundHandler<ServerMessage> {
+    /**
+     * Network host.
+     */
+    private static final String HOST = "localhost";
+    /**
+     * Network port.
+     */
+    private static final int PORT = 8443;
+    /**
+     * Remote InetSocketAddress.
+     */
+    private static final InetSocketAddress REMOTE_ADDRESS =
+            new InetSocketAddress(HOST, PORT);
+    /**
+     * Connection timeout.
+     */
+    private static final int CONNECTION_TIMEOUT = 10000;
 
     /**
      * Class logger.
      */
     private static final Logger LOGGER = Logger
-            .getLogger(ClientChannelHandler.class);
+            .getLogger(ClientNetworkManager.class);
 
     /**
      * Milliseconds in a second.
      */
     private static final long ONE_SECOND = 1000;
+    /**
+     * Singleton.
+     */
+    private static ClientNetworkManager clientNetworkManager;
 
+    /**
+     * @return Network manager
+     */
+    static final ClientNetworkManager getNetworkManager() {
+        return clientNetworkManager;
+    }
+
+    /**
+     * Build the client bootstrap.
+     * @param client Game client
+     * @return client boostrap
+     */
+    static final Bootstrap buildClientBootstrap(final GameClient client) {
+        EventLoopGroup workerGroup = new NioEventLoopGroup();
+        final Timer timer = new HashedWheelTimer();
+        final Bootstrap bootstrap = new Bootstrap();
+        bootstrap.group(workerGroup);
+        bootstrap.channel(NioSocketChannel.class);
+        clientNetworkManager = new ClientNetworkManager(client, bootstrap,
+                timer, REMOTE_ADDRESS);
+
+        bootstrap.handler(new ChannelInitializer<SocketChannel>() {
+            @Override
+            public void initChannel(final SocketChannel ch) throws Exception {
+                ChannelPipeline p = ch.pipeline();
+                p.addLast("frameDecoder", new ProtobufVarint32FrameDecoder());
+                p.addLast("protobufDecoder",
+                        new ProtobufDecoder(
+                                ServerMessage.getDefaultInstance()));
+                p.addLast("frameEncoder",
+                        new ProtobufVarint32LengthFieldPrepender());
+                p.addLast("protobufEncoder", new ProtobufEncoder());
+                p.addLast("handler", clientNetworkManager);
+            }
+        });
+        bootstrap.option(ChannelOption.SO_KEEPALIVE, true);
+        bootstrap.option(ChannelOption.TCP_NODELAY, true);
+        bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
+                CONNECTION_TIMEOUT);
+        bootstrap.remoteAddress(REMOTE_ADDRESS);
+        return bootstrap;
+    }
     /**
      *
      */
@@ -83,7 +158,7 @@ class ClientChannelHandler
      * @param t Reconnection timer
      * @param a Server network socket address
      */
-    ClientChannelHandler(final GameClient gameClient,
+    ClientNetworkManager(final GameClient gameClient,
             final Bootstrap b, final Timer t, final InetSocketAddress a) {
         this.client = gameClient;
         this.bootstrap = b;
