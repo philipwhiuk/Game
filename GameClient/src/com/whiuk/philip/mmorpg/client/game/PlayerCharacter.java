@@ -87,7 +87,7 @@ public class PlayerCharacter {
      */
     final void render() {
         org.lwjgl.opengl.GL11.glPushMatrix();
-        org.lwjgl.opengl.GL11.glTranslatef(x, y, z);
+        org.lwjgl.opengl.GL11.glTranslatef(getX(), getY(), getZ());
 //TODO org.lwjgl.opengl.GL11.glRotatef(direction);
         model.render();
         org.lwjgl.opengl.GL11.glPopMatrix();
@@ -135,5 +135,41 @@ public class PlayerCharacter {
      */
     void handleMovement(final MovementInformation movementInformation) {
         // TODO Auto-generated method stub
+    }
+    /**
+     * @return the z
+     */
+    public float getZ() {
+        return z;
+    }
+    /**
+     * @param z the z to set
+     */
+    public void setZ(float z) {
+        this.z = z;
+    }
+    /**
+     * @return the x
+     */
+    public float getX() {
+        return x;
+    }
+    /**
+     * @param x the x to set
+     */
+    public void setX(float x) {
+        this.x = x;
+    }
+    /**
+     * @return the y
+     */
+    public float getY() {
+        return y;
+    }
+    /**
+     * @param y the y to set
+     */
+    public void setY(float y) {
+        this.y = y;
     }
 }
