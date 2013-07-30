@@ -45,9 +45,8 @@ public class GameServerProperties extends Properties {
         try {
             load(new FileReader(file));
         } catch (Exception e) {
-            System.out.println(file.getAbsolutePath());
             logger.log(Level.WARN, "Error reading properties file: "
-                    + propertiesFilename, e);
+                    + file.getAbsolutePath(), e);
         }
     }
 }
