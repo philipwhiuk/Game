@@ -217,8 +217,6 @@ public class GameClient implements Runnable {
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
-            // render OpenGL
-            // Setup 3D
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
             runQueuedNiftyEvents();
             if (nifty.update()) {
@@ -227,9 +225,7 @@ public class GameClient implements Runnable {
             if (state == State.GAME) {
                 game.render();
             }
-            GL11.glDisable(GL11.GL_DEPTH_TEST);
-            nifty.render(false);
-            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            renderGUI();
             Display.sync(frameRate);
             Display.update();
             int error = GL11.glGetError();
@@ -242,6 +238,15 @@ public class GameClient implements Runnable {
         inputSystem.shutdown();
         Display.destroy();
         System.exit(0);
+    }
+    /**
+     * Render GUI.
+     */
+    private void renderGUI() {
+        GL11.glLoadIdentity();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        nifty.render(false);
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
     /**
      * Run any queued events on the Nifty thread.
