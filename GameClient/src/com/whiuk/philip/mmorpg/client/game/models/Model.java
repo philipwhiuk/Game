@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.lwjgl.opengl.GL11;
+
 /**
  * Model.
  * @author Philip
@@ -91,7 +93,7 @@ public final class Model {
          * 
          */
         private void render() {
-            org.lwjgl.opengl.GL11.glVertex3f(x, y, z);
+            GL11.glVertex3f(x, y, z);
         }
     }
 
@@ -121,6 +123,7 @@ public final class Model {
         private void render() {
             color.render();
             for (Vertex v: vertex) {
+                System.out.println("Rendering vertex x:"+v.x+", y:"+v.y+", z:"+v.z);
                 v.render();
             }
         }
@@ -144,9 +147,11 @@ public final class Model {
      * Render the model.
      */
     public void render() {
+        GL11.glBegin(GL11.GL_QUADS);
         for (Quad q: quads) {
             q.render();
         }
+        GL11.glEnd();
     }
     /**
      * Reads a model file.
