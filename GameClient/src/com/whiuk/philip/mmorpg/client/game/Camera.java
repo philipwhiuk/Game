@@ -84,15 +84,15 @@ class Camera {
     /**
      * Player-relative offset (x co-ordinate).
      */
-    private float xOffset;
+    private float xOffset = 5f;
     /**
      * Player-relative offset (y co-ordinate).
      */
-    private float yOffset;
+    private float yOffset = 5f;
     /**
      * Player-relative offset (z co-ordinate).
      */
-    private float zOffset;
+    private float zOffset = 5f;
     /**
      * Construct camera in default mode.
      */
