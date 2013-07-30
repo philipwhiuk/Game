@@ -72,6 +72,10 @@ public class GameClient implements Runnable {
         EXIT
     }
     /**
+     * Default frame rate.
+     */
+    private static final int FRAME_RATE = 60;
+    /**
      * Game client singleton.
      */
     private static GameClient gameClient;
@@ -139,6 +143,10 @@ public class GameClient implements Runnable {
      * Indicates the game client has finished and should close.
      */
     private boolean finished;
+    /**
+     * Target frame rate.
+     */
+    private int frameRate = FRAME_RATE;
     /**
      * Class logger.
      */
@@ -210,16 +218,20 @@ public class GameClient implements Runnable {
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
             // render OpenGL
-            if (state == State.GAME) {
-                   game.render();
-            }
-            Display.update();
+            // Setup 3D
+            GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
             runQueuedNiftyEvents();
-
             if (nifty.update()) {
                 finished = true;
             }
+            if (state == State.GAME) {
+                game.render();
+            }
+            GL11.glDisable(GL11.GL_DEPTH_TEST);
             nifty.render(false);
+            GL11.glEnable(GL11.GL_DEPTH_TEST);
+            Display.sync(frameRate);
+            Display.update();
             int error = GL11.glGetError();
             if (error != GL11.GL_NO_ERROR) {
                 String glerrmsg = GLU.gluErrorString(error);

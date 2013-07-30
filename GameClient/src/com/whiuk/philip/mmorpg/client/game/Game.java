@@ -120,7 +120,6 @@ public class Game implements GameInterface {
     public final void render() {
         // Clear the screen and depth buffer
         LOGGER.trace("Rendering game");
-        GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glClearDepth(1.0f);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glEnable(GL11.GL_BLEND);
@@ -128,6 +127,7 @@ public class Game implements GameInterface {
         GL11.glEnable(GL11.GL_COLOR_MATERIAL);
         GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
                 GL11.GL_AMBIENT_AND_DIFFUSE);
+        GL11.glLoadIdentity();
         ambientLight.render();
         terrain.render();
         for (Map.Entry<Integer, Structure> e : structures.entrySet()) {
@@ -142,5 +142,6 @@ public class Game implements GameInterface {
         player.render();
         //Camera
         camera.render(player);
+        GL11.glDisable(GL11.GL_BLEND);
     }
 }
