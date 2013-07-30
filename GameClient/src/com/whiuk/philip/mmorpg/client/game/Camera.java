@@ -1,5 +1,6 @@
 package com.whiuk.philip.mmorpg.client.game;
 
+import org.lwjgl.util.glu.GLU;
 
 /**
  * The game camera.
@@ -12,6 +13,99 @@ package com.whiuk.philip.mmorpg.client.game;
  *
  */
 class Camera {
+    /**
+     * The way in which camera handling works and
+     * the perspective that is provided.
+     * @author Philip
+     *
+     */
+    public enum Mode {
+        /**
+         * Third-person, static offset camera mode.
+         */
+        THIRD_PERSON_FIXED_STATIC("Third-person, static offset",
+                "A third person camera that maintains a set angle relative"
+                + " to the map and set distance from the player."),
+        /**
+         * Third-person, static angle, follow camera mode.
+         */
+        THIRD_PERSON_FIXED_FOLLOW("Third-person, static follow",
+                "A third person camera that maintains a set angle relative"
+                + " to the player and set distance from the player."),
+        /**
+         * Third-person, dynamic follow camera mode.
+         */
+        THIRD_PERSON_DYNAMIC_FOLLOW("Third-person, dynamic follow",
+                "A third person camera that provides a dynamic follow,"
+                + " adjusting for terrain."),
+        /**
+         * First-person camera mode.
+         */
+        FIRST_PERSON("First person",
+                "A first person camera");
+        /**
+         * Human readable name.
+         */
+        private final String title;
+        /**
+         * Description.
+         */
+        private final String description;
+        /**
+         * Constructor.
+         * @param t title
+         * @param d description
+         */
+        Mode(final String t, final String d) {
+            this.title = t;
+            this.description = d;
+        }
+        @Override
+        public String toString() {
+            return title;
+        }
+        /**
+         * @return title
+         */
+        public String title() {
+            return title;
+        }
+        /**
+         * @return description
+         */
+        public String description() {
+            return description;
+        }
+    }
+    /**
+     * Camera mode.
+     */
+    private Mode mode;
+    /**
+     * Player-relative offset (x co-ordinate).
+     */
+    private float xOffset;
+    /**
+     * Player-relative offset (y co-ordinate).
+     */
+    private float yOffset;
+    /**
+     * Player-relative offset (z co-ordinate).
+     */
+    private float zOffset;
+    /**
+     * Construct camera in default mode.
+     */
+    Camera() {
+        this(Mode.THIRD_PERSON_FIXED_STATIC);
+    }
+    /**
+     * Construct camera in given mode.
+     * @param m mode
+     */
+    Camera(final Mode m) {
+        this.mode = m;
+    }
 
     /**
      * Rotate <code>d</code> degrees around the Y (vertical) axis.
@@ -56,5 +150,47 @@ class Camera {
      */
     void render(final PlayerCharacter p) {
         // TODO Auto-generated method stub
+        GLU.gluLookAt(
+                p.getX() + xOffset, p.getY() + yOffset, p.getZ() + zOffset,
+                p.getX(), p.getY(), p.getZ(),
+                0, 1, 0);
+    }
+    /**
+     * @return the mode
+     */
+    public Mode getMode() {
+        return mode;
+    }
+    /**
+     * @param m the mode to set
+     */
+    public void setMode(final Mode m) {
+        this.mode = m;
+    }
+    /**
+     * Switch to the next mode.
+     */
+    public void nextMode() {
+        Mode[] modes = Mode.values();
+        for (int i = 0; i < modes.length; i++) {
+            if (mode == modes[i]) {
+                mode = modes[(i + 1) % modes.length];
+                return;
+            }
+        }
+        return;
+    }
+    /**
+     * Switch to the previous mode.
+     */
+    public void previousMode() {
+        Mode[] modes = Mode.values();
+        for (int i = 0; i < modes.length; i++) {
+            if (mode == modes[i]) {
+                mode = modes[(i - 1) % modes.length];
+                return;
+            }
+        }
+        return;
     }
 }
