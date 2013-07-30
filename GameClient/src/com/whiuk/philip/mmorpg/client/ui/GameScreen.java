@@ -57,18 +57,8 @@ public class GameScreen implements ScreenController, ChatInterface {
      console.output("Hello :)");
      // create the console commands class and attach it to the console
      ConsoleCommands consoleCommands = new ConsoleCommands(nifty, console);
-     // create a simple command (see below for implementation)
-     // this class will be called when the command is detected
-     // and register the command as a command with the console
-     ConsoleCommand simpleCommand = new SimpleCommand();
-     consoleCommands.registerCommand("simple", simpleCommand);
-
-     // create another command (this time we can even register arguments
-     // with nifty so that the command completion will work with arguments too)
-     ConsoleCommand showCommand = new ShowCommand();
-     consoleCommands.registerCommand("show a", showCommand);
-     consoleCommands.registerCommand("show b", showCommand);
-     consoleCommands.registerCommand("show c", showCommand);
+     ConsoleCommand quitCommand = new QuitCommand();
+     consoleCommands.registerCommand("quit", quitCommand);
 
      // finally enable command completion
      consoleCommands.enableCommandCompletion(true);
@@ -87,10 +77,10 @@ public class GameScreen implements ScreenController, ChatInterface {
      * @author Philip
      *
      */
-    private class SimpleCommand implements ConsoleCommand {
+    private class QuitCommand implements ConsoleCommand {
         @Override
         public void execute(final String[] args) {
-            //TODO: Handle Simple Comand
+            GameScreen.this.client.quit();
         }
     }
     /**
