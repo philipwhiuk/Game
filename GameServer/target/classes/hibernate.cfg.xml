@@ -15,8 +15,8 @@
 	and let Hibernate bind the session automatically to the thread
 	-->
 	<property name="current_session_context_class">thread</property>
-	<!-- this will show us all sql statements -->
-	<property name="hibernate.show_sql">true</property>
+	<!-- this would show us all sql statements -->
+	<property name="hibernate.show_sql">false</property>
 
 	<!-- mapping files -->
 	<mapping class="com.whiuk.philip.mmorpg.serverShared.Account" />
