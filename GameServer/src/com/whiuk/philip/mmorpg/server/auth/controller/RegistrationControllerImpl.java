@@ -46,7 +46,6 @@ public class RegistrationControllerImpl implements RegistrationController {
         attempt.setAccount(account);
         attempt.setEmail(email);
         attempt.setConnection(con.toString());
-        System.out.println(attempt.getTime());
         registrationAttemptDAO.save(attempt);
         HibernateUtils.commitTransaction();
         if (account != null) {

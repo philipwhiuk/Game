@@ -59,7 +59,6 @@ public class LoginControllerImpl implements LoginController {
         attempt.setTime(System.currentTimeMillis());
         attempt.setAccount(account);
         attempt.setConnection(con.toString());
-        System.out.println(attempt.getTime());
         loginAttemptDAO.save(attempt);
         HibernateUtils.commitTransaction();
         if (account != null) {
