@@ -392,10 +392,10 @@ public class AuthServiceImpl implements AuthService {
     private void performLogout(final Account a) {
         LOGGER.trace("Logging out account");
         // Remove the c->a and a->c mapping
-        connections.remove(accounts.remove(a));
         for (AuthEventListener l : authEventListeners) {
             l.notifyLogout(a);
         }
+        connections.remove(accounts.remove(a));
     }
 
     @Override
