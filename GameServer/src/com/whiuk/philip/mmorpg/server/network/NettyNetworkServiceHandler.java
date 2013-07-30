@@ -2,6 +2,7 @@ package com.whiuk.philip.mmorpg.server.network;
 
 import io.netty.channel.SimpleChannelInboundHandler;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.HashMap;
 import java.util.Map;
@@ -131,8 +132,13 @@ public class NettyNetworkServiceHandler
      * @param m message
      */
     public final void writeMessage(final ServerMessage m) {
-        LOGGER.trace("Writing message to client");
-        channels.get(m.getClientInfo()).writeAndFlush(m);
+        if (channels.containsKey(m.getClientInfo())) {
+            LOGGER.trace("Writing message to client");
+            channels.get(m.getClientInfo()).writeAndFlush(m);
+        } else {
+            LOGGER.trace("Message write requested for client "
+                    + "with no active channel.");
+        }
     }
 
     /**
