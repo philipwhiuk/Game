@@ -219,7 +219,7 @@ public class GameClient implements Runnable {
             if (nifty.update()) {
                 finished = true;
             }
-            nifty.render(true);
+            nifty.render(false);
             int error = GL11.glGetError();
             if (error != GL11.GL_NO_ERROR) {
                 String glerrmsg = GLU.gluErrorString(error);
