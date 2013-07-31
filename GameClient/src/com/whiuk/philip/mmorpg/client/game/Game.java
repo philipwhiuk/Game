@@ -81,7 +81,7 @@ public class Game implements GameInterface {
         this.player = character;
         this.camera = new Camera();
         this.ambientLight = new Light();
-        this.terrain = new Terrain();
+        this.terrain = new Terrain(0f,-1f,0f,50f,50f);
         this.otherPCs = new HashMap<Integer, OtherPlayerCharacter>();
         this.npcs = new HashMap<Integer, NPC>();
         this.structures = new HashMap<Integer, Structure>();
@@ -124,7 +124,7 @@ public class Game implements GameInterface {
         camera.render(player);
         //Lighting
         ambientLight.render();
-        terrain.render();
+//        terrain.render();
         for (Map.Entry<Integer, Structure> e : structures.entrySet()) {
             e.getValue().render();
         }
@@ -135,7 +135,5 @@ public class Game implements GameInterface {
             e.getValue().render();
         }
         player.render();
-        GL11.glDisable(GL11.GL_BLEND);
-        GL11.glDisable(GL11.GL_LIGHTING);
     }
 }
