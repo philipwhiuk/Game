@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.glu.GLU;
 
 import com.whiuk.philip.mmorpg.client.GameClientUtils;
 import com.whiuk.philip.mmorpg.client.GameInterface;
@@ -118,17 +119,13 @@ public class Game implements GameInterface {
      * Render the game.
      */
     public final void render() {
-        // Clear the screen and depth buffer
         LOGGER.trace("Rendering game");
-        GL11.glClearDepth(1.0f);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glEnable(GL11.GL_BLEND);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
-                GL11.GL_AMBIENT_AND_DIFFUSE);
-        GL11.glLoadIdentity();
-        ambientLight.render();
+        //Camera
+        camera.render(player);
+//        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+//       GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
+//                GL11.GL_AMBIENT_AND_DIFFUSE);
+//        ambientLight.render();
         terrain.render();
         for (Map.Entry<Integer, Structure> e : structures.entrySet()) {
             e.getValue().render();
@@ -140,8 +137,7 @@ public class Game implements GameInterface {
             e.getValue().render();
         }
         player.render();
-        //Camera
-        camera.render(player);
         GL11.glDisable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_LIGHTING);
     }
 }

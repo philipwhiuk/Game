@@ -217,15 +217,21 @@ public class GameClient implements Runnable {
         nifty.fromXml("loginScreen.xml", "start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
+            GL11.glClearDepth(1.0f);
+            GL11.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             GL11.glClear(GL11.GL_COLOR_BUFFER_BIT | GL11.GL_DEPTH_BUFFER_BIT);
+
             runQueuedNiftyEvents();
             if (nifty.update()) {
                 finished = true;
             }
             if (state == State.GAME) {
+                enter3DMode();
                 game.render();
             }
+            enter2DMode();
             renderGUI();
+            GL11.glFlush();
             Display.sync(frameRate);
             Display.update();
             int error = GL11.glGetError();
@@ -240,13 +246,40 @@ public class GameClient implements Runnable {
         System.exit(0);
     }
     /**
+     * Enter 2D.
+     */
+    private void enter2DMode() {
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+//        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+        GL11.glOrtho(0, Display.getWidth(), Display.getHeight(), 0, 0, 1);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+//        GL11.glPushMatrix();
+        GL11.glLoadIdentity();
+        GL11.glDisable(GL11.GL_DEPTH_TEST);
+        GL11.glDisable(GL11.GL_LIGHTING);
+    }
+    /**
+     * Enter 3D.
+     */
+    private void enter3DMode() {
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glMatrixMode(GL11.GL_PROJECTION);
+        GL11.glLoadIdentity();
+        GLU.gluPerspective(50.0f, 1.0f, 3.0f, 7.0f);
+        GL11.glMatrixMode(GL11.GL_MODELVIEW);
+        GL11.glLoadIdentity();
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        GL11.glDepthFunc(GL11.GL_LEQUAL);
+        //GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+    }
+    /**
      * Render GUI.
      */
     private void renderGUI() {
-        GL11.glLoadIdentity();
-        GL11.glDisable(GL11.GL_DEPTH_TEST);
         nifty.render(false);
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
     }
     /**
      * Run any queued events on the Nifty thread.
