@@ -275,26 +275,41 @@ public class GameClient implements Runnable {
         GL11.glLoadIdentity();
         GL11.glDisable(GL11.GL_DEPTH_TEST);
         GL11.glDisable(GL11.GL_LIGHTING);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
     /**
      * Enter 3D.
      */
     private void enter3DMode() {
+        //Don't blend in things from behind
         GL11.glDisable(GL11.GL_BLEND);
+        //Render faces based on whether they are in front
+        //not in which order they were rendered.
+        GL11.glEnable(GL11.GL_DEPTH_TEST);
+        //Remove faces that aren't in visible
+        GL11.glEnable(GL11.GL_CULL_FACE);
+        //Test using the 'less than' model
+        GL11.glDepthFunc(GL11.GL_LESS);
+        //Enable lighting for the scene
+        GL11.glEnable(GL11.GL_LIGHTING);
+        //Disable 2D texturing
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        //Use glColor values as a material
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        //When using glColour values as a material
+        //apply ambient and diffuse lighting to front and back
+        GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
+            GL11.GL_AMBIENT_AND_DIFFUSE);
+        //Setup the project matrix
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
         float aspectRatio = (float) Display.getWidth()
                 / (float) Display.getHeight();
         GLU.gluPerspective(FIELD_OF_VIEW_Y, aspectRatio, Z_NEAR, Z_FAR);
+        //Now define the model view.
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
-        GL11.glEnable(GL11.GL_DEPTH_TEST);
-        GL11.glDepthFunc(GL11.GL_LEQUAL);
-        GL11.glEnable(GL11.GL_LIGHTING);
-        GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-        GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
-         GL11.GL_AMBIENT_AND_DIFFUSE);
     }
     /**
      * Render GUI.
