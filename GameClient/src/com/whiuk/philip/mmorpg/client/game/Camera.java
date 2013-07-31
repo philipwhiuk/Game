@@ -84,7 +84,7 @@ class Camera {
     /**
      * Player-relative offset (x co-ordinate).
      */
-    private float xOffset = 5f;
+    private float xOffset = 0f;
     /**
      * Player-relative offset (y co-ordinate).
      */
@@ -153,7 +153,7 @@ class Camera {
         GLU.gluLookAt(
                 p.getX() + xOffset, p.getY() + yOffset, p.getZ() + zOffset,
                 p.getX(), p.getY(), p.getZ(),
-                0, 1, 0);
+                0f, 1.0f, 0.0f);
     }
     /**
      * @return the mode
