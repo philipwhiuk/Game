@@ -2,6 +2,7 @@ package com.whiuk.philip.mmorpg.client.game;
 
 
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import com.whiuk.philip.mmorpg.client.GameSettings;
 import com.whiuk.philip.mmorpg.client.GameSettings.Control;
@@ -86,11 +87,11 @@ public class PlayerCharacter {
      * Render player character.
      */
     final void render() {
-        org.lwjgl.opengl.GL11.glPushMatrix();
-        org.lwjgl.opengl.GL11.glTranslatef(getX(), getY(), getZ());
-//TODO org.lwjgl.opengl.GL11.glRotatef(direction);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(getX(), getY(), getZ());
+        //TODO org.lwjgl.opengl.GL11.glRotatef(direction);
         model.render();
-        org.lwjgl.opengl.GL11.glPopMatrix();
+        GL11.glPopMatrix();
     }
     /**
      * Handle movement.
