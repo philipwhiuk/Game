@@ -149,8 +149,7 @@ class Camera {
      * @param p The player character to transform based on.
      */
     void render(final PlayerCharacter p) {
-        // TODO Auto-generated method stub
-        GLU.gluLookAt(
+         GLU.gluLookAt(
                 p.getX() + xOffset, p.getY() + yOffset, p.getZ() + zOffset,
                 p.getX(), p.getY(), p.getZ(),
                 0f, 1.0f, 0.0f);
