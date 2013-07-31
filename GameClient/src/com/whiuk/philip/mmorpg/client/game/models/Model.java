@@ -123,7 +123,6 @@ public final class Model {
         private void render() {
             color.render();
             for (Vertex v: vertex) {
-                System.out.println("Rendering vertex x:"+v.x+", y:"+v.y+", z:"+v.z);
                 v.render();
             }
         }
