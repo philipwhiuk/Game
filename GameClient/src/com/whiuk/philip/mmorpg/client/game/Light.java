@@ -28,9 +28,9 @@ public class Light {
      */
     Light() {
         position = BufferUtils.createFloatBuffer(4);
-        position.put(1.0f).put(1.0f).put(10.0f).put(0.0f).flip();
+        position.put(5.0f).put(5.0f).put(5.0f).put(1.0f).flip();
         colour = BufferUtils.createFloatBuffer(4);
-        colour.put(1.0f).put(1.0f).put(1.0f).put(1.0f).flip();
+        colour.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
         model = BufferUtils.createFloatBuffer(4);
         model.put(0.5f).put(0.5f).put(0.5f).put(1.0f).flip();
     }
@@ -43,6 +43,7 @@ public class Light {
         // sets light position
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_POSITION, position);
         // sets specular light to white
+        GL11.glLight(GL11.GL_LIGHT0, GL11.GL_AMBIENT, colour);
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_SPECULAR, colour);
         GL11.glLight(GL11.GL_LIGHT0, GL11.GL_DIFFUSE, colour);
     }

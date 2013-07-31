@@ -186,6 +186,22 @@ public class GameClient implements Runnable {
     private static final String USERNAME_NOT_PROVIDED_ERROR =
             "Username not provided, failed registration";
     /**
+     * Field of view (Y).
+     */
+    private static final float FIELD_OF_VIEW_Y = 50.0f;
+    /**
+     * Aspect ratio.
+     */
+    private static final float ASPECT_RATIO = 1.0f;
+    /**
+     * Clipping bound - near.
+     */
+    private static final float Z_NEAR = 3.0f;
+    /**
+     * Clipping bound - far.
+     */
+    private static final float Z_FAR = 25.0f;
+    /**
      * Bean constructor.
      */
     GameClient() {
@@ -267,13 +283,18 @@ public class GameClient implements Runnable {
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GLU.gluPerspective(50.0f, 1.0f, 3.0f, 7.0f);
+        float aspectRatio = (float) Display.getWidth()
+                / (float) Display.getHeight();
+        GLU.gluPerspective(FIELD_OF_VIEW_Y, aspectRatio, Z_NEAR, Z_FAR);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
         GL11.glEnable(GL11.GL_DEPTH_TEST);
         GL11.glDepthFunc(GL11.GL_LEQUAL);
-        //GL11.glEnable(GL11.GL_LIGHTING);
+        GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
+        GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
+         GL11.GL_AMBIENT_AND_DIFFUSE);
     }
     /**
      * Render GUI.

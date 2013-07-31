@@ -122,10 +122,8 @@ public class Game implements GameInterface {
         LOGGER.trace("Rendering game");
         //Camera
         camera.render(player);
-//        GL11.glEnable(GL11.GL_COLOR_MATERIAL);
-//       GL11.glColorMaterial(GL11.GL_FRONT_AND_BACK,
-//                GL11.GL_AMBIENT_AND_DIFFUSE);
-//        ambientLight.render();
+        //Lighting
+        ambientLight.render();
         terrain.render();
         for (Map.Entry<Integer, Structure> e : structures.entrySet()) {
             e.getValue().render();
