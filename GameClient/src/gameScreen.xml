@@ -6,8 +6,8 @@
    <useControls filename="nifty-default-controls.xml" />
    <!-- Control definition of chat area -->
    <screen id="main" controller="com.whiuk.philip.mmorpg.client.ui.GameScreen">
-      <layer id="main" backgroundColor="#0000" childLayout="center">
-         <control id="console" name="nifty-console" lines="25" align="center" valign="center"/>
+      <layer id="main" backgroundColor="#0000" childLayout="vertical">
+         <control id="console" name="nifty-console"  backgroundColor="#6002" lines="10" align="center" valign="top"/>
       </layer>
    </screen>
 </nifty>
