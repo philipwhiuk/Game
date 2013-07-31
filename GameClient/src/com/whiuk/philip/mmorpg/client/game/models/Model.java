@@ -90,7 +90,7 @@ public final class Model {
             this.z = z;
         }
         /**
-         * 
+         * Render vertex.
          */
         private void render() {
             GL11.glVertex3f(x, y, z);
@@ -167,17 +167,17 @@ public final class Model {
             InputStreamReader isr = new InputStreamReader(mis, "UTF-8");
             br = new BufferedReader(isr);
             Model m = new Model();
-            m.name = br.readLine();
+            m.name = readNextInstruction(br);
             String[] l;
-            int quadCount = Integer.parseInt(br.readLine());
+            int quadCount = Integer.parseInt(readNextInstruction(br));
             for (int i = 0; i < quadCount; i++) {
                 Quad q = new Quad();
-                l = br.readLine().split(",");
+                l = readNextInstruction(br).split(",");
                 RGB c = new RGB(Float.parseFloat(l[0]),
                         Float.parseFloat(l[1]), Float.parseFloat(l[2]));
                 q.color = c;
                 for (int j = 0; j < QUAD_VERTEX_COUNT; j++) {
-                    l = br.readLine().split(",");
+                    l = readNextInstruction(br).split(",");
                     Vertex v = new Vertex(Float.parseFloat(l[0]),
                             Float.parseFloat(l[1]), Float.parseFloat(l[2]));
                     q.vertex.add(v);
@@ -186,12 +186,32 @@ public final class Model {
             }
             models.put(filename, m);
         return m;
-        } catch (UnsupportedEncodingException e) {
+        } catch (
+        UnsupportedEncodingException e) {
             throw new RuntimeException("Error loading model from: "
                     + filename, e);
         } catch (IOException e) {
             throw new RuntimeException("Error loading model from: "
                     + filename, e);
+        }
+    }
+    /**
+     * Reads the next instruction (skips comments & blank lines).
+     * @param br
+     *      Model file reader.
+     * @return
+     *      Next instruction
+     * @throws IOException
+     *      Thrown if I/O error encountered when trying to read from file.
+     */
+    private static String readNextInstruction(final BufferedReader br)
+            throws IOException {
+        String line;
+        while (true) {
+            line = br.readLine().trim();
+            if (!line.startsWith("#") && line.length() > 0) {
+                return line;
+            }
         }
     }
 }
