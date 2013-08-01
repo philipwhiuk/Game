@@ -2,11 +2,13 @@ package com.whiuk.philip.mmorpg.client.game;
 
 import org.lwjgl.opengl.GL11;
 
+import com.whiuk.philip.gameEngine.Node;
+
 /**
  * @author Philip
  *
  */
-public class Terrain {
+public class Terrain extends Node {
     /**
      * 
      */

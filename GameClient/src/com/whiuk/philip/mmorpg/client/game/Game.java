@@ -7,6 +7,8 @@ import org.apache.log4j.Logger;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 
+import com.whiuk.philip.gameEngine.BranchGroup;
+import com.whiuk.philip.gameEngine.SimpleUniverse;
 import com.whiuk.philip.mmorpg.client.GameClientUtils;
 import com.whiuk.philip.mmorpg.client.GameInterface;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
@@ -75,16 +77,25 @@ public class Game implements GameInterface {
      */
     private Terrain terrain;
     /**
+     * 
+     */
+    private SimpleUniverse universe;
+    /**
      * @param character Player character
      */
     public Game(final PlayerCharacter character) {
         this.player = character;
         this.camera = new Camera();
         this.ambientLight = new Light();
-        this.terrain = new Terrain(0f,-1f,0f,50f,50f);
+        this.terrain = new Terrain(0f, -1f, 0f, 50f, 50f);
         this.otherPCs = new HashMap<Integer, OtherPlayerCharacter>();
         this.npcs = new HashMap<Integer, NPC>();
         this.structures = new HashMap<Integer, Structure>();
+        BranchGroup zone = new BranchGroup();
+        zone.addChild(terrain);
+        this.universe = new SimpleUniverse();
+        universe.getViewingPlatform().setNominalViewingTransform();
+        universe.addBranchGraph(zone);
     }
 
     @Override

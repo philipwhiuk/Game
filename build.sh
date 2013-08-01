@@ -1,4 +1,6 @@
-cd GameShared
+cd GameEngine
+mvn clean install
+cd ../GameShared
 mvn clean install
 cd ../GameClient
 mvn clean install
