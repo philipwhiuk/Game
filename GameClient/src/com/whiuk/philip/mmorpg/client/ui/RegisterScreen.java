@@ -11,6 +11,7 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -86,13 +87,10 @@ public class RegisterScreen implements ScreenController, AuthInterface {
 
     @Override
     public final void onStartScreen() {
-        textInputUsername.addInputHandler(new KeyInputHandler() {
+        	textInputUsername.addInputHandler(new StandardKeyInputHandler() {
             @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
-                switch (inputEvent) {
+            public boolean standardKeyEvent(final NiftyStandardInputEvent inputEvent) {
+                    switch (inputEvent) {
                     case SubmitText:
                         textInputPassword.setFocus();
                         return true;
@@ -102,12 +100,9 @@ public class RegisterScreen implements ScreenController, AuthInterface {
                 return false;
             }
         });
-        textInputPassword.addInputHandler(new KeyInputHandler() {
+        textInputPassword.addInputHandler(new StandardKeyInputHandler() {
             @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
+            public boolean standardKeyEvent(final NiftyStandardInputEvent inputEvent) {
                 switch (inputEvent) {
                     case SubmitText:
                         textInputPasswordConfirm.setFocus();
@@ -118,12 +113,9 @@ public class RegisterScreen implements ScreenController, AuthInterface {
                 return false;
             }
         });
-        textInputPasswordConfirm.addInputHandler(new KeyInputHandler() {
+        textInputPasswordConfirm.addInputHandler(new StandardKeyInputHandler() {
             @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
+            public boolean standardKeyEvent(final NiftyStandardInputEvent inputEvent) {
                 switch (inputEvent) {
                     case SubmitText:
                         textInputEmail.setFocus();
@@ -134,12 +126,9 @@ public class RegisterScreen implements ScreenController, AuthInterface {
                 return false;
             }
         });
-        textInputEmail.addInputHandler(new KeyInputHandler() {
+        textInputEmail.addInputHandler(new StandardKeyInputHandler() {
             @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
+            public boolean standardKeyEvent(final NiftyStandardInputEvent inputEvent) {
                 switch (inputEvent) {
                     case SubmitText:
                         sendRegistrationRequest();

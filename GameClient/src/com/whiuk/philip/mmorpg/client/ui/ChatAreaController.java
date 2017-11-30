@@ -1,16 +1,14 @@
 package com.whiuk.philip.mmorpg.client.ui;
 
-import java.util.Properties;
-
 import de.lessvoid.nifty.Nifty;
 import de.lessvoid.nifty.controls.Controller;
+import de.lessvoid.nifty.controls.Parameters;
 import de.lessvoid.nifty.controls.ScrollPanel;
 import de.lessvoid.nifty.controls.ScrollPanel.AutoScroll;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.elements.render.TextRenderer;
 import de.lessvoid.nifty.input.NiftyInputEvent;
 import de.lessvoid.nifty.screen.Screen;
-import de.lessvoid.xml.xpp3.Attributes;
 
 /**
  *
@@ -34,17 +32,15 @@ class ChatAreaController implements Controller {
     @Override
     public final void bind(final Nifty nifty,
             final Screen s, final Element element,
-            final Properties parameter,
-            final Attributes controlDefinitionAttributes) {
+            final Parameters parameters) {
         this.screen = s;
         scrollPanel = element.findNiftyControl("scroll_panel",
                 ScrollPanel.class);
-        textArea = element.findElementByName("text_area");
+        textArea = element.findElementById("text_area");
     }
 
     @Override
-    public final void init(final Properties parameter,
-            final Attributes controlDefinitionAttributes) {
+    public final void init(final Parameters parameters) {
     }
 
     @Override
@@ -100,4 +96,10 @@ class ChatAreaController implements Controller {
     final String getText() {
         return textArea.getRenderer(TextRenderer.class).getOriginalText();
     }
+
+	@Override
+	public void onEndScreen() {
+		// TODO Auto-generated method stub
+		
+	}
 }

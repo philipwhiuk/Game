@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="GameClient/src"/>
+	<classpathentry kind="src" path="GameEngine/src"/>
+	<classpathentry kind="src" path="GameServer/src"/>
+	<classpathentry kind="src" path="GameServer/src-gen"/>
+	<classpathentry kind="src" path="GameServerShared/src"/>
+	<classpathentry kind="src" path="GameShared/src"/>
+	<classpathentry kind="src" path="GameShared/src-gen"/>
+	<classpathentry kind="src" path="GameWebsite/src/main/java"/>
+	<classpathentry kind="lib" path="GameClient/lib/lwjgl_util.jar"/>
+	<classpathentry kind="lib" path="GameClient/lib/lwjgl.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

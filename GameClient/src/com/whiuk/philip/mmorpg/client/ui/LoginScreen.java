@@ -11,6 +11,7 @@ import de.lessvoid.nifty.controls.Label;
 import de.lessvoid.nifty.controls.TextField;
 import de.lessvoid.nifty.elements.Element;
 import de.lessvoid.nifty.input.NiftyInputEvent;
+import de.lessvoid.nifty.input.NiftyStandardInputEvent;
 import de.lessvoid.nifty.screen.KeyInputHandler;
 import de.lessvoid.nifty.screen.Screen;
 import de.lessvoid.nifty.screen.ScreenController;
@@ -74,13 +75,13 @@ public class LoginScreen implements ScreenController, AuthInterface {
 
     @Override
     public final void onStartScreen() {
-        textInputUsername.addInputHandler(new KeyInputHandler() {
+        textInputUsername.addInputHandler(new StandardKeyInputHandler() {
             @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
+            public boolean standardKeyEvent(final NiftyStandardInputEvent inputEvent) {
+                if (inputEvent == null || inputEvent instanceof NiftyStandardInputEvent) {
                     return false;
                 }
-                switch (inputEvent) {
+                switch ((NiftyStandardInputEvent) inputEvent) {
                     case SubmitText:
                         textInputPassword.setFocus();
                         return true;
@@ -90,12 +91,9 @@ public class LoginScreen implements ScreenController, AuthInterface {
                 return false;
             }
         });
-        textInputPassword.addInputHandler(new KeyInputHandler() {
+        textInputPassword.addInputHandler(new StandardKeyInputHandler() {
             @Override
-            public boolean keyEvent(final NiftyInputEvent inputEvent) {
-                if (inputEvent == null) {
-                    return false;
-                }
+            public boolean standardKeyEvent(final NiftyStandardInputEvent inputEvent) {
                 switch (inputEvent) {
                     case SubmitText:
                         sendLoginRequest();
