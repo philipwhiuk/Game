@@ -2,9 +2,11 @@ package com.whiuk.philip.mmorpg.server.hibernate;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.Metadata;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.service.ServiceRegistry;
-import org.hibernate.service.ServiceRegistryBuilder;
 
 /**
  * Hibernate utilities.
@@ -29,11 +31,11 @@ public final class HibernateUtils {
             Configuration configuration = new Configuration();
             configuration.configure();
 
-            ServiceRegistry serviceRegistry = new ServiceRegistryBuilder()
-                    .applySettings(configuration.getProperties())
-                    .buildServiceRegistry();
-            SESSION_FACTORY = configuration
-                    .buildSessionFactory(serviceRegistry);
+            StandardServiceRegistry standardRegistry = 
+            	       new StandardServiceRegistryBuilder().configure("hibernate.cfg.xml").build();
+            Metadata metaData = 
+                    new MetadataSources(standardRegistry).getMetadataBuilder().build();
+            SESSION_FACTORY = metaData.getSessionFactoryBuilder().build();
         } catch (Throwable ex) {
             // Log the exception.
             System.err.println("Initial SessionFactory creation failed." + ex);

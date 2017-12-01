@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.mmorpg.server.GameServer;
+import com.whiuk.philip.mmorpg.server.GameServerProperties;
 import com.whiuk.philip.mmorpg.shared.Messages.ClientMessage;
 import com.whiuk.philip.mmorpg.shared.Messages.ServerMessage;
 
@@ -38,11 +39,12 @@ public class NettyNetworkService implements NetworkService {
 	 */
     @Autowired
     private NettyNetworkServiceHandler handler;
+
     /**
-     * Game Server.
+     * Properties
      */
    @Autowired
-   private GameServer gameServer;
+   private GameServerProperties gameServerProperties;
 
     /**
      * 
@@ -84,7 +86,7 @@ public class NettyNetworkService implements NetworkService {
         channel = bootstrap.bind(
                 new InetSocketAddress(
                     Integer.parseInt(
-                            gameServer.getProperties().getProperty("port"))
+                    		gameServerProperties.getProperty("port"))
                 )).awaitUninterruptibly().channel();
     }
 

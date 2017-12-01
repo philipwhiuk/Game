@@ -58,13 +58,6 @@ public class GameServer {
     }
 
     /**
-     * @param gsProp Game Server Properties
-     */
-    public final void setProperties(final GameServerProperties gsProp) {
-        this.properties = gsProp;
-    }
-
-    /**
      * @return properties
      */
     public final GameServerProperties getProperties() {
