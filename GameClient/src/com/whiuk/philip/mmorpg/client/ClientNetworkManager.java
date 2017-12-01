@@ -46,7 +46,7 @@ class ClientNetworkManager
     /**
      * Network port.
      */
-    private static final int PORT = 8443;
+    private static final int PORT = 12550;
     /**
      * Remote InetSocketAddress.
      */
@@ -188,9 +188,11 @@ class ClientNetworkManager
                     ((InetSocketAddress) ctx.channel().localAddress())
                             .getAddress()).getHardwareAddress();
         } catch (SocketException se) {
-            // Set the
-            macAddress = new byte[0];
             logException("Exception getting MAC address.", se);
+            macAddress = new byte[]{0};
+        }
+        if (macAddress == null) {
+            macAddress = new byte[]{0};
         }
         clientInfo = ClientInfo.newBuilder().setClientID(client.getClientID())
                 .setVersion(GameClient.VERSION).setLocalIPAddress(address)
