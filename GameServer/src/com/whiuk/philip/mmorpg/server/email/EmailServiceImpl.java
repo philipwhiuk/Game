@@ -22,11 +22,11 @@ public class EmailServiceImpl implements EmailService {
     /**
      * 
      */
-    private static final String REGISTRATION_EMAIL_SUBJECT = null;
+    private static final String REGISTRATION_EMAIL_SUBJECT = "Welcome to WorldScape MMO";
     /**
      * 
      */
-    private static final String REGISTRATION_EMAIL_TEXT = null;
+    private static final String REGISTRATION_EMAIL_TEXT = "Welcome to WorldScape MMO, %s1";
     /**
      * 
      */
@@ -52,7 +52,7 @@ public class EmailServiceImpl implements EmailService {
                     to);
             message.setFrom(from);
             message.setSubject(REGISTRATION_EMAIL_SUBJECT);
-            message.setText(REGISTRATION_EMAIL_TEXT);
+            message.setText(String.format(REGISTRATION_EMAIL_TEXT, account.getUsername()));
             try {
                 Transport.send(message);
             } catch (MessagingException se) {
