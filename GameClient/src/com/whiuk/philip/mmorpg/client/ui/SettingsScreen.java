@@ -138,6 +138,7 @@ public class SettingsScreen implements ScreenController {
         vsyncDropDown = vsyncListElement
                 .getNiftyControl(DropDown.class);
         vsyncDropDown.addAllItems(Arrays.asList(BooleanOption.values()));
+        vsyncDropDown.selectItem(BooleanOption.NO);
     }
 
     @Override
