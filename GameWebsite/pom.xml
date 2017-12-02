@@ -11,6 +11,14 @@
   <build>
 	<plugins>
 	 <plugin>
+		<artifactId>maven-compiler-plugin</artifactId>
+		<version>3.0</version>
+		<configuration>
+			<source>1.8</source>
+			<target>1.8</target>
+		</configuration>
+	 </plugin>
+	 <plugin>
 		<groupId>org.apache.maven.plugins</groupId>
 		<artifactId>maven-war-plugin</artifactId>
 		<version>2.4</version>
@@ -31,12 +39,12 @@
 		<dependency>
 	  		<groupId>org.hibernate</groupId>
 	  		<artifactId>hibernate-core</artifactId>
-	  		<version>4.1.10.Final</version>
+	  		<version>5.0.1.Final</version>
   		</dependency>
 		<dependency>
 	  		<groupId>org.hibernate.common</groupId>
 	  		<artifactId>hibernate-commons-annotations</artifactId>
-	  		<version>4.0.1.Final</version>
+	  		<version>5.0.1.Final</version>
   		</dependency>
 		<dependency>
 	  		<groupId>org.hibernate.javax.persistence</groupId>
@@ -47,7 +55,7 @@
 		<dependency>
 	  		<groupId>org.springframework</groupId>
 	  		<artifactId>spring-orm</artifactId>
-	  		<version>3.2.2.RELEASE</version>
+	  		<version>5.0.2.RELEASE</version>
   		</dependency>
   </dependencies>
 </project>
