@@ -21,7 +21,7 @@ public class GameServerProperties extends Properties {
     /**
      * Default listening port for server.
      */
-    private static final String DEFALT_PORT = "8443";
+    private static final String DEFALT_PORT = "12550";
     /**
     *
     */
