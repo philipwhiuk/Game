@@ -6,3 +6,4 @@
 # Repository #
 bin/
 target/
+*.db
