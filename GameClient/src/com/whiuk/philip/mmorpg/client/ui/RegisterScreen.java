@@ -173,6 +173,7 @@ public class RegisterScreen implements ScreenController, AuthInterface {
                     password,
                     email);
         } else if (!gameClient.isConnected()) {
+        		setMessage("Unable to register - not connected");
             LOGGER.info("Client not connected");
         } else if (!gameClient.hasClientInfo()) {
             LOGGER.info("Client info not set");
