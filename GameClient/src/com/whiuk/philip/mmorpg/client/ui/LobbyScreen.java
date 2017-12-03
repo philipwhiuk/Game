@@ -206,14 +206,14 @@ public class LobbyScreen
                     break;
                 case CHARACTER_SELECTION:
                     LOGGER.trace("Recieved character selection message");
-                    ServerMessage.GameData.CharacterInformation c =
-                            gameData.getCharacterInformationList().get(0);
-                    LobbyCharacterData pc = new LobbyCharacterData(
-                            c.getId(), c.getName(),
-                            Race.valueOf(c.getRace()),
-                            c.getLocation());
-                    characters.add(pc);
-                    characterListDropDown.addItem(pc);
+                    for (ServerMessage.GameData.CharacterInformation c : gameData.getCharacterInformationList()) {
+	                    	LobbyCharacterData pc = new LobbyCharacterData(
+	                                c.getId(), c.getName(),
+	                                Race.valueOf(c.getRace()),
+	                                c.getLocation());
+	                        characters.add(pc);
+	                        characterListDropDown.addItem(pc);
+                    }
                     break;
                 default:
                     throw new IllegalStateException();

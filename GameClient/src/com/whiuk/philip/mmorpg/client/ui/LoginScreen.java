@@ -46,6 +46,7 @@ public class LoginScreen implements ScreenController, AuthInterface {
      * Number of login failures.
      */
     private int loginFailures;
+	private String initialMessage;
     /**
      * Class logger.
      */
@@ -63,6 +64,16 @@ public class LoginScreen implements ScreenController, AuthInterface {
         this.gameClient = g;
         gameClient.setState(State.LOGIN);
     }
+    
+    /**
+     * @param g
+     *            Game client
+     */
+    public LoginScreen(final GameClient g, String initialMessage) {
+        this.gameClient = g;
+        this.initialMessage = initialMessage;
+        gameClient.setState(State.LOGIN);
+    }
 
     @Override
     public final void bind(final Nifty newNifty, final Screen screen) {
@@ -70,6 +81,9 @@ public class LoginScreen implements ScreenController, AuthInterface {
         textInputUsername = screen.findElementByName("text_input_username");
         textInputPassword = screen.findElementByName("text_input_password");
         messageLabel = screen.findElementByName("message");
+        if (initialMessage != null) {
+        		setMessage(initialMessage);
+        }
         gameClient.setState(State.LOGIN);
     }
 

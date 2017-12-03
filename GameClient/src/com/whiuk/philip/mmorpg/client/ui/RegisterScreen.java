@@ -197,7 +197,7 @@ public class RegisterScreen implements ScreenController, AuthInterface {
      *
      */
     public final void login() {
-        gameClient.switchToLoginScreen();
+        gameClient.switchToLoginScreen(null);
     }
 
     @Override

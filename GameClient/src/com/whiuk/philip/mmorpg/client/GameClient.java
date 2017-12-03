@@ -230,7 +230,9 @@ public class GameClient implements Runnable {
         setupOpenGL();
         setupInputSystem();
         setupNifty();
-        nifty.fromXml("loginScreen.xml", "start");
+        nifty.fromXmlWithoutStartScreen("base.xml");
+        nifty.addXml("loginScreen.xml");
+        nifty.gotoScreen("start");
         openNetworkConnection();
         while (!Display.isCloseRequested() && !finished) {
             GL11.glClearDepth(1.0f);
@@ -710,8 +712,7 @@ public class GameClient implements Runnable {
                             ((AuthInterface) screen)
                                 .registrationFailed("Server error occurred");
                         } else {
-                            switchToLoginScreen();
-                            ((AuthInterface) screen).setMessage("Account '"
+                            switchToLoginScreen("Account '"
                                     + data.getUsername()
                                     + "' succesfully registered.");
                             state = State.LOGIN;
@@ -736,7 +737,7 @@ public class GameClient implements Runnable {
                 switch (data.getType()) {
                     case LOGOUT_SUCCESSFUL:
                         account = null;
-                        switchToLoginScreen();
+                        switchToLoginScreen("Logged out");
                         state = State.LOGIN;
                         break;
                     default:
@@ -749,7 +750,7 @@ public class GameClient implements Runnable {
                     case LOGOUT_SUCCESSFUL:
                         account = null;
                         character = null;
-                        switchToLoginScreen();
+                        switchToLoginScreen("Logged out");
                         state = State.LOGIN;
                         break;
                     default:
@@ -856,8 +857,8 @@ public class GameClient implements Runnable {
      * Switch from the previous screen to the login screen.
      * Must be run on the OpenGL context thread.
      */
-    public final void switchToLoginScreen() {
-        screen = new LoginScreen(this);
+    public final void switchToLoginScreen(String initialMessage) {
+        screen = new LoginScreen(this, initialMessage);
         nifty.registerScreenController(screen);
         nifty.fromXml("loginScreen.xml", "start");
     }
@@ -917,7 +918,7 @@ public class GameClient implements Runnable {
                 QueuedLWJGLEvent switchToLogin = new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
-                        switchToLoginScreen();
+                        switchToLoginScreen("Disconnected");
                         GameClient.this.account = null;
                         GameClient.this.character = null;
                     }
@@ -955,7 +956,7 @@ public class GameClient implements Runnable {
                 QueuedLWJGLEvent switchToLogin = new QueuedLWJGLEvent() {
                     @Override
                     public void run() {
-                        switchToLoginScreen();
+                        switchToLoginScreen(null);
                         GameClient.this.account = null;
                         GameClient.this.character = null;
                     }

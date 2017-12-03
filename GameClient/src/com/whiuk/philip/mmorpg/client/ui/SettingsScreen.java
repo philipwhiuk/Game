@@ -185,7 +185,7 @@ public class SettingsScreen implements ScreenController {
                 gameClient.switchToLobbyScreen();
                 break;
             case LOGIN:
-                gameClient.switchToLoginScreen();
+                gameClient.switchToLoginScreen(null);
                 break;
             case GAME:
                 gameClient.switchToGameScreen();
