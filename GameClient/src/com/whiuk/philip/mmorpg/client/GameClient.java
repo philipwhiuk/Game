@@ -458,24 +458,9 @@ public class GameClient implements Runnable {
      * Open a network connection.
      */
     private void openNetworkConnection() {
-        final Bootstrap bootstrap = ClientNetworkManager
-                .buildClientBootstrap(this);
-        final ChannelFuture f = bootstrap.connect();
-        f.addListener(new ChannelFutureListener() {
-            @Override
-            public void operationComplete(final ChannelFuture future)
-                    throws Exception {
-                if (future.isCancelled()) {
-                    LOGGER.info("Connection attempt cancelled");
-                } else if (!future.isSuccess()) {
-                    ClientNetworkManager.getNetworkManager().logException(
-                            "Connection attempt unsuccesful",
-                            future.cause());
-                } else {
-                    channel = future.channel();
-                }
-            }
-        });
+        ClientNetworkManager.buildClientBootstrap(this);
+        ClientNetworkManager.getNetworkManager().requestConnectionAttempt();
+        
     }
     /**
      * Close the network connection.

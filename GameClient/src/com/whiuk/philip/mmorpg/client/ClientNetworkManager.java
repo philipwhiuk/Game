@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
 import io.netty.bootstrap.Bootstrap;
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
+import io.netty.channel.ChannelFutureListener;
 import io.netty.channel.ChannelHandler.Sharable;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
@@ -84,7 +86,7 @@ class ClientNetworkManager
      * @param client Game client
      * @return client boostrap
      */
-    static final Bootstrap buildClientBootstrap(final GameClient client) {
+    static final void buildClientBootstrap(final GameClient client) {
         EventLoopGroup workerGroup = new NioEventLoopGroup();
         final Timer timer = new HashedWheelTimer();
         final Bootstrap bootstrap = new Bootstrap();
@@ -112,7 +114,6 @@ class ClientNetworkManager
         bootstrap.option(ChannelOption.CONNECT_TIMEOUT_MILLIS,
                 CONNECTION_TIMEOUT);
         bootstrap.remoteAddress(REMOTE_ADDRESS);
-        return bootstrap;
     }
     /**
      *
@@ -233,18 +234,40 @@ class ClientNetworkManager
     public final void channelInactive(final ChannelHandlerContext ctx) {
         client.handleDisconnection();
         if (reconnect) {
-            LOGGER.info(format("Channel inactive, sleeping for: "
-                    + GameClient.RECONNECT_DELAY + 's'));
-            timer.newTimeout(new TimerTask() {
-                public void run(final Timeout timeout) throws Exception {
-                    LOGGER.trace(format("Reconnecting to: "
-                            + getRemoteAddress()));
-                    bootstrap.connect();
-                }
-            }, GameClient.RECONNECT_DELAY, TimeUnit.SECONDS);
+        		requestConnectionAttempt();
         } else {
             LOGGER.info(format("Channel inactive"));
         }
+    }
+    
+    public void requestConnectionAttempt() {
+        LOGGER.trace(format("Channel inactive, sleeping for: "
+                + GameClient.RECONNECT_DELAY + 's'));
+        timer.newTimeout(new TimerTask() {
+            public void run(final Timeout timeout) throws Exception {
+                LOGGER.info(format("Connecting to: "
+                        + getRemoteAddress()));
+	        		final ChannelFuture f = bootstrap.connect();
+                f.addListener(new ChannelFutureListener() {
+                    @Override
+                    public void operationComplete(final ChannelFuture future)
+                            throws Exception {
+                        if (future.isCancelled()) {
+                            LOGGER.info("Connection attempt cancelled");
+                        } else if (!future.isSuccess()) {
+                            ClientNetworkManager.getNetworkManager().logException(
+                                    "Connection attempt unsuccesful",
+                                    future.cause());
+                            ClientNetworkManager.getNetworkManager().requestConnectionAttempt();
+                        } else {
+                            client.setChannel(future.channel());
+                        }
+                    }
+                });
+            }
+        }, GameClient.RECONNECT_DELAY, TimeUnit.SECONDS);
+        LOGGER.trace(format("Submitted task: "
+                + GameClient.RECONNECT_DELAY + 's'));
     }
 
     /**
