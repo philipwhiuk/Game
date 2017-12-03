@@ -8,6 +8,7 @@ import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 import com.whiuk.philip.mmorpg.serverShared.Account;
@@ -19,6 +20,11 @@ import com.whiuk.philip.mmorpg.serverShared.Account;
  */
 @Service
 public class EmailServiceImpl implements EmailService {
+    /**
+     * Class logger.
+     */
+    private static final Logger LOGGER = Logger
+            .getLogger(EmailServiceImpl.class);
     /**
      * 
      */
@@ -56,12 +62,10 @@ public class EmailServiceImpl implements EmailService {
             try {
                 Transport.send(message);
             } catch (MessagingException se) {
-                // TODO Auto-generated catch block
-                se.printStackTrace();
+            		LOGGER.warn("Failed to send registration message", se);
             }
         } catch (MessagingException me) {
-            // TODO Auto-generated catch block
-            me.printStackTrace();
+    			LOGGER.warn("Failed to construct and send registration message", me);
         }
     }
 
