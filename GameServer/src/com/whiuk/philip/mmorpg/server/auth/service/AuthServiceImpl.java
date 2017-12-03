@@ -259,8 +259,7 @@ public class AuthServiceImpl implements AuthService {
         } catch (InvalidEmailException e) {
             accountEmailController.invalidateEmail(account);
         }
-
-        accounts.put(account, con);
+        
         ServerMessage message = ServerMessage
                 .newBuilder()
                 .setType(ServerMessage.Type.AUTH)
