@@ -52,6 +52,7 @@ public class Connection {
         this.lastConnectionTime = nanoTime;
         this.active = b;
         loginAttempts = new HashSet<LoginAttempt>();
+        registrationAttempts = new HashSet<RegistrationAttempt>();
     }
 
     /**
