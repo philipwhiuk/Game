@@ -1,8 +1,13 @@
 package com.whiuk.philip.mmorpg.client;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.lwjgl.input.Keyboard;
 
 /**
@@ -11,16 +16,21 @@ import org.lwjgl.input.Keyboard;
  *
  */
 public final class GameSettings {
-    /**
-     * Singleton.
-     */
-    private static final GameSettings SETTINGS = new GameSettings();
+	
+	private static final Logger logger = Logger.getLogger(GameSettings.class);
     /**
      * @return settings
      */
     public static GameSettings getSettings() {
-        //TODO Load from file.
-        return SETTINGS;
+    		Properties props = new Properties();
+    		try {
+			props.load(new FileReader("settings.properties"));
+		} catch (FileNotFoundException e) {
+			logger.warn("Settings file not found - using defaults");
+		} catch (IOException e) {
+			logger.warn("Failed to load settings file - using defaults");
+		}
+        return new GameSettings(props);
     }
     /**
      * Controls.
@@ -56,14 +66,19 @@ public final class GameSettings {
     /**
      * Singleton constructor.
      */
-    private GameSettings() {
+    private GameSettings(Properties props) {
         controls = new HashMap<Control, Integer>();
-        controls.put(Control.MOVE_FOREWARD, Keyboard.KEY_W);
-        controls.put(Control.MOVE_BACKWARD, Keyboard.KEY_S);
-        controls.put(Control.TURN_LEFT, Keyboard.KEY_A);
-        controls.put(Control.TURN_RIGHT, Keyboard.KEY_D);
-        fullscreen = true;
+        controls.put(Control.MOVE_FOREWARD, getKeyForControl(props, Control.MOVE_FOREWARD, Keyboard.KEY_W));
+        controls.put(Control.MOVE_BACKWARD, getKeyForControl(props, Control.MOVE_BACKWARD, Keyboard.KEY_S));
+        controls.put(Control.TURN_LEFT, getKeyForControl(props, Control.TURN_LEFT, Keyboard.KEY_A));
+        controls.put(Control.TURN_RIGHT, getKeyForControl(props, Control.TURN_RIGHT, Keyboard.KEY_D));
+        fullscreen = Boolean.parseBoolean(props.getProperty("FULLSCREEN", "true"));
     }
+    
+    private Integer getKeyForControl(Properties props, Control control, Integer defaultKey) {
+    		return Integer.parseInt(props.getProperty(control.name(), defaultKey.toString()));
+    }
+    
     /**
      * Return the mapping for a control.
      * @param c Control.
